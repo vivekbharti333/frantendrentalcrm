@@ -3,6 +3,10 @@
     <div class="page-title">
       <h4>User List</h4>
       <h6>Manage Your Users</h6>
+      <p-toast></p-toast>
+      <!-- <button type="button" class="btn btn-primary btn-wave" id="liveToastBtn" pButton pRipple
+      (click)="show()" label="Show">Show live
+      toast</button>  -->
     </div>
   </div>
   <ul class="table-top-head">
@@ -19,7 +23,7 @@
       class="feather icon-printer feather-rotate-ccw"></i></a>
     </li>
     <li>
-      <a data-bs-toggle="tooltip" data-bs-placement="top" matTooltip="Refresh" matTooltipPosition="above"><i
+      <a data-bs-toggle="tooltip" data-bs-placement="top" matTooltip="Refresh" matTooltipPosition="above" (click)="getUserDetails()"><i
       class="feather icon-rotate-ccw feather-rotate-ccw"></i></a>
     </li>
     <li>
@@ -160,7 +164,7 @@
         </button></td> 
             <td class="action-table-data">
               <div class="edit-delete-action">
-                <a class="me-2 p-2 mb-0" href="javascript:void(0);" (click)="changeUserStatus(data)"><i class="feather icon-eye action-eye"></i> </a>
+                <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a>
                 <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(data)"> <i class="feather icon-edit feather-edit"></i></a>
                 <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);" (click)=confirmColor()> <i class="feather icon-trash-2 feather-trash-2"></i></a>
               </div>

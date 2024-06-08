@@ -50,6 +50,7 @@ export class SigninComponent {
               this.getApplicaionHeaderDetails();
               let permission = response['payload']['permissions'];
               localStorage.setItem('menuPermission', JSON.stringify(permission));
+              localStorage.setItem('userPicture', JSON.stringify(response['payload']['userPicture']));
               // localStorage.setItem('menuPermission', JSON.stringify(['admindb', 'admindbn', 'usermang', 'usermang1']));
               // this.router.navigate([routes.adminDashboard]);
 
@@ -61,7 +62,6 @@ export class SigninComponent {
               this.cookieService.set('loginDetails', JSON.stringify(response['payload']), expiredDate);
 
               let cook = this.cookieService.get('loginDetails')
-              alert("This is cookies : "+cook);
               
               this.messageService.add({
                 summary: response['payload']['respCode'],
@@ -88,6 +88,7 @@ export class SigninComponent {
         error: (error: any) =>  this.messageService.add({
           summary: '500',
           detail: 'Server Error',
+          styleClass: 'danger-background-popover',
         }),
       });
       // this.isLoading = false;

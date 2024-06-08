@@ -4,6 +4,8 @@ import { CommonService, SidebarService } from 'src/app/core/core.index';
 import { WebstorgeService } from 'src/app/shared/webstorge.service';
 import { routes } from 'src/app/core/helpers/routes';
 import { CommonComponentService } from '../common-component.service';
+import { AuthenticationService } from 'src/app/auth/authentication.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -24,15 +26,22 @@ export class HeaderComponent  {
   page = '';
   last = '';
 
-  public headerDetails:any;
+  public loginUser: any;
+  public headerDetails: any;
   public displayLogo: any;
+
+  public userName: any;
+  public userRole: any;
+  public userPicture: any;
 
   constructor(
     private Router: Router,
     private common: CommonService,
     private sidebar: SidebarService,
     private webStorage: WebstorgeService,
-    private commonComponentService: CommonComponentService
+    private commonComponentService: CommonComponentService,
+    private authenticationService: AuthenticationService,
+    private cookieService: CookieService,
   ) {
     this.activePath = this.Router.url.split('/')[2];
     this.Router.events.subscribe((data: RouterEvent) => {
@@ -56,6 +65,8 @@ export class HeaderComponent  {
     this.common.last.subscribe((last: string) => {
       this.last = last;
     });
+
+    this.loginUser = this.authenticationService.getLoginUser();
   }
 
   ngOnInit(){
@@ -93,20 +104,22 @@ export class HeaderComponent  {
   }
 
   public getApplicaionHeaderDetails() {
+    this.userName = this.loginUser['firstName']+" "+this.loginUser['lastName'];
+    this.userRole = this.loginUser['roleType'];
      this.displayLogo =localStorage.getItem('displayLogo');
-    //  alert("Image : "+this.displayLogo)
-    // this.commonComponentService.getApplicaionHeaderDetails()
-    //   .subscribe({
-    //     next: (response: any) => {
-    //       if (response['responseCode'] == '200') {
-    //         this.headerDetails = JSON.parse(JSON.stringify(response['payload']));
-    //         let base = this.headerDetails[''];
-    //         console.log("jhhjg"+this.headerDetails);
-    //       } else {
-    //       }
-    //     },
-    //     // error: (error: any) => this.toastr.error('Server Error', '500'),
-    //   });
+     this.userPicture = 'data:image/jpeg;base64,'+localStorage.getItem('userPicture');
+
+     console.log("this.userPicture : "+this.userPicture);
+
+    //  alert("Display Logo : "+this.displayLogo);
+    //  alert("User Picture : "+this.userPicture);
+    
+  }
+
+  logOut() {
+    this.cookieService.delete('loginDetails');
+    window.location.href = "/signin";
+    window.location.reload();
   }
 
  

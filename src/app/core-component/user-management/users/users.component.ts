@@ -177,6 +177,7 @@ export class UsersComponent {
   }
 
   getUserDetailsByRoleType(roleType: any) {
+   
     this.userManagementService.getUserDetailsByRoleType(roleType).subscribe((apiRes: any) => {
       this.totalData = apiRes.totalNumber;
       // const stringRepresentation = JSON.stringify(apiRes);
@@ -298,15 +299,24 @@ export class UsersComponent {
     }
   }
 
+  show() {
+    this.messageService.add({
+      summary: 'Toast',
+      detail: 'Hello, world! This is a toast message.',
+    });
+  }
+
   changeUserStatus(rowData:any) {
     this.userManagementService.changeUserStatus(rowData)
       .subscribe({
         next: (response: any) => {
-
+            console.log(response['responseCode']+" kjhk");
+            console.log(response['payload']['respCode']+" resesr");
           if (response['responseCode'] == '200') {
             if (response['payload']['respCode'] == '200') {
       
-              this.getUserDetailsByRoleType('ALL');
+              this.getUserDetails();
+
               this.messageService.add({
                 summary: response['payload']['respCode'],
                 detail: response['payload']['respMesg'],
@@ -370,9 +380,6 @@ export class UsersComponent {
   submitUserForm() {
     // this.isLoading = true;
     alert(this.user.userPicture);
-    // alert(form);
-    // alert(form.value);
-
     this.userManagementService.updateUserDetails(this.user)
       .subscribe({
         next: (response: any) => {

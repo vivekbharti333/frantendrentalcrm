@@ -252,22 +252,24 @@
       <a href="javascript:void(0);" class="dropdown-toggle nav-link userset" data-bs-toggle="dropdown">
         <span class="user-info">
           <span class="user-letter">
-            <img src="assets/img/profiles/avator1.jpg" alt="" class="img-fluid">
+            <img src="{{userPicture}}" alt="" class="img-fluid">
           </span>
           <span class="user-detail">
-            <span class="user-name">John Smilga</span>
-            <span class="user-role">Super Admin</span>
+            <span class="user-name">{{userName}}</span>
+            <span class="user-role">{{userRole}}</span>
           </span>
         </span>
       </a>
       <div class="dropdown-menu menu-drop-user">
         <div class="profilename">
           <div class="profileset">
-            <span class="user-img"><img src="assets/img/profiles/avator1.jpg" alt="">
+            <span class="user-img">
+              <!-- <img src="{{userPicture}}" alt=""> -->
+              <img src= "{{userPicture}}" alt="user image" >
               <span class="status online"></span></span>
             <div class="profilesets">
-              <h6>John Smilga</h6>
-              <h5>Super Admin</h5>
+              <h6>{{userName}}</h6>
+              <h5>{{userRole}}</h5>
             </div>
           </div>
           <hr class="m-0">
@@ -275,7 +277,7 @@
           <a class="dropdown-item" [routerLink] = "routes.generalSettings"><i class="me-2"
               class="feather icon-settings"></i>Settings</a>
           <hr class="m-0">
-          <a class="dropdown-item logout pb-0" [routerLink] = "routes.signIn"><img src="assets/img/icons/log-out.svg" class="me-2"
+          <a class="dropdown-item logout pb-0" (click)="logOut()"><img src="assets/img/icons/log-out.svg" class="me-2"
               alt="img">Logout</a>
         </div>
       </div>
