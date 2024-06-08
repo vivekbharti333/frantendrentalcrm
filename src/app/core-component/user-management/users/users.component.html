@@ -153,12 +153,14 @@
               <td>{{data.lastName}}</td>
               <td>{{data.roleType}}</td>
               <td>{{data.createdAt | date: 'dd-MM-yyyy | HH:mm'}}</td>
-              <td><span class="badge"
-              [ngClass]="{'badge-linesuccess': data.status === 'ACTIVE', 'badge-linedanger': data.status === 'INACTIVE'}">{{data.status}}</span>
-            </td> 
+              <td><button class="badge-button" 
+                [ngClass]="{'badge-linesuccess': data.status === 'ACTIVE', 'badge-linedanger': data.status === 'INACTIVE'}"
+                (click)="changeUserStatus(data)">
+          {{data.status}}
+        </button></td> 
             <td class="action-table-data">
               <div class="edit-delete-action">
-                <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a>
+                <a class="me-2 p-2 mb-0" href="javascript:void(0);" (click)="changeUserStatus(data)"><i class="feather icon-eye action-eye"></i> </a>
                 <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(data)"> <i class="feather icon-edit feather-edit"></i></a>
                 <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);" (click)=confirmColor()> <i class="feather icon-trash-2 feather-trash-2"></i></a>
               </div>
@@ -168,7 +170,7 @@
       </tbody>
     </table>
   </div>
-  <!-- <app-custom-pagination></app-custom-pagination> -->
+   <app-custom-pagination></app-custom-pagination> 
 </div>
 </div>
 

@@ -4,8 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constant } from 'src/app/core/constant/constants';
 import { CookieService } from 'ngx-cookie-service';
 // import { UserDetails, UserDetailsRequest } from '../interface/user-management';
-// import { AuthenticationService } from './services/authentication-service.service';
-
+import { AuthenticationService } from 'src/app/auth/authentication.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,11 +14,11 @@ export class UserManagementService {
 
   constructor(
     private http: HttpClient,
-    private cookieService: CookieService
-    // private authenticationService: AuthenticationService,
+    private cookieService: CookieService,
+    private authenticationService: AuthenticationService,
   ) {
-    // this.loginUser = this.authenticationService.getLoginUser();
-    this.loginUser = JSON.parse(this.cookieService.get('loginDetails'))
+    this.loginUser = this.authenticationService.getLoginUser();
+    // this.loginUser = JSON.parse(this.cookieService.get('loginDetails'))
   }
 
   doLogin(login: any): Observable<any> {
@@ -33,7 +32,7 @@ export class UserManagementService {
   }
 
   getUserDetailsList(): Observable<any> {
-    // this.loginUser = JSON.parse(this.cookieService.get('loginDetails'));
+    this.loginUser = JSON.parse(this.cookieService.get('loginDetails'));
     let request: any = {
       payload: {
         requestedFor: 'ALL',
@@ -59,6 +58,32 @@ export class UserManagementService {
     return  this.http.post<any>(Constant.Site_Url+"getUserDetailsByRoleType",request);
   }
 
+  getUserListForDropDown(): Observable<any> {
+    // this.loginUser = JSON.parse(this.cookieService.get('loginDetails'));
+    let request: any = {
+      payload: {
+        requestedFor: 'ALL',
+        roleType: this.loginUser['roleType'],
+        token: this.loginUser['token'],
+        createdBy: this.loginUser['loginId'],
+        superadminId: this.loginUser['superadminId'],
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getUserListForDropDown",request);
+  }
+
+  changeUserStatus(rowData:any): Observable<any> {
+    // this.loginUser = JSON.parse(this.cookieService.get('loginDetails'));
+    let request: any = {
+      payload: {
+        loginId: rowData.loginId,
+        token: this.loginUser['token'],
+        superadminId: this.loginUser['superadminId'],
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"changeUserStatus",request);
+  }
+
 
   getAddressListByUserId(userId:any): Observable<any> {
     let request: any = {
@@ -75,8 +100,9 @@ export class UserManagementService {
 
 
   saveUserDetails(user: any): Observable<any> {
-    this.cookieService.get('loginDetails')
-    user.firstname
+    let loginRole;
+    this.loginUser = JSON.parse(this.cookieService.get('loginDetails'));
+    
     let request: any = {
       payload: {
         userPicture: user.userPicture,
@@ -85,7 +111,8 @@ export class UserManagementService {
         emailId: user.emailId,
         gender: user.gender,
         roleType: user.roleType,
-        permissions: user.permissions,
+        // permissions: "'"+user.permissions+"'",
+        permissions: JSON.stringify(user.permissions),
         mobileNo: user.mobileNo,
         dob: user.dob,
         alternateMobile: user.alternateMobile,
@@ -101,9 +128,11 @@ export class UserManagementService {
         emergencyContactNo2: user.emergencyContactNo2,
         addressList: user.addressList,
 
-        token: '',
-        createdBy: 'MAINADMIN',
-        superadminId: 'MAINADMIN',
+        token: this.loginUser['token'],
+        adminId: '',
+        teamleaderId: '',
+        createdBy: this.loginUser['loginId'],
+        superadminId: this.loginUser['superadminId'],
 
       }
     };

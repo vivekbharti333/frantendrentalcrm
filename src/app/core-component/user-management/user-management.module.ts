@@ -10,7 +10,8 @@ import { UsersComponent } from './users/users.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core'; 
-// import { MultiSelectModule } from 'primeng/multiselect';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { CreateUserComponent } from './create-user/create-user.component';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { MatOptionModule } from '@angular/material/core';
     RolesPermissionsComponent,
     UsersComponent,
     PermissionsComponent,
+    CreateUserComponent,
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { MatOptionModule } from '@angular/material/core';
     FormsModule,
     MatSelectModule,
     MatOptionModule,
-    // MultiSelectModule
-  ]
+    MultiSelectModule
+  ],
+  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class UserManagementModule { }

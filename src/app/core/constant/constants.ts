@@ -9,7 +9,7 @@ export class Constant {
     public static superAdmin = 'SUPERADMIN';
     public static admin = 'ADMIN';
     public static teamLeader = 'TEAM_LEADER';
-    public static fundraisingOfficer = 'FUNDRAISING_OFFICER';
+    public static saleExecutive = 'SALE_EXECUTIVE';
 
     //Requested For
     public static TODAY = 'TODAY';

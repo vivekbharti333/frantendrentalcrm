@@ -3,8 +3,13 @@
     <div class="page-title">
       <h4>New User</h4>
       <h6>Create new User</h6>
+      <!-- <p-toast></p-toast>
+      <button type="button" class="btn btn-primary btn-wave" id="liveToastBtn" pButton pRipple
+      (click)="show()" label="Show">Show live
+      toast</button> -->
     </div>
   </div>
+
   <ul class="table-top-head">
     <li>
       <div class="page-btn">
@@ -109,7 +114,7 @@
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label">Role</label>
-               <mat-select name="roleType" [(ngModel)]="user.roleType" multiple [ngModelOptions]="{standalone: true}"
+               <mat-select name="roleType" [(ngModel)]="user.roleType" [ngModelOptions]="{standalone: true}"
                 class="select" placeholder="Select User Role">
                 @for (data of userType; track data) {
                   <mat-option [value]="data.value">
@@ -139,7 +144,27 @@
                 }
               </mat-select>  -->
             </div>
-            
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Admin</label>
+              <input type="text" class="form-control" name="adminId" [(ngModel)]="user.adminId" required>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6" *ngIf="!teamLeaderFielShow">
+            <div class="mb-3">
+              <label class="form-label">Team Leader</label>
+              <!-- <input type="text" class="form-control" name="teamleaderId" [(ngModel)]="user.teamleaderId" required> -->
+              <mat-select name="permissions" [(ngModel)]="user.teamleaderId" multiple [ngModelOptions]="{standalone: true}"
+                class="select" placeholder="Select Team Leader">
+                @for (dropDownUser of userForDropDown; track dropDownUser) {
+                  <mat-option [value]="dropDownUser.loginId">
+                    {{dropDownUser.firstName+" "+dropDownUser.lastName}}
+                  </mat-option> 
+                }
+              </mat-select>
+            </div>
           </div>
 
         </div>

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constant } from 'src/app/core/constant/constants';
+import { AuthenticationService } from 'src/app/auth/authentication.service';
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,10 @@ export class WebsiteSettingService {
 
   constructor(
     private http: HttpClient,
-  ) { }
+    private authenticationService: AuthenticationService,
+  ) {
+    this.loginUser = this.authenticationService.getLoginUser();
+  }
 
   saveCompanyDetails(comapny: any): Observable<any> {
     let request: any = {
@@ -26,7 +31,7 @@ export class WebsiteSettingService {
         website: comapny.website,
         phoneNumber: comapny.phoneNumber,
         token: comapny.phoneNumber,
-        superadminId: 'MAINADMIN',
+        superadminId: this.loginUser['superadminId'],
       }
     };
     return this.http.post<any>(Constant.Site_Url + "addUpdateApplicationHeader", request);
@@ -35,8 +40,8 @@ export class WebsiteSettingService {
   getApplicationDetailsList(): Observable<any> {
     let request: any = {
       payload: {
-        token: '',
-        superadminId: 'MAINADMIN',
+        token: this.loginUser['token'],
+        superadminId: this.loginUser['superadminId'],
       }
     };
     return this.http.post<any>(Constant.Site_Url + "getApplicationHeaderDetails", request);

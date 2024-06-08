@@ -87,12 +87,12 @@ export class SidebarService {
             {
               menuValue: 'Admin Dashboard',
               route: routes.adminDashboard,
-              permission: 'admindb',
+              permission: 'admin-dashboard',
             },
             {
               menuValue: 'Sales Dashboard',
               route: routes.salesDashboard,
-              permission: 'admindbn',
+              permission: 'sale-dashboard',
             },
           ],
         },
@@ -104,14 +104,19 @@ export class SidebarService {
           base1: 'usermang',
           subMenus: [
             {
-              menuValue: 'Create user',
+              menuValue: 'Add user',
               route: routes.addusers,
-              permission: 'usermang',
+              permission: 'create-user',
+            },
+            {
+              menuValue: 'Create user',
+              route: routes.createUser,
+              permission: 'create-user',
             },
             {
               menuValue: 'User List',
               route: routes.users,
-              permission: 'usermang1',
+              permission: 'user-list',
             },
           ],
         },
@@ -133,12 +138,12 @@ export class SidebarService {
             {
               menuValue: 'General Setting',
               route: routes.generalSettings,
-              permission: 'admindb',
+              permission: 'general-setting',
             },
             {
               menuValue: 'Company Setting',
               route: routes.companySettings,
-              permission: 'admindbn',
+              permission: 'company-setting',
             },
           ],
         },

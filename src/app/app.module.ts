@@ -6,12 +6,13 @@ import { AppComponent } from './app.component';
 import { LoaderComponent } from './common-component/loader/loader.component';
 import { sharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   declarations: [AppComponent, LoaderComponent],
-  imports: [BrowserModule, AppRoutingModule, sharedModule, BrowserAnimationsModule],
+  imports: [BrowserModule, AppRoutingModule, sharedModule, BrowserAnimationsModule,MatSelectModule,FormsModule],
   exports: [],
   bootstrap: [AppComponent],
 })

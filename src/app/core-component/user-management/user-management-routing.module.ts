@@ -4,6 +4,7 @@ import { AddUserComponent } from './users/add-user/add-user.component';
 import { UserManagementComponent } from './user-management.component';
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component';
 import { DeleteAccountComponent } from './delete-account/delete-account.component';
+import { CreateUserComponent } from './create-user/create-user.component';
 import { UsersComponent } from './users/users.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 
@@ -23,6 +24,10 @@ const routes: Routes = [
       {
         path: 'add-users',
         component: AddUserComponent,
+      },
+      {
+        path: 'create-users',
+        component: CreateUserComponent,
       },
       {
         path: 'users',

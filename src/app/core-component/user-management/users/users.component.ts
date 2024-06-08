@@ -13,7 +13,8 @@ import { users } from 'src/app/shared/model/page.model';
 import { PaginationService, tablePageSize } from 'src/app/shared/shared.index';
 import Swal from 'sweetalert2';
 import { UserManagementService } from '../user-management.service';
-// import { ToastrService } from 'ngx-toastr';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 
 interface data {
@@ -25,6 +26,7 @@ interface data {
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
+  providers: [MessageService, ToastModule],
 })
 
 export class UsersComponent {
@@ -134,6 +136,7 @@ export class UsersComponent {
     private pagination: PaginationService,
     private router: Router,
     private sidebar: SidebarService,
+    private messageService: MessageService,
     private userManagementService: UserManagementService,
   ) {
     //   this.userManagementService.getUserDetailsList().subscribe((apiRes: any) => {
@@ -293,6 +296,43 @@ export class UsersComponent {
         f.isSelected = false;
       });
     }
+  }
+
+  changeUserStatus(rowData:any) {
+    this.userManagementService.changeUserStatus(rowData)
+      .subscribe({
+        next: (response: any) => {
+
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+      
+              this.getUserDetailsByRoleType('ALL');
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+            } else {
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        },
+        error: () => this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+        }),
+      });
+    // this.isLoading = false;
   }
 
   public getAddressListByUserId(userId: any) {

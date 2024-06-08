@@ -1,8 +1,9 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component } from '@angular/core';
+// import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms'; // Import FormsModule and NgForm
 import { SidebarService } from 'src/app/core/core.index'; // Ensure correct import path
-import { UserManagementService } from '../../user-management.service';
+import { UserManagementService } from '../user-management.service';
 import { MessageService } from 'primeng/api';
 import { routes } from 'src/app/core/helpers/routes';
 import { MatSelectModule } from '@angular/material/select';
@@ -14,47 +15,38 @@ import { CookieService } from 'ngx-cookie-service';
 import { Constant } from 'src/app/core/constant/constants';
 import { ToastModule } from 'primeng/toast';
 
-
-// interface Address {
-//   addressType: string;
-//   addressLine: string;
-//   landmark: string;
-//   district: string;
-//   city: string;
-//   state: string;
-//   country: string;
-//   pincode: string;
-// }
-
 interface data {
   value: string;
   name: string;
 }
 
-interface dropDownUser{
+interface dropDownUser {
   firstName: string;
   lastName: string;
   loginId: string
 }
 
 @Component({
-  selector: 'app-add-user',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatSelectModule,MatOptionModule,MatCheckboxModule, MatFormFieldModule], // Add FormsModule here
-  templateUrl: './add-user.component.html',
-  styleUrls: ['./add-user.component.scss'],
-  providers: [MessageService,ToastModule],
-  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html',
+  styleUrl: './create-user.component.scss',
+  providers: [MessageService, ToastModule],
 })
-export class AddUserComponent {
+export class CreateUserComponent {
 
-  // permissionsList: string[] = ['admindb', 'admindbn', 'usermang', 'usermang1'];
-  selectedOptions: string[] = [];
-  public userForDropDown : any[]=[];
   public loginUser: any;
-  public teamLeaderFielShow :boolean = false;
+  public userForDropDown: any[] = [];
+  public teamLeaderFielShow: boolean = false;
 
-  public routes = routes;
+  constructor(
+    private sidebar: SidebarService,
+    private userManagementService: UserManagementService,
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService,
+    // private toastr: ToastrService
+  ) {
+    this.loginUser = this.authenticationService.getLoginUser();
+  }
 
   public user = {
     userPicture: '',
@@ -65,14 +57,14 @@ export class AddUserComponent {
     adminId: '',
     teamleaderId: '',
     permissions: '',
-	  roleType: '',
-	  mobileNo: '',
-	  alternateMobile: '',
+    roleType: '',
+    mobileNo: '',
+    alternateMobile: '',
     userCode: '',
-	  idDocumentType: '',
-	  idDocumentPicture: '',
-	  panNumber: '',
-    dob:'',
+    idDocumentType: '',
+    idDocumentPicture: '',
+    panNumber: '',
+    dob: '',
     emergencyContactRelation1: '',
     emergencyContactName1: '',
     emergencyContactNo1: '',
@@ -93,40 +85,29 @@ export class AddUserComponent {
     // ]
   };
 
+  show() {
+    // this.messageService.add({
+    //   summary: 'Toast',
+    //   detail: 'Hello, world! This is a toast message.',
+    // });
 
-
-
-
-  constructor(
-    private sidebar: SidebarService,
-    private userManagementService: UserManagementService,
-    private authenticationService: AuthenticationService,
-    private messageService: MessageService,
-    // private toastr: ToastrService
-  ) {
-    this.loginUser = this.authenticationService.getLoginUser();
+    this.messageService.add({
+      summary: 'test',
+      detail: 'uiyiyuui',
+      styleClass: 'success-background-popover',
+    });
   }
-  ngOnInit(){
-  this.getUserListForDropDown();
- }
- 
- show() {
-  this.messageService.add({
-    summary: 'Toast',
-    detail: 'Hello, world! This is a toast message.',
-  });
-}
 
-  public password : boolean[] = [false];
+  public password: boolean[] = [false];
 
-  genderType: data[] = [{ value: 'MALE', name: 'MALE'}, {value: 'FEMALE', name: 'FEMALE'}, {value: 'OTHER', name: 'OTHER'}];
-  userType: data[] = [{ value: 'ADMIN', name: 'ADMIN'}, {value: 'TEAM_LEADER', name: 'TEAM LEADER'}, {value: 'SALE_EXECUTIVE', name: 'SALE EXECUTIVE'}];
+  genderType: data[] = [{ value: 'MALE', name: 'MALE' }, { value: 'FEMALE', name: 'FEMALE' }, { value: 'OTHER', name: 'OTHER' }];
+  userType: data[] = [{ value: 'ADMIN', name: 'ADMIN' }, { value: 'TEAM_LEADER', name: 'TEAM LEADER' }, { value: 'SALE_EXECUTIVE', name: 'SALE EXECUTIVE' }];
   // permissionsList: data[] = [{ value: '1', name: 'admindb'}, {value: '2', name: 'admindbn'}, {value: '3', name: 'usermang'},{value: '3', name: 'usermang1'}];
-  permissionsList: string[] = ['admin-dashboard','sale-dashboard','create-user','user-list','general-setting','company-setting'];
+  permissionsList: string[] = ['admin-dashboard', 'sale-dashboard', 'create-user', 'user-list', 'general-setting', 'company-setting'];
 
 
-  public isTeamLeaderFielsShow(){
-    if(this.loginUser['roleType'] == Constant.admin){
+  public isTeamLeaderFielsShow() {
+    if (this.loginUser['roleType'] == Constant.admin) {
       this.teamLeaderFielShow = true;
     }
   }
@@ -153,37 +134,30 @@ export class AddUserComponent {
     if (selectedFile) {
       const reader = new FileReader();
       reader.onload = (event: any) => {
-      const base64String = event.target.result.split(',')[1]; // Get the base64 part
+        const base64String = event.target.result.split(',')[1]; // Get the base64 part
 
         // Set the base64 string to the userPicture field
-        this.user.userPicture = "data:image/jpeg;base64,"+base64String;
+        this.user.userPicture = "data:image/jpeg;base64," + base64String;
       };
       reader.readAsDataURL(selectedFile);
     }
   }
 
-  submitUserForm() {
-    // this.isLoading = true;
-    // alert(this.user.userPicture);
-    // alert(form);
-    // alert(form.value);
-    
+  submitUserForm(form: NgForm) {
     this.userManagementService.saveUserDetails(this.user)
       .subscribe({
         next: (response: any) => {
+
           if (response['responseCode'] == '200') {
             if (response['payload']['respCode'] == '200') {
-              alert(response['payload']['respMesg']);
-              //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
-            // this.user;
-             this.messageService.add({
-              summary: response['payload']['respCode'],
-              detail: response['payload']['respMesg'],
-              styleClass: 'success-background-popover',
-            });
+      
+              form.reset();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
             } else {
-              // alert(response['payload']['respMesg']);
-
               this.messageService.add({
                 summary: response['payload']['respCode'],
                 detail: response['payload']['respMesg'],
@@ -203,8 +177,9 @@ export class AddUserComponent {
           detail: 'Server Error',
         }),
       });
-      // this.isLoading = false;
+    // this.isLoading = false;
   }
+
 
 
   isCollapsed: boolean = false;

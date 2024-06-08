@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SidebarService } from 'src/app/core/core.index';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import { WebsiteSettingService } from '../website-setting.service';
 
 @Component({
   selector: 'app-company-settings',
   templateUrl: './company-settings.component.html',
   styleUrls: ['./company-settings.component.scss'],
-  providers: [MessageService]
+  providers: [MessageService,ToastModule]
 })
 export class CompanySettingsComponent implements OnInit {
   constructor(
@@ -17,6 +18,15 @@ export class CompanySettingsComponent implements OnInit {
     private messageService: MessageService,
     private websiteSettingService: WebsiteSettingService
   ) {}
+
+  // show() {
+  //   this.messageService.add({
+  //     summary: 'Toast',
+  //     detail: 'Hello, world! This is a toast message.',
+  //     styleClass: 'danger-background-popover',
+      
+  //   });
+  // }
 
   public applicationDetailsList: any;
 
@@ -74,8 +84,8 @@ export class CompanySettingsComponent implements OnInit {
   submitCompanyForm() {
     this.websiteSettingService.saveCompanyDetails(this.comapany).subscribe({
       next: (response: any) => {
-        if (response.responseCode === '200') {
-          if (response.payload.respCode === '200') {
+        if (response.responseCode == '200') {
+          if (response.payload.respCode == '200') {
             this.messageService.add({
               summary: response.payload.respCode,
               detail: response.payload.respMesg,
@@ -106,7 +116,7 @@ export class CompanySettingsComponent implements OnInit {
   public getApplicationDetailsList() {
     this.websiteSettingService.getApplicationDetailsList().subscribe({
       next: (response: any) => {
-        if (response.responseCode === '200') {
+        if (response.responseCode == '200') {
           this.applicationDetailsList = JSON.parse(JSON.stringify(response.listPayload));
           this.applicationDetailsList = this.applicationDetailsList[0];
           this.setApplicationDetails();

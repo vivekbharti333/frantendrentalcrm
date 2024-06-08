@@ -898,6 +898,9 @@ export class routes {
   public static get addusers(): string {
     return this.usersManagement + '/add-users';
   }
+  public static get createUser(): string {
+    return this.usersManagement +'/create-users'
+  }
   public static get users(): string {
     return this.usersManagement + '/users';
   }
