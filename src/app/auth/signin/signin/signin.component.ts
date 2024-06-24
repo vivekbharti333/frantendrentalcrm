@@ -46,22 +46,29 @@ export class SigninComponent {
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
+            alert(" response['responseCode'] "+response['responseCode']);
             if (response['payload']['respCode'] == '200') {
+              alert("response['payload']['respCode'] "+response['payload']['respCode']);
               this.getApplicaionHeaderDetails();
               let permission = response['payload']['permissions'];
               localStorage.setItem('menuPermission', JSON.stringify(permission));
               localStorage.setItem('userPicture', JSON.stringify(response['payload']['userPicture']));
-              // localStorage.setItem('menuPermission', JSON.stringify(['admindb', 'admindbn', 'usermang', 'usermang1']));
-              // this.router.navigate([routes.adminDashboard]);
-
               
-
               // Get a cookie
               let expiredDate = new Date();
               expiredDate.setDate(expiredDate.getDate() + 1);
               this.cookieService.set('loginDetails', JSON.stringify(response['payload']), expiredDate);
 
-              let cook = this.cookieService.get('loginDetails')
+              this.cookieService.set('loginId', response['payload']['loginId'], expiredDate);
+              this.cookieService.set('firstName', response['payload']['firstName'], expiredDate);
+              this.cookieService.set('lastName', response['payload']['lastName'], expiredDate);
+              this.cookieService.set('roleType', response['payload']['roleType'], expiredDate);
+              this.cookieService.set('teamleaderId', response['payload']['teamleaderId'], expiredDate);
+              this.cookieService.set('superadminId', response['payload']['superadminId'], expiredDate);
+              this.cookieService.set('token', response['payload']['token'], expiredDate);
+              
+
+             
               
               this.messageService.add({
                 summary: response['payload']['respCode'],
@@ -84,14 +91,12 @@ export class SigninComponent {
             });
           }
         },
-        // error: (error: any) => this.toastr.error('Server Error', '500'),
         error: (error: any) =>  this.messageService.add({
           summary: '500',
           detail: 'Server Error',
           styleClass: 'danger-background-popover',
         }),
       });
-      // this.isLoading = false;
   }
 
   public getApplicaionHeaderDetails() {
@@ -101,11 +106,11 @@ export class SigninComponent {
           if (response['responseCode'] == '200') {
             let headerDetails = JSON.parse(JSON.stringify(response['payload']));
             let base = headerDetails['displayLogo'];
+            console.log("base : "+base);
             localStorage.setItem('displayLogo', base);
           } else {
           }
         },
-        // error: (error: any) => this.toastr.error('Server Error', '500'),
       });
   }
 

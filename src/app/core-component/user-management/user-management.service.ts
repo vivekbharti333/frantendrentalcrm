@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Constant } from 'src/app/core/constant/constants';
@@ -10,7 +10,7 @@ import { AuthenticationService } from 'src/app/auth/authentication.service';
 })
 export class UserManagementService {
 
-  public loginUser: any;
+  public loginUser;
 
   constructor(
     private http: HttpClient,
@@ -32,14 +32,13 @@ export class UserManagementService {
   }
 
   getUserDetailsList(): Observable<any> {
-    this.loginUser = JSON.parse(this.cookieService.get('loginDetails'));
     let request: any = {
       payload: {
         requestedFor: 'ALL',
-        roleType: this.loginUser['roleType'],
-        token: this.loginUser['token'],
-        createdBy: this.loginUser['loginId'],
-        superadminId: this.loginUser['superadminId'],
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
       }
     };
     return  this.http.post<any>(Constant.Site_Url+"getUserDetails",request);
@@ -100,8 +99,6 @@ export class UserManagementService {
 
 
   saveUserDetails(user: any): Observable<any> {
-    let loginRole;
-    this.loginUser = JSON.parse(this.cookieService.get('loginDetails'));
     
     let request: any = {
       payload: {

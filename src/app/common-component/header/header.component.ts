@@ -30,12 +30,12 @@ export class HeaderComponent  {
   public headerDetails: any;
   public displayLogo: any;
 
-  public userName: any;
-  public userRole: any;
-  public userPicture: any;
+  public userName: string = '';
+  public userRole: string = '';
+  public userPicture: any = '';
 
   constructor(
-    private Router: Router,
+    private router: Router,
     private common: CommonService,
     private sidebar: SidebarService,
     private webStorage: WebstorgeService,
@@ -43,8 +43,8 @@ export class HeaderComponent  {
     private authenticationService: AuthenticationService,
     private cookieService: CookieService,
   ) {
-    this.activePath = this.Router.url.split('/')[2];
-    this.Router.events.subscribe((data: RouterEvent) => {
+    this.activePath = this.router.url.split('/')[2];
+    this.router.events.subscribe((data: RouterEvent) => {
       if (data instanceof NavigationStart) {
         this.activePath = data.url.split('/')[2];
       }
@@ -67,11 +67,13 @@ export class HeaderComponent  {
     });
 
     this.loginUser = this.authenticationService.getLoginUser();
+    // this.loginUser = JSON.parse(this.cookieService.get('loginDetails'));
+
+    // this.getApplicaionHeaderDetails();
   }
 
   ngOnInit(){
     this.getApplicaionHeaderDetails();
-    
   }
 
 
@@ -104,23 +106,42 @@ export class HeaderComponent  {
   }
 
   public getApplicaionHeaderDetails() {
-    this.userName = this.loginUser['firstName']+" "+this.loginUser['lastName'];
-    this.userRole = this.loginUser['roleType'];
-     this.displayLogo =localStorage.getItem('displayLogo');
-     this.userPicture = 'data:image/jpeg;base64,'+localStorage.getItem('userPicture');
+    let firstName = this.cookieService.get('firstName');
+    let lastName = this.cookieService.get('lastName');
+    this.userName = firstName+" "+lastName
+    this.userRole = this.cookieService.get('roleType');
 
-     console.log("this.userPicture : "+this.userPicture);
+    //  this.displayLogo =localStorage.getItem('displayLogo');
+    //  this.userPicture = 'data:image/jpeg;base64,'+localStorage.getItem('userPicture');
+    this.userPicture = localStorage.getItem('userPicture') || '';
 
-    //  alert("Display Logo : "+this.displayLogo);
-    //  alert("User Picture : "+this.userPicture);
-    
+     console.log(this.userPicture);
   }
 
   logOut() {
+
     this.cookieService.delete('loginDetails');
-    window.location.href = "/signin";
-    window.location.reload();
+    this.cookieService.delete('loginId');
+    this.cookieService.delete('firstName');
+    this.cookieService.delete('lastName');
+    this.cookieService.delete('roleType');
+    this.cookieService.delete('teamleaderId');
+    this.cookieService.delete('superadminId');
+    this.cookieService.delete('token');
+
+    // Remove 'displayLogo' from localStorage
+    localStorage.removeItem('displayLogo');
+
+    // Remove 'userPicture' from localStorage
+    localStorage.removeItem('userPicture');
+    
+    this.router.navigate([routes.signIn]);
+    // this.router.navigate([routes.signIn]);
+    // window.location.href = "/signin";
+    // window.location.reload();
   }
+
+
 
  
 }

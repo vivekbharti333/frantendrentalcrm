@@ -31,16 +31,6 @@ export class AuthenticationService {
     }
   }
 
-  isLogin() {
-    let details = this.cookieService.get('loginDetails');
-    if (details) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-
 
   logOut() {
     this.cookieService.delete('loginDetails');
