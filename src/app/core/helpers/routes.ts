@@ -103,6 +103,9 @@ export class routes {
   public static get usersManagement(): string {
     return this.core + '/user-management';
   }
+  public static get leadManagement(): string {
+    return this.core + '/lead-management';
+  }
   public static get settings(): string {
     return this.core + '/settings';
   }
@@ -426,7 +429,6 @@ export class routes {
   public static get purchaseOrderReport(): string {
     return this.purchase + '/purchase-order-report';
   }
-
   public static get newUser(): string {
     return this.users + '/new-user';
   }
@@ -903,6 +905,9 @@ export class routes {
   }
   public static get users(): string {
     return this.usersManagement + '/users';
+  }
+  public static get createLead(): string {
+    return this.leadManagement + '/create-lead';
   }
   public static get fileShared(): string {
     return this.application + '/file-shared';

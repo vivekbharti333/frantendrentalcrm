@@ -120,6 +120,21 @@ export class SidebarService {
             },
           ],
         },
+        {
+          menuValue: 'Lead Management',
+          hasSubRoute: true,
+          showSubRoute: false,
+          icon: 'grid',
+          base1: 'usermang',
+          subMenus: [
+            {
+              menuValue: 'Add user',
+              route: routes.createLead,
+              permission: 'create-lead',
+            },
+            
+          ],
+        },
       ],
     },
     {
