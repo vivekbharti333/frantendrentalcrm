@@ -100,7 +100,7 @@ export class SidebarService {
           menuValue: 'User Management',
           hasSubRoute: true,
           showSubRoute: false,
-          icon: 'grid',
+          icon: 'users',
           base1: 'usermang',
           subMenus: [
             {
@@ -124,11 +124,11 @@ export class SidebarService {
           menuValue: 'Lead Management',
           hasSubRoute: true,
           showSubRoute: false,
-          icon: 'grid',
-          base1: 'usermang',
+          icon: 'bar-chart',
+          base1: 'leadmang',
           subMenus: [
             {
-              menuValue: 'Add user',
+              menuValue: 'Create Lead',
               route: routes.createLead,
               permission: 'create-lead',
             },

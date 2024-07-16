@@ -46,9 +46,9 @@ export class SigninComponent {
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            alert(" response['responseCode'] "+response['responseCode']);
+            // alert(" response['responseCode'] "+response['responseCode']);
             if (response['payload']['respCode'] == '200') {
-              alert("response['payload']['respCode'] "+response['payload']['respCode']);
+              // alert("response['payload']['respCode'] "+response['payload']['respCode']);
               this.getApplicaionHeaderDetails();
               let permission = response['payload']['permissions'];
               localStorage.setItem('menuPermission', JSON.stringify(permission));
