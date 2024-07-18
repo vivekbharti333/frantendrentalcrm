@@ -69,7 +69,6 @@ export class routes {
   public static get transfer(): string {
     return this.core + '/transfer';
   }
-
   public static get return(): string {
     return this.core + '/return';
   }
@@ -99,12 +98,6 @@ export class routes {
   }
   public static get reports(): string {
     return this.core + '/reports';
-  }
-  public static get usersManagement(): string {
-    return this.core + '/user-management';
-  }
-  public static get leadManagement(): string {
-    return this.core + '/lead-management';
   }
   public static get settings(): string {
     return this.core + '/settings';
@@ -618,9 +611,6 @@ export class routes {
   public static get editEmployee(): string {
     return this.hrm + '/employee/edit-employee';
   }
-  public static get deleteaccount(): string {
-    return this.usersManagement + '/delete-account';
-  }
   public static get uiAlerts(): string {
     return this.baseUi + '/ui-alerts';
   }
@@ -894,21 +884,6 @@ export class routes {
   public static get paySlip(): string {
     return this.hrm + '/payroll/payslip';
   }
-  public static get rolesPermission(): string {
-    return this.usersManagement + '/roles-permissions';
-  }
-  public static get addusers(): string {
-    return this.usersManagement + '/add-users';
-  }
-  public static get createUser(): string {
-    return this.usersManagement +'/create-users'
-  }
-  public static get users(): string {
-    return this.usersManagement + '/users';
-  }
-  public static get createLead(): string {
-    return this.leadManagement + '/create-lead';
-  }
   public static get fileShared(): string {
     return this.application + '/file-shared';
   }
@@ -951,8 +926,39 @@ export class routes {
   public static get success3(): string {
     return this.base + '/success-3';
   }
+
+  
+  public static get usersManagement(): string {
+    return this.core + '/user-management';
+  }
   public static get permissions(): string {
     return this.usersManagement + '/permissions';
+  } 
+  public static get rolesPermission(): string {
+    return this.usersManagement + '/roles-permissions';
+  }
+  public static get addusers(): string {
+    return this.usersManagement + '/add-users';
+  }
+  public static get createUser(): string {
+    return this.usersManagement +'/create-users'
+  }
+  public static get users(): string {
+    return this.usersManagement + '/users';
+  }
+  public static get deleteaccount(): string {
+    return this.usersManagement + '/delete-account';
+  }
+
+  
+  public static get leadManagement(): string {
+    return this.core + '/lead-management';
+  }
+  public static get createLead(): string {
+    return this.leadManagement + '/create-lead';
+  }
+  public static get followupOne(): string {
+    return this.leadManagement + '/follow-up-one';
   }
   
   // core pages child routes *ends*

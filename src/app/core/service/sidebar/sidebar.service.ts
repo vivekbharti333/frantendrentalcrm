@@ -101,7 +101,7 @@ export class SidebarService {
           hasSubRoute: true,
           showSubRoute: false,
           icon: 'users',
-          base1: 'usermang',
+          // base1: 'usermang',
           subMenus: [
             {
               menuValue: 'Add user',
@@ -125,12 +125,16 @@ export class SidebarService {
           hasSubRoute: true,
           showSubRoute: false,
           icon: 'bar-chart',
-          base1: 'leadmang',
+          // base1: 'leadmang',
           subMenus: [
             {
               menuValue: 'Create Lead',
               route: routes.createLead,
               permission: 'create-lead',
+            },{
+              menuValue: 'Follow up one',
+              route: routes.followupOne,
+              permission: 'follow-up-one',
             },
             
           ],
@@ -164,13 +168,13 @@ export class SidebarService {
         },
       ],
     },
-  
-
 
 
 
     
 
+
+    
   ];
 
   public sidebarData2 = [

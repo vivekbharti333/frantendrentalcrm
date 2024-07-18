@@ -8,7 +8,7 @@ describe('CreateLeadComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CreateLeadComponent]
+      declarations: [CreateLeadComponent]
     })
     .compileComponents();
     

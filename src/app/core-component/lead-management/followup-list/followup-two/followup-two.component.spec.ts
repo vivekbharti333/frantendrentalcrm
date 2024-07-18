@@ -8,7 +8,7 @@ describe('FollowupTwoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FollowupTwoComponent]
+      declarations: [FollowupTwoComponent]
     })
     .compileComponents();
     
