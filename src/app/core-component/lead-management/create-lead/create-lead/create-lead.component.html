@@ -1,1 +1,289 @@
-<p>create-lead works!</p>
+<div class="page-header">
+    <div class="add-item d-flex">
+        <div class="page-title">
+            <h4>New Lead</h4>
+            <h6>Create new Lead</h6>
+            <p-toast></p-toast>
+            <!-- <button type="button" class="btn btn-primary btn-wave" id="liveToastBtn" pButton pRipple
+        (click)="show()" label="Show">Show live
+        toast</button>  -->
+        </div>
+    </div>
+
+    <ul class="table-top-head">
+        <li>
+            <div class="page-btn">
+                <!-- <a [routerLink] = "routes.employeesList" class="btn btn-secondary"><i  class="feather icon-arrow-left me-2"></i>Back to Employee List</a> -->
+            </div>
+        </li>
+        <li>
+            <a (click)="toggleCollapse()" data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse"
+                id="collapse-header" matTooltip="Collapse" matTooltipPosition="above"> @if (!isCollapsed) {
+                <i class="feather icon-chevron-up feather-chevron-up"></i>
+                }
+                @if (isCollapsed) {
+                <i class="feather icon-chevron-down feather-chevron-down"></i>
+                }</a>
+        </li>
+    </ul>
+</div>
+
+
+
+
+<form #leadForm="ngForm" (ngSubmit)="submitLeadForm(leadForm)">
+    <div class="card">
+        <div class="card-body">
+            <div class="new-employee-field">
+                <div class="card-title-head">
+                    <h6><span><i class=" feather icon-info feather-edit"></i></span>Company Name</h6>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 form-check"></div>
+                    <div class="col-lg-2 col-md-2 form-check">
+                      <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="EZEE" id="companyName1" checked>
+                      <label class="form-check-label" for="companyName1">
+                        EZEE
+                      </label>
+                    </div>
+                    <div class="col-lg-2 col-md-2 form-check">
+                      <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="JAZZ" id="companyName2">
+                      <label class="form-check-label" for="companyName2">
+                        JAZZ
+                      </label>
+                    </div>
+                    <div class="col-lg-2 col-md-2 form-check">
+                        <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="JOES" id="companyName3">
+                        <label class="form-check-label" for="companyName3">
+                          JOES
+                        </label>
+                    </div>
+                    <div class="col-lg-2 col-md-2 form-check">
+                        <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="DIVINE" id="companyName4">
+                        <label class="form-check-label" for="companyName4">
+                          DIVINE
+                        </label>
+                    </div>
+                </div><div><p></p><p></p><p></p></div>
+                <div class="card-title-head">
+                    <h6><span><i class=" feather icon-info feather-edit"></i></span>Enquiry Source</h6>
+                </div>
+
+                <!-- <div class="row">
+                    <div class="col-lg-2 col-md-2 form-check"></div>
+                    <div class="col-lg-2 col-md-2 form-check">
+                      <input class="form-check-input" type="radio" name="enquirySource" [(ngModel)]="lead.enquirySource" value="Call" id="enquirySource1" checked>
+                      <label class="form-check-label" for="enquirySource1">
+                        Call
+                      </label>
+                    </div>
+                    <div class="col-lg-2 col-md-2 form-check">
+                      <input class="form-check-input" type="radio" name="enquirySource" [(ngModel)]="lead.enquirySource" value="Email" id="enquirySource2">
+                      <label class="form-check-label" for="enquirySource2">
+                        Email
+                      </label>
+                    </div>
+                    <div class="col-lg-2 col-md-2 form-check">
+                        <input class="form-check-input" type="radio" name="enquirySource" [(ngModel)]="lead.enquirySource" value="Whats App" id="enquirySource3">
+                        <label class="form-check-label" for="enquirySource3">
+                          Whats App
+                        </label>
+                    </div>
+                    <div class="col-lg-2 col-md-2 form-check">
+                        <input class="btn-check" type="radio" name="enquirySource" [(ngModel)]="lead.enquirySource" value="Other" id="enquirySource4" autocomplete="off">
+                        <label class="btn " for="option1">
+                          Other
+                        </label>
+                    </div>
+                </div> -->
+
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 form-check"></div>
+                        <div class="col-lg-2 col-md-2 form-check">
+                            <input type="radio" class="btn-check"  name="enquirySource" [(ngModel)]="lead.enquirySource" value="Call"  id="enquirySource1" autocomplete="off" checked>
+                            <label class="btn" for="enquirySource1">Call</label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 form-check">
+                            <input type="radio" class="btn-check"  name="enquirySource" [(ngModel)]="lead.enquirySource" value="Email" id="enquirySource2" autocomplete="off">
+                            <label class="btn" for="enquirySource2">Email</label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 form-check">
+                            <input type="radio" class="btn-check"  name="enquirySource" [(ngModel)]="lead.enquirySource" value="Whats App" id="enquirySource3" autocomplete="off">
+                            <label class="btn" for="enquirySource3">Whats App</label>
+                        </div>
+                        <div class="col-lg-2 col-md-2 form-check">
+                            <input type="radio" class="btn-check"  name="enquirySource" [(ngModel)]="lead.enquirySource" value="Other"  id="enquirySource4" autocomplete="off">
+                            <label class="btn" for="enquirySource4">Other</label>
+                        </div>
+                        
+                    </div>
+                    
+                <div><p></p><p></p><p></p></div>
+
+
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <input type="text" class="form-control" name="category" [(ngModel)]="lead.category" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Sub ategory</label>
+                            <input type="text" class="form-control" name="subCategory" [(ngModel)]="lead.subCategory" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Item Name</label>
+                            <input type="text" class="form-control" name="itemName" [(ngModel)]="lead.itemName" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-title-head">
+                    <h6><span><i class=" feather icon-info feather-edit"></i></span>Enquiry Source</h6>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Pickup Date & Time</label>
+                            <input type="datetime-local" class="form-control" name="pickupDateTime" [(ngModel)]="lead.pickupDateTime" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Pickup Location</label>
+                            <input type="text" class="form-control" name="pickupLocation" [(ngModel)]="lead.pickupLocation" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Drop Date & Time</label>
+                            <input type="datetime-local" class="form-control" name="dropDateTime" [(ngModel)]="lead.dropDateTime" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Drop Location</label>
+                            <input type="text" class="form-control" name="dropLocation" [(ngModel)]="lead.dropLocation" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-title-head">
+                    <h6><span><i class=" feather icon-info feather-edit"></i></span>Customer Details</h6>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Custome Name</label>
+                            <input type="text" class="form-control" name="customeName" [(ngModel)]="lead.customeName" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1">
+                        <div class="mb-3">
+                            <label class="form-label">Dial Code</label>
+                            <input type="text" class="form-control" name="countryDialCode" [(ngModel)]="lead.countryDialCode" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Customer Mobile</label>
+                            <input type="text" class="form-control" name="customerMobile" [(ngModel)]="lead.customerMobile" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Customer EmailId</label>
+                            <input type="text" class="form-control" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-2 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Vendor Amount</label>
+                            <input type="text" class="form-control" name="vendorAmount" [(ngModel)]="lead.vendorAmount" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Sell Amount</label>
+                            <input type="text" class="form-control" name="sellAmount" [(ngModel)]="lead.sellAmount" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Booking Amount</label>
+                            <input type="number" class="form-control" name="bookingAmount" [(ngModel)]="lead.bookingAmount" required>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-2 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Balance Amount</label>
+                            <input type="number" class="form-control" name="balanceAmount" [(ngModel)]="lead.balanceAmount" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Total Amount</label>
+                            <input type="number" class="form-control" name="totalAmount" [(ngModel)]="lead.totalAmount" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Security Amount</label>
+                            <input type="number" class="form-control" name="securityAmount" [(ngModel)]="lead.securityAmount" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <input type="text" class="form-control" name="status" [(ngModel)]="lead.status" required>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Created By</label>
+                            <input type="text" class="form-control" name="createdBy" [(ngModel)]="lead.createdBy" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" name="notes" [(ngModel)]="lead.notes" rows="4" placeholder="Enter your notes here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="text-end mb-3">
+        <!-- <button type="submit" class="btn btn-submit" [disabled]="!leadForm.form.valid">Save User</button> -->
+        <button type="submit" class="btn btn-submit">Save Lead</button>
+    </div>
+</form>

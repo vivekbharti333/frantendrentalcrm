@@ -5,6 +5,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core'; 
 import { MultiSelectModule } from 'primeng/multiselect';
 import { sharedModule } from 'src/app/shared/shared.module';
+// import { CreateLeadComponent } from './create-lead.component';
 import { CreateLeadComponent } from './create-lead/create-lead/create-lead.component';
 import { LeadManagementComponent } from './lead-management.component';
 import { LeadManagementRoutingModule } from './lead-management-routing.module';
