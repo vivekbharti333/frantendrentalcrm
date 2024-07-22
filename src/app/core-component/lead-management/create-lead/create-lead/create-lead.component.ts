@@ -15,6 +15,7 @@ import { ToastModule } from 'primeng/toast';
 export class CreateLeadComponent {
 
   public loginUser: any;
+  public selectedOption: string = 'lead'; 
 
   constructor(
     private sidebar: SidebarService,
@@ -25,10 +26,18 @@ export class CreateLeadComponent {
     this.loginUser = this.authenticationService.getLoginUser();
   }
 
+  onSelectionChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    this.selectedOption = inputElement.value;
+    console.log('Selected option:', this.selectedOption);
+  }
+  
+
   public lead = {
     // bookingId: '',
     companyName: '',
     enquirySource: 'Call',
+    superCategory: '',
     category: '',
     subCategory: '',
     itemName: '',

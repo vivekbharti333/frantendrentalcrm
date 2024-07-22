@@ -28,6 +28,7 @@ export class LeadManagementService {
       payload: {
         companyName: lead.companyName,
         enquirySource: lead.enquirySource,
+        superCategory: lead.superCategory,
         category: lead.category,
         subCategory: lead.subCategory,
         itemName: lead.itemName,
