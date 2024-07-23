@@ -6,6 +6,7 @@ import { AuthenticationService } from 'src/app/auth/authentication.service';
 import { LeadManagementService } from '../../lead-management.service';
 import { Constant } from 'src/app/core/constant/constants';
 import { ToastModule } from 'primeng/toast';
+
 @Component({
   selector: 'app-create-lead',
   templateUrl: './create-lead.component.html',
@@ -35,7 +36,7 @@ export class CreateLeadComponent {
 
   public lead = {
     // bookingId: '',
-    companyName: '',
+    companyName: 'Notes',
     enquirySource: 'Call',
     superCategory: '',
     category: '',
@@ -48,6 +49,7 @@ export class CreateLeadComponent {
     customeName: '',
     countryDialCode: '',
     customerMobile: '',
+    customerAlternateMobile: '',
     customerEmailId: '',
     quantity: '',
     vendorAmount: '',
@@ -60,9 +62,13 @@ export class CreateLeadComponent {
     status: '',
     createdBy: '',
     notes: '',
-
-
-   
+    preValue: `    Reports :
+    Delivery :
+    Comments :
+    Pay to vendor :
+    Pay to company :`,
+    reminderDate: '',
+    records: ''
   };
 
   submitLeadForm(form: NgForm) {
