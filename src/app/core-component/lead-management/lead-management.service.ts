@@ -22,6 +22,32 @@ export class LeadManagementService {
     // this.loginUser = JSON.parse(this.cookieService.get('loginDetails'))
   }
 
+  getSuperCategoryList(lead: any): Observable<any> {
+    let request: any = {
+      payload: {
+        requestedFor: 'ALL',
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getSuperCategoryDetails",request);
+  }
+
+  getCategoryList(id:any): Observable<any> {
+    let request: any = {
+      payload: {
+        superCategoryId: id,
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getCategoryDetailsBySuperCategoryId",request);
+  }
+
 
   saveLeadDetails(lead: any): Observable<any> {
     let request: any = {

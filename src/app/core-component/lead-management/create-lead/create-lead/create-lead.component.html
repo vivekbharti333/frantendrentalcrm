@@ -142,22 +142,23 @@
                     
                     <br>
 
+                   
+
                     <div class="row">
                         <div class="col-lg-5 col-md-6"></div>
                         <div class="col-lg-2 col-md-6">
                             <div class="mb-3">
                                 <!-- <label class="form-label">Super Category</label> -->
-                                <mat-select [(ngModel)]="selectedValue11" [ngModelOptions]="{standalone: true}"
-                                class="select custom-mat-select" placeholder="Car">
-                                @for (data of selectedList1; track data) {
-                                <mat-option [value]="data.value">
-                                  {{data.value}}
+                                <mat-select [(ngModel)]="lead.leadType" [ngModelOptions]="{standalone: false}"
+                                class="select custom-mat-select">
+                                @for (su of superCategoryList; track su) {
+                                <mat-option [value]="su.superCategory">
+                                  {{su.superCategory}}
                                 </mat-option>
                                 }
                               </mat-select>
                             </div>
                         </div>
-                        
                     </div>
 
                     <div class="row">
@@ -168,8 +169,8 @@
                                 <mat-select [(ngModel)]="selectedValue11" [ngModelOptions]="{standalone: true}"
                                 class="select custom-mat-select" placeholder="Vehicle Name">
                                 @for (data of selectedList2; track data) {
-                                <mat-option [value]="data.value">
-                                  {{data.value}}
+                                <mat-option [value]="data.name">
+                                  {{data.name}}
                                 </mat-option>
                                 }
                               </mat-select>
@@ -181,8 +182,8 @@
                                 <mat-select [(ngModel)]="selectedValue11" [ngModelOptions]="{standalone: true}"
                                 class="select custom-mat-select" placeholder="Select Vehicle Details Type">
                                 @for (data of selectedList3; track data) {
-                                <mat-option [value]="data.value">
-                                  {{data.value}}
+                                <mat-option [value]="data.name">
+                                  {{data.name}}
                                 </mat-option>
                                 }
                               </mat-select>
@@ -382,7 +383,8 @@
                             </div>
                           <P></P>
                             <div *ngIf="lead.companyName === 'Reminders'">
-                              <input type="date" class="form-control" name="reminderDate" [(ngModel)]="lead.dropDateTime" required>
+                              <input type="datetime-local" class="form-control" name="reminderDate" [(ngModel)]="lead.followupDateTime" required>
+                              <textarea class="form-control no-border" name="notes" [(ngModel)]="lead.notes" rows="4" placeholder="__________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
                             </div>
                           </div>
                         <div class="col-lg-4 col-md-4 vl">

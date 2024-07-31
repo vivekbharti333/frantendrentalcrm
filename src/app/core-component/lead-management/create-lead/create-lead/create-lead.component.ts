@@ -8,7 +8,13 @@ import { Constant } from 'src/app/core/constant/constants';
 import { ToastModule } from 'primeng/toast';
 
 interface data {
-  value: string;
+  id: number;
+  name: string;
+}
+
+interface su {
+  id: number;
+  name: string;
 }
 
 @Component({
@@ -21,6 +27,8 @@ export class CreateLeadComponent {
 
   public loginUser: any;
   public selectedOption: string = 'lead'; 
+  public superCategoryList: any[]=[];
+  public categoryList : any[]=[];
 
   constructor(
     private sidebar: SidebarService,
@@ -29,7 +37,12 @@ export class CreateLeadComponent {
     private messageService: MessageService,
   ) {
     this.loginUser = this.authenticationService.getLoginUser();
+   
   }
+
+  ngOnInit(){
+    this.getSuperCategory();
+   }
 
   onSelectionChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
@@ -51,16 +64,18 @@ export class CreateLeadComponent {
   public selectedValue11 = '';
 
   selectedList1: data[] = [
-    { value: 'Car' },
-    { value: 'Bike' }
+    {id:1, name: 'Car' },
+    {id:2, name: 'Bike' }
   ];
 
   selectedList2: data[] = [
-    { value: 'Vehicle Name' }
+    {id:1, name: 'Car' },
+    {id:2, name: 'Bike' }
   ];
   
   selectedList3: data[] = [
-    { value: 'Manual' }
+    {id:1, name: 'Car' },
+    {id:2, name: 'Bike' }
   ];
 
   public lead = {
@@ -87,10 +102,16 @@ export class CreateLeadComponent {
     balanceAmount: '',
     totalAmount: '',
     securityAmount: '',
+    amountToCompany: '',
+    amountToVendor: '',
+    deliveryAmountToCompany: '',
+    deliveryAmountToVendor: '',
     // vendorName: '',
     status: '',
+    leadType: '',
     createdBy: '',
     notes: '',
+    followupDateTime: '',
     preValue: `    Reports : 
     Delivery : 
     Comments : 
@@ -143,6 +164,38 @@ export class CreateLeadComponent {
   toggleCollapse() {
     this.sidebar.toggleCollapse();
     this.isCollapsed = !this.isCollapsed;
+  }
+
+  public getSuperCategory() {
+    this.leadManagementService.getSuperCategoryList(12)
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
+  }
+
+  public getCategory() {
+    this.leadManagementService.getSuperCategoryList(12)
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.categoryList = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
   }
   
 }
