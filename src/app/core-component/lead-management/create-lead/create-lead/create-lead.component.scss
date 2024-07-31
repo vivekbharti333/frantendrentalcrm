@@ -24,3 +24,14 @@
     border: none;
     border-bottom: 1px solid #c4c0c0; /* Adjust thickness and color as needed */
   }
+  .center-table {
+    margin: auto;
+    text-align: center;
+}
+.center-table td {
+    padding: 0 20px; /* Adds margin between the two table cells */
+    height: 50px;
+}
+.form-check-label {
+  margin-left: 10px; /* Adjust this value to increase or decrease the space between the input and label */
+}

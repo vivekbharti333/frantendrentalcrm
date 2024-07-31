@@ -1,11 +1,15 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms'; // Import FormsModule and NgForm
-import { SidebarService } from 'src/app/core/core.index'; // Ensure correct import path
+import { SidebarService, routes } from 'src/app/core/core.index'; // Ensure correct import path
 import { MessageService } from 'primeng/api';
 import { AuthenticationService } from 'src/app/auth/authentication.service';
 import { LeadManagementService } from '../../lead-management.service';
 import { Constant } from 'src/app/core/constant/constants';
 import { ToastModule } from 'primeng/toast';
+
+interface data {
+  value: string;
+}
 
 @Component({
   selector: 'app-create-lead',
@@ -32,7 +36,32 @@ export class CreateLeadComponent {
     this.selectedOption = inputElement.value;
     console.log('Selected option:', this.selectedOption);
   }
+
+  public routes = routes;
+  public selectedValue1 = '';
+  public selectedValue2 = '';
+  public selectedValue3 = '';
+  public selectedValue4 = '';
+  public selectedValue5 = '';
+  public selectedValue6 = '';
+  public selectedValue7 = '';
+  public selectedValue8 = '';
+  public selectedValue9 = '';
+  public selectedValue10 = '';
+  public selectedValue11 = '';
+
+  selectedList1: data[] = [
+    { value: 'Car' },
+    { value: 'Bike' }
+  ];
+
+  selectedList2: data[] = [
+    { value: 'Vehicle Name' }
+  ];
   
+  selectedList3: data[] = [
+    { value: 'Manual' }
+  ];
 
   public lead = {
     // bookingId: '',
@@ -62,11 +91,11 @@ export class CreateLeadComponent {
     status: '',
     createdBy: '',
     notes: '',
-    preValue: `    Reports :
-    Delivery :
-    Comments :
-    Pay to vendor :
-    Pay to company :`,
+    preValue: `    Reports : 
+    Delivery : 
+    Comments : 
+    Pay to vendor : 
+    Pay to company :` ,
     reminderDate: '',
     records: ''
   };

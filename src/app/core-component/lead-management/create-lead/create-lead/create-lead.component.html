@@ -95,96 +95,101 @@
         <div class="card">
             <div class="card-body">
                 <div class="new-employee-field">
+                    
+                    <table class="center-table">
+                        <tr>
+                            <td>
+                                <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="Vehicle" id="companyName1" checked>
+                                <label class="form-check-label" for="companyName1">
+                                     Goa
+                                </label>
+                            </td>
+                            <td>
+                                <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="Other" id="companyName2">
+                                <label class="form-check-label" for="companyName2">
+                                     Other
+                                </label>
+                            </td>
+                        </tr>
+                        <!-- <tr><td></td></tr> -->
+                        <tr>
+                            <td>
+                                <input type="radio" class="btn-check" name="formName" value="Vehicle" id="Vehicle" autocomplete="off" checked (change)="onSelectionChange($event)">
+                                <label class="btn" for="Vehicle">Vehicle</label>
+                            </td>
+                            <td>
+                                <input type="radio" class="btn-check" name="formName" value="addServices" id="addServices" autocomplete="off" (change)="onSelectionChange($event)">
+                                <label class="btn" for="addServices">Add. Services</label>
+                            </td>
+                        </tr>
+                    </table>
+                    
+
+
+                    <!-- <table class="center-table">
+                        <tr>
+                            <td>
+                                <input type="radio" class="btn-check" name="formName" value="lead" id="lead" autocomplete="off" checked (change)="onSelectionChange($event)">
+                                <label class="btn" for="lead">New Lead</label>
+                            </td>
+                            <td>
+                                <input type="radio" class="btn-check" name="formName" value="info" id="info" autocomplete="off" (change)="onSelectionChange($event)">
+                                <label class="btn" for="info">Information</label>
+                            </td>
+                        </tr>
+                    </table> -->
+
+                    
+                    <br>
 
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 form-check"></div>
-                        <div class="col-lg-2 col-md-2 form-check">
-                          <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="EZEE" id="companyName1" checked>
-                          <label class="form-check-label" for="companyName1">
-                            EZEE
-                          </label>
+                        <div class="col-lg-5 col-md-6"></div>
+                        <div class="col-lg-2 col-md-6">
+                            <div class="mb-3">
+                                <!-- <label class="form-label">Super Category</label> -->
+                                <mat-select [(ngModel)]="selectedValue11" [ngModelOptions]="{standalone: true}"
+                                class="select custom-mat-select" placeholder="Car">
+                                @for (data of selectedList1; track data) {
+                                <mat-option [value]="data.value">
+                                  {{data.value}}
+                                </mat-option>
+                                }
+                              </mat-select>
+                            </div>
                         </div>
-                        <div class="col-lg-2 col-md-2 form-check">
-                          <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="JAZZ" id="companyName2">
-                          <label class="form-check-label" for="companyName2">
-                            JAZZ
-                          </label>
-                        </div>
-                        <div class="col-lg-4 col-md-4 form-check"></div>
-                        
                         
                     </div>
-                    
-                    <!-- <div class="card-title-head">
-                        <h6><span><i class=" feather icon-info feather-edit"></i></span>Enquiry Source</h6>
-                    </div> -->
-                    <!-- <div class="row">
-                        <div class="col-lg-2 col-md-2 form-check"></div>
-                        <div class="col-lg-2 col-md-2 form-check">
-                            <input type="radio" class="btn-check" name="enquirySource" [(ngModel)]="lead.enquirySource"
-                                value="Call" id="enquirySource1" autocomplete="off" checked>
-                            <label class="btn" for="enquirySource1">Call</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 form-check">
-                            <input type="radio" class="btn-check" name="enquirySource" [(ngModel)]="lead.enquirySource"
-                                value="Email" id="enquirySource2" autocomplete="off">
-                            <label class="btn" for="enquirySource2">Email</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 form-check">
-                            <input type="radio" class="btn-check" name="enquirySource" [(ngModel)]="lead.enquirySource"
-                                value="Whats App" id="enquirySource3" autocomplete="off">
-                            <label class="btn" for="enquirySource3">Whats App</label>
-                        </div>
-                        <div class="col-lg-2 col-md-2 form-check">
-                            <input type="radio" class="btn-check" name="enquirySource" [(ngModel)]="lead.enquirySource"
-                                value="Other" id="enquirySource4" autocomplete="off">
-                            <label class="btn" for="enquirySource4">Other</label>
-                        </div>
-    
-                    </div> 
-    
-                     <div>
-                        <p></p>
-                        <p></p>
-                        <p></p>
-                    </div> -->
-    
-    
+
                     <div class="row">
+                        <div class="col-lg-3 col-md-6"></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Super Category</label>
-                                <input type="text" class="form-control" name="superCategory" [(ngModel)]="lead.category"
-                                    required>
+                                <!-- <label class="form-label">Super Category</label> -->
+                                <mat-select [(ngModel)]="selectedValue11" [ngModelOptions]="{standalone: true}"
+                                class="select custom-mat-select" placeholder="Vehicle Name">
+                                @for (data of selectedList2; track data) {
+                                <mat-option [value]="data.value">
+                                  {{data.value}}
+                                </mat-option>
+                                }
+                              </mat-select>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Category</label>
-                                <input type="text" class="form-control" name="category" [(ngModel)]="lead.category"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Sub ategory</label>
-                                <input type="text" class="form-control" name="subCategory" [(ngModel)]="lead.subCategory"
-                                    required>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Item Name</label>
-                                <input type="text" class="form-control" name="itemName" [(ngModel)]="lead.itemName"
-                                    required>
+                                <!-- <label class="form-label">Super Category</label> -->
+                                <mat-select [(ngModel)]="selectedValue11" [ngModelOptions]="{standalone: true}"
+                                class="select custom-mat-select" placeholder="Select Vehicle Details Type">
+                                @for (data of selectedList3; track data) {
+                                <mat-option [value]="data.value">
+                                  {{data.value}}
+                                </mat-option>
+                                }
+                              </mat-select>
                             </div>
                         </div>
                     </div>
-    
-                    <!-- <div class="card-title-head">
-                        <h6><span><i class=" feather icon-info feather-edit"></i></span>Enquiry Source</h6>
-                    </div> -->
-    
+
                     <div class="row">
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
@@ -336,14 +341,14 @@
                         <div class="col-lg-2 col-md-6">
                             <div class="mb-3">
                                 <!-- <label class="form-label">Customer Mobile</label> -->
-                                <input type="text" class="form-control bottom-border" placeholder="Customer Mobile" name="customerMobile"
+                                <input type="text" class="form-control bottom-border" placeholder="Mobile" name="customerMobile"
                                     [(ngModel)]="lead.customerMobile" required>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-6">
                             <div class="mb-3">
                                 <!-- <label class="form-label">Customer Mobile</label> -->
-                                <input type="text" class="form-control bottom-border" placeholder="Customer Alternate Mobile" name="customerAlternateMobile"
+                                <input type="text" class="form-control bottom-border" placeholder="Alternate Mobile" name="customerAlternateMobile"
                                     [(ngModel)]="lead.customerAlternateMobile" required>
                             </div>
                         </div>
@@ -373,7 +378,7 @@
                             </label>
                           
                             <div *ngIf="lead.companyName === 'Notes'">
-                              <textarea class="form-control no-border" name="notes" [(ngModel)]="lead.notes" rows="4" placeholder="________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
+                              <textarea class="form-control no-border" name="notes" [(ngModel)]="lead.notes" rows="4" placeholder="__________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
                             </div>
                           <P></P>
                             <div *ngIf="lead.companyName === 'Reminders'">
