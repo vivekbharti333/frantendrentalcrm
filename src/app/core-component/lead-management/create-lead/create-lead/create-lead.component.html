@@ -20,6 +20,7 @@
     </ul> 
  </div>  -->
 
+
 <p-toast></p-toast>
 
 <div class="row">
@@ -96,8 +97,8 @@
             <div class="card-body">
                 <div class="new-employee-field">
                     
-                    <table class="center-table">
-                        <tr>
+                    <table class="center-table" >
+                        <!-- <tr>
                             <td>
                                 <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="Vehicle" id="companyName1" checked>
                                 <label class="form-check-label" for="companyName1">
@@ -110,82 +111,81 @@
                                      Other
                                 </label>
                             </td>
-                        </tr>
-                        <!-- <tr><td></td></tr> -->
+                        </tr> -->
+                        
                         <tr>
-                            <td>
+                            <!-- <td *ngFor="let cateType of categoryTypeList">
+                                <input type="radio" 
+                                       class="btn-check" 
+                                       name="formName" 
+                                       [value]="cateType.id" 
+                                       [id]="cateType.id" 
+                                       [checked]="cateType.isChecked === 'Y'" 
+                                       (change)="getSuperCategory(cateType.id)">
+                                <label class="btn" [for]="cateType.id">{{cateType.categoryTypeName}}</label>
+                            </td>  -->
+                            
+                            <!-- <td>
                                 <input type="radio" class="btn-check" name="formName" value="Vehicle" id="Vehicle" autocomplete="off" checked (change)="onSelectionChange($event)">
                                 <label class="btn" for="Vehicle">Vehicle</label>
                             </td>
                             <td>
                                 <input type="radio" class="btn-check" name="formName" value="addServices" id="addServices" autocomplete="off" (change)="onSelectionChange($event)">
                                 <label class="btn" for="addServices">Add. Services</label>
-                            </td>
+                            </td> -->
                         </tr>
                     </table>
                     
-
-
-                    <!-- <table class="center-table">
-                        <tr>
-                            <td>
-                                <input type="radio" class="btn-check" name="formName" value="lead" id="lead" autocomplete="off" checked (change)="onSelectionChange($event)">
-                                <label class="btn" for="lead">New Lead</label>
-                            </td>
-                            <td>
-                                <input type="radio" class="btn-check" name="formName" value="info" id="info" autocomplete="off" (change)="onSelectionChange($event)">
-                                <label class="btn" for="info">Information</label>
-                            </td>
-                        </tr>
-                    </table> -->
-
-                    
                     <br>
 
-                   
-
                     <div class="row">
-                        <div class="col-lg-5 col-md-6"></div>
-                        <div class="col-lg-2 col-md-6">
+                        <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
-                                <!-- <label class="form-label">Super Category</label> -->
-                                <mat-select [(ngModel)]="lead.leadType" [ngModelOptions]="{standalone: false}"
-                                class="select custom-mat-select">
-                                @for (su of superCategoryList; track su) {
-                                <mat-option [value]="su.superCategory">
-                                  {{su.superCategory}}
+                                <label class="form-label">Category Type</label>
+                                <mat-select [(ngModel)]="lead.categoryTypeName" 
+                                            class="select" placeholder="Select a Super Category" (selectionChange)="getSuperCategory($event.value)">
+                                             <mat-option [disabled]=true>select hai</mat-option>
+                                  <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
+                                    {{cateType.categoryTypeName}}
+                                  </mat-option>
+                                </mat-select>
+                            </div>
+                        </div> 
+
+                        <div class="col-lg-3 col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Super Category</label>
+                                <mat-select [(ngModel)]="lead.superCategory" [ngModelOptions]="{standalone: false}"
+                                            class="select custom-mat-select" placeholder="Select a Super Category" (selectionChange)="getCategory($event.value)">
+                                  <mat-option *ngFor="let supCate of superCategoryList" [value]="supCate.id">
+                                    {{supCate.superCategory}}
+                                  </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Category</label> 
+                                <mat-select [(ngModel)]="lead.category" [ngModelOptions]="{standalone: false}"
+                                class="select custom-mat-select"  (selectionChange)="getSubCategory($event.value)">
+                                <mat-option *ngFor="let cate of categoryList" [value]="cate.id">
+                                  {{cate.category}}
                                 </mat-option>
-                                }
                               </mat-select>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-lg-3 col-md-6"></div>
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
-                                <!-- <label class="form-label">Super Category</label> -->
-                                <mat-select [(ngModel)]="selectedValue11" [ngModelOptions]="{standalone: true}"
-                                class="select custom-mat-select" placeholder="Vehicle Name">
-                                @for (data of selectedList2; track data) {
-                                <mat-option [value]="data.name">
-                                  {{data.name}}
+                                <label class="form-label">Sub Category</label> 
+                                <mat-select [(ngModel)]="lead.subCategory" [ngModelOptions]="{standalone: false}"
+                                class="select custom-mat-select" placeholder="Select a Sub Category">
+                              
+                                <mat-option *ngFor="let subCate of subCategoryList"  [value]="subCate.id">
+                                  {{subCate.subCategory}}
                                 </mat-option>
-                                }
-                              </mat-select>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="mb-3">
-                                <!-- <label class="form-label">Super Category</label> -->
-                                <mat-select [(ngModel)]="selectedValue11" [ngModelOptions]="{standalone: true}"
-                                class="select custom-mat-select" placeholder="Select Vehicle Details Type">
-                                @for (data of selectedList3; track data) {
-                                <mat-option [value]="data.name">
-                                  {{data.name}}
-                                </mat-option>
-                                }
+             
                               </mat-select>
                             </div>
                         </div>
@@ -362,10 +362,50 @@
                         </div>
                     </div>
 
-                    <div class="row remarks-box">
-                        
+
+
+                    <!-- <div class="row remarks-box">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-">Reports : </div>
+                            <div class="col-lg-4 col-md-4"><input type="text" class="form-control no-border" placeholder="Customer EmailId" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required> </div>
+                        </div>
                         <div class="col-lg-4 col-md-4">
+                            Reports : <input type="text" class="form-control no-border" placeholder="Customer EmailId" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required><br>
+                            Reports : <input type="text" class="form-control no-border" placeholder="Customer EmailId" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+
+
                             <textarea class="form-control no-border" name="preValue" [(ngModel)]="lead.preValue" rows="5" placeholder="Enter your notes here..."></textarea>
+                        </div>
+                    </div> -->
+
+
+
+                    <div class="row remarks-box"><p></p>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="input-container">
+                                <label for="reports"><b>Reports: </b></label>
+                                <input type="text" id="reports" class="form-control no-border" placeholder="Reports" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                              </div>
+                              <div class="input-container">
+                                <label for="delivery"><b>Delivery:</b></label>
+                                <input type="text" id="delivery" class="form-control no-border" placeholder="Delivery" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                              </div>
+                              <div class="input-container">
+                                <label for="comments"><b>Comments:</b></label>
+                                <input type="text" id="comments" class="form-control no-border" placeholder="Comments" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                              </div>
+                              <div class="input-container">
+                                <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
+                                <input type="text" id="pay-to-vendor" class="form-control no-border" placeholder="Pay to vendor" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                              </div>
+                              <div class="input-container">
+                                <label for="pay-to-company"><b>Pay to company:</b></label>
+                                <input type="text" id="pay-to-company" class="form-control no-border" placeholder="Pay to company" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                              </div>
+                            <!-- Reports : <input type="text" class="form-control no-border" placeholder="Customer EmailId" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+
+
+                            <textarea class="form-control no-border" name="preValue" [(ngModel)]="lead.preValue" rows="5" placeholder="Enter your notes here..."></textarea> -->
                         </div>
 
                         <div class="col-lg-4 col-md-4 vl">

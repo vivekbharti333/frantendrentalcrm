@@ -22,23 +22,35 @@ export class LeadManagementService {
     // this.loginUser = JSON.parse(this.cookieService.get('loginDetails'))
   }
 
-  getSuperCategoryList(lead: any): Observable<any> {
+  getCategoryTypeList(): Observable<any> {
     let request: any = {
       payload: {
-        requestedFor: 'ALL',
         roleType:  this.cookieService.get('roleType'),
         token:  this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
         superadminId:  this.cookieService.get('superadminId'),
       }
     };
-    return  this.http.post<any>(Constant.Site_Url+"getSuperCategoryDetails",request);
+    return  this.http.post<any>(Constant.Site_Url+"getCategoryType",request);
   }
 
-  getCategoryList(id:any): Observable<any> {
+  getSuperCategoryList(categoryTypeId: any): Observable<any> {
     let request: any = {
       payload: {
-        superCategoryId: id,
+        categoryTypeId: categoryTypeId,
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getSuperCategoryDetailsByCategoryTypeId",request);
+  }
+
+  getCategoryList(superCategoryId:any): Observable<any> {
+    let request: any = {
+      payload: {
+        superCategoryId: superCategoryId,
         roleType:  this.cookieService.get('roleType'),
         token:  this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
@@ -47,6 +59,20 @@ export class LeadManagementService {
     };
     return  this.http.post<any>(Constant.Site_Url+"getCategoryDetailsBySuperCategoryId",request);
   }
+
+  getSubCategoryList(categoryId:any): Observable<any> {
+    let request: any = {
+      payload: {
+        categoryId: categoryId,
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getSubCategoryDetailsByCategoryId",request);
+  }
+
 
 
   saveLeadDetails(lead: any): Observable<any> {
