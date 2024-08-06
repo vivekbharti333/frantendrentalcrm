@@ -220,9 +220,34 @@
                             </div>
                         </div>
                     </div>
-    
+
+                    <!-- <div class="row">
+                        <div class="col-lg-2 col-md-2"></div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="mb-2">
+                                <label class="form-label">Total Days</label>
+                                <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="mb-2">
+                                <label class="form-label">Quantity</label>
+                                <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+     -->
                     <div class="row">
                         <div class="col-lg-2 col-md-2"></div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="mb-2">
+                                <label class="form-label">Total Days</label>
+                                <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity"
+                                    required>
+                            </div>
+                        </div> 
                         <div class="col-lg-2 col-md-2">
                             <div class="mb-2">
                                 <label class="form-label">Quantity</label>
@@ -233,25 +258,45 @@
     
                         <div class="col-lg-2 col-md-2">
                             <div class="mb-2">
-                                <label class="form-label">Vendor Amount</label>
-                                <input type="text" class="form-control" name="vendorAmount" [(ngModel)]="lead.vendorAmount"
+                                <label class="form-label">Vendor Rate</label>
+                                <input type="text" class="form-control" name="vendorRate" [(ngModel)]="lead.vendorRate"
                                     required>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2">
                             <div class="mb-2">
-                                <label class="form-label">Vendor Amount</label>
-                                <input type="text" class="form-control" name="vendorAmount" [(ngModel)]="lead.vendorAmount"
+                                <label class="form-label">Company Rate</label>
+                                <input type="text" class="form-control" name="companyRate" [(ngModel)]="lead.companyRate"
+                                    required>
+                            </div>
+                        </div>
+                        <!-- <div class="col-lg-2 col-md-2">
+                            <div class="mb-2">
+                                <label class="form-label">Pay to Vendor</label>
+                                <input type="text" class="form-control" name="payToVendor" [(ngModel)]="lead.payToVendor"
                                     required>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2">
                             <div class="mb-2">
-                                <label class="form-label">Sell Amount</label>
-                                <input type="text" class="form-control" name="sellAmount" [(ngModel)]="lead.sellAmount"
+                                <label class="form-label">payToCompany</label>
+                                <input type="text" class="form-control" name="payToCompany" [(ngModel)]="lead.payToCompany"
+                                    required>
+                            </div>
+                        </div> -->
+                        <!-- <div class="col-lg-2 col-md-2">
+                            <div class="mb-2">
+                                <label class="form-label">Delivery To Company</label>
+                                <input type="text" class="form-control" name="deliveryAmountToCompany" [(ngModel)]="lead.deliveryAmountToCompany"
                                     required>
                             </div>
                         </div>
+                        <div class="col-lg-2 col-md-2">
+                            <div class="mb-2">
+                                <label class="form-label">Delivery To Vendor</label>
+                                <input type="text" class="form-control" name="deliveryAmountToVendor" [(ngModel)]="lead.deliveryAmountToVendor" required>
+                            </div>
+                        </div> -->
                         <div class="col-lg-2 col-md-2"></div>
                     </div>
     
@@ -292,33 +337,45 @@
                     <div class="row">
                         <div class="col-lg-2 col-md-2"></div>
                         <div class="col-lg-2 col-md-2">
-                            <div class="mb-2">
-                                <label class="form-label">Booking Amount</label>
-                                <input type="number" class="form-control" name="bookingAmount"
-                                    [(ngModel)]="lead.bookingAmount" required>
-                            </div>
+                            <label class="form-label">Pay to Vendor</label>
+                            <input type="text" class="form-control" name="payToVendor" [(ngModel)]="lead.payToVendor" required>
                         </div>
-    
                         <div class="col-lg-2 col-md-2">
                             <div class="mb-2">
-                                <label class="form-label">Balance Amount</label>
-                                <input type="number" class="form-control" name="balanceAmount"
-                                    [(ngModel)]="lead.balanceAmount" required>
+                                <label class="form-label">Pay To Company</label>
+                                <input type="text" class="form-control" name="payToCompany" [(ngModel)]="lead.payToCompany" required>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2">
                             <div class="mb-2">
-                                <label class="form-label">Status</label>
-                                <input type="text" class="form-control" name="status" [(ngModel)]="lead.status" required>
+                                <label class="form-label">Delivery To Company</label>
+                                <input type="text" class="form-control" name="deliveryAmountToCompany" [(ngModel)]="lead.deliveryAmountToCompany" required>
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2">
+                            <div class="mb-2">
+                                <label class="form-label">Delivery To Vendor</label>
+                                <input type="text" class="form-control" name="deliveryAmountToVendor" [(ngModel)]="lead.deliveryAmountToVendor" required>
+                            </div>
+                        </div>
+                        <!-- <div class="col-lg-2 col-md-2">
                             <div class="mb-2">
                                 <label class="form-label">Created By</label>
                                 <input type="text" class="form-control" name="createdBy" [(ngModel)]="lead.createdBy" required>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-lg-2 col-md-2"></div>
+                    </div>
+
+                    
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2"></div>
+                    <div class="col-lg-2 col-md-2">
+                        <div class="mb-2">
+                            <label class="form-label">Created By</label>
+                            <input type="text" class="form-control" name="createdBy" [(ngModel)]="lead.createdBy" required>
+                        </div>
+                    </div>
                     </div>
 
                     <div class="card-title-head">
@@ -383,8 +440,8 @@
                     <div class="row remarks-box"><p></p>
                         <div class="col-lg-4 col-md-4">
                             <div class="input-container">
-                                <label for="reports"><b>Reports: </b></label>
-                                <input type="text" id="reports" class="form-control no-border" placeholder="Reports" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                                <label for="reports"><b>Reports: </b></label>{{ lead.vendorRate }}
+                                <!-- <input type="text" id="reports" class="form-control no-border" placeholder="Reports" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required> -->
                               </div>
                               <div class="input-container">
                                 <label for="delivery"><b>Delivery:</b></label>
@@ -395,12 +452,12 @@
                                 <input type="text" id="comments" class="form-control no-border" placeholder="Comments" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
                               </div>
                               <div class="input-container">
-                                <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
-                                <input type="text" id="pay-to-vendor" class="form-control no-border" placeholder="Pay to vendor" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                                <label for="pay-to-vendor"><b>Pay to vendor:</b></label>{{lead.payToVendor}}
+                                <!-- <input type="text" id="pay-to-vendor" class="form-control no-border" placeholder="Pay to vendor" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required> -->
                               </div>
                               <div class="input-container">
-                                <label for="pay-to-company"><b>Pay to company:</b></label>
-                                <input type="text" id="pay-to-company" class="form-control no-border" placeholder="Pay to company" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
+                                <label for="pay-to-company"><b>Pay to company:</b></label> {{lead.payToCompany}}
+                                <!-- <input type="text" id="pay-to-company" class="form-control no-border" placeholder="Pay to company" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required> -->
                               </div>
                             <!-- Reports : <input type="text" class="form-control no-border" placeholder="Customer EmailId" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required>
 
