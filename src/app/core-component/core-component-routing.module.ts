@@ -92,6 +92,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'category-management',
+        loadChildren: () =>
+          import('./categories-management/categories-management.module').then(
+            (m) => m.CategoriesManagementModule
+          ),
+      },
+      {
         path: 'sales',
         loadChildren: () =>
           import('./sales/sales.module').then((m) => m.SalesModule),

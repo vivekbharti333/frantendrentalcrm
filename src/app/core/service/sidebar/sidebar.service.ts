@@ -139,6 +139,36 @@ export class SidebarService {
             
           ],
         },
+        {
+          menuValue: 'Category Management',
+          hasSubRoute: true,
+          showSubRoute: false,
+          icon: 'bar-chart',
+          // base1: 'leadmang',
+          subMenus: [
+            {
+              menuValue: 'Category Type',
+              route: routes.categoryType,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'Super Category',
+              route: routes.superCategory,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'category',
+              route: routes.category,
+              permission: 'follow-up-one',
+            },
+            {
+              menuValue: 'Sub category',
+              route: routes.subCategory,
+              permission: 'follow-up-one',
+            },
+            
+          ],
+        },
       ],
     },
     {

@@ -960,6 +960,22 @@ export class routes {
   public static get followupOne(): string {
     return this.leadManagement + '/follow-up-one';
   }
+
+  public static get categoryManagement(): string {
+    return this.core + '/category-management';
+  }
+  public static get categoryType(): string {
+    return this.categoryManagement + '/category-type';
+  }
+  public static get superCategory(): string {
+    return this.categoryManagement + '/super-category';
+  }
+  public static get category(): string {
+    return this.categoryManagement + '/category';
+  }
+  public static get subCategory(): string {
+    return this.categoryManagement + '/sub-category';
+  }
   
   // core pages child routes *ends*
 }
