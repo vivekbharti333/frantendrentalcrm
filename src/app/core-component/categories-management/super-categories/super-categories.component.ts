@@ -97,13 +97,29 @@ export class SuperCategoriesComponent {
     });
   }
 
-  submitCategoryTypeForm(){}
+  submitSuperCategoryForm(){}
+
+  submitEditedSuperCategoryForm(){}
+
+
+  openAddModal(rowDate: any) {
+    this.getCategoryType();
+    this.superCategory.categoryTypeName = rowDate[5];
+    this.superCategory.status = rowDate[5];
+    this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
+    this.superCategory.isChecked = rowDate[5];
+    this.superCategory.categoryTypeId = rowDate[0]
+   
+  }
 
   openEditModal(rowDate: any) {
     this.getCategoryType();
-    // this.superCategory.categoryTypeName = rowDate[5];
-    this.superCategory.status = rowDate.status; // Assign the value to user.firstName
-    this.superCategory.isChecked = rowDate.isChecked;
+    this.superCategory.categoryTypeName = rowDate[5];
+    this.superCategory.status = rowDate[5];
+    this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
+    this.superCategory.isChecked = rowDate[5];
+    this.superCategory.categoryTypeId = rowDate[0]
+   
   }
 
   private getTableData(pageOption: pageSelection): void {
