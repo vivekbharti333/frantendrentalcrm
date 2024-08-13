@@ -157,7 +157,7 @@ export class SidebarService {
               permission: 'create-lead',
             },
             {
-              menuValue: 'category',
+              menuValue: 'Category',
               route: routes.category,
               permission: 'follow-up-one',
             },

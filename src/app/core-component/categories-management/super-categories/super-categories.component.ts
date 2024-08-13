@@ -54,6 +54,7 @@ export class SuperCategoriesComponent {
 
   ngOnInit() {
     this.getSuperCategory();
+    this.getCategoryType();
   }
 
   public superCategory = {
@@ -64,12 +65,17 @@ export class SuperCategoriesComponent {
     isChecked: '', 
   };
 
-  changeStatus(rowData: any){
+  public editSuperCategory = {
+    categoryTypeId: '',
+    superCategoryId: '',
+    categoryTypeName: '',
+    superCategory: '',
+    status: '',
+    createdAt: '', 
+  };
 
-  }
 
   public getCategoryType() {
-  
     this.categoriesManagementService.getCategoryTypeList()
     .subscribe({
       next: (response: any) => {
@@ -85,6 +91,144 @@ export class SuperCategoriesComponent {
     });
   }
 
+
+  submitSuperCategoryForm(){
+    this.categoriesManagementService.addSuperCategory(this.superCategory)
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+            // alert(response['payload']['respMesg']);
+            //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
+          // this.user;
+          // this.modalInstance.hide();
+           this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'success-background-popover',
+          });
+          
+          } else {
+            // alert(response['payload']['respMesg']);
+
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        } else {
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      },
+      error: () => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+      }),
+    });
+    // this.isLoading = false;
+}
+
+  submitEditedSuperCategoryForm(){
+  this.categoriesManagementService.editSuperCategory(this.editSuperCategory)
+  .subscribe({
+    next: (response: any) => {
+      if (response['responseCode'] == '200') {
+        if (response['payload']['respCode'] == '200') {
+         this.messageService.add({
+          summary: response['payload']['respCode'],
+          detail: response['payload']['respMesg'],
+          styleClass: 'success-background-popover',
+        });
+        
+        } else {
+          // alert(response['payload']['respMesg']);
+
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      } else {
+        this.messageService.add({
+          summary: response['payload']['respCode'],
+          detail: response['payload']['respMesg'],
+          styleClass: 'danger-background-popover',
+        });
+      }
+    },
+    error: () => this.messageService.add({
+      summary: '500',
+      detail: 'Server Error',
+    }),
+  });
+  // this.isLoading = false;
+}
+
+changeStatus(rowdata:any){
+  this.categoriesManagementService.changeSuperCategoryStatus(rowdata)
+  .subscribe({
+    next: (response: any) => {
+      if (response['responseCode'] == '200') {
+        if (response['payload']['respCode'] == '200') {
+         this.messageService.add({
+          summary: response['payload']['respCode'],
+          detail: response['payload']['respMesg'],
+          styleClass: 'success-background-popover',
+        });
+        this.getSuperCategory();
+        } else {
+          // alert(response['payload']['respMesg']);
+
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      } else {
+        this.messageService.add({
+          summary: response['payload']['respCode'],
+          detail: response['payload']['respMesg'],
+          styleClass: 'danger-background-popover',
+        });
+      }
+    },
+    error: () => this.messageService.add({
+      summary: '500',
+      detail: 'Server Error',
+    }),
+  });
+  // this.isLoading = false;
+}
+
+
+  // openAddModal(rowDate: any) {
+    
+  //   this.superCategory.categoryTypeName = rowDate[5];
+  //   this.superCategory.status = rowDate[5];
+  //   this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
+  //   this.superCategory.isChecked = rowDate[5];
+  //   this.superCategory.categoryTypeId = rowDate[0]
+   
+  // }
+
+  openEditModal(rowDate: any) {
+    this.getCategoryType();
+    this.editSuperCategory.categoryTypeName = rowDate[5];
+    this.editSuperCategory.createdAt = rowDate[4];
+    this.editSuperCategory.status = rowDate[3];
+    this.editSuperCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
+    this.editSuperCategory.categoryTypeId = rowDate[1]
+    this.editSuperCategory.superCategoryId = rowDate[0]
+   
+  }
+
   getSuperCategory() {
     this.categoriesManagementService.getSuperCategoryList().subscribe((apiRes: any) => {
       this.totalData = apiRes.totalNumber;
@@ -95,31 +239,6 @@ export class SuperCategoriesComponent {
         }
       });
     });
-  }
-
-  submitSuperCategoryForm(){}
-
-  submitEditedSuperCategoryForm(){}
-
-
-  openAddModal(rowDate: any) {
-    this.getCategoryType();
-    this.superCategory.categoryTypeName = rowDate[5];
-    this.superCategory.status = rowDate[5];
-    this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
-    this.superCategory.isChecked = rowDate[5];
-    this.superCategory.categoryTypeId = rowDate[0]
-   
-  }
-
-  openEditModal(rowDate: any) {
-    this.getCategoryType();
-    this.superCategory.categoryTypeName = rowDate[5];
-    this.superCategory.status = rowDate[5];
-    this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
-    this.superCategory.isChecked = rowDate[5];
-    this.superCategory.categoryTypeId = rowDate[0]
-   
   }
 
   private getTableData(pageOption: pageSelection): void {

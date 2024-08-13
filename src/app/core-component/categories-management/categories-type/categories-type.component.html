@@ -38,7 +38,7 @@
       </li>
     </ul> -->
     <div class="page-btn">
-        <button class="btn btn-added" data-bs-toggle="modal" data-bs-target="#edit-units">
+        <button class="btn btn-added" data-bs-toggle="modal" data-bs-target="#add-units" (click)="openAddModel()">
             <i class="feather icon-plus-circle me-2"></i>Add Category Type
           </button>
     </div>
@@ -179,21 +179,22 @@
 
 
   <!-- Add Category Type -->
-  <div class="modal fade" id="add-units">
+  <!-- <div class="modal fade" id="add-units" *ngIf="isAddModalVisible"> -->
+  <div class="modal fade" id="add-units" #addUnitsModal>
     <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
       <div class="modal-content">
         <div class="page-wrapper-new p-0">
           <div class="content">
             <div class="modal-header border-0 custom-modal-header">
               <div class="page-title">
-                <h4>Edit User</h4>
+                <h4>Add Category Type</h4>
               </div>
               <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body custom-modal-body">
-              <form #userForm="ngForm" (ngSubmit)="submitCategoryTypeForm()">
+              <form #addForm="ngForm" (ngSubmit)="submitCategoryTypeForm()">
                 <div class="card">
                   <div class="card-body">
                     <div class="new-employee-field">
@@ -216,7 +217,7 @@
               
               
                 <div class="text-end mb-3">
-                  <button type="submit" class="btn btn-submit" [disabled]="!userForm.form.valid">Save User</button>
+                  <button type="submit" class="btn btn-submit" [disabled]="!addForm.form.valid">Save Category Type</button>
                 </div>
               </form>
                 </div>
@@ -239,14 +240,14 @@
           <div class="content">
             <div class="modal-header border-0 custom-modal-header">
               <div class="page-title">
-                <h4>Edit User</h4>
+                <h4>Edit Category Type</h4>
               </div>
               <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body custom-modal-body">
-              <form #userForm="ngForm" (ngSubmit)="submitCategoryTypeForm()">
+              <form #editForm="ngForm" (ngSubmit)="submitEditedCategoryTypeForm()">
                 <div class="card">
                   <div class="card-body">
                     <div class="new-employee-field">
@@ -258,7 +259,7 @@
                         <div class="col-lg-4 col-md-6">
                           <div class="mb-3">
                             <label class="form-label">Category Type Name</label>
-                            <input type="text" class="form-control" name="categoryTypeName" [(ngModel)]="categoryType.categoryTypeName" required>
+                            <input type="text" class="form-control" name="categoryTypeName" [(ngModel)]="editCategoryType.categoryTypeName" required>
                           </div>
                         </div>
                       </div> 
@@ -269,7 +270,7 @@
               
               
                 <div class="text-end mb-3">
-                  <button type="submit" class="btn btn-submit" [disabled]="!userForm.form.valid">Save User</button>
+                  <button type="submit" class="btn btn-submit" [disabled]="!editForm.form.valid">Update Category Type</button>
                 </div>
               </form>
                 </div>
