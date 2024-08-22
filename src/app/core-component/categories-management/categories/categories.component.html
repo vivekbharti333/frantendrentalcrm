@@ -138,6 +138,7 @@
             <tr>
               <th mat-sort-header="userName">Category Type </th>
               <th mat-sort-header="userName">Super Category</th>
+              <th mat-sort-header="userName">Category</th>
               <th mat-sort-header="status">Status</th>
               <th mat-sort-header="createdOn">Created On</th>
               <th class="no-sort">Action</th>
@@ -146,14 +147,15 @@
           <tbody>
             @for (data of tableData; track data) {
               <tr>
-                <td>{{data[5]}}</td>
-                <td>{{data[2]}}  </td>
+                <td>{{data[2]}}</td>
+                <td>{{data[4]}}  </td>
+                <td>{{data[5]}}  </td>
                 <td><button class="badge-button" 
-                  [ngClass]="{'badge-linesuccess': data[3] === 'ACTIVE', 'badge-linedanger': data[3] === 'INACTIVE'}"
+                  [ngClass]="{'badge-linesuccess': data[6] === 'ACTIVE', 'badge-linedanger': data[6] === 'INACTIVE'}"
                   (click)="changeStatus(data)">
-                {{data[3]}}
+                {{data[6]}}
             </button></td>
-          <td>{{data[4] | date: 'dd-MM-yyyy | HH:mm'}}</td>
+          <td>{{data[7] | date: 'dd-MM-yyyy | HH:mm'}}</td>
               <td class="action-table-data">
                 <div class="edit-delete-action">
                   <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
@@ -198,17 +200,28 @@
                         <div class="col-lg-4 col-md-6">
                           <div class="mb-3">
                             <label class="form-label">Category Type Name</label>
-                            <mat-select name="categoryTypeId" [(ngModel)]="addCategory.superCategoryId" class="select" placeholder="Select a Super Category">
-                              <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
+                            <mat-select name="categoryTypeId" [(ngModel)]="addCategory.categoryTypeId" class="select" placeholder="Select a Super Category" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                              <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id" >
                                 {{cateType.categoryTypeName}}
+                              </mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                          <div class="mb-3">
+                            <label class="form-label">Super Category</label>
+                            <mat-select name="categoryTypeId" [(ngModel)]="addCategory.superCategoryId" class="select" placeholder="Select a Super Category">
+                              <mat-option *ngFor="let superCateType of superCategoryList" [value]="superCateType.id">
+                                {{superCateType.superCategory}}
                               </mat-option>
                             </mat-select>
                           </div>
                         </div>
                         <div class="col-lg-4 col-md-6">
                           <div class="mb-3">
-                            <label class="form-label">Super Category </label>
-                            <input type="text" class="form-control" name="superCategory" [(ngModel)]="addCategory.category" required>
+                            <label class="form-label">Category </label>
+                            <input type="text" class="form-control" name="category" [(ngModel)]="addCategory.category" required>
                           </div>
                         </div>
                       </div> 

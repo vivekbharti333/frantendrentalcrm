@@ -76,11 +76,12 @@ export class CategoriesManagementService {
   addSuperCategory(superCategoryForm:any): Observable<any> {
     let request: any = {
       payload: {
-        categoryTypeId:superCategoryForm.categoryTypeId,
+        superCategoryImage: superCategoryForm.superCategoryImage,
+        categoryTypeId: superCategoryForm.categoryTypeId,
         superCategory: superCategoryForm.superCategory,
-        token:  this.cookieService.get('token'),
+        token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
-        superadminId:  this.cookieService.get('superadminId'),
+        superadminId: this.cookieService.get('superadminId'),
       }
     };
     return  this.http.post<any>(Constant.Site_Url+"addSuperCategory",request);
@@ -126,10 +127,25 @@ export class CategoriesManagementService {
     return  this.http.post<any>(Constant.Site_Url+"getSuperCategoryDetails",request);
   }
 
+  getSuperCategoryListByCategoryTypeId(cateTypeId:any): Observable<any> {
+    let request: any = {
+      payload: {
+        categoryTypeId: cateTypeId,
+        requestedFor: 'BYCATID',
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getSuperCategoryDetails",request);
+  }
+
   addCategoryDetails(addCategory:any): Observable<any> {
     let request: any = {
       payload: {
-        // categoryTypeId:addCategory.categoryTypeId,
+        categoryImage: addCategory.categoryImage,
+        categoryTypeId:addCategory.categoryTypeId,
         superCategoryId: addCategory.superCategoryId,
         category: addCategory.category,
         token:  this.cookieService.get('token'),
@@ -174,7 +190,7 @@ export class CategoriesManagementService {
   getCategoryDetailsList(): Observable<any> {
     let request: any = {
       payload: {
-        superCategoryId: '',
+         requestedFor: 'ALL',
         roleType:  this.cookieService.get('roleType'),
         token:  this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
@@ -184,17 +200,61 @@ export class CategoriesManagementService {
     return  this.http.post<any>(Constant.Site_Url+"getCategoryDetails",request);
   }
 
-  getSubCategoryList(categoryId:any): Observable<any> {
+  
+  getCategoryBySuperCatId(superCatId:any): Observable<any> {
     let request: any = {
       payload: {
-        categoryId: categoryId,
+        requestedFor: 'BYCATID',
+        superCategoryId: superCatId,
         roleType:  this.cookieService.get('roleType'),
         token:  this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
         superadminId:  this.cookieService.get('superadminId'),
       }
     };
-    return  this.http.post<any>(Constant.Site_Url+"getSubCategoryDetailsByCategoryId",request);
+    return  this.http.post<any>(Constant.Site_Url+"getCategoryDetails",request);
+  }
+
+  addSubCategoryDetails(addSubCategory:any): Observable<any> {
+    let request: any = {
+      payload: {
+        subCategoryImage: addSubCategory.subCategoryImage,
+        categoryTypeId: addSubCategory.categoryTypeId,
+        superCategoryId: addSubCategory.superCategoryId,
+        categoryId: addSubCategory.categoryId,
+        subCategory: addSubCategory.subCategory,
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"addSubCategoryDetails",request);
+  }
+
+  changeSubCategoryStatus(rowData:any): Observable<any> {
+    let request: any = {
+      payload: {
+        subCategoryId: rowData[0],
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"changeSubCategoryStatus",request);
+  }
+
+  getSubCategoryList(): Observable<any> {
+    let request: any = {
+      payload: {
+        // categoryId: categoryId,
+        requestedFor: 'ALL',
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getSubCategoryDetails",request);
   }
 
 }

@@ -57,7 +57,8 @@ export class CategoriesTypeComponent {
     this.getCategoryType();
   }
 
-  public categoryType = {
+  public addCategoryType = {
+    categoryTypeImage: '',
     categoryTypeName: '',
     status: '',
     isChecked: '', 
@@ -89,7 +90,7 @@ export class CategoriesTypeComponent {
   }
 
   submitCategoryTypeForm(){
-    this.categoriesManagementService.addCategoryType(this.categoryType)
+    this.categoriesManagementService.addCategoryType(this.addCategoryType)
     .subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {

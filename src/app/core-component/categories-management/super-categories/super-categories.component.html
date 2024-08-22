@@ -146,16 +146,14 @@
           <tbody>
             @for (data of tableData; track data) {
               <tr>
-                <td>{{data[5]}}</td>
-                <td>{{data[2]}}  </td>
-                
-                
+                <td>{{data[2]}}</td>
+                <td>{{data[3]}}  </td>
                 <td><button class="badge-button" 
-                  [ngClass]="{'badge-linesuccess': data[3] === 'ACTIVE', 'badge-linedanger': data[3] === 'INACTIVE'}"
+                  [ngClass]="{'badge-linesuccess': data[4] === 'ACTIVE', 'badge-linedanger': data[4] === 'INACTIVE'}"
                   (click)="changeStatus(data)">
-                {{data[3]}}
+                {{data[4]}}
             </button></td>
-          <td>{{data[4] | date: 'dd-MM-yyyy | HH:mm'}}</td>
+          <td>{{data[5] | date: 'dd-MM-yyyy | HH:mm'}}</td>
               <td class="action-table-data">
                 <div class="edit-delete-action">
                   <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
@@ -199,8 +197,8 @@
                       <div class="row">
                         <div class="col-lg-4 col-md-6">
                           <div class="mb-3">
-                            <label class="form-label">Category Type Name</label>
-                            <mat-select name="categoryTypeId" [(ngModel)]="superCategory.categoryTypeId" class="select" placeholder="Select a Super Category">
+                            <label class="form-label">Category Type</label>
+                            <mat-select name="categoryTypeId" [(ngModel)]="superCategory.categoryTypeId" class="select" placeholder="Select Category Type">
                               <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
                                 {{cateType.categoryTypeName}}
                               </mat-option>

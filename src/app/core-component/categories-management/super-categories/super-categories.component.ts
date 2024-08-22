@@ -58,6 +58,7 @@ export class SuperCategoriesComponent {
   }
 
   public superCategory = {
+    superCategoryImage: '',
     categoryTypeId: '',
     categoryTypeName: '',
     superCategory: '',
@@ -102,6 +103,7 @@ export class SuperCategoriesComponent {
             //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
           // this.user;
           // this.modalInstance.hide();
+          this.getSuperCategory();
            this.messageService.add({
             summary: response['payload']['respCode'],
             detail: response['payload']['respMesg'],

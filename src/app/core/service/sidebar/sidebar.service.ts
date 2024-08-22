@@ -159,12 +159,12 @@ export class SidebarService {
             {
               menuValue: 'Category',
               route: routes.category,
-              permission: 'follow-up-one',
+              permission: 'create-lead',
             },
             {
               menuValue: 'Sub category',
               route: routes.subCategory,
-              permission: 'follow-up-one',
+              permission: 'create-lead',
             },
             
           ],

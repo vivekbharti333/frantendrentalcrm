@@ -26,6 +26,11 @@ export class SubCategoriesComponent {
   // public userList: any;
 
   public routes = routes;
+  public categoryTypeList: any[]=[];
+  public superCategoryList: any[]=[];
+  public categoryList: any[]=[];
+
+
   // pagination variables
   public tableData: Array<any> = [];
   public pageSize = 10;
@@ -52,23 +57,159 @@ export class SubCategoriesComponent {
 
   ngOnInit() {
     this.getCategoryType();
+    this.getSubCategory();
   }
 
-  public categoryType = {
-    categoryTypeName: '',
-    status: '',
-    isChecked: '', 
+  public addSubCategory = {
+    subCategoryImage: '',
+    categoryTypeId: '',
+    superCategoryId: '',
+    categoryId: '',
+    subCategory: '',
+     
   };
 
-  changeStatus(rowData: any){
-
+  public getCategoryType() {
+    this.categoriesManagementService.getCategoryTypeList()
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
+          this.superCategoryList =[];
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
   }
 
-  getCategoryType() {
-    this.categoriesManagementService.getCategoryTypeList().subscribe((apiRes: any) => {
+  public getSuperCategoryByCateTypeId(rowData:any){
+    this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(rowData.value)
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
+  }
+
+  public getCategoryBySuperCatId(rowData:any){
+    alert("Enter : "+rowData.value);
+    this.categoriesManagementService.getCategoryBySuperCatId(rowData.value)
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.categoryList = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
+  }
+
+
+  submitSubCategoryForm(){
+    this.categoriesManagementService.addSubCategoryDetails(this.addSubCategory)
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+            // alert(response['payload']['respMesg']);
+            //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
+          // this.user;
+          // this.modalInstance.hide();
+           this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'success-background-popover',
+          });
+          
+          } else {
+            // alert(response['payload']['respMesg']);
+
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        } else {
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      },
+      error: () => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+      }),
+    });
+    // this.isLoading = false;
+  }
+
+  changeStatus(rowdata:any){
+    this.categoriesManagementService.changeSubCategoryStatus(rowdata)
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+           this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'success-background-popover',
+          });
+          this.getSubCategory();
+          } else {
+            // alert(response['payload']['respMesg']);
+  
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        } else {
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      },
+      error: () => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+      }),
+    });
+    // this.isLoading = false;
+  }
+  
+
+  openEditModal(rowDate: any) {
+    // this.categoryType.categoryTypeName = rowDate.categoryTypeName;
+    // this.categoryType.status = rowDate.status; // Assign the value to user.firstName
+    // this.categoryType.isChecked = rowDate.isChecked;
+  }
+
+  getSubCategory() {
+    this.categoriesManagementService.getSubCategoryList().subscribe((apiRes: any) => {
       this.totalData = apiRes.totalNumber;
       this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-        if (this.router.url == this.routes.categoryType) {
+        if (this.router.url == this.routes.subCategory) {
           this.getTableData({ skip: res.skip, limit: this.totalData });
           this.pageSize = res.pageSize;
         }
@@ -76,17 +217,9 @@ export class SubCategoriesComponent {
     });
   }
 
-  submitCategoryTypeForm(){}
-
-  openEditModal(rowDate: any) {
-    this.categoryType.categoryTypeName = rowDate.categoryTypeName;
-    this.categoryType.status = rowDate.status; // Assign the value to user.firstName
-    this.categoryType.isChecked = rowDate.isChecked;
-  }
-
   private getTableData(pageOption: pageSelection): void {
    
-      this.categoriesManagementService.getCategoryTypeList().subscribe((apiRes: any) => {
+      this.categoriesManagementService.getSubCategoryList().subscribe((apiRes: any) => {
       this.tableData = [];
       this.serialNumberArray = [];
       this.totalData = apiRes.totalNumber;

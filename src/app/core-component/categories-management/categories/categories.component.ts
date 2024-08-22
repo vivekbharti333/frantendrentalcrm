@@ -26,6 +26,7 @@ import { CategoriesManagementService } from '../categories-management.service';
 export class CategoriesComponent {
   public routes = routes;
   public categoryTypeList: any[]=[];
+  public superCategoryList: any[]=[];
 
 
   // pagination variables
@@ -59,6 +60,7 @@ export class CategoriesComponent {
   }
 
   public addCategory = {
+    categoryImage: '',
     categoryTypeId: '',
     superCategoryId: '',
     category: '',
@@ -82,6 +84,23 @@ export class CategoriesComponent {
       next: (response: any) => {
         if (response['responseCode'] == '200') {
           this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
+          this.superCategoryList =[];
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
+  }
+
+  public getSuperCategoryByCateTypeId(rowData:any){
+    this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(rowData.value)
+    .subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
         }
       },
       error: (error: any) => this.messageService.add({
@@ -103,6 +122,9 @@ export class CategoriesComponent {
             //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
           // this.user;
           // this.modalInstance.hide();
+
+          this.getCategoryDetailsList();
+
            this.messageService.add({
             summary: response['payload']['respCode'],
             detail: response['payload']['respMesg'],
