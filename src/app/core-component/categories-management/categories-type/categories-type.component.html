@@ -137,6 +137,7 @@
           <thead>
             <tr>
               <th></th>
+              <th mat-sort-header="image">Category Type Image</th>
               <th mat-sort-header="userName">Category Type Name</th>
               <th mat-sort-header="status">Status</th>
               <th mat-sort-header="createdOn">Created On</th>
@@ -147,10 +148,10 @@
             @for (data of tableData; track data) {
               <tr>
                   <td>
-                    <!-- <div class="userimgname">
+                     <div class="userimgname">
                       <a href="javascript:void(0);" class="userslist-img bg-img">
-                        <img src= "{{data.userPicture}}" alt="user image" style="border-radius: 50%;"></a>
-                    </div> -->
+                        <img src= "{{baseUrl}}categoryImage/{{data.categoryTypeImage}}" alt="user image" style="border-radius: 50%;"></a>
+                    </div> 
                   </td>
                 <td>{{data.categoryTypeName}}  </td>
                 <!-- <td>{{data.status}}</td> -->
@@ -200,6 +201,25 @@
                     <div class="new-employee-field">
                       <div class="card-title-head">
                         <h6><span><i class=" feather icon-info feather-edit"></i></span>Category Type details</h6>
+                      </div>
+
+                      <div class="profile-pic-upload">
+                        <div class="profile-pic">
+                          <ng-container *ngIf="!addCategoryType.categoryTypeImage; else showImage">
+                            <span><i class="feather icon-plus-circle plus-down-add"></i> Category Type Image</span>
+                          </ng-container>
+                          <ng-template #showImage>
+                            <img [src]="addCategoryType.categoryTypeImage" alt="Profile Picture" class="uploaded-profile-pic" />
+                          </ng-template>
+                        </div>
+                        <div class="input-blocks mb-0">
+                          <div class="image-upload mb-0">
+                            <input type="file" class="form-control" id="categoryTypeImage" (change)="onFileSelected($event)">
+                            <div class="image-uploads">
+                              <h4>Change Image</h4>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       
                       <div class="row">

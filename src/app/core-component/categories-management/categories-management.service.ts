@@ -26,6 +26,7 @@ export class CategoriesManagementService {
   addCategoryType(categoryType:any): Observable<any> {
     let request: any = {
       payload: {
+        categoryTypeImage: categoryType.categoryTypeImage,
         categoryTypeName:categoryType.categoryTypeName,
         token:  this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),

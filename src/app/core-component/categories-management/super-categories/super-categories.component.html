@@ -136,6 +136,7 @@
         <table matSort (matSortChange)="sortData($event)" class="table datanew">
           <thead>
             <tr>
+              <th mat-sort-header="image">Super Category Image </th>
               <th mat-sort-header="userName">Category Type </th>
               <th mat-sort-header="userName">Super Category</th>
               <th mat-sort-header="status">Status</th>
@@ -146,14 +147,20 @@
           <tbody>
             @for (data of tableData; track data) {
               <tr>
-                <td>{{data[2]}}</td>
-                <td>{{data[3]}}  </td>
+                <td>
+                  <div class="userimgname">
+                   <a href="javascript:void(0);" class="userslist-img bg-img">
+                     <img src= "{{baseUrl}}categoryImage/{{data[1]}}" alt="user image" style="border-radius: 50%;"></a>
+                 </div> 
+               </td>
+                <td>{{data[3]}}</td>
+                <td>{{data[4]}}  </td>
                 <td><button class="badge-button" 
-                  [ngClass]="{'badge-linesuccess': data[4] === 'ACTIVE', 'badge-linedanger': data[4] === 'INACTIVE'}"
+                  [ngClass]="{'badge-linesuccess': data[5] === 'ACTIVE', 'badge-linedanger': data[5] === 'INACTIVE'}"
                   (click)="changeStatus(data)">
-                {{data[4]}}
+                {{data[5]}}
             </button></td>
-          <td>{{data[5] | date: 'dd-MM-yyyy | HH:mm'}}</td>
+          <td>{{data[6] | date: 'dd-MM-yyyy | HH:mm'}}</td>
               <td class="action-table-data">
                 <div class="edit-delete-action">
                   <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
@@ -192,6 +199,25 @@
                     <div class="new-employee-field">
                       <div class="card-title-head">
                         <h6><span><i class=" feather icon-info feather-edit"></i></span>Category Type details</h6>
+                      </div>
+
+                      <div class="profile-pic-upload">
+                        <div class="profile-pic">
+                          <ng-container *ngIf="!superCategory.superCategoryImage; else showImage">
+                            <span><i class="feather icon-plus-circle plus-down-add"></i>Super Category Image</span>
+                          </ng-container>
+                          <ng-template #showImage>
+                            <img [src]="superCategory.superCategoryImage" alt="Profile Picture" class="uploaded-profile-pic" />
+                          </ng-template>
+                        </div>
+                        <div class="input-blocks mb-0">
+                          <div class="image-upload mb-0">
+                            <input type="file" class="form-control" id="superCategoryImage" (change)="onFileSelected($event)">
+                            <div class="image-uploads">
+                              <h4>Change Image</h4>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       
                       <div class="row">

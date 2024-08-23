@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
 import { Modal } from 'bootstrap';
+import { Constant } from 'src/app/core/constant/constants';
 
 @Component({
   selector: 'app-categories-type',
@@ -27,6 +28,8 @@ export class CategoriesTypeComponent {
   @ViewChild('addUnitsModal') addUnitsModal!: ElementRef;
   modalInstance!: Modal;
   // public isAddModalVisible: boolean = false;
+
+  public baseUrl =Constant.Site_Url;
 
   public routes = routes;
   // pagination variables
@@ -273,4 +276,22 @@ changeStatus(rowData: any){
   openFilter() {
     this.filter = !this.filter;
   }
+
+
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        const base64String = event.target.result.split(',')[1]; // Get the base64 part
+
+        // Set the base64 string to the userPicture field
+        this.addCategoryType.categoryTypeImage = "data:image/png;base64," + base64String;
+      };
+      reader.readAsDataURL(selectedFile);
+    }
+  }
+
+
 }

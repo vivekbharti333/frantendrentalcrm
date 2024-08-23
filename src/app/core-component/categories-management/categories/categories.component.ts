@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
+import { Constant } from 'src/app/core/constant/constants';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class CategoriesComponent {
   public routes = routes;
   public categoryTypeList: any[]=[];
   public superCategoryList: any[]=[];
+  public baseUrl =Constant.Site_Url;
 
 
   // pagination variables
@@ -312,6 +314,21 @@ changeStatus(rowdata:any){
   public filter = false;
   openFilter() {
     this.filter = !this.filter;
+  }
+
+  onFileSelected(event: any) {
+    const selectedFile = event.target.files[0];
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (event: any) => {
+        const base64String = event.target.result.split(',')[1]; // Get the base64 part
+
+        // Set the base64 string to the userPicture field
+        this.addCategory.categoryImage = "data:image/png;base64," + base64String;
+      };
+      reader.readAsDataURL(selectedFile);
+    }
   }
 }
 
