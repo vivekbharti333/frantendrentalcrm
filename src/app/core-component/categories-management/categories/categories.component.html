@@ -237,7 +237,7 @@
                         <div class="col-lg-4 col-md-6">
                           <div class="mb-3">
                             <label class="form-label">Super Category</label>
-                            <mat-select name="categoryTypeId" [(ngModel)]="addCategory.superCategoryId" class="select" placeholder="Select a Super Category">
+                            <mat-select name="superCategoryId" [(ngModel)]="addCategory.superCategoryId" class="select" placeholder="Select a Super Category">
                               <mat-option *ngFor="let superCateType of superCategoryList" [value]="superCateType.id">
                                 {{superCateType.superCategory}}
                               </mat-option>

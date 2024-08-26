@@ -7,6 +7,7 @@ import { LeadManagementService } from '../../lead-management.service';
 import { Constant } from 'src/app/core/constant/constants';
 import { ToastModule } from 'primeng/toast';
 import { SpinnerService } from 'src/app/core/core.index';
+import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
 
 interface data {
   id: number;
@@ -39,6 +40,7 @@ export class CreateLeadComponent {
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private spinnerService: SpinnerService,
+    private categoriesManagementService: CategoriesManagementService,
   ) {
     this.loginUser = this.authenticationService.getLoginUser();
    
@@ -87,6 +89,11 @@ export class CreateLeadComponent {
     // bookingId: '',
     companyName: 'Notes',
     enquirySource: 'Call',
+    categoryTypeId: '',
+    superCategoryId: '',
+    categoryId: '',
+    subCategoryId: '',
+
     categoryTypeName: '',
     superCategory: '',
     category: '',
@@ -129,8 +136,8 @@ export class CreateLeadComponent {
   };
 
   submitLeadForm(form: NgForm) {
-    alert("Company Name :"+this.lead.companyName);
-    alert("Enquiry Source : "+this.lead.pickupDateTime);
+    alert(this.lead.categoryTypeId);
+    alert(this.lead.categoryTypeName);
     this.leadManagementService.saveLeadDetails(this.lead)
       .subscribe({
         next: (response: any) => {
@@ -174,8 +181,7 @@ export class CreateLeadComponent {
   }
 
   public getCategoryType() {
-  
-    this.leadManagementService.getCategoryTypeList()
+    this.categoriesManagementService.getCategoryTypeList()
     .subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
@@ -191,13 +197,11 @@ export class CreateLeadComponent {
   }
 
   public getSuperCategory(superCateId:any) {
-    alert("jhf : "+superCateId);
-    this.leadManagementService.getSuperCategoryList(superCateId)
+    this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(superCateId)
     .subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
           this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
-          alert("jhf : "+this.superCategoryList);
         }
       },
       error: (error: any) => this.messageService.add({
@@ -210,7 +214,7 @@ export class CreateLeadComponent {
 
   public getCategory(categoryId: any) {
 
-    this.leadManagementService.getCategoryList(categoryId)
+    this.categoriesManagementService.getCategoryBySuperCatId(categoryId)
     .subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
@@ -226,7 +230,7 @@ export class CreateLeadComponent {
   }
 
   public getSubCategory(subCategoryId: any) {
-    this.leadManagementService.getSubCategoryList(subCategoryId)
+    this.categoriesManagementService.getSubCategoryListByCatId(subCategoryId)
     .subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {

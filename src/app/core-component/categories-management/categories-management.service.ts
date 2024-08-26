@@ -258,4 +258,18 @@ export class CategoriesManagementService {
     return  this.http.post<any>(Constant.Site_Url+"getSubCategoryDetails",request);
   }
 
+  getSubCategoryListByCatId(categoryId:any): Observable<any> {
+    let request: any = {
+      payload: {
+        categoryId: categoryId,
+        requestedFor: 'BYCATID',
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getSubCategoryDetails",request);
+  }
+
 }

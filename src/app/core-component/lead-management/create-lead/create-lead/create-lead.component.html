@@ -142,20 +142,19 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Category Type</label>
-                                <mat-select [(ngModel)]="lead.categoryTypeName" 
-                                            class="select" placeholder="Select a Super Category" (selectionChange)="getSuperCategory($event.value)">
-                                             <mat-option [disabled]=true>select hai</mat-option>
+                                <mat-select [(ngModel)]="lead.categoryTypeId" 
+                                            class="select" placeholder="Select Category Type" (selectionChange)="getSuperCategory($event.value)">
                                   <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
                                     {{cateType.categoryTypeName}}
                                   </mat-option>
-                                </mat-select>
+                                </mat-select> 
                             </div>
                         </div> 
 
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Super Category</label>
-                                <mat-select [(ngModel)]="lead.superCategory" [ngModelOptions]="{standalone: false}"
+                                <mat-select [(ngModel)]="lead.superCategoryId"
                                             class="select custom-mat-select" placeholder="Select a Super Category" (selectionChange)="getCategory($event.value)">
                                   <mat-option *ngFor="let supCate of superCategoryList" [value]="supCate.id">
                                     {{supCate.superCategory}}
@@ -167,8 +166,8 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Category</label> 
-                                <mat-select [(ngModel)]="lead.category" [ngModelOptions]="{standalone: false}"
-                                class="select custom-mat-select"  (selectionChange)="getSubCategory($event.value)">
+                                <mat-select [(ngModel)]="lead.categoryId"
+                                class="select custom-mat-select" placeholder="Select a Category"  (selectionChange)="getSubCategory($event.value)">
                                 <mat-option *ngFor="let cate of categoryList" [value]="cate.id">
                                   {{cate.category}}
                                 </mat-option>
@@ -179,7 +178,7 @@
                         <div class="col-lg-3 col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Sub Category</label> 
-                                <mat-select [(ngModel)]="lead.subCategory" [ngModelOptions]="{standalone: false}"
+                                <mat-select [(ngModel)]="lead.subCategoryId"
                                 class="select custom-mat-select" placeholder="Select a Sub Category">
                               
                                 <mat-option *ngFor="let subCate of subCategoryList"  [value]="subCate.id">

@@ -242,7 +242,7 @@
                             <label class="form-label">Super Category</label>
                             <mat-select name="superCategoryId" [(ngModel)]="addSubCategory.superCategoryId" class="select" placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
                               <mat-option *ngFor="let superCate of superCategoryList" [value]="superCate.id">
-                                {{superCate.superCategory }} {{superCate.id}}
+                                {{superCate.superCategory }}
                               </mat-option>
                             </mat-select>
                           </div>

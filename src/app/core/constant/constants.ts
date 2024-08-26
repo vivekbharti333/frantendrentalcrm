@@ -1,6 +1,6 @@
 export class Constant {
 
-    // public static Site_Url = "http://192.168.29.119:8080/rentalcrm/";
+    // public static Site_Url = "http://116.203.171.171:6080/rentalcrm/";
     public static Site_Url = "http://localhost:8080/rentalcrm/";
 
 
