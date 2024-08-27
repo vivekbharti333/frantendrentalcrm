@@ -507,8 +507,15 @@ mat-option.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):
 }
 
 mat-option.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
-  color: #fff;
+  // color: green;
+  color: black;
+  // background-color: #97A2D2;
+  // width: 100%;
+  // height: 100%;
 }
+// mat-option.mat-mdc-option.mdc-list-item--selected {
+//   background-color: #02a8b5;
+// }
 
 mat-option.mat-mdc-option:focus.mdc-list-item,
 mat-option.mat-mdc-option.mat-mdc-option-active.mdc-list-item {
@@ -2032,6 +2039,7 @@ body .modern.header-collapse .header {
 
 mat-option.mat-mdc-option.mdc-list-item {
   background-color: #fff;
+  // background-color: red;
 }
 
 
@@ -2063,6 +2071,7 @@ body .box .page-wrapper .content {
 
 .dark-select mat-option.mat-mdc-option.mdc-list-item {
   background-color: #141432;
+  // background-color: red;
 }
 
 .dark-select .sidebar.horizontal-sidebar {
@@ -2123,4 +2132,57 @@ body .mini-sidebar .sidebar .sidebar-menu>ul>li.submenu-open ul li a {
   .mini-sidebar.expand-menu .sidebar .sidebar-menu ul li i {
     margin-right: 5px;
   }
+}
+
+.requiredField:after {
+  content: "*";
+  color: #FF0000;
+  top: 0;
+  right: 0;
+  margin: 0.2rem;
+}
+
+.errorMessage {
+  color: #FF0000;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.modalHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  // background-color: #d1e6dd;
+  background-color: rgba(#FFC96F, 0.3);
+  padding: 1rem 2rem;
+}
+
+.dialogAction {
+  display: flex !important;
+  justify-content: flex-end !important;
+  padding: 1rem 3rem !important;
+}
+
+.modalContent {
+  padding: 0 !important;
+}
+
+.closeBtn {
+  background-color: #FF0000;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.closeBtn .close {
+  color: white !important;
+}
+
+.mat-dialog-close:hover {
+  color: white !important;
 }

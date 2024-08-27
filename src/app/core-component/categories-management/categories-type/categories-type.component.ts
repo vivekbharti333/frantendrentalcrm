@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -17,6 +17,7 @@ import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
 import { Modal } from 'bootstrap';
 import { Constant } from 'src/app/core/constant/constants';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-categories-type',
@@ -51,6 +52,7 @@ export class CategoriesTypeComponent {
     private sidebar: SidebarService,
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
+    private dialog: MatDialog,
   ) {
  
   }
@@ -87,9 +89,13 @@ export class CategoriesTypeComponent {
     });
   }
 
-  openAddModel(){
+  openAddModel(templateRef: TemplateRef<any>) {
     // this.isAddModalVisible = true;
     this.modalInstance.show();
+
+    this.dialog.open(templateRef, {
+      width: '50rem'
+    });
   }
 
   submitCategoryTypeForm(){
@@ -133,11 +139,15 @@ export class CategoriesTypeComponent {
     // this.isLoading = false;
 }
 
-  openEditModal(rowDate: any) {
+openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
     this.editCategoryType.id = rowDate.id;
     this.editCategoryType.categoryTypeName = rowDate.categoryTypeName;
     this.editCategoryType.status = rowDate.status; // Assign the value to user.firstName
     this.editCategoryType.isChecked = rowDate.isChecked;
+
+    this.dialog.open(templateRef, {
+      width: '50rem'
+    });
   }
 
   submitEditedCategoryTypeForm(){

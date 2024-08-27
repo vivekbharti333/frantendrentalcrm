@@ -1,4 +1,4 @@
-import { Component, importProvidersFrom } from '@angular/core';
+import { Component, importProvidersFrom, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ import Swal from 'sweetalert2';
 import { UserManagementService } from '../user-management.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-
+import { MatDialog } from '@angular/material/dialog';
 
 interface data {
   value: string;
@@ -28,10 +28,7 @@ interface data {
   styleUrl: './users.component.scss',
   providers: [MessageService, ToastModule],
 })
-
 export class UsersComponent {
-
-
   public addressList: any;
 
   public user = {
@@ -60,21 +57,36 @@ export class UsersComponent {
     //   this.createAddress()
     // ]
     addressList: [
-      { addressType: 'CURRENT', addressLine: '', landmark: '', district: '', city: '', state: '', country: 'INDIA', pincode: '' },
-      { addressType: 'PARMANENT', addressLine: '', landmark: '', district: '', city: '', state: '', country: 'INDIA', pincode: '' }
-    ]
+      {
+        addressType: 'CURRENT',
+        addressLine: '',
+        landmark: '',
+        district: '',
+        city: '',
+        state: '',
+        country: 'INDIA',
+        pincode: '',
+      },
+      {
+        addressType: 'PARMANENT',
+        addressLine: '',
+        landmark: '',
+        district: '',
+        city: '',
+        state: '',
+        country: 'INDIA',
+        pincode: '',
+      },
+    ],
   };
 
-
   onRoleTypeChange(event: any) {
-
-
     console.log('Selected gender:', event.value);
     this.getUserDetailsByRoleType(event.value);
     // Additional logic can be added here
   }
 
-  openEditModal(rowDate: any) {
+  openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
     this.user.userPicture = rowDate.userPicture;
     this.user.firstName = rowDate.firstName; // Assign the value to user.firstName
     this.user.lastName = rowDate.lastName;
@@ -94,18 +106,15 @@ export class UsersComponent {
     this.user.emergencyContactRelation2 = rowDate.emergencyContactRelation2;
     this.user.emergencyContactName2 = rowDate.emergencyContactName2;
     this.user.emergencyContactNo2 = rowDate.emergencyContactNo2;
-
     this.getAddressListByUserId(rowDate.loginId);
-
+    this.dialog.open(templateRef);
   }
 
   public roleTypes = [
     { id: 1, name: 'SUPERADIN' },
     { id: 2, name: 'ADMIN' },
-    { id: 3, name: 'TEAMLEAER' }
+    { id: 3, name: 'TEAMLEAER' },
   ];
-
-
 
   initChecked = false;
   selectedValue1 = '';
@@ -129,8 +138,6 @@ export class UsersComponent {
   public searchDataValue = '';
   //** / pagination variables
 
-
-
   constructor(
     private data: DataService,
     private pagination: PaginationService,
@@ -138,6 +145,7 @@ export class UsersComponent {
     private sidebar: SidebarService,
     private messageService: MessageService,
     private userManagementService: UserManagementService,
+    private dialog: MatDialog
   ) {
     //   this.userManagementService.getUserDetailsList().subscribe((apiRes: any) => {
     //   this.totalData = apiRes.totalNumber;
@@ -150,15 +158,22 @@ export class UsersComponent {
     //     }
     //   });
     // });
-
   }
 
   ngOnInit() {
     this.getUserDetails();
   }
 
-  genderType: data[] = [{ value: '1', name: 'MALE' }, { value: '2', name: 'FEMALE' }, { value: '3', name: 'OTHER' }];
-  userType: data[] = [{ value: '1', name: 'ADMIN' }, { value: '2', name: 'TEAM LEADER' }, { value: '3', name: 'SALE EXECUTIVE' }];
+  genderType: data[] = [
+    { value: '1', name: 'MALE' },
+    { value: '2', name: 'FEMALE' },
+    { value: '3', name: 'OTHER' },
+  ];
+  userType: data[] = [
+    { value: '1', name: 'ADMIN' },
+    { value: '2', name: 'TEAM LEADER' },
+    { value: '3', name: 'SALE EXECUTIVE' },
+  ];
   // permissionsList: data[] = [{ value: '1', name: 'admindb'}, {value: '2', name: 'admindbn'}, {value: '3', name: 'usermang'},{value: '3', name: 'usermang1'}];
   permissionsList: string[] = ['admindb', 'admindbn', 'usermang', 'usermang1'];
 
@@ -177,18 +192,22 @@ export class UsersComponent {
   }
 
   getUserDetailsByRoleType(roleType: any) {
-   
-    this.userManagementService.getUserDetailsByRoleType(roleType).subscribe((apiRes: any) => {
-      this.totalData = apiRes.totalNumber;
-      // const stringRepresentation = JSON.stringify(apiRes);
-      // const dataSize = stringRepresentation.length;
-      this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-        if (this.router.url == this.routes.users) {
-          this.getTableData({ skip: res.skip, limit: this.totalData }, roleType);
-          this.pageSize = res.pageSize;
-        }
+    this.userManagementService
+      .getUserDetailsByRoleType(roleType)
+      .subscribe((apiRes: any) => {
+        this.totalData = apiRes.totalNumber;
+        // const stringRepresentation = JSON.stringify(apiRes);
+        // const dataSize = stringRepresentation.length;
+        this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+          if (this.router.url == this.routes.users) {
+            this.getTableData(
+              { skip: res.skip, limit: this.totalData },
+              roleType
+            );
+            this.pageSize = res.pageSize;
+          }
+        });
       });
-    });
   }
 
   private getTableData(pageOption: pageSelection, roleType: any): void {
@@ -285,7 +304,7 @@ export class UsersComponent {
   public password: boolean[] = [false];
 
   public togglePassword(index: number) {
-    this.password[index] = !this.password[index]
+    this.password[index] = !this.password[index];
   }
   selectAll(initChecked: boolean) {
     if (!initChecked) {
@@ -306,29 +325,20 @@ export class UsersComponent {
     });
   }
 
-  changeUserStatus(rowData:any) {
-    this.userManagementService.changeUserStatus(rowData)
-      .subscribe({
-        next: (response: any) => {
-            console.log(response['responseCode']+" kjhk");
-            console.log(response['payload']['respCode']+" resesr");
-          if (response['responseCode'] == '200') {
-            if (response['payload']['respCode'] == '200') {
-      
-              this.getUserDetails();
+  changeUserStatus(rowData: any) {
+    this.userManagementService.changeUserStatus(rowData).subscribe({
+      next: (response: any) => {
+        console.log(response['responseCode'] + ' kjhk');
+        console.log(response['payload']['respCode'] + ' resesr');
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+            this.getUserDetails();
 
-              this.messageService.add({
-                summary: response['payload']['respCode'],
-                detail: response['payload']['respMesg'],
-                styleClass: 'success-background-popover',
-              });
-            } else {
-              this.messageService.add({
-                summary: response['payload']['respCode'],
-                detail: response['payload']['respMesg'],
-                styleClass: 'danger-background-popover',
-              });
-            }
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'success-background-popover',
+            });
           } else {
             this.messageService.add({
               summary: response['payload']['respCode'],
@@ -336,30 +346,38 @@ export class UsersComponent {
               styleClass: 'danger-background-popover',
             });
           }
-        },
-        error: () => this.messageService.add({
+        } else {
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      },
+      error: () =>
+        this.messageService.add({
           summary: '500',
           detail: 'Server Error',
         }),
-      });
+    });
     // this.isLoading = false;
   }
 
   public getAddressListByUserId(userId: any) {
-    this.userManagementService.getAddressListByUserId(userId)
-      .subscribe({
-        next: (response: any) => {
-          if (response['responseCode'] == '200') {
-            this.addressList = JSON.parse(JSON.stringify(response['listPayload']));
-            alert("hghgg : " + this.addressList)
-            console.log(this.addressList)
-          } else {
-          }
-        },
-        // error: (error: any) => this.toastr.error('Server Error', '500'),
-      });
+    this.userManagementService.getAddressListByUserId(userId).subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.addressList = JSON.parse(
+            JSON.stringify(response['listPayload'])
+          );
+          alert('hghgg : ' + this.addressList);
+          console.log(this.addressList);
+        } else {
+        }
+      },
+      // error: (error: any) => this.toastr.error('Server Error', '500'),
+    });
   }
-
 
   onFileSelected(event: any) {
     const selectedFile = event.target.files[0];
@@ -370,8 +388,8 @@ export class UsersComponent {
         const base64String = event.target.result.split(',')[1]; // Get the base64 part
 
         // Set the base64 string to the userPicture field
-        this.user.userPicture = "data:image/jpeg;base64," + base64String;
-        alert("base64 : " + this.user.userPicture);
+        this.user.userPicture = 'data:image/jpeg;base64,' + base64String;
+        alert('base64 : ' + this.user.userPicture);
       };
       reader.readAsDataURL(selectedFile);
     }
@@ -380,26 +398,25 @@ export class UsersComponent {
   submitUserForm() {
     // this.isLoading = true;
     alert(this.user.userPicture);
-    this.userManagementService.updateUserDetails(this.user)
-      .subscribe({
-        next: (response: any) => {
-          if (response['responseCode'] == '200') {
-            if (response['payload']['respCode'] == '200') {
-              //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
-              // form.reset();
-              // this.createForms();
-              // this.isLoading = false;
-            } else {
-              // this.toastr.error(response['payload']['respMesg'], response['payload']['respCode']);
-              // this.isLoading = false;
-            }
+    this.userManagementService.updateUserDetails(this.user).subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+            //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
+            // form.reset();
+            // this.createForms();
+            // this.isLoading = false;
           } else {
-            // this.toastr.error(response['responseMessage'], response['responseCode']);
+            // this.toastr.error(response['payload']['respMesg'], response['payload']['respCode']);
             // this.isLoading = false;
           }
-        },
-        // error: (error: any) => this.toastr.error('Server Error', '500'),
-      });
+        } else {
+          // this.toastr.error(response['responseMessage'], response['responseCode']);
+          // this.isLoading = false;
+        }
+      },
+      // error: (error: any) => this.toastr.error('Server Error', '500'),
+    });
     // this.isLoading = false;
   }
 }

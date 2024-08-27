@@ -11,7 +11,7 @@ import { SubCategoriesComponent } from './sub-categories/sub-categories.componen
 import { SuperCategoriesComponent } from './super-categories/super-categories.component';
 import { CategoriesManagementRoutingModule } from './categories-management-routing.module';
 import { CategoriesTypeComponent } from './categories-type/categories-type.component';
-
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -28,7 +28,8 @@ import { CategoriesTypeComponent } from './categories-type/categories-type.compo
     FormsModule,
     MatSelectModule,
     MatOptionModule,
-    MultiSelectModule
+    MultiSelectModule,
+    MatDialogModule
   ]
 })
 export class CategoriesManagementModule { }
