@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef  } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -16,6 +16,8 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
+import { MatDialog } from '@angular/material/dialog';
+
 
 
 @Component({
@@ -50,6 +52,7 @@ export class CategoriesComponent {
     private sidebar: SidebarService,
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
+    private dialog: MatDialog
   ) {
  
   }
@@ -241,7 +244,19 @@ changeStatus(rowdata:any){
    
   // }
 
-  openEditModal(rowData: any) {
+  openAddModal(templateRef: TemplateRef<any>) {
+    // this.superCategory.categoryTypeName = rowDate[5];
+    // this.superCategory.status = rowDate[5];
+    // this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
+    // this.superCategory.isChecked = rowDate[5];
+    // this.superCategory.categoryTypeId = rowDate[0]
+    this.dialog.open(templateRef),
+      {
+        width: '50rem',
+      };
+  }
+
+  openEditModal(templateRef: TemplateRef<any>,rowData: any) {
     // this.getCategoryType();
     this.editCategory.category = rowData[2];
     this.editCategory.createdAt = rowData[4];
@@ -250,6 +265,11 @@ changeStatus(rowdata:any){
     this.editCategory.superCategory = rowData[5]
     this.editCategory.superCategoryId = rowData[1]
     this.editCategory.categoryId = rowData[0]
+
+    this.dialog.open(templateRef),
+    {
+      width: '50rem',
+    };
    
   }
 

@@ -38,9 +38,14 @@
       </li>
     </ul> -->
     <div class="page-btn">
-        <button class="btn btn-added" data-bs-toggle="modal" data-bs-target="#add-units">
-            <i class="feather icon-plus-circle me-2"></i>Add Super Category
-          </button>
+      <button
+      class="btn btn-added"
+      data-bs-toggle="modal"
+      data-bs-target="#add-units"
+      (click)="openAddModal(addCategoryTemplate)"
+    >
+      <i class="feather icon-plus-circle me-2"></i>Add Category
+    </button>
     </div>
   </div>
   
@@ -166,7 +171,7 @@
               <td class="action-table-data">
                 <div class="edit-delete-action">
                   <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
-                  <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(data)"> <i class="feather icon-edit feather-edit"></i></a>
+                  <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(editCategoryTemplate, data)"> <i class="feather icon-edit feather-edit"></i></a>
                   <!-- <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);" (click)=confirmColor()> <i class="feather icon-trash-2 feather-trash-2"></i></a> -->
                 </div> 
               </td>
@@ -181,7 +186,7 @@
 
 
   <!-- Add Category Type -->
-  <div class="modal fade" id="add-units">
+  <!-- <div class="modal fade" id="add-units">
     <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
       <div class="modal-content">
         <div class="page-wrapper-new p-0">
@@ -266,12 +271,112 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- /Add Category Type -->
+
+
+      <!-- Add Category New Modal Start -->
+<ng-template #addCategoryTemplate let-dialog>
+  <div class="modalHeaderContainer">
+    <h2 mat-dialog-title class="p-0">Add Category</h2>
+    <div mat-dialog-close class="closeBtn">
+      <button
+        type="button"
+        class="close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  <form #addForm="ngForm" (ngSubmit)="submitCategoryForm()">
+    <mat-dialog-content class="modalContent">
+      <div class="modal-body custom-modal-body">
+        <div class="card">
+          <div class="card-body">
+            <div class="new-employee-field">
+              <div class="card-title-head">
+                <h6>
+                  <span><i class="feather icon-info feather-edit"></i></span
+                  >Category Type details
+                </h6>
+              </div>
+
+              <div class="profile-pic-upload">
+                <div class="profile-pic">
+                  <ng-container *ngIf="!addCategory.categoryImage; else showImage">
+                    <span><i class="feather icon-plus-circle plus-down-add"></i>Super Category Image</span>
+                  </ng-container>
+                  <ng-template #showImage>
+                    <img [src]="addCategory.categoryImage" alt="Profile Picture" class="uploaded-profile-pic" />
+                  </ng-template>
+                </div>
+                <div class="input-blocks mb-0">
+                  <div class="image-upload mb-0">
+                    <input type="file" class="form-control" id="categoryImage" (change)="onFileSelected($event)">
+                    <div class="image-uploads">
+                      <h4>Change Image</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Category Type Name</label>
+                    <mat-select name="categoryTypeId" [(ngModel)]="addCategory.categoryTypeId" class="select" placeholder="Select a Super Category" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id" >
+                        {{cateType.categoryTypeName}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Super Category</label>
+                    <mat-select name="superCategoryId" [(ngModel)]="addCategory.superCategoryId" class="select" placeholder="Select a Super Category">
+                      <mat-option *ngFor="let superCateType of superCategoryList" [value]="superCateType.id">
+                        {{superCateType.superCategory}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Category </label>
+                    <input type="text" class="form-control" name="category" [(ngModel)]="addCategory.category" required>
+                  </div>
+                </div>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="dialogAction">
+      <div class="text-end mb-3">
+        <button
+          type="submit"
+          class="btn btn-submit"
+          [disabled]="!addForm.form.valid"
+        >
+          Save Category
+        </button>
+      </div>
+      <!-- <button mat-button (click)="dialog.close()">Close</button> -->
+    </mat-dialog-actions>
+  </form>
+</ng-template>
+<!-- Add Category New Modal End -->
+
+
   
 
       <!-- Edit Category Type -->
-      <div class="modal fade" id="edit-units">
+      <!-- <div class="modal fade" id="edit-units">
         <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
           <div class="modal-content">
             <div class="page-wrapper-new p-0">
@@ -326,7 +431,98 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
       <!-- /Edit Category Type -->
   
+
+      <ng-template #editCategoryTemplate let-dialog>
+        <div class="modalHeaderContainer">
+          <h2 mat-dialog-title class="p-0">Edit Category</h2>
+          <div mat-dialog-close class="closeBtn">
+            <button
+              type="button"
+              class="close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+        </div>
+        <form #editForm="ngForm" (ngSubmit)="submitEditedCategoryForm()">
+          <mat-dialog-content class="modalContent">
+            <div class="modal-body custom-modal-body">
+              <div class="card">
+                <div class="card-body">
+                  <div class="new-employee-field">
+                    <div class="card-title-head">
+                      <h6>
+                        <span><i class="feather icon-info feather-edit"></i></span
+                        >Category details
+                      </h6>
+                    </div>
+      
+                    <div class="row">
+                      <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                          <label class="form-label">Category Type Name</label>
+                          <mat-select
+                            name="categoryTypeId"
+                            [(ngModel)]="editCategory.superCategoryId"
+                            class="select"
+                            placeholder="Select a Super Category"
+                          >
+                            <mat-option
+                              *ngFor="let cateType of categoryTypeList"
+                              [value]="cateType.id"
+                            >
+                              {{ cateType.categoryTypeName }}
+                            </mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                          <label class="form-label">Super Category </label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="superCategory"
+                            [(ngModel)]="editCategory.category"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-6">
+                        <div class="mb-3">
+                          <label class="form-label">Category</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            name="category"
+                            [(ngModel)]="editCategory.category"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-dialog-content>
+          <mat-dialog-actions class="dialogAction">
+            <div class="text-end mb-3">
+              <button
+                type="submit"
+                class="btn btn-submit"
+                [disabled]="!editForm.form.valid"
+              >
+                Update Category
+              </button>
+            </div>
+            <!-- <button mat-button (click)="dialog.close()">Close</button> -->
+          </mat-dialog-actions>
+        </form>
+      </ng-template>
   

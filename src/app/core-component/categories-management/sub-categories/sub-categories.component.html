@@ -37,9 +37,14 @@
       </li>
     </ul> -->
     <div class="page-btn">
-        <button class="btn btn-added" data-bs-toggle="modal" data-bs-target="#add-units">
-            <i class="feather icon-plus-circle me-2"></i>Add Sub Category
-          </button>
+      <button
+      class="btn btn-added"
+      data-bs-toggle="modal"
+      data-bs-target="#add-units"
+      (click)="openAddModal(addSubCategoryTemplate)"
+    >
+      <i class="feather icon-plus-circle me-2"></i>Add Sub Category
+    </button>
     </div>
   </div>
   
@@ -285,7 +290,115 @@
       </div>
       <!-- /Add Category Type -->
   
-  
+  <!-- Add Sub Category New Modal Start addSubCategoryTemplate -->
+<ng-template #addSubCategoryTemplate let-dialog>
+  <div class="modalHeaderContainer">
+    <h2 mat-dialog-title class="p-0">Add Sub Category</h2>
+    <div mat-dialog-close class="closeBtn">
+      <button
+        type="button"
+        class="close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  <form #addForm="ngForm" (ngSubmit)="submitSubCategoryForm()">
+    <mat-dialog-content class="modalContent">
+      <div class="modal-body custom-modal-body">
+        <div class="card">
+          <div class="card-body">
+            <div class="new-employee-field">
+              <div class="card-title-head">
+                <h6>
+                  <span><i class="feather icon-info feather-edit"></i></span
+                  >Category Type details
+                </h6>
+              </div>
+
+              <div class="profile-pic-upload">
+                <div class="profile-pic">
+                  <ng-container *ngIf="!addSubCategory.subCategoryImage; else showImage">
+                    <span><i class="feather icon-plus-circle plus-down-add"></i>Super Category Image</span>
+                  </ng-container>
+                  <ng-template #showImage>
+                    <img [src]="addSubCategory.subCategoryImage" alt="Profile Picture" class="uploaded-profile-pic" />
+                  </ng-template>
+                </div>
+                <div class="input-blocks mb-0">
+                  <div class="image-upload mb-0">
+                    <input type="file" class="form-control" id="subCategoryImage" (change)="onFileSelected($event)">
+                    <div class="image-uploads">
+                      <h4>Change Image</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Category Type Name</label>
+                    <mat-select name="categoryTypeId" [(ngModel)]="addSubCategory.categoryTypeId" class="select" placeholder="Select Category Type" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id" >
+                        {{cateType.categoryTypeName}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Super Category</label>
+                    <mat-select name="superCategoryId" [(ngModel)]="addSubCategory.superCategoryId" class="select" placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
+                      <mat-option *ngFor="let superCate of superCategoryList" [value]="superCate.id">
+                        {{superCate.superCategory }}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Category </label>
+                    <!-- <input type="text" class="form-control" name="category" [(ngModel)]="addSubCategory.category" required> -->
+                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.categoryId" class="select" placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
+                      <mat-option *ngFor="let cat of categoryList" [value]="cat.id">
+                        {{cat.category}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Sub Category </label>
+                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory" required>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="dialogAction">
+      <div class="text-end mb-3">
+        <button
+          type="submit"
+          class="btn btn-submit"
+          [disabled]="!addForm.form.valid"
+        >
+          Add Sub Category
+        </button>
+      </div>
+      <!-- <button mat-button (click)="dialog.close()">Close</button> -->
+    </mat-dialog-actions>
+  </form>
+</ng-template>
+<!-- Add Sub Category New Modal End addSubCategoryTemplate -->
 
 
 

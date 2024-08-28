@@ -38,13 +38,13 @@
       </li>
     </ul> -->
     <div class="page-btn">
-        <button class="btn btn-added" data-bs-toggle="modal" data-bs-target="#add-units" (click)="openAddModel()">
+        <button class="btn btn-added" data-bs-toggle="modal" data-bs-target="#add-units" (click)="openAddModel(addCategoryDialogTemplate)">
             <i class="feather icon-plus-circle me-2"></i>Add Category Type
           </button>
     </div>
   </div>
   
-  <!-- /product list -->
+
   <div class="card table-list-card">
     <div class="card-body">
       <div class="table-top">
@@ -180,8 +180,8 @@
 
 
   <!-- Add Category Type -->
-  <!-- <div class="modal fade" id="add-units" *ngIf="isAddModalVisible"> -->
-  <div class="modal fade" id="add-units" #addUnitsModal>
+
+  <!-- <div class="modal fade" id="add-units" #addUnitsModal>
     <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
       <div class="modal-content">
         <div class="page-wrapper-new p-0">
@@ -245,15 +245,93 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- /Add Category Type -->
+
+
+
+      <!-- Add Category Type New Modal -->
+<ng-template #addCategoryDialogTemplate let-dialog>
+  <div class="modalHeaderContainer">
+    <h2 mat-dialog-title class="p-0">Add Category Type</h2>
+    <div mat-dialog-close class="closeBtn">
+      <button
+        type="button"
+        class="close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  <form #addForm="ngForm" (ngSubmit)="submitCategoryTypeForm()">
+    <mat-dialog-content class="modalContent">
+      <div class="modal-body custom-modal-body">
+        <div class="card">
+          <div class="card-body">
+            <div class="new-employee-field">
+              <div class="card-title-head">
+                <h6>
+                  <span><i class="feather icon-info feather-edit"></i></span
+                  >Category Type details
+                </h6>
+              </div>
+
+              <div class="profile-pic-upload">
+                <div class="profile-pic">
+                  <ng-container *ngIf="!addCategoryType.categoryTypeImage; else showImage">
+                    <span><i class="feather icon-plus-circle plus-down-add"></i> Category Type Image</span>
+                  </ng-container>
+                  <ng-template #showImage>
+                    <img [src]="addCategoryType.categoryTypeImage" alt="Profile Picture" class="uploaded-profile-pic" />
+                  </ng-template>
+                </div>
+                <div class="input-blocks mb-0">
+                  <div class="image-upload mb-0">
+                    <input type="file" class="form-control" id="categoryTypeImage" (change)="onFileSelected($event)">
+                    <div class="image-uploads">
+                      <h4>Change Image</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Category Type Name</label>
+                    <input type="text" class="form-control" name="categoryTypeName" [(ngModel)]="addCategoryType.categoryTypeName" required>
+                  </div>
+                </div>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="dialogAction">
+      <div class="text-end mb-3">
+        <button
+          type="submit"
+          class="btn btn-submit"
+          [disabled]="!addForm.form.valid"
+        >
+          Save Category Type
+        </button>
+      </div>
+      <!-- <button mat-button (click)="dialog.close()">Close</button> -->
+    </mat-dialog-actions>
+  </form>
+</ng-template>
+<!-- Add Category Type New Modal Close -->
   
   
 
 
 
   <!-- Edit Category Type -->
-  <div class="modal fade" id="edit-units">
+  <!-- <div class="modal fade" id="edit-units">
     <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
       <div class="modal-content">
         <div class="page-wrapper-new p-0">
@@ -298,7 +376,64 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- /Edit Category Type -->
+
+      <!-- Edit Category Type New Modal Close-->
+<ng-template #editCategoryDialogTemplate let-dialog>
+  <div class="modalHeaderContainer">
+    <h2 mat-dialog-title class="p-0">Edit Category Type</h2>
+    <div mat-dialog-close class="closeBtn">
+      <button
+        type="button"
+        class="close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  <form #editForm="ngForm" (ngSubmit)="submitEditedCategoryTypeForm()">
+    <mat-dialog-content class="modalContent">
+      <div class="modal-body custom-modal-body">
+        <div class="card">
+          <div class="card-body">
+            <div class="new-employee-field">
+              <div class="card-title-head">
+                <h6>
+                  <span><i class="feather icon-info feather-edit"></i></span
+                  >Category Type details
+                </h6>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Category Type Name</label>
+                    <input type="text" class="form-control" name="categoryTypeName" [(ngModel)]="editCategoryType.categoryTypeName" required>
+                  </div>
+                </div>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <mat-dialog-actions class="dialogAction">
+      <div class="text-end mb-3">
+        <button
+          type="submit"
+          class="btn btn-submit"
+          [disabled]="!editForm.form.valid"
+        >
+          Update Category Type
+        </button>
+      </div>
+      <!-- <button mat-button (click)="dialog.close()">Close</button> -->
+    </mat-dialog-actions>
+  </form>
+</ng-template>
+<!-- Edit Category Type -->
   
   

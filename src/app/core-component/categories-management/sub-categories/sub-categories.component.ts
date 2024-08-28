@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-sub-categories',
@@ -52,6 +53,7 @@ export class SubCategoriesComponent {
     private sidebar: SidebarService,
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
+    private dialog: MatDialog
   ) {
  
   }
@@ -200,6 +202,9 @@ export class SubCategoriesComponent {
     // this.isLoading = false;
   }
   
+  openAddModal(templateRef: TemplateRef<any>) {
+    this.dialog.open(templateRef);
+  }
 
   openEditModal(rowDate: any) {
     // this.categoryType.categoryTypeName = rowDate.categoryTypeName;

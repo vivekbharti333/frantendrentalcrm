@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-super-categories',
@@ -49,6 +50,7 @@ export class SuperCategoriesComponent {
     private sidebar: SidebarService,
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
+    private dialog: MatDialog
   ) {
  
   }
@@ -222,15 +224,39 @@ changeStatus(rowdata:any){
    
   // }
 
-  openEditModal(rowDate: any) {
+  openAddModal(templateRef: TemplateRef<any>) {
+    // this.superCategory.categoryTypeName = rowDate[5];
+    // this.superCategory.status = rowDate[5];
+    // this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
+    // this.superCategory.isChecked = rowDate[5];
+    // this.superCategory.categoryTypeId = rowDate[0]
+    this.dialog.open(templateRef, {
+      width: '50rem',
+    });
+  }
+
+  // openEditModal(rowDate: any) {
+  //   this.getCategoryType();
+  //   this.editSuperCategory.categoryTypeName = rowDate[5];
+  //   this.editSuperCategory.createdAt = rowDate[4];
+  //   this.editSuperCategory.status = rowDate[3];
+  //   this.editSuperCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
+  //   this.editSuperCategory.categoryTypeId = rowDate[1]
+  //   this.editSuperCategory.superCategoryId = rowDate[0]
+   
+  // }
+
+  openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
     this.getCategoryType();
     this.editSuperCategory.categoryTypeName = rowDate[5];
     this.editSuperCategory.createdAt = rowDate[4];
     this.editSuperCategory.status = rowDate[3];
     this.editSuperCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
-    this.editSuperCategory.categoryTypeId = rowDate[1]
-    this.editSuperCategory.superCategoryId = rowDate[0]
-   
+    this.editSuperCategory.categoryTypeId = rowDate[1];
+    this.editSuperCategory.superCategoryId = rowDate[0];
+    this.dialog.open(templateRef, {
+      width: '50rem',
+    });
   }
 
   getSuperCategory() {
