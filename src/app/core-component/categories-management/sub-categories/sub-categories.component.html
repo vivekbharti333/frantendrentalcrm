@@ -189,7 +189,7 @@
 
 
   <!-- Add Category Type -->
-  <div class="modal fade" id="add-units">
+  <!-- <div class="modal fade" id="add-units">
     <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
       <div class="modal-content">
         <div class="page-wrapper-new p-0">
@@ -255,7 +255,7 @@
                         <div class="col-lg-3 col-md-6">
                           <div class="mb-3">
                             <label class="form-label">Category </label>
-                            <!-- <input type="text" class="form-control" name="category" [(ngModel)]="addSubCategory.category" required> -->
+                           
                             <mat-select name="categoryId" [(ngModel)]="addSubCategory.categoryId" class="select" placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
                               <mat-option *ngFor="let cat of categoryList" [value]="cat.id">
                                 {{cat.category}}
@@ -287,7 +287,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- /Add Category Type -->
   
   <!-- Add Sub Category New Modal Start addSubCategoryTemplate -->
