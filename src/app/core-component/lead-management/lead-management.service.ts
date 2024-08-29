@@ -131,4 +131,17 @@ export class LeadManagementService {
     };
     return  this.http.post<any>(Constant.Site_Url+"getFollowupOne",request);
   }
+
+  getAllLeadList(): Observable<any> {
+    let request: any = {
+      payload: {
+        requestedFor: 'ALL',
+        roleType:  this.cookieService.get('roleType'),
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"getAllLeadList",request);
+  }
 }
