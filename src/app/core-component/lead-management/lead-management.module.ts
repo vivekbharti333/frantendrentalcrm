@@ -5,13 +5,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core'; 
 import { MultiSelectModule } from 'primeng/multiselect';
 import { sharedModule } from 'src/app/shared/shared.module';
-// import { CreateLeadComponent } from './create-lead.component';
 import { CreateLeadComponent } from './create-lead/create-lead/create-lead.component';
 import { LeadManagementComponent } from './lead-management.component';
 import { LeadManagementRoutingModule } from './lead-management-routing.module';
 import { FollowupOneComponent } from './followup-list/followup-one/followup-one.component';
 import { FollowupTwoComponent } from './followup-list/followup-two/followup-two.component';
 import { FollowupThreeComponent } from './followup-list/followup-three/followup-three.component';
+import { AllLeadComponent } from './lead-list/all-lead/all-lead.component';
+import { LostComponent } from './lead-list/lost/lost.component';
+import { ReservedComponent } from './lead-list/reserved/reserved.component';
+import { EnquiryComponent } from './lead-list/enquiry/enquiry.component';
 
 
 @NgModule({
@@ -21,6 +24,10 @@ import { FollowupThreeComponent } from './followup-list/followup-three/followup-
     FollowupOneComponent,
     FollowupTwoComponent,
     FollowupThreeComponent,
+    AllLeadComponent,
+    LostComponent,
+    ReservedComponent,
+    EnquiryComponent,
   ],
   imports: [
     LeadManagementRoutingModule,

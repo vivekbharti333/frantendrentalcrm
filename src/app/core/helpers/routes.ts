@@ -961,6 +961,19 @@ export class routes {
     return this.leadManagement + '/follow-up-one';
   }
 
+  public static get allLead(): string {
+    return this.leadManagement + '/all-lead';
+  }
+  public static get enquiry(): string {
+    return this.leadManagement + '/enquiry';
+  }
+  public static get reserved(): string {
+    return this.leadManagement + '/reserved';
+  }
+  public static get lost(): string {
+    return this.leadManagement + '/lost';
+  }
+
   public static get categoryManagement(): string {
     return this.core + '/category-management';
   }

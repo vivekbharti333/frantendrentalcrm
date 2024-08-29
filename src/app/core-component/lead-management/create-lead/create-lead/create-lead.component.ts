@@ -126,6 +126,7 @@ export class CreateLeadComponent {
     createdBy: '',
     notes: '',
     followupDateTime: '',
+    remarks: '',
     preValue: `    Reports : 
     Delivery : 
     Comments : 
