@@ -1,7 +1,7 @@
 export class Constant {
 
-    // public static Site_Url = "http://116.203.171.171:6080/rentalcrm/";
-    public static Site_Url = "http://localhost:8080/rentalcrm/";
+    public static Site_Url = "http://datfuslab3.techmates.org:6080/rentalcrm/";
+    // public static Site_Url = "http://localhost:8080/rentalcrm/";
 
 
     // USER ROLE

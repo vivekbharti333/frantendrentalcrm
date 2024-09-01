@@ -26,13 +26,12 @@ interface su {
   providers: [MessageService, ToastModule],
 })
 export class CreateLeadComponent {
-
   public loginUser: any;
-  public selectedOption: string = 'lead'; 
-  public categoryTypeList: any[]=[];
-  public superCategoryList: any[]=[];
-  public categoryList : any[]=[];
-  public subCategoryList : any[]=[];
+  public selectedOption: string = 'lead';
+  public categoryTypeList: any[] = [];
+  public superCategoryList: any[] = [];
+  public categoryList: any[] = [];
+  public subCategoryList: any[] = [];
 
   constructor(
     private sidebar: SidebarService,
@@ -40,15 +39,14 @@ export class CreateLeadComponent {
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private spinnerService: SpinnerService,
-    private categoriesManagementService: CategoriesManagementService,
+    private categoriesManagementService: CategoriesManagementService
   ) {
     this.loginUser = this.authenticationService.getLoginUser();
-   
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.getCategoryType();
-   }
+  }
 
   onSelectionChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
@@ -70,20 +68,19 @@ export class CreateLeadComponent {
   public selectedValue11 = '';
 
   selectedList1: data[] = [
-    {id:1, name: 'Car' },
-    {id:2, name: 'Bike' }
+    { id: 1, name: 'Car' },
+    { id: 2, name: 'Bike' },
   ];
 
   selectedList2: data[] = [
-    {id:1, name: 'Car' },
-    {id:2, name: 'Bike' }
+    { id: 1, name: 'Car' },
+    { id: 2, name: 'Bike' },
   ];
-  
+
   selectedList3: data[] = [
-    {id:1, name: 'Car' },
-    {id:2, name: 'Bike' }
+    { id: 1, name: 'Car' },
+    { id: 2, name: 'Bike' },
   ];
-  
 
   public lead = {
     // bookingId: '',
@@ -94,15 +91,17 @@ export class CreateLeadComponent {
     categoryId: '',
     subCategoryId: '',
 
-    categoryTypeName: '',
-    superCategory: '',
-    category: '',
-    subCategory: '',
+    categoryTypeName: '', // Need to add in payload
+    superCategory: '', //
+    category: '', //
+    subCategory: '', //
     itemName: '',
     pickupDateTime: '',
     pickupLocation: '',
+    pickupPoint: '',
     dropDateTime: '',
     dropLocation: '',
+    dropPoint: '',
     customeName: '',
     countryDialCode: '',
     customerMobile: '',
@@ -122,6 +121,7 @@ export class CreateLeadComponent {
     deliveryAmountToVendor: '',
     // vendorName: '',
     status: '',
+    leadOrigine: '',
     leadType: '',
     createdBy: '',
     notes: '',
@@ -131,34 +131,24 @@ export class CreateLeadComponent {
     Delivery : 
     Comments : 
     Pay to vendor : 
-    Pay to company :` ,
+    Pay to company :`,
     reminderDate: '',
-    records: ''
+    records: '',
   };
 
   submitLeadForm(form: NgForm) {
     alert(this.lead.categoryTypeId);
     alert(this.lead.categoryTypeName);
-    this.leadManagementService.saveLeadDetails(this.lead)
-      .subscribe({
-        next: (response: any) => {
-
-          if (response['responseCode'] == '200') {
-            if (response['payload']['respCode'] == '200') {
-      
-              form.reset();
-              this.messageService.add({
-                summary: response['payload']['respCode'],
-                detail: response['payload']['respMesg'],
-                styleClass: 'success-background-popover',
-              });
-            } else {
-              this.messageService.add({
-                summary: response['payload']['respCode'],
-                detail: response['payload']['respMesg'],
-                styleClass: 'danger-background-popover',
-              });
-            }
+    this.leadManagementService.saveLeadDetails(this.lead).subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+            form.reset();
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'success-background-popover',
+            });
           } else {
             this.messageService.add({
               summary: response['payload']['respCode'],
@@ -166,12 +156,20 @@ export class CreateLeadComponent {
               styleClass: 'danger-background-popover',
             });
           }
-        },
-        error: () => this.messageService.add({
+        } else {
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      },
+      error: () =>
+        this.messageService.add({
           summary: '500',
           detail: 'Server Error',
         }),
-      });
+    });
   }
 
   isCollapsed: boolean = false;
@@ -182,68 +180,84 @@ export class CreateLeadComponent {
   }
 
   public getCategoryType() {
-    this.categoriesManagementService.getCategoryTypeList()
-    .subscribe({
+    this.categoriesManagementService.getCategoryTypeList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
-          this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
+          this.categoryTypeList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
         }
       },
-      error: (error: any) => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-        styleClass: 'danger-background-popover',
-      })
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
     });
   }
 
-  public getSuperCategory(superCateId:any) {
-    this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(superCateId)
-    .subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
-        }
-      },
-      error: (error: any) => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-        styleClass: 'danger-background-popover',
-      })
-    });
+  public getSuperCategory(superCateId: any) {
+    console.log("categoryyyyy++++++", superCateId)
+    const categoryId = superCateId?.id;
+    this.categoriesManagementService
+      .getSuperCategoryListByCategoryTypeId(categoryId)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            this.superCategoryList = JSON.parse(
+              JSON.stringify(response.listPayload)
+            );
+          }
+        },
+        error: (error: any) =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+            styleClass: 'danger-background-popover',
+          }),
+      });
   }
 
   public getCategory(categoryId: any) {
-
-    this.categoriesManagementService.getCategoryBySuperCatId(categoryId)
-    .subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.categoryList = JSON.parse(JSON.stringify(response.listPayload));
-        }
-      },
-      error: (error: any) => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-        styleClass: 'danger-background-popover',
-      })
-    });
+    const superCatId = categoryId?.id;
+    this.categoriesManagementService
+      .getCategoryBySuperCatId(superCatId)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            this.categoryList = JSON.parse(
+              JSON.stringify(response.listPayload)
+            );
+          }
+        },
+        error: (error: any) =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+            styleClass: 'danger-background-popover',
+          }),
+      });
   }
 
   public getSubCategory(subCategoryId: any) {
-    this.categoriesManagementService.getSubCategoryListByCatId(subCategoryId)
-    .subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.subCategoryList = JSON.parse(JSON.stringify(response.listPayload));
-        }
-      },
-      error: (error: any) => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-        styleClass: 'danger-background-popover',
-      })
-    });
+    const categoryId = subCategoryId?.id;
+    this.categoriesManagementService
+      .getSubCategoryListByCatId(categoryId)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            this.subCategoryList = JSON.parse(
+              JSON.stringify(response.listPayload)
+            );
+          }
+        },
+        error: (error: any) =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+            styleClass: 'danger-background-popover',
+          }),
+      });
   }
-  
 }

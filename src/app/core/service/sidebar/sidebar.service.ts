@@ -135,27 +135,27 @@ export class SidebarService {
             {
               menuValue: 'Follow up one',
               route: routes.followupOne,
-              permission: 'follow-up-one',
+              permission: 'create-lead',
             },
             {
               menuValue: 'All Lead',
               route: routes.allLead,
-              permission: 'follow-up-one',
+              permission: 'create-lead',
             },
             {
               menuValue: 'Enquiry',
               route: routes.enquiry,
-              permission: 'follow-up-one',
+              permission: 'create-lead',
             },
             {
               menuValue: 'Reserved',
               route: routes.reserved,
-              permission: 'follow-up-one',
+              permission: 'create-lead',
             },
             {
               menuValue: 'Lost',
               route: routes.lost,
-              permission: 'follow-up-one',
+              permission: 'create-lead',
             },
             
           ],

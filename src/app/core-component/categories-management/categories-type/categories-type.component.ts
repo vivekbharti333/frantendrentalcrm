@@ -1,4 +1,10 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, TemplateRef } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  TemplateRef,
+} from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -17,7 +23,7 @@ import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
 import { Modal } from 'bootstrap';
 import { Constant } from 'src/app/core/constant/constants';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-categories-type',
@@ -30,7 +36,7 @@ export class CategoriesTypeComponent {
   modalInstance!: Modal;
   // public isAddModalVisible: boolean = false;
 
-  public baseUrl =Constant.Site_Url;
+  public baseUrl = Constant.Site_Url;
 
   public routes = routes;
   // pagination variables
@@ -41,10 +47,9 @@ export class CategoriesTypeComponent {
   showFilter = false;
   dataSource!: MatTableDataSource<users>;
   public searchDataValue = '';
+  addCategoryTypeDialog: any;
+  editCategoryTypeDialog: any;
   //** / pagination variables
-
-
-
   constructor(
     private data: DataService,
     private pagination: PaginationService,
@@ -52,11 +57,8 @@ export class CategoriesTypeComponent {
     private sidebar: SidebarService,
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
-    private dialog: MatDialog,
-  ) {
- 
-  }
-
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit() {
     this.getCategoryType();
@@ -66,198 +68,199 @@ export class CategoriesTypeComponent {
     categoryTypeImage: '',
     categoryTypeName: '',
     status: '',
-    isChecked: '', 
+    isChecked: '',
   };
 
   public editCategoryType = {
-    id:'',
+    id: '',
     categoryTypeName: '',
     status: '',
-    isChecked: '', 
+    isChecked: '',
   };
 
-
   getCategoryType() {
-    this.categoriesManagementService.getCategoryTypeList().subscribe((apiRes: any) => {
-      this.totalData = apiRes.totalNumber;
-      this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-        if (this.router.url == this.routes.categoryType) {
-          this.getTableData({ skip: res.skip, limit: this.totalData });
-          this.pageSize = res.pageSize;
-        }
+    this.categoriesManagementService
+      .getCategoryTypeList()
+      .subscribe((apiRes: any) => {
+        this.totalData = apiRes.totalNumber;
+        this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+          if (this.router.url == this.routes.categoryType) {
+            this.getTableData({ skip: res.skip, limit: this.totalData });
+            this.pageSize = res.pageSize;
+          }
+        });
       });
-    });
   }
 
   openAddModel(templateRef: TemplateRef<any>) {
-    // this.isAddModalVisible = true;
-    this.modalInstance.show();
-
-    this.dialog.open(templateRef, {
-      width: '50rem'
+    this.addCategoryTypeDialog = this.dialog.open(templateRef, {
+      width: '50rem',
     });
   }
 
-  submitCategoryTypeForm(){
-    this.categoriesManagementService.addCategoryType(this.addCategoryType)
-    .subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          if (response['payload']['respCode'] == '200') {
-            // alert(response['payload']['respMesg']);
-            //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
-          // this.user;
-          this.modalInstance.hide();
-           this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'success-background-popover',
-          });
-          
+  submitCategoryTypeForm() {
+    this.categoriesManagementService
+      .addCategoryType(this.addCategoryType)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              // alert(response['payload']['respMesg']);
+              //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
+              // this.user;
+              // this.modalInstance.hide();
+              this.addCategoryTypeDialog.close();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+              this.getCategoryType();
+            } else {
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
           } else {
-            // alert(response['payload']['respMesg']);
-
             this.messageService.add({
               summary: response['payload']['respCode'],
               detail: response['payload']['respMesg'],
               styleClass: 'danger-background-popover',
             });
           }
-        } else {
+        },
+        error: () =>
           this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'danger-background-popover',
-          });
-        }
-      },
-      error: () => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-      }),
-    });
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
     // this.isLoading = false;
-}
+  }
 
-openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
+  openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
     this.editCategoryType.id = rowDate.id;
     this.editCategoryType.categoryTypeName = rowDate.categoryTypeName;
     this.editCategoryType.status = rowDate.status; // Assign the value to user.firstName
     this.editCategoryType.isChecked = rowDate.isChecked;
 
-    this.dialog.open(templateRef, {
-      width: '50rem'
+    this.editCategoryTypeDialog = this.dialog.open(templateRef, {
+      width: '50rem',
     });
   }
 
-  submitEditedCategoryTypeForm(){
-    this.categoriesManagementService.editCategoryType(this.editCategoryType)
-    .subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          if (response['payload']['respCode'] == '200') {
-            // alert(response['payload']['respMesg']);
-            //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
-          // this.user;
-          this.getCategoryType();
-          this.modalInstance.hide();
-
-           this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'success-background-popover',
-          });
-          
+  submitEditedCategoryTypeForm() {
+    this.categoriesManagementService
+      .editCategoryType(this.editCategoryType)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              // alert(response['payload']['respMesg']);
+              //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
+              // this.user;
+              // this.modalInstance.hide();
+              this.editCategoryTypeDialog.close();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+              this.getCategoryType();
+            } else {
+              // alert(response['payload']['respMesg']);
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
           } else {
-            // alert(response['payload']['respMesg']);
-
             this.messageService.add({
               summary: response['payload']['respCode'],
               detail: response['payload']['respMesg'],
               styleClass: 'danger-background-popover',
             });
           }
-        } else {
+        },
+        error: () =>
           this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'danger-background-popover',
-          });
-        }
-      },
-      error: () => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-      }),
-    });
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
     // this.isLoading = false;
-}
+  }
 
-changeStatus(rowData: any){
-    this.categoriesManagementService.changeCategoryTypeStatus(rowData)
-    .subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          if (response['payload']['respCode'] == '200') {
-            // alert(response['payload']['respMesg']);
-            //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
-          // this.user;
-          this.getCategoryType();
-          this.modalInstance.hide();
+  changeStatus(rowData: any) {
+    this.categoriesManagementService
+      .changeCategoryTypeStatus(rowData)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              // alert(response['payload']['respMesg']);
+              //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
+              // this.user;
+              this.getCategoryType();
+              this.modalInstance.hide();
 
-           this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'success-background-popover',
-          });
-          
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+            } else {
+              // alert(response['payload']['respMesg']);
+
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
           } else {
-            // alert(response['payload']['respMesg']);
-
             this.messageService.add({
               summary: response['payload']['respCode'],
               detail: response['payload']['respMesg'],
               styleClass: 'danger-background-popover',
             });
           }
-        } else {
+        },
+        error: () =>
           this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'danger-background-popover',
-          });
-        }
-      },
-      error: () => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-      }),
-    });
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
     // this.isLoading = false;
-}
+  }
 
   private getTableData(pageOption: pageSelection): void {
-   
-      this.categoriesManagementService.getCategoryTypeList().subscribe((apiRes: any) => {
-      this.tableData = [];
-      this.serialNumberArray = [];
-      this.totalData = apiRes.totalNumber;
-      apiRes.listPayload.map((res: any, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          this.tableData.push(res);
-          this.serialNumberArray.push(serialNumber);
-        }
+    this.categoriesManagementService
+      .getCategoryTypeList()
+      .subscribe((apiRes: any) => {
+        this.tableData = [];
+        this.serialNumberArray = [];
+        this.totalData = apiRes.totalNumber;
+        apiRes.listPayload.map((res: any, index: number) => {
+          const serialNumber = index + 1;
+          if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
+            this.tableData.push(res);
+            this.serialNumberArray.push(serialNumber);
+          }
+        });
+        this.dataSource = new MatTableDataSource<users>(this.tableData);
+        const dataSize = this.tableData.length;
+        this.pagination.calculatePageSize.next({
+          totalData: this.totalData,
+          pageSize: this.pageSize,
+          tableData: this.tableData,
+          serialNumberArray: this.serialNumberArray,
+        });
       });
-      this.dataSource = new MatTableDataSource<users>(this.tableData);
-      const dataSize = this.tableData.length;
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
-      });
-    });
   }
 
   public sortData(sort: Sort) {
@@ -287,21 +290,18 @@ changeStatus(rowData: any){
     this.filter = !this.filter;
   }
 
-
   onFileSelected(event: any) {
     const selectedFile = event.target.files[0];
-
     if (selectedFile) {
       const reader = new FileReader();
       reader.onload = (event: any) => {
         const base64String = event.target.result.split(',')[1]; // Get the base64 part
 
         // Set the base64 string to the userPicture field
-        this.addCategoryType.categoryTypeImage = "data:image/png;base64," + base64String;
+        this.addCategoryType.categoryTypeImage =
+          'data:image/png;base64,' + base64String;
       };
       reader.readAsDataURL(selectedFile);
     }
   }
-
-
 }

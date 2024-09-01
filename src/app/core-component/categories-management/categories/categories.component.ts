@@ -1,4 +1,4 @@
-import { Component, TemplateRef  } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -18,8 +18,6 @@ import { CategoriesManagementService } from '../categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
 import { MatDialog } from '@angular/material/dialog';
 
-
-
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
@@ -28,10 +26,9 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class CategoriesComponent {
   public routes = routes;
-  public categoryTypeList: any[]=[];
-  public superCategoryList: any[]=[];
-  public baseUrl =Constant.Site_Url;
-
+  public categoryTypeList: any[] = [];
+  public superCategoryList: any[] = [];
+  public baseUrl = Constant.Site_Url;
 
   // pagination variables
   public tableData: Array<any> = [];
@@ -42,9 +39,8 @@ export class CategoriesComponent {
   dataSource!: MatTableDataSource<users>;
   public searchDataValue = '';
   //** / pagination variables
-
-
-
+  addCategoryDialog: any;
+  editCategoryDialog: any;
   constructor(
     private data: DataService,
     private pagination: PaginationService,
@@ -53,13 +49,9 @@ export class CategoriesComponent {
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
     private dialog: MatDialog
-  ) {
- 
-  }
-
+  ) {}
 
   ngOnInit() {
-    
     this.getCategoryDetailsList();
     this.getCategoryType();
   }
@@ -74,71 +66,149 @@ export class CategoriesComponent {
 
   public editCategory = {
     categoryTypeId: '',
-    superCategoryId: '',
-    categoryId:'',
-    category: '',
+    categoryTypeName: '',
     superCategory: '',
+    category: '',
     createdAt: '',
-    status:'',
+    status: '',
   };
 
-
   public getCategoryType() {
-    this.categoriesManagementService.getCategoryTypeList()
-    .subscribe({
+    this.categoriesManagementService.getCategoryTypeList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
-          this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
-          this.superCategoryList =[];
+          this.categoryTypeList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.superCategoryList = [];
+          // console.log("response++++++++++", this.categoryTypeList)
         }
       },
-      error: (error: any) => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-        styleClass: 'danger-background-popover',
-      })
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
     });
   }
 
-  public getSuperCategoryByCateTypeId(rowData:any){
-    this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(rowData.value)
-    .subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
-        }
-      },
-      error: (error: any) => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-        styleClass: 'danger-background-popover',
-      })
-    });
+  public getSuperCategoryByCateTypeId(rowData: any) {
+    this.categoriesManagementService
+      .getSuperCategoryListByCategoryTypeId(rowData.value)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            this.superCategoryList = JSON.parse(
+              JSON.stringify(response.listPayload)
+            );
+          }
+        },
+        error: (error: any) =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+            styleClass: 'danger-background-popover',
+          }),
+      });
   }
 
+  submitCategoryForm() {
+    this.categoriesManagementService
+      .addCategoryDetails(this.addCategory)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              // alert(response['payload']['respMesg']);
+              //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
+              // this.user;
+              // this.modalInstance.hide();
+              this.addCategoryDialog.close();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+              this.getCategoryDetailsList();
+            } else {
+              // alert(response['payload']['respMesg']);
 
-  submitCategoryForm(){
-    this.categoriesManagementService.addCategoryDetails(this.addCategory)
-    .subscribe({
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        },
+        error: () =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
+    // this.isLoading = false;
+  }
+
+  submitEditedCategoryForm() {
+    this.categoriesManagementService
+      .editCategoryDetails(this.editCategory)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              this.editCategoryDialog.close();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+              this.getCategoryDetailsList();
+            } else {
+              // alert(response['payload']['respMesg']);
+
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        },
+        error: () =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
+    // this.isLoading = false;
+  }
+
+  changeStatus(rowdata: any) {
+    this.categoriesManagementService.changeCategoryStatus(rowdata).subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
           if (response['payload']['respCode'] == '200') {
-            // alert(response['payload']['respMesg']);
-            //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
-          // this.user;
-          // this.modalInstance.hide();
-
-          this.getCategoryDetailsList();
-
-           this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'success-background-popover',
-          });
-          
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'success-background-popover',
+            });
+            this.getCategoryDetailsList();
           } else {
-            // alert(response['payload']['respMesg']);
-
             this.messageService.add({
               summary: response['payload']['respCode'],
               detail: response['payload']['respMesg'],
@@ -153,95 +223,23 @@ export class CategoriesComponent {
           });
         }
       },
-      error: () => this.messageService.add({
-        summary: '500',
-        detail: 'Server Error',
-      }),
+      error: () =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+        }),
     });
     // this.isLoading = false;
-}
-
-submitEditedCategoryForm(){
-  this.categoriesManagementService.editCategoryDetails(this.editCategory)
-  .subscribe({
-    next: (response: any) => {
-      if (response['responseCode'] == '200') {
-        if (response['payload']['respCode'] == '200') {
-         this.messageService.add({
-          summary: response['payload']['respCode'],
-          detail: response['payload']['respMesg'],
-          styleClass: 'success-background-popover',
-        });
-        
-        } else {
-          // alert(response['payload']['respMesg']);
-
-          this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'danger-background-popover',
-          });
-        }
-      } else {
-        this.messageService.add({
-          summary: response['payload']['respCode'],
-          detail: response['payload']['respMesg'],
-          styleClass: 'danger-background-popover',
-        });
-      }
-    },
-    error: () => this.messageService.add({
-      summary: '500',
-      detail: 'Server Error',
-    }),
-  });
-  // this.isLoading = false;
-}
-
-changeStatus(rowdata:any){
-  this.categoriesManagementService.changeCategoryStatus(rowdata)
-  .subscribe({
-    next: (response: any) => {
-      if (response['responseCode'] == '200') {
-        if (response['payload']['respCode'] == '200') {
-         this.messageService.add({
-          summary: response['payload']['respCode'],
-          detail: response['payload']['respMesg'],
-          styleClass: 'success-background-popover',
-        });
-        this.getCategoryDetailsList();
-        } else {
-          this.messageService.add({
-            summary: response['payload']['respCode'],
-            detail: response['payload']['respMesg'],
-            styleClass: 'danger-background-popover',
-          });
-        }
-      } else {
-        this.messageService.add({
-          summary: response['payload']['respCode'],
-          detail: response['payload']['respMesg'],
-          styleClass: 'danger-background-popover',
-        });
-      }
-    },
-    error: () => this.messageService.add({
-      summary: '500',
-      detail: 'Server Error',
-    }),
-  });
-  // this.isLoading = false;
-}
-
+  }
 
   // openAddModal(rowDate: any) {
-    
+
   //   this.superCategory.categoryTypeName = rowDate[5];
   //   this.superCategory.status = rowDate[5];
   //   this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
   //   this.superCategory.isChecked = rowDate[5];
   //   this.superCategory.categoryTypeId = rowDate[0]
-   
+
   // }
 
   openAddModal(templateRef: TemplateRef<any>) {
@@ -250,63 +248,71 @@ changeStatus(rowdata:any){
     // this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
     // this.superCategory.isChecked = rowDate[5];
     // this.superCategory.categoryTypeId = rowDate[0]
-    this.dialog.open(templateRef),
+    (this.addCategoryDialog = this.dialog.open(templateRef)),
       {
         width: '50rem',
       };
   }
 
-  openEditModal(templateRef: TemplateRef<any>,rowData: any) {
+  openEditModal(templateRef: TemplateRef<any>, rowData: any) {
     // this.getCategoryType();
-    this.editCategory.category = rowData[2];
-    this.editCategory.createdAt = rowData[4];
-    this.editCategory.status = rowData[3];
+    const filterCategoryType: any = this.categoryTypeList.filter((item) => {
+      if (item?.categoryTypeName === rowData[3]) {
+        return item;
+      }
+    });
+    this.editCategory.categoryTypeId = filterCategoryType[0]?.id;
+    this.editCategory.categoryTypeName = rowData[3];
+    this.editCategory.superCategory = rowData[5];
+    this.editCategory.category = rowData[6];
+    this.editCategory.createdAt = rowData[8];
+    this.editCategory.status = rowData[7];
+    // console.log('rowData++++++++', this.editCategory, filterCategoryType);
     // this.editCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
-    this.editCategory.superCategory = rowData[5]
-    this.editCategory.superCategoryId = rowData[1]
-    this.editCategory.categoryId = rowData[0]
-
-    this.dialog.open(templateRef),
-    {
-      width: '50rem',
-    };
-   
+    // this.editCategory.superCategoryId = rowData[1];
+    (this.editCategoryDialog = this.dialog.open(templateRef)),
+      {
+        width: '50rem',
+      };
   }
 
   getCategoryDetailsList() {
-    this.categoriesManagementService.getCategoryDetailsList().subscribe((apiRes: any) => {
-      this.totalData = apiRes.totalNumber;
-      this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-        if (this.router.url == this.routes.category) {
-          this.getTableData({ skip: res.skip, limit: this.totalData });
-          this.pageSize = res.pageSize;
-        }
+    this.categoriesManagementService
+      .getCategoryDetailsList()
+      .subscribe((apiRes: any) => {
+        this.totalData = apiRes.totalNumber;
+        this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
+          if (this.router.url == this.routes.category) {
+            this.getTableData({ skip: res.skip, limit: this.totalData });
+            this.pageSize = res.pageSize;
+          }
+        });
       });
-    });
   }
 
   private getTableData(pageOption: pageSelection): void {
-   
-      this.categoriesManagementService.getCategoryDetailsList().subscribe((apiRes: any) => {
-      this.tableData = [];
-      this.serialNumberArray = [];
-      this.totalData = apiRes.totalNumber;
-      apiRes.listPayload.map((res: any, index: number) => {
-        const serialNumber = index + 1;
-        if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-          this.tableData.push(res);
-          this.serialNumberArray.push(serialNumber);
-        }
+    this.categoriesManagementService
+      .getCategoryDetailsList()
+      .subscribe((apiRes: any) => {
+        this.tableData = [];
+        this.serialNumberArray = [];
+        this.totalData = apiRes.totalNumber;
+        apiRes.listPayload.map((res: any, index: number) => {
+          const serialNumber = index + 1;
+          if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
+            this.tableData.push(res);
+            this.serialNumberArray.push(serialNumber);
+          }
+        });
+        this.dataSource = new MatTableDataSource<users>(this.tableData);
+        const dataSize = this.tableData.length;
+        this.pagination.calculatePageSize.next({
+          totalData: this.totalData,
+          pageSize: this.pageSize,
+          tableData: this.tableData,
+          serialNumberArray: this.serialNumberArray,
+        });
       });
-      this.dataSource = new MatTableDataSource<users>(this.tableData);
-      const dataSize = this.tableData.length;
-      this.pagination.calculatePageSize.next({
-        totalData: this.totalData,
-        pageSize: this.pageSize,
-        tableData: this.tableData,
-        serialNumberArray: this.serialNumberArray,
-      });
-    });
   }
 
   public sortData(sort: Sort) {
@@ -345,11 +351,10 @@ changeStatus(rowdata:any){
         const base64String = event.target.result.split(',')[1]; // Get the base64 part
 
         // Set the base64 string to the userPicture field
-        this.addCategory.categoryImage = "data:image/png;base64," + base64String;
+        this.addCategory.categoryImage =
+          'data:image/png;base64,' + base64String;
       };
       reader.readAsDataURL(selectedFile);
     }
   }
 }
-
-

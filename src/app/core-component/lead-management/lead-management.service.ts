@@ -7,16 +7,15 @@ import { CookieService } from 'ngx-cookie-service';
 import { AuthenticationService } from 'src/app/auth/authentication.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LeadManagementService {
-
   public loginUser;
 
   constructor(
     private http: HttpClient,
     private cookieService: CookieService,
-    private authenticationService: AuthenticationService,
+    private authenticationService: AuthenticationService
   ) {
     this.loginUser = this.authenticationService.getLoginUser();
     // this.loginUser = JSON.parse(this.cookieService.get('loginDetails'))
@@ -25,55 +24,62 @@ export class LeadManagementService {
   getCategoryTypeList(): Observable<any> {
     let request: any = {
       payload: {
-        roleType:  this.cookieService.get('roleType'),
-        token:  this.cookieService.get('token'),
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
-        superadminId:  this.cookieService.get('superadminId'),
-      }
+        superadminId: this.cookieService.get('superadminId'),
+      },
     };
-    return  this.http.post<any>(Constant.Site_Url+"getCategoryType",request);
+    return this.http.post<any>(Constant.Site_Url + 'getCategoryType', request);
   }
 
   getSuperCategoryList(categoryTypeId: any): Observable<any> {
     let request: any = {
       payload: {
         categoryTypeId: categoryTypeId,
-        roleType:  this.cookieService.get('roleType'),
-        token:  this.cookieService.get('token'),
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
-        superadminId:  this.cookieService.get('superadminId'),
-      }
+        superadminId: this.cookieService.get('superadminId'),
+      },
     };
-    return  this.http.post<any>(Constant.Site_Url+"getSuperCategoryDetailsByCategoryTypeId",request);
+    return this.http.post<any>(
+      Constant.Site_Url + 'getSuperCategoryDetailsByCategoryTypeId',
+      request
+    );
   }
 
-  getCategoryList(superCategoryId:any): Observable<any> {
+  getCategoryList(superCategoryId: any): Observable<any> {
     let request: any = {
       payload: {
         superCategoryId: superCategoryId,
-        roleType:  this.cookieService.get('roleType'),
-        token:  this.cookieService.get('token'),
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
-        superadminId:  this.cookieService.get('superadminId'),
-      }
+        superadminId: this.cookieService.get('superadminId'),
+      },
     };
-    return  this.http.post<any>(Constant.Site_Url+"getCategoryDetailsBySuperCategoryId",request);
+    return this.http.post<any>(
+      Constant.Site_Url + 'getCategoryDetailsBySuperCategoryId',
+      request
+    );
   }
 
-  getSubCategoryList(categoryId:any): Observable<any> {
+  getSubCategoryList(categoryId: any): Observable<any> {
     let request: any = {
       payload: {
         categoryId: categoryId,
-        roleType:  this.cookieService.get('roleType'),
-        token:  this.cookieService.get('token'),
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
-        superadminId:  this.cookieService.get('superadminId'),
-      }
+        superadminId: this.cookieService.get('superadminId'),
+      },
     };
-    return  this.http.post<any>(Constant.Site_Url+"getSubCategoryDetailsByCategoryId",request);
+    return this.http.post<any>(
+      Constant.Site_Url + 'getSubCategoryDetailsByCategoryId',
+      request
+    );
   }
-
-
 
   saveLeadDetails(lead: any): Observable<any> {
     let request: any = {
@@ -83,15 +89,21 @@ export class LeadManagementService {
         // superCategory: lead.superCategory,
         // category: lead.category,
         // subCategory: lead.subCategory,
-        categoryTypeId: lead.categoryTypeId,
-        superCategoryId: lead.superCategoryId,
-        categoryId: lead.categoryId,
-        subCategoryId: lead.subCategoryId,
+        categoryTypeId: lead.categoryTypeId?.id,
+        superCategoryId: lead.superCategoryId?.id,
+        categoryId: lead.categoryId?.id,
+        subCategoryId: lead.subCategoryId?.id,
+        categoryTypeName: lead.categoryTypeId?.categoryTypeName, // Need to add in payload
+        superCategory: lead.superCategoryId?.superCategory, //
+        category: lead.categoryId?.category, //
+        subCategory: lead.subCategoryId?.subCategory, //
         // itemName: lead.itemName,
         pickupDateTime: lead.pickupDateTime,
         pickupLocation: lead.pickupLocation,
+        pickupPoint: lead.pickupPoint,
         dropDateTime: lead.dropDateTime,
         dropLocation: lead.dropLocation,
+        dropPoint: lead.dropPoint,
         customeName: lead.customeName,
         countryDialCode: lead.countryDialCode,
         customerMobile: lead.customerMobile,
@@ -108,40 +120,82 @@ export class LeadManagementService {
         securityAmount: lead.securityAmount,
         // vendorName: lead.,
         status: lead.status,
-        createdBy: lead.createdBy,
+        leadOrigine: lead.leadOrigine,
+        leadType: lead.leadType,
+        // createdBy: lead.createdBy,
+        createdBy: this.cookieService.get('loginId'),
         notes: lead.notes,
         roleType: this.cookieService.get('roleType'),
         token: this.cookieService.get('token'),
         // createdBy: this.cookieService.get('loginId'),
         superadminId: this.cookieService.get('superadminId'),
-      }
+      },
     };
-    return this.http.post<any>(Constant.Site_Url + "registerLead", request);
+    return this.http.post<any>(Constant.Site_Url + 'registerLead', request);
   }
 
   getFollowupOneList(): Observable<any> {
     let request: any = {
       payload: {
         requestedFor: 'ALL',
-        roleType:  this.cookieService.get('roleType'),
-        token:  this.cookieService.get('token'),
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
-        superadminId:  this.cookieService.get('superadminId'),
-      }
+        superadminId: this.cookieService.get('superadminId'),
+      },
     };
-    return  this.http.post<any>(Constant.Site_Url+"getFollowupOne",request);
+    return this.http.post<any>(Constant.Site_Url + 'getFollowupOne', request);
   }
 
   getAllLeadList(): Observable<any> {
     let request: any = {
       payload: {
         requestedFor: 'ALL',
-        roleType:  this.cookieService.get('roleType'),
-        token:  this.cookieService.get('token'),
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
-        superadminId:  this.cookieService.get('superadminId'),
-      }
+        superadminId: this.cookieService.get('superadminId'),
+      },
     };
-    return  this.http.post<any>(Constant.Site_Url+"getAllLeadList",request);
+    return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
+  }
+
+  getAllEnquiryList(): Observable<any> {
+    let request: any = {
+      payload: {
+        requestedFor: 'ALL',
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId: this.cookieService.get('superadminId'),
+      },
+    };
+    return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
+  }
+
+  getAllReservedList(): Observable<any> {
+    let request: any = {
+      payload: {
+        requestedFor: 'ALL',
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId: this.cookieService.get('superadminId'),
+      },
+    };
+    return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
+  }
+
+  getAllLostList(): Observable<any> {
+    let request: any = {
+      payload: {
+        requestedFor: 'ALL',
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId: this.cookieService.get('superadminId'),
+      },
+    };
+    return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
   }
 }
