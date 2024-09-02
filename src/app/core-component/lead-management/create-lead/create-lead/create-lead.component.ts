@@ -8,6 +8,7 @@ import { Constant } from 'src/app/core/constant/constants';
 import { ToastModule } from 'primeng/toast';
 import { SpinnerService } from 'src/app/core/core.index';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
+import { UserManagementService } from 'src/app/core-component/user-management/user-management.service';
 
 interface data {
   id: number;
@@ -16,6 +17,11 @@ interface data {
 
 interface su {
   id: number;
+  name: string;
+}
+
+interface listData {
+  value: string;
   name: string;
 }
 
@@ -32,6 +38,7 @@ export class CreateLeadComponent {
   public superCategoryList: any[] = [];
   public categoryList: any[] = [];
   public subCategoryList: any[] = [];
+  public userList: any[] = [];
 
   constructor(
     private sidebar: SidebarService,
@@ -39,13 +46,15 @@ export class CreateLeadComponent {
     private authenticationService: AuthenticationService,
     private messageService: MessageService,
     private spinnerService: SpinnerService,
-    private categoriesManagementService: CategoriesManagementService
+    private categoriesManagementService: CategoriesManagementService,
+    private userManagementService: UserManagementService
   ) {
     this.loginUser = this.authenticationService.getLoginUser();
   }
 
   ngOnInit() {
     this.getCategoryType();
+    this.getUserList();
   }
 
   onSelectionChange(event: Event): void {
@@ -81,6 +90,11 @@ export class CreateLeadComponent {
     { id: 1, name: 'Car' },
     { id: 2, name: 'Bike' },
   ];
+
+  // leadOrigine: listData[] = [{ value: 'CALL', name: 'Call'}, {value: 'WHATSAPP', name: 'Whats App'}, {value: 'EMAIL', name: 'Email'},{value: 'OTHER', name: 'Other'}];
+  leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
+  leadType: listData[] = Constant.LEAD_TYPE_LIST;
+  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
   public lead = {
     // bookingId: '',
@@ -259,5 +273,23 @@ export class CreateLeadComponent {
             styleClass: 'danger-background-popover',
           }),
       });
+  }
+
+  public getUserList() {
+    this.userManagementService.getUserDetailsList().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.userList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
   }
 }

@@ -394,21 +394,35 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Lead Origine</label>
-                <input type="text" class="form-control" name="leadOrigine" [(ngModel)]="lead.leadOrigine" required
+                <!-- <input type="text" class="form-control" name="leadOrigine" [(ngModel)]="lead.leadOrigine" required
                   #leadOrigine="ngModel" />
                 @if(leadOrigine?.errors?.['required'] && leadOrigine?.touched) {
                 <div class="errorMessage">Lead Origine is required</div>
-                }
+                } -->
+                <mat-select name="leadOrigine" [(ngModel)]="lead.leadOrigine" class="select" placeholder="Select Lead Origine">
+                  @for (listData of leadOrigine; track listData) {
+                  <mat-option [value]="listData.name">
+                    {{ listData.name }}
+                  </mat-option>
+                  }
+                </mat-select>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Lead Type</label>
-                <input type="text" class="form-control" name="leadType" [(ngModel)]="lead.leadType" required
+                <!-- <input type="text" class="form-control" name="leadType" [(ngModel)]="lead.leadType" required
                   #leadType="ngModel" />
                 @if(leadType?.errors?.['required'] && leadType?.touched) {
                 <div class="errorMessage">Lead Type is required</div>
-                }
+                } -->
+                <mat-select name="leadType" [(ngModel)]="lead.leadType" class="select" placeholder="Select Lead Type">
+                  @for (listData of leadType; track listData) {
+                  <mat-option [value]="listData.name">
+                    {{ listData.name }}
+                  </mat-option>
+                  }
+                </mat-select>
               </div>
             </div>
             <div class="col-lg-2 col-md-2"></div>
@@ -419,20 +433,34 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label">Created By</label>
-                <input type="text" class="form-control" name="createdBy" [(ngModel)]="lead.createdBy"
+                <!-- <input type="text" class="form-control" name="createdBy" [(ngModel)]="lead.createdBy"
                   #createdBy="ngModel" />
                 @if(createdBy?.errors?.['required'] && createdBy?.touched) {
                 <div class="errorMessage">Created By is required</div>
-                }
+                } -->
+                <mat-select [(ngModel)]="lead.createdBy" class="select custom-mat-select" name="createdBy"
+                  placeholder="Select Agent Name"  required
+                  #createdBy="ngModel">
+                  <mat-option *ngFor="let user of userList" [value]="user">
+                    {{ user.firstName }}
+                  </mat-option>
+                </mat-select>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label">Status</label>
-                <input type="text" class="form-control" name="status" [(ngModel)]="lead.status" #status="ngModel" />
+                <!-- <input type="text" class="form-control" name="status" [(ngModel)]="lead.status" #status="ngModel" />
                 @if(status?.errors?.['required'] && status?.touched) {
                 <div class="errorMessage">status is required</div>
-                }
+                } -->
+                <mat-select name="status" [(ngModel)]="lead.status" class="select" placeholder="Select Status">
+                  @for (listData of leadStatus; track listData) {
+                  <mat-option [value]="listData.name">
+                    {{ listData.name }}
+                  </mat-option>
+                  }
+                </mat-select>
               </div>
             </div>
           </div>

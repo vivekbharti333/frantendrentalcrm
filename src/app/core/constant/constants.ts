@@ -1,7 +1,7 @@
 export class Constant {
 
-    public static Site_Url = "http://datfuslab3.techmates.org:6080/rentalcrm/";
-    // public static Site_Url = "http://localhost:8080/rentalcrm/";
+    // public static Site_Url = "http://datfuslab3.techmates.org:6080/rentalcrm/";
+    public static Site_Url = "http://localhost:8080/rentalcrm/";
 
 
     // USER ROLE
@@ -28,4 +28,8 @@ export class Constant {
     public static ALREADY_EXISTS = 403;
     public static INTERNAL_SERVER_ERR = 500;
 
+
+    public static LEAD_STATUS_LIST = [{ value: 'ENQUIRY', name: 'Enquiry'}, {value: 'FOLLOWUP', name: 'Follow Up'}, {value: 'BOOKED', name: 'Booked'},{value: 'OTHER', name: 'Other'}];
+    public static LEAD_ORIGINE_LIST = [{ value: 'CALL', name: 'Call'}, {value: 'WHATSAPP', name: 'Whats App'}, {value: 'EMAIL', name: 'Email'},{value: 'OTHER', name: 'Other'}];
+    public static LEAD_TYPE_LIST = [{ value: 'NEW', name: 'New'}, {value: 'REPEAT', name: 'Repeat'}, {value: 'REFERRED', name: 'Referred'},{value: 'AGENT', name: 'Agent'}, {value: 'AGENT-REPEAT', name: 'Agent Repeat'}];
 }
