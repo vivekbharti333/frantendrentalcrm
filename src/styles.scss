@@ -794,8 +794,30 @@ span.custom-disabled-span {
   color: #FF0000;
 }
 
+.edit-delete-action a .textBlack {
+  color: #000000 !important;
+}
 .edit-delete-action a:hover i {
   color: #ffffff !important;
+}
+
+
+.edit-delete-action a:hover .tooltipText {
+  visibility: visible;
+}
+
+.tooltipText {
+  visibility: hidden;
+  height: 32px;
+  width: 64px;
+  background-color: #0a0a0a;
+  color: #ffffff;
+  position: absolute;
+  bottom: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
 }
 
 .custom-modal-two .content {
@@ -2157,6 +2179,13 @@ body .mini-sidebar .sidebar .sidebar-menu>ul>li.submenu-open ul li a {
   background-color: rgba(#FFC96F, 0.3);
   padding: 1rem 2rem;
 }
+.modalFooterContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(#FFC96F, 0.3);
+  padding: 1rem 2rem;
+}
 
 .dialogAction {
   display: flex !important;
@@ -2185,4 +2214,14 @@ body .mini-sidebar .sidebar .sidebar-menu>ul>li.submenu-open ul li a {
 
 .mat-dialog-close:hover {
   color: white !important;
+}
+
+.mat-select-search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mat-select-search-container input {
+  width: 95%;
+  margin-bottom: 8px;
 }

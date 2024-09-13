@@ -9,6 +9,7 @@ import { ToastModule } from 'primeng/toast';
 import { SpinnerService } from 'src/app/core/core.index';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
 import { UserManagementService } from 'src/app/core-component/user-management/user-management.service';
+import { CookieService } from 'ngx-cookie-service';
 
 interface data {
   id: number;
@@ -39,64 +40,9 @@ export class CreateLeadComponent {
   public categoryList: any[] = [];
   public subCategoryList: any[] = [];
   public userList: any[] = [];
-
-  constructor(
-    private sidebar: SidebarService,
-    private leadManagementService: LeadManagementService,
-    private authenticationService: AuthenticationService,
-    private messageService: MessageService,
-    private spinnerService: SpinnerService,
-    private categoriesManagementService: CategoriesManagementService,
-    private userManagementService: UserManagementService
-  ) {
-    this.loginUser = this.authenticationService.getLoginUser();
-  }
-
-  ngOnInit() {
-    this.getCategoryType();
-    this.getUserList();
-  }
-
-  onSelectionChange(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    this.selectedOption = inputElement.value;
-    console.log('Selected option:', this.selectedOption);
-  }
-
-  public routes = routes;
-  public selectedValue1 = '';
-  public selectedValue2 = '';
-  public selectedValue3 = '';
-  public selectedValue4 = '';
-  public selectedValue5 = '';
-  public selectedValue6 = '';
-  public selectedValue7 = '';
-  public selectedValue8 = '';
-  public selectedValue9 = '';
-  public selectedValue10 = '';
-  public selectedValue11 = '';
-
-  selectedList1: data[] = [
-    { id: 1, name: 'Car' },
-    { id: 2, name: 'Bike' },
-  ];
-
-  selectedList2: data[] = [
-    { id: 1, name: 'Car' },
-    { id: 2, name: 'Bike' },
-  ];
-
-  selectedList3: data[] = [
-    { id: 1, name: 'Car' },
-    { id: 2, name: 'Bike' },
-  ];
-
-  // leadOrigine: listData[] = [{ value: 'CALL', name: 'Call'}, {value: 'WHATSAPP', name: 'Whats App'}, {value: 'EMAIL', name: 'Email'},{value: 'OTHER', name: 'Other'}];
-  leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
-  leadType: listData[] = Constant.LEAD_TYPE_LIST;
-  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
-
-  public lead = {
+  roleType: string = '';
+  fullName: string = '';
+  lead = {
     // bookingId: '',
     companyName: 'Notes',
     enquirySource: 'Call',
@@ -149,6 +95,75 @@ export class CreateLeadComponent {
     reminderDate: '',
     records: '',
   };
+  filteredCategoryTypeList: any[] = [];
+  filteredSuperCategoryList: any[] = [];
+  filteredCategoryList: any[] = [];
+  filteredSubCategoryList: any[] = [];
+
+  constructor(
+    private sidebar: SidebarService,
+    private leadManagementService: LeadManagementService,
+    private authenticationService: AuthenticationService,
+    private messageService: MessageService,
+    private spinnerService: SpinnerService,
+    private categoriesManagementService: CategoriesManagementService,
+    private userManagementService: UserManagementService,
+    private cookiesService: CookieService
+  ) {
+    this.loginUser = this.authenticationService.getLoginUser();
+    this.roleType = this.cookiesService.get('roleType');
+    this.fullName =
+      this.cookiesService.get('firstName') +
+      ' ' +
+      this.cookiesService.get('lastName');
+  }
+
+  ngOnInit() {
+    this.getCategoryType();
+    this.getUserList();
+    this.roleType === 'SUPERADMIN'
+      ? (this.lead.createdBy = '')
+      : (this.lead.createdBy = this.fullName);
+  }
+
+  onSelectionChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    this.selectedOption = inputElement.value;
+    console.log('Selected option:', this.selectedOption);
+  }
+
+  public routes = routes;
+  public selectedValue1 = '';
+  public selectedValue2 = '';
+  public selectedValue3 = '';
+  public selectedValue4 = '';
+  public selectedValue5 = '';
+  public selectedValue6 = '';
+  public selectedValue7 = '';
+  public selectedValue8 = '';
+  public selectedValue9 = '';
+  public selectedValue10 = '';
+  public selectedValue11 = '';
+
+  selectedList1: data[] = [
+    { id: 1, name: 'Car' },
+    { id: 2, name: 'Bike' },
+  ];
+
+  selectedList2: data[] = [
+    { id: 1, name: 'Car' },
+    { id: 2, name: 'Bike' },
+  ];
+
+  selectedList3: data[] = [
+    { id: 1, name: 'Car' },
+    { id: 2, name: 'Bike' },
+  ];
+
+  // leadOrigine: listData[] = [{ value: 'CALL', name: 'Call'}, {value: 'WHATSAPP', name: 'Whats App'}, {value: 'EMAIL', name: 'Email'},{value: 'OTHER', name: 'Other'}];
+  leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
+  leadType: listData[] = Constant.LEAD_TYPE_LIST;
+  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
   submitLeadForm(form: NgForm) {
     alert(this.lead.categoryTypeId);
@@ -200,6 +215,7 @@ export class CreateLeadComponent {
           this.categoryTypeList = JSON.parse(
             JSON.stringify(response.listPayload)
           );
+          this.filteredCategoryTypeList = this.categoryTypeList;
         }
       },
       error: (error: any) =>
@@ -212,7 +228,6 @@ export class CreateLeadComponent {
   }
 
   public getSuperCategory(superCateId: any) {
-    console.log("categoryyyyy++++++", superCateId)
     const categoryId = superCateId?.id;
     this.categoriesManagementService
       .getSuperCategoryListByCategoryTypeId(categoryId)
@@ -222,6 +237,7 @@ export class CreateLeadComponent {
             this.superCategoryList = JSON.parse(
               JSON.stringify(response.listPayload)
             );
+            this.filteredSuperCategoryList = this.superCategoryList;
           }
         },
         error: (error: any) =>
@@ -243,6 +259,7 @@ export class CreateLeadComponent {
             this.categoryList = JSON.parse(
               JSON.stringify(response.listPayload)
             );
+            this.filteredCategoryList = this.categoryList;
           }
         },
         error: (error: any) =>
@@ -264,6 +281,7 @@ export class CreateLeadComponent {
             this.subCategoryList = JSON.parse(
               JSON.stringify(response.listPayload)
             );
+            this.filteredSubCategoryList = this.subCategoryList;
           }
         },
         error: (error: any) =>
@@ -279,9 +297,7 @@ export class CreateLeadComponent {
     this.userManagementService.getUserDetailsList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
-          this.userList = JSON.parse(
-            JSON.stringify(response.listPayload)
-          );
+          this.userList = JSON.parse(JSON.stringify(response.listPayload));
         }
       },
       error: (error: any) =>
@@ -291,5 +307,23 @@ export class CreateLeadComponent {
           styleClass: 'danger-background-popover',
         }),
     });
+  }
+  setFilterList(listVal: any, typeOfList: any) {
+    switch (typeOfList) {
+      case 'categoryType':
+        this.filteredCategoryTypeList = listVal;
+        break;
+      case 'superCategory':
+        this.filteredSuperCategoryList = listVal;
+        break;
+      case 'category':
+        this.filteredCategoryList = listVal;
+        break;
+      case 'subCategory':
+        this.filteredSubCategoryList = listVal;
+        break;
+      default:
+        break;
+    }
   }
 }

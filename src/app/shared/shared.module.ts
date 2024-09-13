@@ -27,16 +27,17 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { LightgalleryModule } from 'lightgallery/angular'; 
+import { LightgalleryModule } from 'lightgallery/angular';
 import { NgxMatIntlTelInputComponent } from 'ngx-mat-intl-tel-input';
 import { CountUpModule } from 'ngx-countup';
 import { TimepickerActions, TimepickerModule } from 'ngx-bootstrap/timepicker';
 import { DatePipe } from '@angular/common';
 import { FeatherModule } from 'angular-feather';
 import { Tool } from 'angular-feather/icons';
+import { MatSelectSearchComponent } from './mat-select-search/mat-select-search.component';
 
 const icons = {
-  Tool
+  Tool,
 };
 @NgModule({
   imports: [
@@ -74,7 +75,7 @@ const icons = {
     NgxMatIntlTelInputComponent,
     CountUpModule,
     TimepickerModule,
-    FeatherModule.pick(icons)
+    FeatherModule.pick(icons),
   ],
   exports: [
     MaterialModule,
@@ -107,7 +108,8 @@ const icons = {
     NgxMatIntlTelInputComponent,
     CountUpModule,
     TimepickerModule,
-    FeatherModule
+    FeatherModule,
+    MatSelectSearchComponent,
   ],
   providers: [
     DataService,
@@ -116,5 +118,6 @@ const icons = {
     BsDatepickerConfig,
     { provide: HTTP_INTERCEPTORS, useClass: SpinnerInterceptor, multi: true },
   ],
+  declarations: [MatSelectSearchComponent],
 })
 export class sharedModule {}

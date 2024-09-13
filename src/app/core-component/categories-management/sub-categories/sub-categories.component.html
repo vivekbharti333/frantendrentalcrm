@@ -494,7 +494,7 @@
       </button>
     </div>
   </div>
-  <form #userForm="ngForm" (ngSubmit)="submitSubCategoryForm()">
+  <form #editForm="ngForm" (ngSubmit)="submitEditedSubCategoryForm()">
     <mat-dialog-content class="modalContent">
       <div class="modal-body custom-modal-body">
         <div class="card">
@@ -503,7 +503,7 @@
               <div class="card-title-head">
                 <h6>
                   <span><i class="feather icon-info feather-edit"></i></span
-                  >Category Type details
+                  >Sub Category details
                 </h6>
               </div>
 
@@ -511,7 +511,83 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <!-- <input type="text" class="form-control" name="categoryTypeName" [(ngModel)]="categoryType.categoryTypeName" required> -->
+                    <mat-select
+                      name="categoryTypeId"
+                      [(ngModel)]="editSubCategory.categoryTypeId"
+                      class="select"
+                      placeholder="Select a Super Category"
+                      (selectionChange)="getSuperCategoryByCateTypeId($event)"
+                    >
+                      <mat-option
+                        *ngFor="let cateType of categoryTypeList"
+                        [value]="cateType.id"
+                      >
+                        {{ cateType.categoryTypeName }}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Super Category </label>
+                    <mat-select
+                      name="superCategoryId"
+                      [(ngModel)]="editSubCategory.superCategoryId"
+                      class="select"
+                      placeholder="Select a Super Category"
+                      (selectionChange)="getCategoryBySuperCatId($event)"
+                    >
+                      <mat-option
+                        *ngFor="let superCategory of superCategoryList"
+                        [value]="superCategory.id"
+                      >
+                        {{ superCategory.superCategory }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <input
+                      type="text"
+                      class="form-control"
+                      name="superCategory"
+                      [(ngModel)]="editSubCategory.superCategory"
+                      required
+                    /> -->
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <mat-select
+                      name="superCategoryId"
+                      [(ngModel)]="editSubCategory.categoryId"
+                      class="select"
+                      placeholder="Select a Super Category"
+                    >
+                      <mat-option
+                        *ngFor="let cate of categoryList"
+                        [value]="cate.id"
+                      >
+                        {{ cate.category }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <input
+                      type="text"
+                      class="form-control"
+                      name="category"
+                      [(ngModel)]="editSubCategory.category"
+                      required
+                    /> -->
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Sub Category</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="category"
+                      [(ngModel)]="editSubCategory.subCategory"
+                      required
+                    />
                   </div>
                 </div>
               </div>
@@ -525,9 +601,9 @@
         <button
           type="submit"
           class="btn btn-submit"
-          [disabled]="!userForm.form.valid"
+          [disabled]="!editForm.form.valid"
         >
-          Save Sub Category
+          Update Sub Category
         </button>
       </div>
       <!-- <button mat-button (click)="dialog.close()">Close</button> -->

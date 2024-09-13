@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -217,7 +218,7 @@ export class CategoriesManagementService {
   }
 
   addSubCategoryDetails(addSubCategory:any): Observable<any> {
-    let request: any = {
+    const request: any = {
       payload: {
         subCategoryImage: addSubCategory.subCategoryImage,
         categoryTypeId: addSubCategory.categoryTypeId,
@@ -230,6 +231,22 @@ export class CategoriesManagementService {
       }
     };
     return  this.http.post<any>(Constant.Site_Url+"addSubCategoryDetails",request);
+  }
+
+  editSubCategoryDetails(editSubCategory: any): Observable<any>{
+    const request: any = {
+      payload: {
+        categoryTypeId: editSubCategory.categoryTypeId,
+        superCategoryId: editSubCategory.superCategoryId,
+        categoryId: editSubCategory.categoryId,
+        subCategory: editSubCategory.subCategory,
+        // category: editSubCategory.category,
+        token:  this.cookieService.get('token'),
+        createdBy: this.cookieService.get('loginId'),
+        superadminId:  this.cookieService.get('superadminId'),
+      }
+    };
+    return  this.http.post<any>(Constant.Site_Url+"editSubCategoryDetails",request); 
   }
 
   changeSubCategoryStatus(rowData:any): Observable<any> {

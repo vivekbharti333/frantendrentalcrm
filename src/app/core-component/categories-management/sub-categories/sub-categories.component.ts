@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -67,6 +69,18 @@ export class SubCategoriesComponent {
     subCategory: '',
   };
 
+  public editSubCategory = {
+    categoryTypeId: '',
+    categoryTypeName: '',
+    superCategory: '',
+    superCategoryId: '',
+    category: '',
+    categoryId: '',
+    subCategory: '',
+    createdAt: '',
+    status: '',
+  };
+
   public getCategoryType() {
     this.categoriesManagementService.getCategoryTypeList().subscribe({
       next: (response: any) => {
@@ -86,45 +100,58 @@ export class SubCategoriesComponent {
     });
   }
 
-  public getSuperCategoryByCateTypeId(rowData: any) {
-    this.categoriesManagementService
-      .getSuperCategoryListByCategoryTypeId(rowData.value)
-      .subscribe({
-        next: (response: any) => {
-          if (response['responseCode'] == '200') {
-            this.superCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
-          }
-        },
-        error: (error: any) =>
-          this.messageService.add({
-            summary: '500',
-            detail: 'Server Error',
-            styleClass: 'danger-background-popover',
-          }),
-      });
+  async getSuperCategoryByCateTypeId(rowData: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.categoriesManagementService
+        .getSuperCategoryListByCategoryTypeId(rowData.value)
+        .subscribe({
+          next: (response: any) => {
+            if (response['responseCode'] == '200') {
+              this.superCategoryList = JSON.parse(
+                JSON.stringify(response.listPayload)
+              );
+              resolve(this.superCategoryList);
+            } else {
+              reject('Invalid response code');
+            }
+          },
+          error: (error: any) => {
+            this.messageService.add({
+              summary: '500',
+              detail: 'Server Error',
+              styleClass: 'danger-background-popover',
+            });
+            reject(error);
+          },
+        });
+    });
   }
 
-  public getCategoryBySuperCatId(rowData: any) {
-    alert('Enter : ' + rowData.value);
-    this.categoriesManagementService
-      .getCategoryBySuperCatId(rowData.value)
-      .subscribe({
-        next: (response: any) => {
-          if (response['responseCode'] == '200') {
-            this.categoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
-          }
-        },
-        error: (error: any) =>
-          this.messageService.add({
-            summary: '500',
-            detail: 'Server Error',
-            styleClass: 'danger-background-popover',
-          }),
-      });
+  async getCategoryBySuperCatId(rowData: any) {
+    return new Promise((resolve, reject) => {
+      this.categoriesManagementService
+        .getCategoryBySuperCatId(rowData.value)
+        .subscribe({
+          next: (response: any) => {
+            if (response['responseCode'] == '200') {
+              this.categoryList = JSON.parse(
+                JSON.stringify(response.listPayload)
+              );
+              resolve(this.categoryList);
+            } else {
+              reject('Invalid response code');
+            }
+          },
+          error: (error: any) => {
+            this.messageService.add({
+              summary: '500',
+              detail: 'Server Error',
+              styleClass: 'danger-background-popover',
+            });
+            reject(error);
+          },
+        });
+    });
   }
 
   submitSubCategoryForm() {
@@ -214,11 +241,85 @@ export class SubCategoriesComponent {
     this.addSubCategoryDialog = this.dialog.open(templateRef);
   }
 
-  openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
+  async openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
+    const filterCategoryType: any = this.categoryTypeList.filter((item) => {
+      if (item?.categoryTypeName === rowDate[3]) {
+        return item;
+      }
+    });
+    await this.getSuperCategoryByCateTypeId({
+      value: filterCategoryType[0]?.id,
+    });
+    const filterSuperCategory: any = this.superCategoryList.filter((item) => {
+      if (item?.superCategory === rowDate[5]) {
+        return item;
+      }
+    });
+    await this.getCategoryBySuperCatId({ value: filterSuperCategory[0]?.id });
+    const filterCategory: any = this.categoryList.filter((item) => {
+      if (item?.category === rowDate[7]) {
+        return item;
+      }
+    });
+    this.editSubCategory = {
+      categoryTypeId: filterCategoryType[0]?.id,
+      categoryTypeName: rowDate[3],
+      superCategory: rowDate[5],
+      superCategoryId: filterSuperCategory[0]?.id,
+      category: rowDate[7],
+      categoryId: filterCategory[0]?.id,
+      subCategory: rowDate[8],
+      createdAt: rowDate[10],
+      status: rowDate[9],
+    };
+    console.log('rowData+++++', rowDate, this.editSubCategory);
     this.editSubCategoryDialog = this.dialog.open(templateRef);
+    setTimeout(() => {
+      console.log('++++Item', this.superCategoryList);
+    }, 1000);
     // this.categoryType.categoryTypeName = rowDate.categoryTypeName;
     // this.categoryType.status = rowDate.status; // Assign the value to user.firstName
     // this.categoryType.isChecked = rowDate.isChecked;
+  }
+
+  submitEditedSubCategoryForm() {
+    this.categoriesManagementService
+      .editSubCategoryDetails(this.editSubCategory)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              this.editSubCategoryDialog.close();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+              this.getSubCategory();
+            } else {
+              // alert(response['payload']['respMesg']);
+
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        },
+        error: () =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
+    // this.isLoading = false;
   }
 
   getSubCategory() {
@@ -250,14 +351,14 @@ export class SubCategoriesComponent {
           }
         });
         this.dataSource = new MatTableDataSource<users>(this.tableData);
-        const dataSize = this.tableData.length;
+        // const dataSize = this.tableData.length;
         this.pagination.calculatePageSize.next({
           totalData: this.totalData,
           pageSize: this.pageSize,
           tableData: this.tableData,
           serialNumberArray: this.serialNumberArray,
         });
-        console.log("tabledata++++++", this.tableData)
+        console.log('tabledata++++++', this.tableData);
       });
   }
 
