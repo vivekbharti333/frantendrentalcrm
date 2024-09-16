@@ -173,28 +173,28 @@
               <div class="userimgname">
                 <a href="javascript:void(0);" class="userslist-img bg-img">
                   <img
-                    src="{{ baseUrl }}cateImg/{{ data[1] }}"
+                    src="{{ baseUrl }}cateImg/{{ data.categoryImage }}"
                     alt="user image"
                     style="border-radius: 50%"
                 /></a>
               </div>
             </td>
-            <td>{{ data[3] }}</td>
-            <td>{{ data[5] }}</td>
-            <td>{{ data[6] }}</td>
+            <td>{{ data.categoryTypeName }}</td>
+            <td>{{ data.superCategory }}</td>
+            <td>{{ data.category }}</td>
             <td>
               <button
                 class="badge-button"
                 [ngClass]="{
-                  'badge-linesuccess': data[7] === 'ACTIVE',
-                  'badge-linedanger': data[7] === 'INACTIVE'
+                  'badge-linesuccess': data.status === 'ACTIVE',
+                  'badge-linedanger': data.status === 'INACTIVE'
                 }"
                 (click)="changeStatus(data)"
               >
-                {{ data[7] }}
+                {{ data.status }}
               </button>
             </td>
-            <td>{{ data[8] | date : "dd-MM-yyyy | HH:mm" }}</td>
+            <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
             <td class="action-table-data">
               <div class="edit-delete-action">
                 <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
@@ -531,17 +531,15 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <mat-select
-                      name="categoryTypeId"
-                      [(ngModel)]="editCategory.categoryTypeId"
-                      class="select"
-                      placeholder="Select a Super Category"
-                    >
-                      <mat-option
-                        *ngFor="let cateType of categoryTypeList"
-                        [value]="cateType.id"
-                      >
+                    <mat-select name="categoryTypeId" [(ngModel)]="editCategory.categoryTypeId" class="select" placeholder="Select a Super Category">
+                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id" >
                         {{ cateType.categoryTypeName }}
+                      </mat-option>
+                    </mat-select>
+
+                    <mat-select name="categoryTypeId" [(ngModel)]="editCategory.categoryTypeId" class="select" placeholder="Select a Super Category">
+                      <mat-option *ngFor="let cateType of superCategoryList" [value]="cateType.id" >
+                        {{ cateType.superCategory }}
                       </mat-option>
                     </mat-select>
                   </div>
@@ -549,13 +547,27 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Super Category </label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="superCategory"
-                      [(ngModel)]="editCategory.superCategory"
-                      required
-                    />
+                    <!-- <input type="text" class="form-control" name="superCategory" [(ngModel)]="editCategory.superCategory" required /> -->
+
+                    <mat-select name="superCategoryId" [(ngModel)]="editCategory.superCategoryId" class="select" placeholder="Select a Super Category">
+                      <mat-option
+                        *ngFor="let cateType of superCategoryList"
+                        [value]="cateType.superCategoryId"
+                      >
+                        {{ cateType.superCategory }}
+                      </mat-option>
+                    </mat-select>
+
+                    <mat-select name="superCategoryId" [(ngModel)]="editCategory.superCategoryId"class="select" placeholder="Select a Super Category">
+                    
+                      <mat-option *ngFor="let superCateType of superCategoryList" [value]="superCateType.superCategoryId" >
+                        {{ superCateType }}
+                      </mat-option>
+                    </mat-select>
+
+
+
+
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">

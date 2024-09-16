@@ -54,6 +54,7 @@ export class CategoriesComponent {
   ngOnInit() {
     this.getCategoryDetailsList();
     this.getCategoryType();
+    this.getSuperCategory();
   }
 
   public addCategory = {
@@ -67,6 +68,7 @@ export class CategoriesComponent {
   public editCategory = {
     categoryTypeId: '',
     categoryTypeName: '',
+    superCategoryId: '',
     superCategory: '',
     category: '',
     createdAt: '',
@@ -81,7 +83,25 @@ export class CategoriesComponent {
             JSON.stringify(response.listPayload)
           );
           this.superCategoryList = [];
-          // console.log("response++++++++++", this.categoryTypeList)
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+
+  public getSuperCategory() {
+    this.categoriesManagementService.getSuperCategoryList().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.superCategoryList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.superCategoryList = [];
         }
       },
       error: (error: any) =>
@@ -261,12 +281,12 @@ export class CategoriesComponent {
         return item;
       }
     });
-    this.editCategory.categoryTypeId = filterCategoryType[0]?.id;
-    this.editCategory.categoryTypeName = rowData[3];
-    this.editCategory.superCategory = rowData[5];
-    this.editCategory.category = rowData[6];
-    this.editCategory.createdAt = rowData[8];
-    this.editCategory.status = rowData[7];
+    this.editCategory.categoryTypeId = rowData.categoryTypeId;
+    this.editCategory.categoryTypeName = rowData.categoryTypeName;
+    this.editCategory.superCategory = rowData.superCategory;
+    this.editCategory.category = rowData.category;
+    this.editCategory.createdAt = rowData.createdAt;
+    this.editCategory.status = rowData.status;
     // console.log('rowData++++++++', this.editCategory, filterCategoryType);
     // this.editCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
     // this.editCategory.superCategoryId = rowData[1];
