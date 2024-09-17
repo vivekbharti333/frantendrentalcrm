@@ -28,6 +28,7 @@ export class CategoriesComponent {
   public routes = routes;
   public categoryTypeList: any[] = [];
   public superCategoryList: any[] = [];
+  public editSuperCategoryList: any[] = [];
   public baseUrl = Constant.Site_Url;
 
   // pagination variables
@@ -66,6 +67,7 @@ export class CategoriesComponent {
   };
 
   public editCategory = {
+    categoryId: '',
     categoryTypeId: '',
     categoryTypeName: '',
     superCategoryId: '',
@@ -98,7 +100,7 @@ export class CategoriesComponent {
     this.categoriesManagementService.getSuperCategoryList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
-          this.superCategoryList = JSON.parse(
+          this.editSuperCategoryList = JSON.parse(
             JSON.stringify(response.listPayload)
           );
           this.superCategoryList = [];
@@ -178,8 +180,7 @@ export class CategoriesComponent {
   }
 
   submitEditedCategoryForm() {
-    this.categoriesManagementService
-      .editCategoryDetails(this.editCategory)
+    this.categoriesManagementService.editCategoryDetails(this.editCategory)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
@@ -252,16 +253,6 @@ export class CategoriesComponent {
     // this.isLoading = false;
   }
 
-  // openAddModal(rowDate: any) {
-
-  //   this.superCategory.categoryTypeName = rowDate[5];
-  //   this.superCategory.status = rowDate[5];
-  //   this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
-  //   this.superCategory.isChecked = rowDate[5];
-  //   this.superCategory.categoryTypeId = rowDate[0]
-
-  // }
-
   openAddModal(templateRef: TemplateRef<any>) {
     // this.superCategory.categoryTypeName = rowDate[5];
     // this.superCategory.status = rowDate[5];
@@ -277,12 +268,14 @@ export class CategoriesComponent {
   openEditModal(templateRef: TemplateRef<any>, rowData: any) {
     // this.getCategoryType();
     const filterCategoryType: any = this.categoryTypeList.filter((item) => {
-      if (item?.categoryTypeName === rowData[3]) {
+      if (item?.categoryTypeName === rowData.categoryTypeName) {
         return item;
       }
     });
+    this.editCategory.categoryId = rowData.id;
     this.editCategory.categoryTypeId = rowData.categoryTypeId;
     this.editCategory.categoryTypeName = rowData.categoryTypeName;
+    this.editCategory.superCategoryId = rowData.superCategoryId;
     this.editCategory.superCategory = rowData.superCategory;
     this.editCategory.category = rowData.category;
     this.editCategory.createdAt = rowData.createdAt;

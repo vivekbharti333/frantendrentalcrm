@@ -39,6 +39,8 @@ export class CreateLeadComponent {
   public superCategoryList: any[] = [];
   public categoryList: any[] = [];
   public subCategoryList: any[] = [];
+  public pickLocationList: any[] = [];
+  public dropLocationList: any[] = [];
   public userList: any[] = [];
   roleType: string = '';
   fullName: string = '';
@@ -99,6 +101,8 @@ export class CreateLeadComponent {
   filteredSuperCategoryList: any[] = [];
   filteredCategoryList: any[] = [];
   filteredSubCategoryList: any[] = [];
+  filteredPickLocationList: any[] =[];
+  filteredDropLocationList: any[] =[];
 
   constructor(
     private sidebar: SidebarService,
@@ -121,6 +125,8 @@ export class CreateLeadComponent {
   ngOnInit() {
     this.getCategoryType();
     this.getUserList();
+    this.getPickLocation();
+    this.getDropLocation();
     this.roleType === 'SUPERADMIN'
       ? (this.lead.createdBy = '')
       : (this.lead.createdBy = this.fullName);
@@ -227,6 +233,44 @@ export class CreateLeadComponent {
     });
   }
 
+  public getPickLocation() {
+    this.categoriesManagementService.getLocationByType('PICK').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.pickLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredPickLocationList = this.pickLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+
+  public getDropLocation() {
+    this.categoriesManagementService.getLocationByType('DROP').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.dropLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredDropLocationList = this.dropLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+
   public getSuperCategory(superCateId: any) {
     const categoryId = superCateId?.id;
     this.categoriesManagementService
@@ -321,6 +365,12 @@ export class CreateLeadComponent {
         break;
       case 'subCategory':
         this.filteredSubCategoryList = listVal;
+        break;
+      case 'pickLocation':
+        this.filteredPickLocationList = listVal;
+        break;
+        case 'dropLocation':
+        this.filteredDropLocationList = listVal;
         break;
       default:
         break;

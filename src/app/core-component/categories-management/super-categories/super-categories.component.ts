@@ -48,7 +48,7 @@ export class SuperCategoriesComponent {
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getSuperCategory();

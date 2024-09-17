@@ -198,14 +198,9 @@
             <td class="action-table-data">
               <div class="edit-delete-action">
                 <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
-                <a
-                  class="me-2 p-2 mb-0"
-                  data-bs-toggle="modal"
-                  data-bs-target="#edit-units"
-                  (click)="openEditModal(editCategoryTemplate, data)"
-                >
-                  <i class="feather icon-edit feather-edit"></i
-                ></a>
+                <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(editCategoryTemplate, data)">
+                  <i class="feather icon-edit feather-edit"></i>
+                </a>
                 <!-- <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);" (click)=confirmColor()> <i class="feather icon-trash-2 feather-trash-2"></i></a> -->
               </div>
             </td>
@@ -536,38 +531,19 @@
                         {{ cateType.categoryTypeName }}
                       </mat-option>
                     </mat-select>
-
-                    <mat-select name="categoryTypeId" [(ngModel)]="editCategory.categoryTypeId" class="select" placeholder="Select a Super Category">
-                      <mat-option *ngFor="let cateType of superCategoryList" [value]="cateType.id" >
-                        {{ cateType.superCategory }}
-                      </mat-option>
-                    </mat-select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Super Category </label>
-                    <!-- <input type="text" class="form-control" name="superCategory" [(ngModel)]="editCategory.superCategory" required /> -->
-
                     <mat-select name="superCategoryId" [(ngModel)]="editCategory.superCategoryId" class="select" placeholder="Select a Super Category">
                       <mat-option
-                        *ngFor="let cateType of superCategoryList"
-                        [value]="cateType.superCategoryId"
+                        *ngFor="let SuperCate of editSuperCategoryList"
+                        [value]="SuperCate.id"
                       >
-                        {{ cateType.superCategory }}
+                        {{ SuperCate.superCategory }}
                       </mat-option>
                     </mat-select>
-
-                    <mat-select name="superCategoryId" [(ngModel)]="editCategory.superCategoryId"class="select" placeholder="Select a Super Category">
-                    
-                      <mat-option *ngFor="let superCateType of superCategoryList" [value]="superCateType.superCategoryId" >
-                        {{ superCateType }}
-                      </mat-option>
-                    </mat-select>
-
-
-
-
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
