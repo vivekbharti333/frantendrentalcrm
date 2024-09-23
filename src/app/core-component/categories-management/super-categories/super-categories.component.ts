@@ -245,14 +245,14 @@ export class SuperCategoriesComponent {
 
   // }
 
-  openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
+  openEditModal(templateRef: TemplateRef<any>, rowData: any) {
     this.getCategoryType();
-    this.editSuperCategory.categoryTypeName = rowDate[3];
-    this.editSuperCategory.createdAt = rowDate[6];
-    this.editSuperCategory.status = rowDate[5];
-    this.editSuperCategory.superCategory = rowDate[4];
-    this.editSuperCategory.categoryTypeId = rowDate[2];
-    this.editSuperCategory.superCategoryId = rowDate[0];
+    this.editSuperCategory.superCategoryId = rowData.id;
+    this.editSuperCategory.categoryTypeName = rowData.categoryTypeName;
+    this.editSuperCategory.createdAt = rowData.createdAt;
+    this.editSuperCategory.status = rowData.status;
+    this.editSuperCategory.superCategory = rowData.superCategory;
+    this.editSuperCategory.categoryTypeId = rowData.categoryTypeId;
     this.editSuperCategoryDialog = this.dialog.open(templateRef, {
       width: '50rem',
     });

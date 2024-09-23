@@ -243,6 +243,7 @@ export class SubCategoriesComponent {
 
   async openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
     const filterCategoryType: any = this.categoryTypeList.filter((item) => {
+      // this.editSubCategory.categoryTypeName = rowDate.categoryTypeName;
       if (item?.categoryTypeName === rowDate[3]) {
         return item;
       }
