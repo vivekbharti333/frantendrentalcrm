@@ -96,6 +96,16 @@
       <div class="card-body pb-0">
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-12">
+            <label class="form-label requiredField">Select Agent</label>
+              <mat-select name="permissions" class="select" placeholder="Select Agent" (selectionChange)="onAgentSelectionChange($event.value)">
+              @for (dropDownUser of userForDropDown; track dropDownUser) {
+                <mat-option [value]="dropDownUser.loginId">
+                  {{dropDownUser.firstName+" "+dropDownUser.lastName}}
+                </mat-option> 
+              }
+            </mat-select>
+          </div>
+          <div class="col-lg-3 col-sm-6 col-12">
             <div class="input-blocks">
               <!-- <i class="feather icon-user info-img"></i> -->
               <!-- <mat-select [(ngModel)]="selectedValue3" [ngModelOptions]="{standalone: true}" class="space-select select"
@@ -107,7 +117,7 @@
               <label class="form-label requiredField">First Date</label>
               <!-- <p>{{ leadDetails.pickUpDateTime || '-' }}</p> -->
               <input
-                type="datetime-local"
+                type="date"
                 class="form-control"
                 [(ngModel)]="firstDate"
                 name="firstDate"
@@ -122,7 +132,7 @@
             <div class="input-blocks">
               <label class="form-label requiredField">Last Date</label>
               <input
-                type="datetime-local"
+                type="date"
                 class="form-control"
                 [(ngModel)]="lastDate"
                 name="lastDate"

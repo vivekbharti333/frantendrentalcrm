@@ -19,6 +19,8 @@ import { ToastModule } from 'primeng/toast';
 import { HelperService } from 'src/app/core/service/helper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
+import { Constant } from 'src/app/core/constant/constants';
+import { UserManagementService } from '../../../user-management/user-management.service';
 
 @Component({
   selector: 'app-reserved',
@@ -28,6 +30,7 @@ import { CategoriesManagementService } from 'src/app/core-component/categories-m
 })
 export class ReservedComponent {
   public followupList: any;
+  public userForDropDown : any[]=[];
 
   public routes = routes;
 
@@ -99,13 +102,15 @@ export class ReservedComponent {
     private leadManagementService: LeadManagementService,
     private helper: HelperService,
     private dialog: MatDialog,
-    private categoriesManagementService: CategoriesManagementService
+    private categoriesManagementService: CategoriesManagementService,
+    private userManagementService: UserManagementService,
   ) {}
 
   ngOnInit() {
     (async () => {
-      await this.getAllReservedList();
-
+      await
+       this.getAllReservedList();
+      this.getUserListForDropDown();
       this.getCategoryType();
     })();
   }
@@ -122,8 +127,27 @@ export class ReservedComponent {
   //   });
   // }
 
+  public getUserListForDropDown() {
+    this.userManagementService.getUserListForDropDown().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.userForDropDown = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
+  }
+
+  onAgentSelectionChange(dd:any){
+alert(dd)
+  }
+
   getAllReservedList() {
-    this.leadManagementService.getAllReservedList().subscribe((apiRes: any) => {
+    this.leadManagementService.getLeadListByStatus(Constant.RESERVED).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }
@@ -400,7 +424,7 @@ export class ReservedComponent {
 
   filterByDate() {
     this.leadManagementService
-      .getAllReservedListByDate(this.firstDate, this.lastDate)
+      .getLeadListByDate(Constant.RESERVED,this.firstDate, this.lastDate)
       .subscribe((apiRes: any) => {
         this.setTableData(apiRes);
       });

@@ -96,6 +96,16 @@
       <div class="card-body pb-0">
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-12">
+            <label class="form-label requiredField">Select Agent</label>
+              <mat-select name="permissions" class="select" placeholder="Select Agent" (selectionChange)="onAgentSelectionChange($event.value)">
+              @for (dropDownUser of userForDropDown; track dropDownUser) {
+                <mat-option [value]="dropDownUser.loginId">
+                  {{dropDownUser.firstName+" "+dropDownUser.lastName}}
+                </mat-option> 
+              }
+            </mat-select>
+          </div>
+          <div class="col-lg-3 col-sm-6 col-12">
             <div class="input-blocks">
               <!-- <i class="feather icon-user info-img"></i> -->
               <!-- <mat-select [(ngModel)]="selectedValue3" [ngModelOptions]="{standalone: true}" class="space-select select"
@@ -170,6 +180,33 @@
         </div>
       </div>
     </div>
+
+    <mat-tab-group>
+      <mat-tab>
+        <!-- #docregion label-directive -->
+        <ng-template mat-tab-label>
+          First
+        </ng-template>
+        <!-- #enddocregion label-directive -->
+        Content 1
+      </mat-tab>
+    
+      <mat-tab>
+        <ng-template mat-tab-label>
+          Second
+        </ng-template>
+        Content 2
+      </mat-tab>
+    
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <!-- <mat-icon class="example-tab-icon">thumb_up</mat-icon> -->
+          Third
+        </ng-template>
+        Content 3
+      </mat-tab>
+    </mat-tab-group>
+    
     <!-- /Filter -->
     <div class="table-responsive">
       <table matSort (matSortChange)="sortData($event)" class="table datanew">

@@ -19,6 +19,8 @@ import { ToastModule } from 'primeng/toast';
 import { HelperService } from 'src/app/core/service/helper.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
+import { Constant } from 'src/app/core/constant/constants';
+import { UserManagementService } from '../../../user-management/user-management.service';
 
 @Component({
   selector: 'app-enquiry',
@@ -28,6 +30,7 @@ import { CategoriesManagementService } from 'src/app/core-component/categories-m
 })
 export class EnquiryComponent {
   public followupList: any;
+  public userForDropDown : any[]=[];
 
   public routes = routes;
 
@@ -99,12 +102,15 @@ export class EnquiryComponent {
     private leadManagementService: LeadManagementService,
     private helper: HelperService,
     private dialog: MatDialog,
-    private categoriesManagementService: CategoriesManagementService
+    private categoriesManagementService: CategoriesManagementService,
+    private userManagementService: UserManagementService,
   ) {}
 
   ngOnInit() {
     (async () => {
-      await this.getEnquiryList();
+      await 
+      this.getEnquiryList();
+      this.getUserListForDropDown();
 
       this.getCategoryType();
     })();
@@ -121,9 +127,27 @@ export class EnquiryComponent {
   //     });
   //   });
   // }
+  public getUserListForDropDown() {
+    this.userManagementService.getUserListForDropDown().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.userForDropDown = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
+  }
+
+  onAgentSelectionChange(dd:any){
+alert(dd)
+  }
 
   getEnquiryList() {
-    this.leadManagementService.getAllEnquiryList().subscribe((apiRes: any) => {
+    this.leadManagementService.getLeadListByStatus(Constant.ENQUIRY).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }
@@ -401,7 +425,7 @@ export class EnquiryComponent {
 
   filterByDate() {
     this.leadManagementService
-      .getAllEnquiryListByDate(this.firstDate, this.lastDate)
+      .getLeadListByDate(Constant.ENQUIRY,this.firstDate, this.lastDate)
       .subscribe((apiRes: any) => {
         this.setTableData(apiRes);
       });

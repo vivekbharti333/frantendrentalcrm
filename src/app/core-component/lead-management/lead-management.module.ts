@@ -16,7 +16,8 @@ import { LostComponent } from './lead-list/lost/lost.component';
 import { ReservedComponent } from './lead-list/reserved/reserved.component';
 import { EnquiryComponent } from './lead-list/enquiry/enquiry.component';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import {MatTabsModule} from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSelectModule,
     MatOptionModule,
     MultiSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTabsModule,
+    MatIconModule
   ]
 })
 export class LeadManagementModule { }

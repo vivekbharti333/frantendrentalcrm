@@ -257,11 +257,12 @@ export class LeadManagementService {
   getAllLeadListByDate(firstDate: string, lastDate: string): Observable<any> {
     const request: any = {
       payload: {
-        requestedFor: 'ALL',
-        roleType: this.cookieService.get('roleType'),
-        token: this.cookieService.get('token'),
+        requestedFor: 'BYDATE',
         firstDate: firstDate,
         lastDate: lastDate,
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
+        superadminId: this.cookieService.get('superadminId'),
       },
     };
     return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
@@ -286,63 +287,67 @@ export class LeadManagementService {
     );
   }
 
-  getAllEnquiryList(): Observable<any> {
+  getLeadListByStatus(status: string): Observable<any> {
     const request: any = {
       payload: {
         requestedFor: 'ALL',
+        status: status,
         roleType: this.cookieService.get('roleType'),
         token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
         superadminId: this.cookieService.get('superadminId'),
       },
     };
-    return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
+    return this.http.post<any>(Constant.Site_Url + 'getLeadListByStatus', request);
   }
 
-  getAllEnquiryListByDate(
-    firstDate: string,
-    lastDate: string
-  ): Observable<any> {
+  getLeadListByDate(status: string, firstDate: string, lastDate: string): Observable<any> {
     const request: any = {
       payload: {
-        requestedFor: 'ALL',
-        roleType: this.cookieService.get('roleType'),
-        token: this.cookieService.get('token'),
+        requestedFor: 'BYDATE',
+        status: status,
         firstDate: firstDate,
         lastDate: lastDate,
-      },
-    };
-    return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
-  }
-
-  getAllReservedList(): Observable<any> {
-    const request: any = {
-      payload: {
-        requestedFor: 'ALL',
         roleType: this.cookieService.get('roleType'),
         token: this.cookieService.get('token'),
-        createdBy: this.cookieService.get('loginId'),
         superadminId: this.cookieService.get('superadminId'),
+       
       },
     };
-    return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
+    return this.http.post<any>(Constant.Site_Url + 'getLeadListByStatus', request);
   }
 
-  getAllReservedListByDate(
-    firstDate: string,
-    lastDate: string
-  ): Observable<any> {
-    const request: any = {
-      payload: {
-        requestedFor: 'ALL',
-        roleType: this.cookieService.get('roleType'),
-        token: this.cookieService.get('token'),
-        firstDate: firstDate,
-        lastDate: lastDate,
-      },
-    };
-    return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
-  }
+  // getAllReservedList(): Observable<any> {
+  //   const request: any = {
+  //     payload: {
+  //       requestedFor: 'ALL',
+  //       status: "RESERVED",
+  //       roleType: this.cookieService.get('roleType'),
+  //       token: this.cookieService.get('token'),
+  //       createdBy: this.cookieService.get('loginId'),
+  //       superadminId: this.cookieService.get('superadminId'),
+  //     },
+  //   };
+  //   return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
+  // }
+
+  // getAllReservedListByDate(
+  //   firstDate: string,
+  //   lastDate: string
+  // ): Observable<any> {
+  //   const request: any = {
+  //     payload: {
+  //       requestedFor: 'BYDATE',
+  //       status: "RESERVED",
+  //       firstDate: firstDate,
+  //       lastDate: lastDate,
+  //       roleType: this.cookieService.get('roleType'),
+  //       token: this.cookieService.get('token'),
+  //       superadminId: this.cookieService.get('superadminId'),
+  //     },
+  //   };
+  //   return this.http.post<any>(Constant.Site_Url + 'getAllLeadList', request);
+  // }
 
   getAllLostList(): Observable<any> {
     const request: any = {

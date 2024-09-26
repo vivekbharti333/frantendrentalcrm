@@ -13,21 +13,25 @@ import { users } from 'src/app/shared/model/page.model';
 import { PaginationService, tablePageSize } from 'src/app/shared/shared.index';
 import Swal from 'sweetalert2';
 import { LeadManagementService } from '../../lead-management.service';
-// import { UserManagementService } from '../user-management.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { MatDialog } from '@angular/material/dialog';
 import { HelperService } from 'src/app/core/service/helper.service';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
+import { UserManagementService } from '../../../user-management/user-management.service';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @Component({
   selector: 'app-all-lead',
   templateUrl: './all-lead.component.html',
   styleUrl: './all-lead.component.scss',
   providers: [MessageService, ToastModule],
+  // standalone: true,
+  // imports: [MatTabsModule],
 })
 export class AllLeadComponent {
   public followupList: any;
+  public userForDropDown : any[]=[];
 
   public routes = routes;
 
@@ -99,12 +103,16 @@ export class AllLeadComponent {
     private leadManagementService: LeadManagementService,
     private dialog: MatDialog,
     private helper: HelperService,
-    private categoriesManagementService: CategoriesManagementService
+    private categoriesManagementService: CategoriesManagementService,
+    private userManagementService: UserManagementService,
   ) {}
 
   ngOnInit() {
     this.getAllLeadList();
+    this.getUserListForDropDown();
     this.getCategoryType();
+
+    
   }
 
   // getAllLeadList() {
@@ -118,6 +126,25 @@ export class AllLeadComponent {
   //     });
   //   });
   // }
+
+  public getUserListForDropDown() {
+    this.userManagementService.getUserListForDropDown().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.userForDropDown = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
+  }
+
+  onAgentSelectionChange(dd:any){
+    alert(dd)
+  }
 
   getAllLeadList() {
     this.leadManagementService.getAllLeadList().subscribe((apiRes: any) => {
