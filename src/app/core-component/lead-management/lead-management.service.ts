@@ -241,13 +241,14 @@ export class LeadManagementService {
     );
   }
 
-  getAllLeadList(): Observable<any> {
+  getAllLeadList(roleType:string): Observable<any> {
     const request: any = {
       payload: {
         requestedFor: 'ALL',
-        roleType: this.cookieService.get('roleType'),
+        roleType: roleType,
         token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
+        adminId: this.cookieService.get('adminId'),
         superadminId: this.cookieService.get('superadminId'),
       },
     };
@@ -281,10 +282,7 @@ export class LeadManagementService {
       },
     };
     // return this.http.post<any>(Constant.Site_Url + 'getFollowupOne', request);
-    return this.http.post<any>(
-      Constant.Site_Url + 'getLeadListByStatus',
-      request
-    );
+    return this.http.post<any>(Constant.Site_Url + 'getLeadListByStatus', request);
   }
 
   getLeadListByStatus(status: string): Observable<any> {

@@ -96,6 +96,7 @@
       <div class="card-body pb-0">
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-12">
+            <div class="input-blocks">
             <label class="form-label requiredField">Select Agent</label>
               <mat-select name="permissions" class="select" placeholder="Select Agent" (selectionChange)="onAgentSelectionChange($event.value)">
               @for (dropDownUser of userForDropDown; track dropDownUser) {
@@ -104,20 +105,14 @@
                 </mat-option> 
               }
             </mat-select>
+            </div>
           </div>
-          <div class="col-lg-3 col-sm-6 col-12">
+          <div class="col-lg-2 col-sm-3 col-12">
             <div class="input-blocks">
-              <!-- <i class="feather icon-user info-img"></i> -->
-              <!-- <mat-select [(ngModel)]="selectedValue3" [ngModelOptions]="{standalone: true}" class="space-select select"
-                    placeholder="Choose Name">
-                    <mat-option value="Choose Name">Choose Name</mat-option>
-                    <mat-option value="Lilly">Lilly</mat-option>
-                    <mat-option value="Benjamin">Benjamin</mat-option>
-                  </mat-select> -->
+            
               <label class="form-label requiredField">First Date</label>
-              <!-- <p>{{ leadDetails.pickUpDateTime || '-' }}</p> -->
               <input
-                type="datetime-local"
+                type="date"
                 class="form-control"
                 [(ngModel)]="firstDate"
                 name="firstDate"
@@ -128,11 +123,11 @@
               />
             </div>
           </div>
-          <div class="col-lg-3 col-sm-6 col-12">
+          <div class="col-lg-2 col-sm-3 col-12">
             <div class="input-blocks">
               <label class="form-label requiredField">Last Date</label>
               <input
-                type="datetime-local"
+                type="date"
                 class="form-control"
                 [(ngModel)]="lastDate"
                 name="lastDate"
@@ -141,36 +136,9 @@
                 (change)="setFilterDate($event, 'last')"
                 required
               />
-              <!-- <i class="feather icon-stop-circle info-img"></i> -->
-              <!-- <mat-select [(ngModel)]="selectedValue4" [ngModelOptions]="{standalone: true}" class="space-select select"
-                    placeholder="Select User Role" (selectionChange)="onRoleTypeChange($event)">
-                    <mat-option value="ALL">ALL</mat-option>
-                    <mat-option *ngFor="let data of roleTypes" [value]="data.name">
-                      {{ data.name }}
-                    </mat-option>
-                  </mat-select> -->
-
-              <!-- <mat-select name="gender" [(ngModel)]="user.gender" [ngModelOptions]="{standalone: true}" class="select"  placeholder="Choose Status" (selectionChange)="onGenderChange($event)">
-                    <mat-option *ngFor="let data of genderType" [value]="data.name">
-                      {{ data.name }}
-                    </mat-option>
-                  </mat-select> -->
             </div>
           </div>
-          <!-- <div class="col-lg-3 col-sm-6 col-12">
-                <div class="input-blocks">
-                  <i class="feather icon-zap info-img"></i>
-                  <mat-select [(ngModel)]="selectedValue5" [ngModelOptions]="{standalone: true}" class="space-select select"
-                    placeholder="Choose Role">
-                    <mat-option value="Choose Role">Choose Role</mat-option>
-                    <mat-option value="Store Keeper">Store Keeper</mat-option>
-                    <mat-option value="Salesman">Salesman</mat-option>
-                  </mat-select>
-                </div>
-              </div> -->
-          <div
-            class="d-flex justify-content-center align-items-end col-lg-3 col-sm-6 col-12"
-          >
+          <div class="d-flex justify-content-center align-items-end col-lg-2 col-sm-3 col-12">
             <div class="input-blocks">
               <a (click)="filterByDate()" class="btn btn-filters ms-auto">
                 <i class="feather icon-search feather-search"></i> Search
@@ -183,121 +151,187 @@
 
     <mat-tab-group>
       <mat-tab>
-        <!-- #docregion label-directive -->
         <ng-template mat-tab-label>
-          First
+          Today's
         </ng-template>
-        <!-- #enddocregion label-directive -->
-        Content 1
+        <div class="table-responsive">
+          <table matSort (matSortChange)="sortData($event)" class="table datanew">
+            <thead>
+              <tr>
+                <th></th>
+                <th mat-sort-header="userName">Sub Category</th>
+                <th mat-sort-header="loginId">Customer Name</th>
+                <th mat-sort-header="phone">Mobile</th>
+                <th mat-sort-header="role">Agent Name</th>
+                <th mat-sort-header="createdOn">Created On</th>
+                <th mat-sort-header="status">Status</th>
+                <th class="no-sort">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of tableData; track data; let idx=$index) {
+              <tr>
+                <td></td>
+                <td>{{ data.subCategory }}</td>
+                <td>{{ data.customeName }}</td>
+                <td>{{ data.customerMobile }}</td>
+                <td>{{ data.createdBy }}</td>
+                <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
+                <td>{{ data.status }}</td>
+    
+                <td class="action-table-data">
+                  <div class="edit-delete-action">
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#view-units" (click)="openEditModal(viewLeadDialogTemplate, data, false)">
+                      <i class="feather icon-info feather-info"></i>
+                      <span class="tooltipText">View</span>
+                    </a>
+                    <a class="me-2 p-2 mb-0 position-relative"
+                      data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(viewLeadDialogTemplate, data, true)">
+                      <i class="feather icon-edit feather-edit textBlack"></i>
+                      <span class="tooltipText">Edit</span>
+                    </a>
+                    @if(data?.isDataCopied) {
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units">
+                      <i class="feather icon-check feather-check"></i>
+                      <span class="tooltipText">Copied!</span>
+                    </a>
+                    } @else {
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units" (click)="copyData(data, idx)">
+                      <i class="feather icon-copy feather-copy"></i>
+                      <span class="tooltipText">Copy</span>
+                    </a>
+                    }
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </mat-tab>
     
       <mat-tab>
         <ng-template mat-tab-label>
-          Second
+          Yesterday's
         </ng-template>
-        Content 2
+        <div class="table-responsive">
+          <table matSort (matSortChange)="sortData($event)" class="table datanew">
+            <thead>
+              <tr>
+                <th></th>
+                <th mat-sort-header="userName">Sub Category</th>
+                <th mat-sort-header="loginId">Customer Name</th>
+                <th mat-sort-header="phone">Mobile</th>
+                <th mat-sort-header="role">Agent Name</th>
+                <th mat-sort-header="createdOn">Created On</th>
+                <th mat-sort-header="status">Status</th>
+                <th class="no-sort">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of tableData; track data; let idx=$index) {
+              <tr>
+                <td></td>
+                <td>{{ data.subCategory }}</td>
+                <td>{{ data.customeName }}</td>
+                <td>{{ data.customerMobile }}</td>
+                <td>{{ data.createdBy }}</td>
+                <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
+                <td>{{ data.status }}</td>
+    
+                <td class="action-table-data">
+                  <div class="edit-delete-action">
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#view-units" (click)="openEditModal(viewLeadDialogTemplate, data, false)">
+                      <i class="feather icon-info feather-info"></i>
+                      <span class="tooltipText">View</span>
+                    </a>
+                    <a class="me-2 p-2 mb-0 position-relative"
+                      data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(viewLeadDialogTemplate, data, true)">
+                      <i class="feather icon-edit feather-edit textBlack"></i>
+                      <span class="tooltipText">Edit</span>
+                    </a>
+                    @if(data?.isDataCopied) {
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units">
+                      <i class="feather icon-check feather-check"></i>
+                      <span class="tooltipText">Copied!</span>
+                    </a>
+                    } @else {
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units" (click)="copyData(data, idx)">
+                      <i class="feather icon-copy feather-copy"></i>
+                      <span class="tooltipText">Copy</span>
+                    </a>
+                    }
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </mat-tab>
     
       <mat-tab>
         <ng-template mat-tab-label>
-          <!-- <mat-icon class="example-tab-icon">thumb_up</mat-icon> -->
-          Third
+          Day Before Yesterday's
         </ng-template>
-        Content 3
+        <div class="table-responsive">
+          <table matSort (matSortChange)="sortData($event)" class="table datanew">
+            <thead>
+              <tr>
+                <th></th>
+                <th mat-sort-header="userName">Sub Category</th>
+                <th mat-sort-header="loginId">Customer Name</th>
+                <th mat-sort-header="phone">Mobile</th>
+                <th mat-sort-header="role">Agent Name</th>
+                <th mat-sort-header="createdOn">Created On</th>
+                <th mat-sort-header="status">Status</th>
+                <th class="no-sort">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of tableData; track data; let idx=$index) {
+              <tr>
+                <td>{{ data.subCategory }}</td>
+                <td>{{ data.customeName }}</td>
+                <td>{{ data.customerMobile }}</td>
+                <td>{{ data.createdBy }}</td>
+                <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
+                <td>{{ data.status }}</td>
+    
+                <td class="action-table-data">
+                  <div class="edit-delete-action">
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#view-units" (click)="openEditModal(viewLeadDialogTemplate, data, false)">
+                      <i class="feather icon-info feather-info"></i>
+                      <span class="tooltipText">View</span>
+                    </a>
+                    <a class="me-2 p-2 mb-0 position-relative"
+                      data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(viewLeadDialogTemplate, data, true)">
+                      <i class="feather icon-edit feather-edit textBlack"></i>
+                      <span class="tooltipText">Edit</span>
+                    </a>
+                    @if(data?.isDataCopied) {
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units">
+                      <i class="feather icon-check feather-check"></i>
+                      <span class="tooltipText">Copied!</span>
+                    </a>
+                    } @else {
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units" (click)="copyData(data, idx)">
+                      <i class="feather icon-copy feather-copy"></i>
+                      <span class="tooltipText">Copy</span>
+                    </a>
+                    }
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </mat-tab>
     </mat-tab-group>
     
     <!-- /Filter -->
-    <div class="table-responsive">
-      <table matSort (matSortChange)="sortData($event)" class="table datanew">
-        <thead>
-          <tr>
-            <th></th>
-            <th mat-sort-header="userName">Sub Category</th>
-            <th mat-sort-header="loginId">Customer Name</th>
-            <th mat-sort-header="phone">Mobile</th>
-            <th mat-sort-header="role">Agent Name</th>
-            <th mat-sort-header="createdOn">Created On</th>
-            <th mat-sort-header="status">Status</th>
-            <th class="no-sort">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (data of tableData; track data; let idx=$index) {
-          <tr>
-            <td>
-              <!-- <div class="userimgname">
-                      <a href="javascript:void(0);" class="userslist-img bg-img">
-                        <img src= "{{data.userPicture}}" alt="user image" style="border-radius: 50%;"></a>
-                    </div> -->
-            </td>
-            <td>{{ data.subCategory }}</td>
-            <td>{{ data.customeName }}</td>
-            <td>{{ data.customerMobile }}</td>
-            <td>{{ data.createdBy }}</td>
-            <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
-            <td>{{ data.status }}</td>
-            <!-- <td><button class="badge-button" 
-                  [ngClass]="{'badge-linesuccess': data.status === 'ACTIVE', 'badge-linedanger': data.status === 'INACTIVE'}"
-                  (click)="changeUserStatus(data)">
-            {{data.status}}
-          </button></td>  -->
-            <!-- <td class="action-table-data">
-              <div class="edit-delete-action">
-                  <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a>
-                  <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(data)"> <i class="feather icon-edit feather-edit"></i></a>
-                  <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);" (click)=confirmColor()> <i class="feather icon-trash-2 feather-trash-2"></i></a>
-                </div>
-            </td> -->
-            <td class="action-table-data">
-              <div class="edit-delete-action">
-                <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
-                <a
-                  class="me-2 p-2 mb-0 position-relative"
-                  data-bs-toggle="modal"
-                  data-bs-target="#view-units"
-                  (click)="openEditModal(viewLeadDialogTemplate, data, false)"
-                >
-                  <i class="feather icon-info feather-info"></i>
-                  <span class="tooltipText">View</span>
-                </a>
-                <a
-                  class="me-2 p-2 mb-0 position-relative"
-                  data-bs-toggle="modal"
-                  data-bs-target="#edit-units"
-                  (click)="openEditModal(viewLeadDialogTemplate, data, true)"
-                >
-                  <i class="feather icon-edit feather-edit textBlack"></i>
-                  <span class="tooltipText">Edit</span>
-                </a>
-                @if(data?.isDataCopied) {
-                <a
-                  class="me-2 p-2 mb-0 position-relative"
-                  data-bs-toggle="modal"
-                  data-bs-target="#copy-units"
-                >
-                  <i class="feather icon-check feather-check"></i>
-                  <span class="tooltipText">Copied!</span>
-                </a>
-                } @else {
-                <a
-                  class="me-2 p-2 mb-0 position-relative"
-                  data-bs-toggle="modal"
-                  data-bs-target="#copy-units"
-                  (click)="copyData(data, idx)"
-                >
-                  <i class="feather icon-copy feather-copy"></i>
-                  <span class="tooltipText">Copy</span>
-                </a>
-                }
-                <!-- <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);" (click)=confirmColor()> <i class="feather icon-trash-2 feather-trash-2"></i></a> -->
-              </div>
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+    
     <app-custom-pagination></app-custom-pagination>
   </div>
 </div>
@@ -937,7 +971,7 @@
   </form>
   <div class="modalFooterContainer">
     <button type="submit" class="btn btn-submit" (click)="updateLeadDetails()">
-      Save Lead Details
+      Update Lead Details
     </button>
   </div>
 </ng-template>

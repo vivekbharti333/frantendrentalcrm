@@ -20,14 +20,13 @@ import { HelperService } from 'src/app/core/service/helper.service';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
 import { UserManagementService } from '../../../user-management/user-management.service';
 import {MatTabsModule} from '@angular/material/tabs';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-all-lead',
   templateUrl: './all-lead.component.html',
   styleUrl: './all-lead.component.scss',
   providers: [MessageService, ToastModule],
-  // standalone: true,
-  // imports: [MatTabsModule],
 })
 export class AllLeadComponent {
   public followupList: any;
@@ -105,6 +104,7 @@ export class AllLeadComponent {
     private helper: HelperService,
     private categoriesManagementService: CategoriesManagementService,
     private userManagementService: UserManagementService,
+    private cookieService: CookieService,
   ) {}
 
   ngOnInit() {
@@ -144,10 +144,13 @@ export class AllLeadComponent {
 
   onAgentSelectionChange(dd:any){
     alert(dd)
+    this.leadManagementService.getAllLeadList('AGENT').subscribe((apiRes: any) => {
+      this.setTableData(apiRes);
+    });
   }
 
   getAllLeadList() {
-    this.leadManagementService.getAllLeadList().subscribe((apiRes: any) => {
+    this.leadManagementService.getAllLeadList(this.cookieService.get('roleType')).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }
