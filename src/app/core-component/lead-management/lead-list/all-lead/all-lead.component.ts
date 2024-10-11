@@ -354,6 +354,7 @@ export class AllLeadComponent {
           }),
       });
   }
+  
 
   public getCategory(categoryId: any) {
     const superCatId = categoryId?.id;
