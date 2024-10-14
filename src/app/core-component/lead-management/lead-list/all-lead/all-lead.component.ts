@@ -21,6 +21,7 @@ import { CategoriesManagementService } from 'src/app/core-component/categories-m
 import { UserManagementService } from '../../../user-management/user-management.service';
 import {MatTabsModule} from '@angular/material/tabs';
 import { CookieService } from 'ngx-cookie-service';
+import { Constant } from 'src/app/core/constant/constants';
 
 @Component({
   selector: 'app-all-lead',
@@ -113,6 +114,11 @@ export class AllLeadComponent {
     this.getCategoryType();
 
     
+  }
+
+  downloadInvoice(receiptNo : string) {
+    window.open(Constant.Site_Url+"paymentreceipt/"+receiptNo, '_blank');
+    // console.log(Constant.Site_Url+"paymentreceipt/"+receiptNo);
   }
 
   // getAllLeadList() {
