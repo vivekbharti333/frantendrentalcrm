@@ -99,6 +99,7 @@
             <div class="input-blocks">
             <label class="form-label requiredField">Select Agent</label>
               <mat-select name="permissions" class="select" placeholder="Select Agent" (selectionChange)="onAgentSelectionChange($event.value)">
+                <!-- <mat-option [value]="ALL">ALL</mat-option> -->
               @for (dropDownUser of userForDropDown; track dropDownUser) {
                 <mat-option [value]="dropDownUser.loginId">
                   {{dropDownUser.firstName+" "+dropDownUser.lastName}}

@@ -143,8 +143,48 @@ export class SidebarService {
               permission: 'create-lead',
             },
             {
+              menuValue: 'Info',
+              route: routes.infoLead,
+              permission: 'create-lead',
+            },
+            {
               menuValue: 'Enquiry',
               route: routes.enquiry,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'Hot Lead',
+              route: routes.hotLead,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'Follow Up',
+              route: routes.folloupLead,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'importaint Lead',
+              route: routes.importaintLead,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'Pending Paymnt',
+              route: routes.pendingPayment,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'Won Lead',
+              route: routes.wonLead,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'Lost Lead',
+              route: routes.lost,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'Assigned Lead',
+              route: routes.assignedLead,
               permission: 'create-lead',
             },
             {
@@ -152,11 +192,7 @@ export class SidebarService {
               route: routes.reserved,
               permission: 'create-lead',
             },
-            {
-              menuValue: 'Lost',
-              route: routes.lost,
-              permission: 'create-lead',
-            },
+            
             
           ],
         },

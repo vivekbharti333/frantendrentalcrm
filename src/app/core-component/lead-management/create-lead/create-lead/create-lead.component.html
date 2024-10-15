@@ -208,9 +208,9 @@
           <div class="row">
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
-                <label class="form-label requiredField">Pickup Date & Time</label>
-                <input type="datetime-local" class="form-control" name="pickupDateTime"
-                  [(ngModel)]="lead.pickupDateTime" required #pickupDateTime="ngModel" />
+                <label class="form-label requiredField">Pickup Date & Time</label> <!--[(ngModel)]="lead.pickupDateTime" -->
+                <input type="datetime-local" class="form-control" name="pickupDateTime" [(ngModel)]="selectedDateTime" min="{{selectedDateTime}}" required #pickupDateTime="ngModel" />
+                <!-- <input type="datetime-local" id="meeting-time" name="meeting-time" value="2018-06-12T19:30" min="2018-06-07T00:00" max="2018-06-14T00:00" /> -->
                 @if(pickupDateTime?.errors?.['required'] &&
                 pickupDateTime?.touched) {
                 <div class="errorMessage">Pickup Date & Time is required</div>
@@ -255,9 +255,12 @@
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
-                <label class="form-label requiredField">Drop Date & Time</label>
-                <input type="datetime-local" class="form-control" name="dropDateTime" [(ngModel)]="lead.dropDateTime"
+                <label class="form-label requiredField">Drop Date & Time</label> <!-- [(ngModel)]="lead.dropDateTime" -->
+                <input type="datetime-local" class="form-control" name="dropDateTime"  [(ngModel)]="selectedDateTime" min="{{selectedDateTime}}" step="00:15"
                   required #dropDateTime="ngModel" />
+                  <p-calendar [(ngModel)]="selectedDateTime" [showTime]="true" [stepMinute]="900" showIcon="true"></p-calendar>
+                  <p-calendar [(ngModel)]="selectedDateTime" [showTime]="true" [stepMinute]="15" showIcon="true"></p-calendar>
+                  <input type="time" [(ngModel)]="selectedDateTime" step="900">
                 @if(dropDateTime?.errors?.['required'] && dropDateTime?.touched)
                 {
                 <div class="errorMessage">Drop Date & Time is required</div>

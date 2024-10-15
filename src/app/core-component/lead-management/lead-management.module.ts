@@ -18,6 +18,14 @@ import { EnquiryComponent } from './lead-list/enquiry/enquiry.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatTabsModule} from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
+import { InfoComponent } from './lead-list/info/info.component';
+import { HotLeadComponent } from './lead-list/hot-lead/hot-lead.component';
+import { ImportaintLeadComponent } from './lead-list/importaint-lead/importaint-lead.component';
+import { PendingPaymentComponent } from './lead-list/pending-payment/pending-payment.component';
+import { WonComponent } from './lead-list/won/won.component';
+import { AssignedLeadComponent } from './lead-list/assigned-lead/assigned-lead.component';
+import { FollowupLeadComponent } from './lead-list/followup-lead/followup-lead.component';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -30,6 +38,13 @@ import { MatIconModule } from '@angular/material/icon';
     LostComponent,
     ReservedComponent,
     EnquiryComponent,
+    InfoComponent,
+    HotLeadComponent,
+    ImportaintLeadComponent,
+    PendingPaymentComponent,
+    WonComponent,
+    AssignedLeadComponent,
+    FollowupLeadComponent,
   ],
   imports: [
     LeadManagementRoutingModule,
@@ -42,7 +57,8 @@ import { MatIconModule } from '@angular/material/icon';
     MultiSelectModule,
     MatDialogModule,
     MatTabsModule,
-    MatIconModule
+    MatIconModule,
+    CalendarModule
   ]
 })
 export class LeadManagementModule { }

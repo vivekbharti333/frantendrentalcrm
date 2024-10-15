@@ -964,14 +964,35 @@ export class routes {
   public static get allLead(): string {
     return this.leadManagement + '/all-lead';
   }
+  public static get infoLead(): string {
+    return this.leadManagement + '/info';
+  }
   public static get enquiry(): string {
     return this.leadManagement + '/enquiry';
   }
-  public static get reserved(): string {
-    return this.leadManagement + '/reserved';
+  public static get hotLead(): string {
+    return this.leadManagement + '/hot-lead';
+  }
+  public static get folloupLead(): string {
+    return this.leadManagement + '/followup-lead';
+  }
+  public static get importaintLead(): string {
+    return this.leadManagement + '/importaint-lead';
+  }
+  public static get pendingPayment(): string {
+    return this.leadManagement + '/pending-payment';
+  }
+  public static get wonLead(): string {
+    return this.leadManagement + '/won-lead';
   }
   public static get lost(): string {
-    return this.leadManagement + '/lost';
+    return this.leadManagement + '/lost-lead';
+  }
+  public static get assignedLead(): string {
+    return this.leadManagement + '/assigned-lead';
+  }
+  public static get reserved(): string {
+    return this.leadManagement + '/reserved';
   }
 
   public static get categoryManagement(): string {
