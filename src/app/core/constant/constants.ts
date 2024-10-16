@@ -29,6 +29,7 @@ export class Constant {
     public static ENQUIRY = "ENQUIRY";
     public static RESERVED = "RESERVED";
     public static LOST = "LOST";
+    public static WON = "WON";
 
 
     public static LEAD_STATUS_LIST = [{ value: 'ENQUIRY', name: 'Enquiry'}, {value: 'FOLLOWUP', name: 'Follow Up'}, {value: 'RESERVED', name: 'Reserved'},{value: 'LOST', name: 'Lost'},{value: 'OTHER', name: 'Other'}];

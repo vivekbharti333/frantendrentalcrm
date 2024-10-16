@@ -205,6 +205,7 @@ alert(dd)
   openFilter() {
     this.filter = !this.filter;
   }
+  
   async openEditModal(
     templateRef: TemplateRef<any>,
     rawData: any,
