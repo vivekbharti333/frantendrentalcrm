@@ -37,12 +37,8 @@
       </li>
     </ul> -->
   <div class="page-btn">
-    <button
-      class="btn btn-added"
-      data-bs-toggle="modal"
-      data-bs-target="#add-units"
-      (click)="openAddModal(addSubCategoryTemplate)"
-    >
+    <button class="btn btn-added" data-bs-toggle="modal" data-bs-target="#add-units"
+      (click)="openAddModal(addSubCategoryTemplate)">
       <i class="feather icon-plus-circle me-2"></i>Add Sub Category
     </button>
   </div>
@@ -54,31 +50,19 @@
     <div class="table-top">
       <div class="search-set">
         <div class="search-input">
-          <a href="javascript:void(0);" class="btn btn-searchset"
-            ><i class="feather icon-search feather-search"></i
-          ></a>
+          <a href="javascript:void(0);" class="btn btn-searchset"><i class="feather icon-search feather-search"></i></a>
           <div class="dataTables_filter">
             <label>
-              <input
-                [(ngModel)]="searchDataValue"
-                [ngModelOptions]="{ standalone: true }"
-                (ngModelChange)="searchData(searchDataValue)"
-                type="search"
-                class="form-control"
-                placeholder="Search..."
-              />
+              <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="searchData(searchDataValue)" type="search" class="form-control"
+                placeholder="Search..." />
             </label>
           </div>
         </div>
       </div>
       <div class="search-path">
         <div class="d-flex align-items-center">
-          <a
-            class="btn btn-filter"
-            id="filter_search"
-            (click)="openFilter()"
-            [ngClass]="{ setclose: filter === true }"
-          >
+          <a class="btn btn-filter" id="filter_search" (click)="openFilter()" [ngClass]="{ setclose: filter === true }">
             <i class="feather icon-filter filter-icon"></i>
             <span><img src="assets/img/icons/closes.svg" alt="img" /></span>
           </a>
@@ -95,11 +79,7 @@
       </div>
     </div>
     <!-- /Filter -->
-    <div
-      class="card"
-      id="filter_inputs"
-      [ngClass]="{ 'd-block': filter, 'd-none': !filter }"
-    >
+    <div class="card" id="filter_inputs" [ngClass]="{ 'd-block': filter, 'd-none': !filter }">
       <div class="card-body pb-0">
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-12">
@@ -174,11 +154,8 @@
             <td>
               <div class="userimgname">
                 <a href="javascript:void(0);" class="userslist-img bg-img">
-                  <img
-                    src="{{ baseUrl }}cateImg/{{ data.subCategoryImage }}"
-                    alt="user image"
-                    style="border-radius: 50%"
-                /></a>
+                  <img src="{{ baseUrl }}cateImg/{{ data.subCategoryImage }}" alt="user image"
+                    style="border-radius: 50%" /></a>
               </div>
             </td>
             <td>{{ data.categoryTypeName }}</td>
@@ -187,14 +164,10 @@
             <td>{{ data.subCategory }}</td>
 
             <td>
-              <button
-                class="badge-button"
-                [ngClass]="{
+              <button class="badge-button" [ngClass]="{
                   'badge-linesuccess': data.status === 'ACTIVE',
                   'badge-linedanger': data.status === 'INACTIVE'
-                }"
-                (click)="changeStatus(data)"
-              >
+                }" (click)="changeStatus(data)">
                 {{ data.status }}
               </button>
             </td>
@@ -202,14 +175,9 @@
             <td class="action-table-data">
               <div class="edit-delete-action">
                 <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
-                <a
-                  class="me-2 p-2 mb-0"
-                  data-bs-toggle="modal"
-                  data-bs-target="#edit-units"
-                  (click)="openEditModal(editSubCategoryTemplate, data)"
-                >
-                  <i class="feather icon-edit feather-edit"></i
-                ></a>
+                <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units"
+                  (click)="openEditModal(editSubCategoryTemplate, data)">
+                  <i class="feather icon-edit feather-edit"></i></a>
                 <!-- <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);" (click)=confirmColor()> <i class="feather icon-trash-2 feather-trash-2"></i></a> -->
               </div>
             </td>
@@ -329,12 +297,7 @@
   <div class="modalHeaderContainer">
     <h2 mat-dialog-title class="p-0">Add Sub Category</h2>
     <div mat-dialog-close class="closeBtn">
-      <button
-        type="button"
-        class="close"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      >
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -354,30 +317,17 @@
 
               <div class="profile-pic-upload">
                 <div class="profile-pic">
-                  <ng-container
-                    *ngIf="!addSubCategory.subCategoryImage; else showImage"
-                  >
-                    <span
-                      ><i class="feather icon-plus-circle plus-down-add"></i>Sub
-                      Category Image</span
-                    >
+                  <ng-container *ngIf="!addSubCategory.subCategoryImage; else showImage">
+                    <span><i class="feather icon-plus-circle plus-down-add"></i>Sub
+                      Category Image</span>
                   </ng-container>
                   <ng-template #showImage>
-                    <img
-                      [src]="addSubCategory.subCategoryImage"
-                      alt="Profile Picture"
-                      class="uploaded-profile-pic"
-                    />
+                    <img [src]="addSubCategory.subCategoryImage" alt="Profile Picture" class="uploaded-profile-pic" />
                   </ng-template>
                 </div>
                 <div class="input-blocks mb-0">
                   <div class="image-upload mb-0">
-                    <input
-                      type="file"
-                      class="form-control"
-                      id="subCategoryImage"
-                      (change)="onFileSelected($event)"
-                    />
+                    <input type="file" class="form-control" id="subCategoryImage" (change)="onFileSelected($event)" />
                     <div class="image-uploads">
                       <h4>Change Image</h4>
                     </div>
@@ -389,17 +339,9 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <mat-select
-                      name="categoryTypeId"
-                      [(ngModel)]="addSubCategory.categoryTypeId"
-                      class="select"
-                      placeholder="Select Category Type"
-                      (selectionChange)="getSuperCategoryByCateTypeId($event)"
-                    >
-                      <mat-option
-                        *ngFor="let cateType of categoryTypeList"
-                        [value]="cateType.id"
-                      >
+                    <mat-select name="categoryTypeId" [(ngModel)]="addSubCategory.categoryTypeId" class="select"
+                      placeholder="Select Category Type" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
                         {{ cateType.categoryTypeName }}
                       </mat-option>
                     </mat-select>
@@ -409,17 +351,9 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Super Category</label>
-                    <mat-select
-                      name="superCategoryId"
-                      [(ngModel)]="addSubCategory.superCategoryId"
-                      class="select"
-                      placeholder="Select a Super Category"
-                      (selectionChange)="getCategoryBySuperCatId($event)"
-                    >
-                      <mat-option
-                        *ngFor="let superCate of superCategoryList"
-                        [value]="superCate.id"
-                      >
+                    <mat-select name="superCategoryId" [(ngModel)]="addSubCategory.superCategoryId" class="select"
+                      placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
+                      <mat-option *ngFor="let superCate of superCategoryList" [value]="superCate.id">
                         {{ superCate.superCategory }}
                       </mat-option>
                     </mat-select>
@@ -429,17 +363,9 @@
                   <div class="mb-3">
                     <label class="form-label">Category </label>
                     <!-- <input type="text" class="form-control" name="category" [(ngModel)]="addSubCategory.category" required> -->
-                    <mat-select
-                      name="categoryId"
-                      [(ngModel)]="addSubCategory.categoryId"
-                      class="select"
-                      placeholder="Select a Super Category"
-                      (selectionChange)="getCategoryBySuperCatId($event)"
-                    >
-                      <mat-option
-                        *ngFor="let cat of categoryList"
-                        [value]="cat.id"
-                      >
+                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.categoryId" class="select"
+                      placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
+                      <mat-option *ngFor="let cat of categoryList" [value]="cat.id">
                         {{ cat.category }}
                       </mat-option>
                     </mat-select>
@@ -449,13 +375,15 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Sub Category </label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="subCategory"
-                      [(ngModel)]="addSubCategory.subCategory"
-                      required
-                    />
+                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
+                      required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Description </label>
+                    <input type="text" class="form-control" name="description" [(ngModel)]="addSubCategory.description"
+                      required />
                   </div>
                 </div>
               </div>
@@ -466,11 +394,7 @@
     </mat-dialog-content>
     <mat-dialog-actions class="dialogAction">
       <div class="text-end mb-3">
-        <button
-          type="submit"
-          class="btn btn-submit"
-          [disabled]="!addForm.form.valid"
-        >
+        <button type="submit" class="btn btn-submit" [disabled]="!addForm.form.valid">
           Add Sub Category
         </button>
       </div>
@@ -484,12 +408,7 @@
   <div class="modalHeaderContainer">
     <h2 mat-dialog-title class="p-0">Edit Sub Category</h2>
     <div mat-dialog-close class="closeBtn">
-      <button
-        type="button"
-        class="close"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      >
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -502,8 +421,7 @@
             <div class="new-employee-field">
               <div class="card-title-head">
                 <h6>
-                  <span><i class="feather icon-info feather-edit"></i></span
-                  >Sub Category details
+                  <span><i class="feather icon-info feather-edit"></i></span>Sub Category details
                 </h6>
               </div>
 
@@ -511,17 +429,9 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <mat-select
-                      name="categoryTypeId"
-                      [(ngModel)]="editSubCategory.categoryTypeId"
-                      class="select"
-                      placeholder="Select a Super Category"
-                      (selectionChange)="getSuperCategoryByCateTypeId($event)"
-                    >
-                      <mat-option
-                        *ngFor="let cateType of categoryTypeList"
-                        [value]="cateType.id"
-                      >
+                    <mat-select name="categoryTypeId" [(ngModel)]="editSubCategory.categoryTypeId" class="select"
+                      placeholder="Select a Super Category" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
                         {{ cateType.categoryTypeName }}
                       </mat-option>
                     </mat-select>
@@ -530,17 +440,9 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Super Category </label>
-                    <mat-select
-                      name="superCategoryId"
-                      [(ngModel)]="editSubCategory.superCategoryId"
-                      class="select"
-                      placeholder="Select a Super Category"
-                      (selectionChange)="getCategoryBySuperCatId($event)"
-                    >
-                      <mat-option
-                        *ngFor="let superCategory of superCategoryList"
-                        [value]="superCategory.id"
-                      >
+                    <mat-select name="superCategoryId" [(ngModel)]="editSubCategory.superCategoryId" class="select"
+                      placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
+                      <mat-option *ngFor="let superCategory of superCategoryList" [value]="superCategory.id">
                         {{ superCategory.superCategory }}
                       </mat-option>
                     </mat-select>
@@ -556,16 +458,9 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category</label>
-                    <mat-select
-                      name="superCategoryId"
-                      [(ngModel)]="editSubCategory.categoryId"
-                      class="select"
-                      placeholder="Select a Super Category"
-                    >
-                      <mat-option
-                        *ngFor="let cate of categoryList"
-                        [value]="cate.id"
-                      >
+                    <mat-select name="superCategoryId" [(ngModel)]="editSubCategory.categoryId" class="select"
+                      placeholder="Select a Super Category">
+                      <mat-option *ngFor="let cate of categoryList" [value]="cate.id">
                         {{ cate.category }}
                       </mat-option>
                     </mat-select>
@@ -581,13 +476,8 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Sub Category</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="category"
-                      [(ngModel)]="editSubCategory.subCategory"
-                      required
-                    />
+                    <input type="text" class="form-control" name="category" [(ngModel)]="editSubCategory.subCategory"
+                      required />
                   </div>
                 </div>
               </div>
@@ -598,11 +488,7 @@
     </mat-dialog-content>
     <mat-dialog-actions class="dialogAction">
       <div class="text-end mb-3">
-        <button
-          type="submit"
-          class="btn btn-submit"
-          [disabled]="!editForm.form.valid"
-        >
+        <button type="submit" class="btn btn-submit" [disabled]="!editForm.form.valid">
           Update Sub Category
         </button>
       </div>

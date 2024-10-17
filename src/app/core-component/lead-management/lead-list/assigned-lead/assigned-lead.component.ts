@@ -67,7 +67,7 @@ export class AssignedLeadComponent {
   ngOnInit() {
     (async () => {
       await 
-      this.getInfoList();
+      this.getAssignedList();
       // this.getUserListForDropDown();
       // this.getCategoryType();
     })();
@@ -93,8 +93,8 @@ export class AssignedLeadComponent {
     alert(dd)
       }
 
-  getInfoList() {
-    this.leadManagementService.getLeadListByStatus(Constant.WON).subscribe((apiRes: any) => {
+  getAssignedList() {
+    this.leadManagementService.getLeadListByStatus(Constant.ASSIGNED).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }

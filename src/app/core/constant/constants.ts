@@ -26,10 +26,17 @@ export class Constant {
     public static ALREADY_EXISTS = 403;
     public static INTERNAL_SERVER_ERR = 500;
 
+    public static INFO = "INFO";
     public static ENQUIRY = "ENQUIRY";
-    public static RESERVED = "RESERVED";
-    public static LOST = "LOST";
+    public static FOLLOWUP = "FOLLOWUP";
+    public static IMPORTAINT = "IMPORTAINT";
+    public static PENDING_PAYMENT = "IMPORTAINT";
     public static WON = "WON";
+    public static LOST = "LOST";
+    public static ASSIGNED = "ASSIGNED";
+    public static RESERVED = "RESERVED";
+
+    
 
 
     public static LEAD_STATUS_LIST = [{ value: 'ENQUIRY', name: 'Enquiry'}, {value: 'FOLLOWUP', name: 'Follow Up'}, {value: 'RESERVED', name: 'Reserved'},{value: 'LOST', name: 'Lost'},{value: 'OTHER', name: 'Other'}];

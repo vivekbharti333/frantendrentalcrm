@@ -258,9 +258,9 @@
                 <label class="form-label requiredField">Drop Date & Time</label> <!-- [(ngModel)]="lead.dropDateTime" -->
                 <input type="datetime-local" class="form-control" name="dropDateTime"  [(ngModel)]="selectedDateTime" min="{{selectedDateTime}}" step="00:15"
                   required #dropDateTime="ngModel" />
-                  <p-calendar [(ngModel)]="selectedDateTime" [showTime]="true" [stepMinute]="900" showIcon="true"></p-calendar>
+                  <!-- <p-calendar [(ngModel)]="selectedDateTime" [showTime]="true" [stepMinute]="900" showIcon="true"></p-calendar>
                   <p-calendar [(ngModel)]="selectedDateTime" [showTime]="true" [stepMinute]="15" showIcon="true"></p-calendar>
-                  <input type="time" [(ngModel)]="selectedDateTime" step="900">
+                  <input type="time" [(ngModel)]="selectedDateTime" step="900"> -->
                 @if(dropDateTime?.errors?.['required'] && dropDateTime?.touched)
                 {
                 <div class="errorMessage">Drop Date & Time is required</div>
@@ -305,23 +305,57 @@
           </div>
 
           <div class="row">
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
+            
+            <div class="col-lg-1 col-md-1">
+              <div class="mb-1">
+                <label class="form-label requiredField">Quantity</label>
+                <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity" min="0" required
+                  #quantity="ngModel" />
+                @if(quantity?.errors?.['required'] && quantity?.touched) {
+                <div class="errorMessage">Quantity is required</div>
+                }
+              </div>
+            </div>
+            <!-- <div class="col-lg-1 col-md-1">
+              <div class="mb-1">
+                <label class="form-label requiredField">Adult Quantity</label>
+                <input type="number" class="form-control" name="adultQuantity" [(ngModel)]="lead.adultQuantity" required
+                  #adultQuantity="ngModel" />
+                @if(adultQuantity?.errors?.['required'] && adultQuantity?.touched) {
+                <div class="errorMessage">Adult Quantity is required</div>
+                }
+              </div>
+            </div> -->
+
+            <div class="col-lg-1 col-md-1">
+              <div class="mb-1">
+                <label class="form-label requiredField">Child Quantity</label>
+                <input type="number" class="form-control" name="childrenQuantity" [(ngModel)]="lead.childrenQuantity" min="0" required
+                  #childrenQuantity="ngModel" />
+                @if(childrenQuantity?.errors?.['required'] && childrenQuantity?.touched) {
+                <div class="errorMessage">Quantity is required</div>
+                }
+              </div>
+            </div>
+
+            <div class="col-lg-1 col-md-1">
+              <div class="mb-1">
+                <label class="form-label requiredField">infant Quantity</label>
+                <input type="number" class="form-control" name="infantQuantity" [(ngModel)]="lead.infantQuantity" min="0" required
+                  #infantQuantity="ngModel" />
+                @if(infantQuantity?.errors?.['required'] && infantQuantity?.touched) {
+                <div class="errorMessage">Infant Quantity is required</div>
+                }
+              </div>
+            </div>
+
+            <div class="col-lg-1 col-md-1">
+              <div class="mb-1">
                 <label class="form-label requiredField">Total Days</label>
                 <input type="number" class="form-control" name="totalDays" [(ngModel)]="lead.totalDays" required
                   #totalDays="ngModel" />
                 @if(totalDays?.errors?.['required'] && totalDays?.touched) {
                 <div class="errorMessage">Total Days is required</div>
-                }
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                <label class="form-label requiredField">Quantity</label>
-                <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity" required
-                  #quantity="ngModel" />
-                @if(quantity?.errors?.['required'] && quantity?.touched) {
-                <div class="errorMessage">Quantity is required</div>
                 }
               </div>
             </div>

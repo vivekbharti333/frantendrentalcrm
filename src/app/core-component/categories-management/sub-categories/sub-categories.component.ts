@@ -67,6 +67,7 @@ export class SubCategoriesComponent {
     superCategoryId: '',
     categoryId: '',
     subCategory: '',
+    description: '',
   };
 
   public editSubCategory = {
@@ -77,6 +78,7 @@ export class SubCategoriesComponent {
     category: '',
     categoryId: '',
     subCategory: '',
+    // description: '',
     createdAt: '',
     status: '',
   };

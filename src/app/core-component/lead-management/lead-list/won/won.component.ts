@@ -67,7 +67,7 @@ export class WonComponent {
   ngOnInit() {
     (async () => {
       await 
-      this.getInfoList();
+      this.getWonList();
       // this.getUserListForDropDown();
       // this.getCategoryType();
     })();
@@ -93,7 +93,7 @@ export class WonComponent {
     alert(dd)
       }
 
-  getInfoList() {
+    getWonList() {
     this.leadManagementService.getLeadListByStatus(Constant.WON).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });

@@ -95,7 +95,7 @@ export class InfoComponent {
       }
 
   getInfoList() {
-    this.leadManagementService.getLeadListByStatus(Constant.WON).subscribe((apiRes: any) => {
+    this.leadManagementService.getLeadListByStatus(Constant.INFO).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }

@@ -67,7 +67,7 @@ export class PendingPaymentComponent {
   ngOnInit() {
     (async () => {
       await 
-      this.getInfoList();
+      this.getPendingPaymentList();
       // this.getUserListForDropDown();
       // this.getCategoryType();
     })();
@@ -93,8 +93,8 @@ export class PendingPaymentComponent {
     alert(dd)
       }
 
-  getInfoList() {
-    this.leadManagementService.getLeadListByStatus(Constant.WON).subscribe((apiRes: any) => {
+  getPendingPaymentList() {
+    this.leadManagementService.getLeadListByStatus(Constant.PENDING_PAYMENT).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }

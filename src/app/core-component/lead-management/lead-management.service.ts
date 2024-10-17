@@ -124,6 +124,9 @@ export class LeadManagementService {
       customerEmailId: lead.customerEmailId,
       totalDays: lead.totalDays,
       quantity: lead.quantity,
+      adultQuantity: '',
+      childrenQuantity: '',
+      infantQuantity: '',
       vendorRate: lead.vendorRate,
       payToVendor: lead.payToVendor,
       companyRate: lead.companyRate,
@@ -281,7 +284,6 @@ export class LeadManagementService {
         teamLeaderId: this.cookieService.get('teamLeaderId'),
       },
     };
-    // return this.http.post<any>(Constant.Site_Url + 'getFollowupOne', request);
     return this.http.post<any>(Constant.Site_Url + 'getLeadListByStatus', request);
   }
 

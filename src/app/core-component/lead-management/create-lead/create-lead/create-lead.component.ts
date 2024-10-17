@@ -75,6 +75,9 @@ export class CreateLeadComponent {
     customerEmailId: '',
     totalDays: '',
     quantity: '',
+    // adultQuantity: '',
+    childrenQuantity: '',
+    infantQuantity: '',
     vendorRate: '',
     payToVendor: '',
     companyRate: '',
@@ -128,7 +131,7 @@ export class CreateLeadComponent {
       this.setDefaultDateTime();
   }
 
-  setDefaultDateTime(): void {
+  setDefaultDateTime1(): void {
     const currentDate = new Date();
 
     // Adjust to local time zone
@@ -152,7 +155,7 @@ export class CreateLeadComponent {
     this.selectedDateTime = `${year}-${month}-${day}T${hours}:${minutesFormatted}`;
   }
 
-  setDefaultDateTime1(): void {
+  setDefaultDateTime(): void {
     const currentDate = new Date();
   
     // Get the local date and time values
@@ -175,6 +178,10 @@ export class CreateLeadComponent {
     this.roleType === 'SUPERADMIN'
       ? (this.lead.createdBy = '')
       : (this.lead.createdBy = this.fullName);
+
+      if (this.filteredPickLocationList.length > 0) {
+        this.lead.pickupLocation = this.filteredPickLocationList[0];
+      }
   }
 
   onSelectionChange(event: Event): void {

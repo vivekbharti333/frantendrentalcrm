@@ -67,7 +67,7 @@ export class ImportaintLeadComponent {
   ngOnInit() {
     (async () => {
       await 
-      this.getInfoList();
+      this.getImportaintList();
       // this.getUserListForDropDown();
       // this.getCategoryType();
     })();
@@ -93,8 +93,8 @@ export class ImportaintLeadComponent {
     alert(dd)
       }
 
-  getInfoList() {
-    this.leadManagementService.getLeadListByStatus(Constant.WON).subscribe((apiRes: any) => {
+  getImportaintList() {
+    this.leadManagementService.getLeadListByStatus(Constant.IMPORTAINT).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }
