@@ -30,7 +30,7 @@ import { UserManagementService } from '../../../user-management/user-management.
 })
 export class FollowupLeadComponent {
   public followupList: any;
-  public userForDropDown : any[]=[];
+  public userForDropDown: any[] = [];
 
   public routes = routes;
   firstDate: any = '';
@@ -50,6 +50,7 @@ export class FollowupLeadComponent {
   public searchDataValue = '';
 
 
+
   constructor(
     // private data: DataService,
     private pagination: PaginationService,
@@ -61,12 +62,12 @@ export class FollowupLeadComponent {
     private dialog: MatDialog,
     private categoriesManagementService: CategoriesManagementService,
     private userManagementService: UserManagementService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     (async () => {
-      await 
-      this.getFollowupList();
+      await
+        this.getFollowupList1();
       // this.getUserListForDropDown();
       // this.getCategoryType();
     })();
@@ -74,7 +75,7 @@ export class FollowupLeadComponent {
 
   filterByDate() {
     this.leadManagementService
-      .getLeadListByDate(Constant.LOST,this.firstDate, this.lastDate)
+      .getLeadListByDate(Constant.LOST, this.firstDate, this.lastDate)
       .subscribe((apiRes: any) => {
         this.setTableData(apiRes);
       });
@@ -88,12 +89,26 @@ export class FollowupLeadComponent {
     }
   }
 
-  onAgentSelectionChange(dd:any){
+  onAgentSelectionChange(dd: any) {
     alert(dd)
-      }
+  }
 
-  getFollowupList() {
-    this.leadManagementService.getLeadListByStatus(Constant.FOLLOWUP).subscribe((apiRes: any) => {
+  onTabClick() {
+    console.log('Tab clicked!');
+    alert('Tab clicked!');
+    // Add your logic here
+  }
+
+  getFollowupList1() {
+    let currentDate = new Date();
+    let dateString = currentDate.toDateString();
+    let nextDay = currentDate.getDate() + 1;
+
+    let nextDate = new Date(currentDate);  // Clone the current date
+    nextDate.setDate(currentDate.getDate() + 1);  // Add 1 day to the current date
+    let nextDayString = nextDate.toDateString();
+
+    this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, dateString, nextDayString).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }

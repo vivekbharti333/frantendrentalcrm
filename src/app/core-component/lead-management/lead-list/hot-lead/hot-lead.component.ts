@@ -67,7 +67,7 @@ export class HotLeadComponent {
   ngOnInit() {
     (async () => {
       await 
-      this.getInfoList();
+      this.getHotLeadList();
       // this.getUserListForDropDown();
       // this.getCategoryType();
     })();
@@ -93,8 +93,8 @@ export class HotLeadComponent {
     alert(dd)
       }
 
-  getInfoList() {
-    this.leadManagementService.getLeadListByStatus(Constant.WON).subscribe((apiRes: any) => {
+  getHotLeadList() {
+    this.leadManagementService.getAllHotLeadList().subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
   }
