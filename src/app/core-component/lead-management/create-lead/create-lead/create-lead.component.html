@@ -91,6 +91,7 @@
                 }
               </div>
             </div>
+            <input type="text" class="form-control" name="status" value="INFO"/>
           </div>
         </div>
       </div>
@@ -229,10 +230,12 @@
                   placeholder="Select Pickup Location" required #superCategoryId="ngModel">
                   <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
                     [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search>
-                  <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList">
+
+                  <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
                     {{ pickList.location }}
                   </mat-option>
                 </mat-select>
+
                 @if(pickupLocation?.errors?.['required'] &&
                 pickupLocation?.touched) {
                 <div class="errorMessage">Pickup Location is required</div>
@@ -270,17 +273,11 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Drop Location</label>
-                <!-- <input type="text" class="form-control" name="dropLocation" [(ngModel)]="lead.dropLocation" required
-                  #dropLocation="ngModel" />
-                @if(dropLocation?.errors?.['required'] && dropLocation?.touched)
-                {
-                <div class="errorMessage">Drop Location is required</div>
-                } -->
                 <mat-select [(ngModel)]="lead.dropLocation" class="select custom-mat-select" name="dropLocation"
                   placeholder="Select a Drop Location" required #superCategoryId="ngModel">
                   <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
                     [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search>
-                  <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList">
+                  <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
                     {{ dropList.location }}
                   </mat-option>
                 </mat-select>
@@ -528,7 +525,7 @@
                 @if(roleType === 'SUPERADMIN') {
                 <mat-select [(ngModel)]="lead.createdBy" class="select custom-mat-select" name="createdBy"
                   placeholder="Select Agent Name" #createdBy="ngModel">
-                  <mat-option *ngFor="let user of userList" [value]="user">
+                  <mat-option *ngFor="let user of userList" [value]="user.loginId">
                     {{ user.firstName }}
                   </mat-option>
                 </mat-select>
@@ -551,7 +548,7 @@
                 } -->
                 <mat-select name="status" [(ngModel)]="lead.status" class="select" placeholder="Select Status">
                   @for (listData of leadStatus; track listData) {
-                  <mat-option [value]="listData.name">
+                  <mat-option [value]="listData.value">
                     {{ listData.name }}
                   </mat-option>
                   }

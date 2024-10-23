@@ -179,9 +179,9 @@ export class CreateLeadComponent {
       ? (this.lead.createdBy = '')
       : (this.lead.createdBy = this.fullName);
 
-      if (this.filteredPickLocationList.length > 0) {
-        this.lead.pickupLocation = this.filteredPickLocationList[0];
-      }
+      // if (this.filteredPickLocationList.length > 0) {
+      //   this.lead.pickupLocation = this.filteredPickLocationList[0];
+      // }
   }
 
   onSelectionChange(event: Event): void {
@@ -224,10 +224,9 @@ export class CreateLeadComponent {
   leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
   submitLeadForm(form: NgForm) {
-    alert(this.lead.categoryTypeId);
-    alert(this.lead.categoryTypeName);
     this.leadManagementService.saveLeadDetails(this.lead).subscribe({
       next: (response: any) => {
+        alert("response : "+response.responseCode);
         if (response['responseCode'] == '200') {
           if (response['payload']['respCode'] == '200') {
             form.reset();

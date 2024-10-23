@@ -124,7 +124,6 @@ export class LeadManagementService {
       customerEmailId: lead.customerEmailId,
       totalDays: lead.totalDays,
       quantity: lead.quantity,
-      adultQuantity: '',
       childrenQuantity: '',
       infantQuantity: '',
       vendorRate: lead.vendorRate,
@@ -139,13 +138,15 @@ export class LeadManagementService {
       status: lead.status,
       leadOrigine: lead.leadOrigine,
       leadType: lead.leadType,
-      createdBy: lead.createdBy,
-      // createdBy: this.cookieService.get('loginId'),
+      // createdBy: lead.createdBy,
+      createdBy: this.cookieService.get('loginId'),
       notes: lead.notes,
       roleType: this.cookieService.get('roleType'),
       token: this.cookieService.get('token'),
       // createdBy: this.cookieService.get('loginId'),
       superadminId: this.cookieService.get('superadminId'),
+      teamleaderId: this.cookieService.get('teamleaderId'),
+      adminId: this.cookieService.get('adminId')
     };
     return payload;
   }
@@ -221,7 +222,7 @@ export class LeadManagementService {
         ? {
             superadminId: this.cookieService.get('superadminId'),
             adminId: this.cookieService.get('adminId'),
-            teamLeaderId: this.cookieService.get('teamLeaderId'),
+            teamleaderId: this.cookieService.get('teamleaderId'),
           }
         : {}),
       ...(roleType !== 'SUPERADMIN' &&
@@ -281,7 +282,7 @@ export class LeadManagementService {
         createdBy: this.cookieService.get('loginId'),
         superadminId: this.cookieService.get('superadminId'),
         adminId: this.cookieService.get('adminId'),
-        teamLeaderId: this.cookieService.get('teamLeaderId'),
+        teamleaderId: this.cookieService.get('teamleaderId'),
       },
     };
     return this.http.post<any>(Constant.Site_Url + 'getLeadListByStatus', request);

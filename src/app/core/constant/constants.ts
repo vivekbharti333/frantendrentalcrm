@@ -30,7 +30,7 @@ export class Constant {
     public static ENQUIRY = "ENQUIRY";
     public static FOLLOWUP = "FOLLOWUP";
     public static IMPORTAINT = "IMPORTAINT";
-    public static PENDING_PAYMENT = "IMPORTAINT";
+    public static PENDING_PAYMENT = "PENDING_PAYMENT";
     public static WON = "WON";
     public static LOST = "LOST";
     public static ASSIGNED = "ASSIGNED";
