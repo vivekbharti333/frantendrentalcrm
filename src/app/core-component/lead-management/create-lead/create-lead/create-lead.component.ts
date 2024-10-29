@@ -104,6 +104,9 @@ export class CreateLeadComponent {
     reminderDate: '',
     records: '',
   };
+
+  public isActivities:Boolean = false;
+
   filteredCategoryTypeList: any[] = [];
   filteredSuperCategoryList: any[] = [];
   filteredCategoryList: any[] = [];
@@ -182,6 +185,15 @@ export class CreateLeadComponent {
       // if (this.filteredPickLocationList.length > 0) {
       //   this.lead.pickupLocation = this.filteredPickLocationList[0];
       // }
+  }
+
+  checkCategoryType(categoryType: any) {
+    console.log(categoryType.categoryTypeName, Constant.ACTIVITY); // For debugging
+    if (categoryType.categoryTypeName === Constant.ACTIVITY) {
+      this.isActivities = true;
+    } else {
+      this.isActivities = false;
+    }
   }
 
   onSelectionChange(event: Event): void {
@@ -323,6 +335,7 @@ export class CreateLeadComponent {
   }
 
   public getSuperCategory(superCateId: any) {
+    this.checkCategoryType(superCateId);
     const categoryId = superCateId?.id;
     this.categoriesManagementService
       .getSuperCategoryListByCategoryTypeId(categoryId)
