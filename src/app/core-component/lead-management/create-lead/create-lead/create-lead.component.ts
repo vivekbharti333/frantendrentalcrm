@@ -49,18 +49,16 @@ export class CreateLeadComponent {
   roleType: string = '';
   fullName: string = '';
   lead = {
-    // bookingId: '',
     companyName: 'Notes',
     enquirySource: 'Call',
     categoryTypeId: '',
     superCategoryId: '',
     categoryId: '',
     subCategoryId: '',
-
-    categoryTypeName: '', // Need to add in payload
-    superCategory: '', //
-    category: '', //
-    subCategory: '', //
+    categoryTypeName: '', 
+    superCategory: '', 
+    category: '', 
+    subCategory: '', 
     itemName: '',
     pickupDateTime: '',
     pickupLocation: '',
@@ -75,7 +73,6 @@ export class CreateLeadComponent {
     customerEmailId: '',
     totalDays: '',
     quantity: '',
-    // adultQuantity: '',
     childrenQuantity: '',
     infantQuantity: '',
     vendorRate: '',
@@ -88,7 +85,6 @@ export class CreateLeadComponent {
     securityAmount: '',
     deliveryAmountToCompany: '',
     deliveryAmountToVendor: '',
-    // vendorName: '',
     status: '',
     leadOrigine: '',
     leadType: '',
@@ -169,7 +165,9 @@ export class CreateLeadComponent {
     const minutes = String(currentDate.getMinutes()).padStart(2, '0');
   
     // Combine into the required format: YYYY-MM-DDTHH:MM
-    this.selectedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    // this.selectedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    this.lead.dropDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    this.lead.pickupDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   ngOnInit() {
@@ -242,6 +240,7 @@ export class CreateLeadComponent {
         if (response['responseCode'] == '200') {
           if (response['payload']['respCode'] == '200') {
             form.reset();
+            this.setDefaultDateTime();
             this.messageService.add({
               summary: response['payload']['respCode'],
               detail: response['payload']['respMesg'],

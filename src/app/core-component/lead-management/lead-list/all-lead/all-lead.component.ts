@@ -94,6 +94,11 @@ export class AllLeadComponent {
   filteredCategoryList: any[] = [];
   filteredSubCategoryList: any[] = [];
 
+  allIds = {
+    superCategoryId: '',
+    categoryTypeId: '',
+  }
+
   constructor(
     private data: DataService,
     private pagination: PaginationService,
@@ -149,7 +154,6 @@ export class AllLeadComponent {
   }
 
   onAgentSelectionChange(dd:any){
-    alert(dd)
     this.leadManagementService.getAllLeadList('AGENT').subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
@@ -246,6 +250,7 @@ export class AllLeadComponent {
       );
     });
   }
+
   saveLeadData(rawData: any) {
     const pickup = new Date(rawData?.pickupDateTime);
     const drop = new Date(rawData?.dropDateTime);
@@ -263,14 +268,17 @@ export class AllLeadComponent {
     )}-${drop.getFullYear()} ${this.helper.addZeroInDateTime(
       drop.getHours()
     )}:${drop.getMinutes()}`;
+    
     this.leadDetails = {
       categoryType: rawData?.categoryTypeName,
       superCategory: rawData?.superCategory,
       category: rawData?.category,
       subCategory: rawData?.subCategory,
-      pickUpDateTime: pickupDateTime,
+      // pickUpDateTime: pickupDateTime,
+      pickUpDateTime: rawData?.pickupDateTime,
       pickUpLocation: rawData?.pickupLocation,
-      dropDateTime: dropDateTime,
+      // dropDateTime: dropDateTime,
+      dropDateTime:rawData?.dropDateTime,
       dropLocation: rawData?.dropLocation,
       totalDays: rawData?.totalDays,
       quantity: rawData?.quantity,
@@ -300,6 +308,16 @@ export class AllLeadComponent {
       createdBy: rawData?.createdBy,
       notes: rawData?.notes,
     };
+
+    const superCategory = this.categoryTypeList.find(item => item.categoryTypeName === this.leadDetails.categoryType);
+    this.getSuperCategory(superCategory.id);
+    this.allIds.superCategoryId = superCategory.id;
+
+   // const category = this.superCategoryList.find(item => item.superCategory === this.leadDetails.superCategory);
+  //  alert("superCategory "+this.leadDetails.superCategory +"category id "+this.superCategoryList);
+    //this.getCategory(category.id)
+          
+
   }
 
   async copyData(data: any, idx: number) {
@@ -321,13 +339,16 @@ export class AllLeadComponent {
   }
 
   public getCategoryType() {
+// alert("getCategoryType ");
     this.categoriesManagementService.getCategoryTypeList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
-          this.categoryTypeList = JSON.parse(
-            JSON.stringify(response.listPayload)
-          );
+          this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
           this.filteredCategoryTypeList = this.categoryTypeList;
+
+    const superCategory = this.categoryTypeList.find(item => item.categoryTypeName === this.leadDetails.categoryType);
+    this.getSuperCategory(superCategory.id);
+    this.allIds.categoryTypeId = superCategory.id
         }
       },
       error: (error: any) =>
@@ -340,16 +361,17 @@ export class AllLeadComponent {
   }
 
   public getSuperCategory(superCateId: any) {
-    const categoryId = superCateId?.id;
-    this.categoriesManagementService
-      .getSuperCategoryListByCategoryTypeId(categoryId)
+    // alert("getSuperCategory :"+superCateId);
+    this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(superCateId)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.superCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+
             this.filteredSuperCategoryList = this.superCategoryList;
+
+            const category = this.superCategoryList.find(item => item.superCategory === this.leadDetails.superCategory);
+            this.getCategory(category.id)
           }
         },
         error: (error: any) =>
@@ -363,16 +385,17 @@ export class AllLeadComponent {
   
 
   public getCategory(categoryId: any) {
-    const superCatId = categoryId?.id;
-    this.categoriesManagementService
-      .getCategoryBySuperCatId(superCatId)
+    //const superCatId = categoryId?.id;
+    // alert("getCategory :"+categoryId);
+    this.categoriesManagementService.getCategoryBySuperCatId(categoryId)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.categoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.categoryList = JSON.parse( JSON.stringify(response.listPayload));
             this.filteredCategoryList = this.categoryList;
+
+            const subCategory = this.categoryList.find(item => item.category === this.leadDetails.category);
+            this.getSubCategory(subCategory.id);
           }
         },
         error: (error: any) =>
@@ -385,15 +408,17 @@ export class AllLeadComponent {
   }
 
   public getSubCategory(subCategoryId: any) {
-    const categoryId = subCategoryId?.id;
-    this.categoriesManagementService
-      .getSubCategoryListByCatId(categoryId)
+    // const categoryId = subCategoryId?.id;
+    alert("enter into getSubCategory")
+    this.categoriesManagementService.getSubCategoryListByCatId(subCategoryId)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.subCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.subCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+            this.subCategoryList.forEach(subCategory => {
+              console.log(subCategory); // Access each item
+              // You can perform actions on each subCategory here
+            });
             this.filteredSubCategoryList = this.subCategoryList;
           }
         },

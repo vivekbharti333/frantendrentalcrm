@@ -195,7 +195,7 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label> <!--[(ngModel)]="lead.pickupDateTime" -->
-                <input type="datetime-local" class="form-control" name="pickupDateTime" [(ngModel)]="selectedDateTime" min="{{selectedDateTime}}" required #pickupDateTime="ngModel" />
+                <input type="datetime-local" class="form-control" name="pickupDateTime" [(ngModel)]="lead.pickupDateTime" min="{{selectedDateTime}}" required #pickupDateTime="ngModel" />
                 <!-- @if(pickupDateTime?.errors?.['required'] &&
                 pickupDateTime?.touched) {
                 <div class="errorMessage">Pickup Date & Time is required</div>
@@ -238,9 +238,16 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Drop Date & Time</label> 
-                <input type="datetime-local" class="form-control" name="dropDateTime"  [(ngModel)]="selectedDateTime" min="{{selectedDateTime}}" step="00:15"
-                  required #dropDateTime="ngModel" />
-                <div *ngIf="dropDateTime?.errors?.['required'] && dropDateTime?.touched" class="errorMessage">
+                <input type="datetime-local" 
+                       class="form-control" 
+                       name="dropDateTime" 
+                       [(ngModel)]="lead.dropDateTime" 
+                       [min]="selectedDateTime" 
+                       step="00:15"
+                       required 
+                       #dropDateTime="ngModel" />
+                <div *ngIf="dropDateTime?.errors?.['required'] && dropDateTime?.touched" 
+                     class="errorMessage">
                   Drop Date & Time is required
                 </div>
               </div>
@@ -465,11 +472,6 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Created By</label>
-                <!-- <input type="text" class="form-control" name="createdBy" [(ngModel)]="lead.createdBy"
-                  #createdBy="ngModel" />
-                @if(createdBy?.errors?.['required'] && createdBy?.touched) {
-                <div class="errorMessage">Created By is required</div>
-                } -->
                 @if(roleType === 'SUPERADMIN') {
                 <mat-select [(ngModel)]="lead.createdBy" class="select custom-mat-select" name="createdBy"
                   placeholder="Select Agent Name" #createdBy="ngModel">
@@ -490,10 +492,6 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label">Status</label>
-                <!-- <input type="text" class="form-control" name="status" [(ngModel)]="lead.status" #status="ngModel" />
-                @if(status?.errors?.['required'] && status?.touched) {
-                <div class="errorMessage">status is required</div>
-                } -->
                 <mat-select name="status" [(ngModel)]="lead.status" class="select" placeholder="Select Status">
                   @for (listData of leadStatus; track listData) {
                   <mat-option [value]="listData.value">
