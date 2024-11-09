@@ -91,7 +91,7 @@
                 }
               </div>
             </div>
-            <input type="text" class="form-control" name="status" value="INFO"/>
+            <input type="hidden" class="form-control" name="status" value="INFO"/>
           </div>
         </div>
       </div>
@@ -303,8 +303,8 @@
 
           <div class="row">
             
-            <div class="col-lg-1 col-md-1">
-              <div class="mb-1">
+            <div class="col-lg-2 col-md-2">
+              <div class="mb-2">
                 <label class="form-label requiredField">Quantity</label>
                 <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity" min="0" required
                   #quantity="ngModel" />
@@ -326,7 +326,7 @@
 
             <div class="col-lg-1 col-md-1">
               <div class="mb-1">
-                <label class="form-label requiredField">Child Quantity</label>
+                <label class="form-label requiredField">Child Qty</label>
                 <input type="number" class="form-control" name="childrenQuantity" [(ngModel)]="lead.childrenQuantity" min="0" required
                   #childrenQuantity="ngModel" />
                 @if(childrenQuantity?.errors?.['required'] && childrenQuantity?.touched) {
@@ -337,7 +337,7 @@
 
             <div class="col-lg-1 col-md-1">
               <div class="mb-1">
-                <label class="form-label requiredField">infant Quantity</label>
+                <label class="form-label requiredField">infant Qty</label>
                 <input type="number" class="form-control" name="infantQuantity" [(ngModel)]="lead.infantQuantity" min="0" required
                   #infantQuantity="ngModel" />
                 @if(infantQuantity?.errors?.['required'] && infantQuantity?.touched) {
@@ -346,16 +346,16 @@
               </div>
             </div>
 
-            <div class="col-lg-1 col-md-1">
+            <!-- <div class="col-lg-1 col-md-1">
               <div class="mb-1">
-                <label class="form-label requiredField">Total Days</label>
-                <input type="number" class="form-control" name="totalDays" [(ngModel)]="lead.totalDays" required
+                <label class="form-label requiredField">Total Days</label> 
+                <input type="hidden" class="form-control" name="totalDays" [(ngModel)]="lead.totalDays" required
                   #totalDays="ngModel" />
                 @if(totalDays?.errors?.['required'] && totalDays?.touched) {
                 <div class="errorMessage">Total Days is required</div>
                 }
               </div>
-            </div>
+            </div> -->
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
