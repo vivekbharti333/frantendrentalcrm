@@ -346,8 +346,7 @@ alert(dd)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.superCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
+            this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload)
             );
             this.filteredSuperCategoryList = this.superCategoryList;
           }

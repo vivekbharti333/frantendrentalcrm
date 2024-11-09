@@ -109,24 +109,9 @@
     <div class="card">
       <div class="card-body">
         <div class="new-employee-field">
-          <table class="center-table">
-            <!-- <tr>
-                            <td>
-                                <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="Vehicle" id="companyName1" checked>
-                                <label class="form-check-label" for="companyName1">
-                                     Goa
-                                </label>
-                            </td>
-                            <td>
-                                <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName" value="Other" id="companyName2">
-                                <label class="form-check-label" for="companyName2">
-                                     Other
-                                </label>
-                            </td>
-                        </tr> -->
-
+          <!-- <table class="center-table">
             <tr></tr>
-          </table>
+          </table> -->
 
           <br />
 
@@ -210,37 +195,32 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label> <!--[(ngModel)]="lead.pickupDateTime" -->
-                <input type="datetime-local" class="form-control" name="pickupDateTime" [(ngModel)]="selectedDateTime" min="{{selectedDateTime}}" required #pickupDateTime="ngModel" />
-                <!-- <input type="datetime-local" id="meeting-time" name="meeting-time" value="2018-06-12T19:30" min="2018-06-07T00:00" max="2018-06-14T00:00" /> -->
-                @if(pickupDateTime?.errors?.['required'] &&
+                <input type="datetime-local" class="form-control" name="pickupDateTime" [(ngModel)]="lead.pickupDateTime" min="{{selectedDateTime}}" required #pickupDateTime="ngModel" />
+                <!-- @if(pickupDateTime?.errors?.['required'] &&
                 pickupDateTime?.touched) {
                 <div class="errorMessage">Pickup Date & Time is required</div>
-                }
+                } -->
+
+                <div *ngIf="pickupDateTime?.errors?.['required'] && pickupDateTime?.touched" class="errorMessage">
+                  Pickup Location is required
+                </div>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Location</label>
-                <!-- <input type="text" class="form-control" name="pickupLocation" [(ngModel)]="lead.pickupLocation" required #pickupLocation="ngModel" />
-                @if(pickupLocation?.errors?.['required'] &&
-                pickupLocation?.touched) {
-                <div class="errorMessage">Pickup Location is required</div>
-                } -->
                 <mat-select [(ngModel)]="lead.pickupLocation" class="select custom-mat-select" name="pickupLocation"
-                  placeholder="Select Pickup Location" required #superCategoryId="ngModel">
+                  placeholder="Select Pickup Location" required #pickupLocation="ngModel">
                   <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
                     [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search>
-
                   <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
                     {{ pickList.location }}
                   </mat-option>
                 </mat-select>
-
-                @if(pickupLocation?.errors?.['required'] &&
-                pickupLocation?.touched) {
-                <div class="errorMessage">Pickup Location is required</div>
-                }
-
+            
+                <div *ngIf="pickupLocation?.errors?.['required'] && pickupLocation?.touched" class="errorMessage">
+                  Pickup Location is required
+                </div>
               </div>
             </div>
 
@@ -248,26 +228,28 @@
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Point</label>
                 <input type="text" class="form-control" name="pickupPoint" [(ngModel)]="lead.pickupPoint" required
-                  #pickupLocation="ngModel" />
-                @if(pickupLocation?.errors?.['required'] &&
-                pickupLocation?.touched) {
-                <div class="errorMessage">Pickup Point is required</div>
-                }
+                  #pickupPoint="ngModel" />
+                <div *ngIf="pickupPoint?.errors?.['required'] && pickupPoint?.touched" class="errorMessage">
+                  Pickup Point is required
+                </div>
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
-                <label class="form-label requiredField">Drop Date & Time</label> <!-- [(ngModel)]="lead.dropDateTime" -->
-                <input type="datetime-local" class="form-control" name="dropDateTime"  [(ngModel)]="selectedDateTime" min="{{selectedDateTime}}" step="00:15"
-                  required #dropDateTime="ngModel" />
-                  <!-- <p-calendar [(ngModel)]="selectedDateTime" [showTime]="true" [stepMinute]="900" showIcon="true"></p-calendar>
-                  <p-calendar [(ngModel)]="selectedDateTime" [showTime]="true" [stepMinute]="15" showIcon="true"></p-calendar>
-                  <input type="time" [(ngModel)]="selectedDateTime" step="900"> -->
-                @if(dropDateTime?.errors?.['required'] && dropDateTime?.touched)
-                {
-                <div class="errorMessage">Drop Date & Time is required</div>
-                }
+                <label class="form-label requiredField">Drop Date & Time</label> 
+                <input type="datetime-local" 
+                       class="form-control" 
+                       name="dropDateTime" 
+                       [(ngModel)]="lead.dropDateTime" 
+                       [min]="selectedDateTime" 
+                       step="00:15"
+                       required 
+                       #dropDateTime="ngModel" />
+                <div *ngIf="dropDateTime?.errors?.['required'] && dropDateTime?.touched" 
+                     class="errorMessage">
+                  Drop Date & Time is required
+                </div>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
@@ -281,10 +263,9 @@
                     {{ dropList.location }}
                   </mat-option>
                 </mat-select>
-                @if(dropLocation?.errors?.['required'] && dropLocation?.touched)
-                {
-                <div class="errorMessage">Drop Location is required</div>
-                }
+                <div *ngIf="dropLocation?.errors?.['required'] && dropLocation?.touched" class="errorMessage">
+                  Drop Location is required
+                </div>
               </div>
             </div>
 
@@ -293,24 +274,23 @@
                 <label class="form-label requiredField">Drop Point</label>
                 <input type="text" class="form-control" name="dropPoint" [(ngModel)]="lead.dropPoint" required
                   #dropLocation="ngModel" />
-                @if(dropLocation?.errors?.['required'] && dropLocation?.touched)
-                {
-                <div class="errorMessage">Drop Location is required</div>
-                }
+                <div *ngIf="dropLocation?.errors?.['required'] && dropLocation?.touched" class="errorMessage">
+                  Drop Point is required
+                </div>
               </div>
             </div>
           </div>
 
           <div class="row">
             
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
+            <div class="col-lg-1 col-md-1">
+              <div class="mb-1">
                 <label class="form-label requiredField">Quantity</label>
                 <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity" min="0" required
                   #quantity="ngModel" />
-                @if(quantity?.errors?.['required'] && quantity?.touched) {
-                <div class="errorMessage">Quantity is required</div>
-                }
+                <div *ngIf="quantity?.errors?.['required'] && quantity?.touched" class="errorMessage">
+                  Quantity is required
+                </div>
               </div>
             </div>
             <!-- <div class="col-lg-1 col-md-1">
@@ -326,7 +306,7 @@
 
             <div class="col-lg-1 col-md-1">
               <div class="mb-1">
-                <label class="form-label requiredField">Child Qty</label>
+                <label class="form-label requiredField">Child Quantity</label>
                 <input type="number" class="form-control" name="childrenQuantity" [(ngModel)]="lead.childrenQuantity" min="0" required
                   #childrenQuantity="ngModel" />
                 @if(childrenQuantity?.errors?.['required'] && childrenQuantity?.touched) {
@@ -337,7 +317,7 @@
 
             <div class="col-lg-1 col-md-1">
               <div class="mb-1">
-                <label class="form-label requiredField">infant Qty</label>
+                <label class="form-label requiredField">infant Quantity</label>
                 <input type="number" class="form-control" name="infantQuantity" [(ngModel)]="lead.infantQuantity" min="0" required
                   #infantQuantity="ngModel" />
                 @if(infantQuantity?.errors?.['required'] && infantQuantity?.touched) {
@@ -346,14 +326,14 @@
               </div>
             </div>
 
-            <!-- <div class="col-lg-1 col-md-1">
+            <div class="col-lg-1 col-md-1">
               <div class="mb-1">
                 <label class="form-label requiredField">Total Days</label> 
                 <input type="hidden" class="form-control" name="totalDays" [(ngModel)]="lead.totalDays" required
                   #totalDays="ngModel" />
-                @if(totalDays?.errors?.['required'] && totalDays?.touched) {
-                <div class="errorMessage">Total Days is required</div>
-                }
+                <div *ngIf="totalDays?.errors?.['required'] && totalDays?.touched" class="errorMessage">
+                  Total Days is required
+                </div>
               </div>
             </div> -->
 
@@ -362,9 +342,9 @@
                 <label class="form-label requiredField">Company Rate</label>
                 <input type="text" class="form-control" name="companyRate" [(ngModel)]="lead.companyRate" required
                   #companyRate="ngModel" />
-                @if(companyRate?.errors?.['required'] && companyRate?.touched) {
-                <div class="errorMessage">Company Rate is required</div>
-                }
+                <div *ngIf="companyRate?.errors?.['required'] && companyRate?.touched" class="errorMessage">
+                  Company Rate is required
+                </div>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
@@ -372,21 +352,20 @@
                 <label class="form-label requiredField">Vendor Rate</label>
                 <input type="text" class="form-control" name="vendorRate" [(ngModel)]="lead.vendorRate" required
                   #vendorRate="ngModel" />
-                @if(vendorRate?.errors?.['required'] && vendorRate?.touched) {
-                <div class="errorMessage">Vendor Rate is required</div>
-                }
+                <div *ngIf="vendorRate?.errors?.['required'] && vendorRate?.touched" class="errorMessage">
+                  Vendor Rate is required
+                </div>
               </div>
             </div>
 
-            <div class="col-lg-2 col-md-2">
+            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Delivery</label>
                 <input type="text" class="form-control" name="deliveryAmountToCompany"
                   [(ngModel)]="lead.deliveryAmountToCompany" required #deliveryAmountToCompany="ngModel" />
-                @if(deliveryAmountToCompany?.errors?.['required'] &&
-                deliveryAmountToCompany?.touched) {
-                <div class="errorMessage">Total Delivery</div>
-                }
+                <div *ngIf="deliveryAmountToCompany?.errors?.['required'] && deliveryAmountToCompany?.touched" class="errorMessage">
+                  Total Delivery is required
+                </div>
               </div>
             </div>
 
@@ -395,10 +374,13 @@
                 <label class="form-label requiredField">Delivery To Vendor</label>
                 <input type="text" class="form-control" name="deliveryAmountToVendor"
                   [(ngModel)]="lead.deliveryAmountToVendor" required #deliveryAmountToVendor="ngModel" />
-                @if(deliveryAmountToVendor?.errors?.['required'] &&
+                <!-- @if(deliveryAmountToVendor?.errors?.['required'] &&
                 deliveryAmountToVendor?.touched) {
                 <div class="errorMessage">Delivery To Vendor is required</div>
-                }
+                } -->
+                <div *ngIf="deliveryAmountToVendor?.errors?.['required'] && deliveryAmountToVendor?.touched" class="errorMessage">
+                  Delivery To Vendor is required
+                </div>
               </div>
             </div>
             <div class="col-lg-2 col-md-2"></div>
@@ -409,45 +391,39 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Booking Amount</label>
-                <input type="number" class="form-control" name="bookingAmount" [(ngModel)]="lead.bookingAmount" required
-                  #bookingAmount="ngModel" />
-                @if(bookingAmount?.errors?.['required'] &&
-                bookingAmount?.touched) {
-                <div class="errorMessage">Booking Amount is required</div>
-                }
+                <input type="number" class="form-control" name="bookingAmount" [(ngModel)]="lead.bookingAmount" required #bookingAmount="ngModel" />
+                <div *ngIf="bookingAmount?.errors?.['required'] && bookingAmount?.touched" class="errorMessage">
+                  Booking Amount is required
+                </div>
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Balance Amount</label>
-                <input type="number" class="form-control" name="balanceAmount" [(ngModel)]="lead.balanceAmount" required
-                  #balanceAmount="ngModel" />
-                @if(balanceAmount?.errors?.['required'] &&
-                balanceAmount?.touched) {
-                <div class="errorMessage">Balance Amount is required</div>
-                }
+                <input type="number" class="form-control" name="balanceAmount" [(ngModel)]="lead.balanceAmount" required #balanceAmount="ngModel" />
+                <div *ngIf="balanceAmount?.errors?.['required'] && balanceAmount?.touched" class="errorMessage">
+                  Balance Amount is required
+                </div>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Amount</label>
-                <input type="number" class="form-control" name="totalAmount" [(ngModel)]="lead.totalAmount" required
-                  #totalAmount="ngModel" />
-                @if(totalAmount?.errors?.['required'] && totalAmount?.touched) {
-                <div class="errorMessage">Total Amount is required</div>
-                }
+                <input type="number" class="form-control" name="totalAmount" [(ngModel)]="lead.totalAmount" required #totalAmount="ngModel" />
+                <div *ngIf="totalAmount?.errors?.['required'] && totalAmount?.touched" class="errorMessage">
+                  Total Amount is required
+                </div>
               </div>
             </div>
-            <div class="col-lg-2 col-md-2">
+            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-2">
                 <label class="form-label requiredField">Security Amount</label>
                 <input type="number" class="form-control" name="securityAmount" [(ngModel)]="lead.securityAmount"
                   required #securityAmount="ngModel" />
-                @if(securityAmount?.errors?.['required'] &&
-                securityAmount?.touched) {
-                <div class="errorMessage">Security Amount is required</div>
-                }
+                <div *ngIf="securityAmount?.errors?.['required'] && securityAmount?.touched" class="errorMessage">
+                  Security Amount is required
+                </div>
               </div>
             </div>
             <div class="col-lg-2 col-md-2"></div>
@@ -459,29 +435,23 @@
               <label class="form-label requiredField">Pay to Vendor</label>
               <input type="text" class="form-control" name="payToVendor" [(ngModel)]="lead.payToVendor" required
                 #payToVendor="ngModel" />
-              @if(payToVendor?.errors?.['required'] && payToVendor?.touched) {
-              <div class="errorMessage">Pay to Vendor is required</div>
-              }
+              <div *ngIf="payToVendor?.errors?.['required'] && payToVendor?.touched" class="errorMessage">
+                Pay to Vendor is required
+              </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pay To Company</label>
                 <input type="text" class="form-control" name="payToCompany" [(ngModel)]="lead.payToCompany" required
                   #payToCompany="ngModel" />
-                @if(payToCompany?.errors?.['required'] && payToCompany?.touched)
-                {
-                <div class="errorMessage">Pay To Company is required</div>
-                }
+                <div *ngIf="payToCompany?.errors?.['required'] && payToCompany?.touched" class="errorMessage">
+                  Pay to Company is required
+                </div>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Lead Origine</label>
-                <!-- <input type="text" class="form-control" name="leadOrigine" [(ngModel)]="lead.leadOrigine" required
-                  #leadOrigine="ngModel" />
-                @if(leadOrigine?.errors?.['required'] && leadOrigine?.touched) {
-                <div class="errorMessage">Lead Origine is required</div>
-                } -->
                 <mat-select name="leadOrigine" [(ngModel)]="lead.leadOrigine" class="select"
                   placeholder="Select Lead Origine">
                   @for (listData of leadOrigine; track listData) {
@@ -495,11 +465,6 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Lead Type</label>
-                <!-- <input type="text" class="form-control" name="leadType" [(ngModel)]="lead.leadType" required
-                  #leadType="ngModel" />
-                @if(leadType?.errors?.['required'] && leadType?.touched) {
-                <div class="errorMessage">Lead Type is required</div>
-                } -->
                 <mat-select name="leadType" [(ngModel)]="lead.leadType" class="select" placeholder="Select Lead Type">
                   @for (listData of leadType; track listData) {
                   <mat-option [value]="listData.name">
@@ -517,11 +482,6 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Created By</label>
-                <!-- <input type="text" class="form-control" name="createdBy" [(ngModel)]="lead.createdBy"
-                  #createdBy="ngModel" />
-                @if(createdBy?.errors?.['required'] && createdBy?.touched) {
-                <div class="errorMessage">Created By is required</div>
-                } -->
                 @if(roleType === 'SUPERADMIN') {
                 <mat-select [(ngModel)]="lead.createdBy" class="select custom-mat-select" name="createdBy"
                   placeholder="Select Agent Name" #createdBy="ngModel">
@@ -542,10 +502,6 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label">Status</label>
-                <!-- <input type="text" class="form-control" name="status" [(ngModel)]="lead.status" #status="ngModel" />
-                @if(status?.errors?.['required'] && status?.touched) {
-                <div class="errorMessage">status is required</div>
-                } -->
                 <mat-select name="status" [(ngModel)]="lead.status" class="select" placeholder="Select Status">
                   @for (listData of leadStatus; track listData) {
                   <mat-option [value]="listData.value">
@@ -610,7 +566,8 @@
             </div>
           </div>
 
-          <div class="row remarks-box">
+          <div class="row ">
+            <div class="remarks-box">
             <p></p>
             <div class="col-lg-4 col-md-4">
               <div class="input-container">
@@ -670,8 +627,12 @@
               <textarea class="form-control no-border" name="records" [(ngModel)]="lead.records" rows="4"
                 placeholder="No Records Found"></textarea>
             </div>
-          </div>
+          </div></div>
         </div>
+      </div>
+      <div class="text-mid mb-3">
+        <!-- <button type="submit" class="btn btn-submit" [disabled]="!leadForm.form.valid">Save User</button> -->
+        <button type="submit" class="btn btn-submit">Save Lead</button>
       </div>
     </div>
 
