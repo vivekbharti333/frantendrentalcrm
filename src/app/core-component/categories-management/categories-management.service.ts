@@ -129,7 +129,6 @@ export class CategoriesManagementService {
   }
 
   getSuperCategoryListByCategoryTypeId(cateTypeId: any): Observable<any> {
-    // alert(cateTypeId+"yjgygyg")
     let request: any = {
       payload: {
         categoryTypeId: cateTypeId,
@@ -223,7 +222,6 @@ export class CategoriesManagementService {
         superCategoryId: addSubCategory.superCategoryId,
         categoryId: addSubCategory.categoryId,
         subCategory: addSubCategory.subCategory,
-        description: addSubCategory.description,
         token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),
         superadminId: this.cookieService.get('superadminId'),
@@ -277,7 +275,6 @@ export class CategoriesManagementService {
   getSubCategoryListByCatId(categoryId: any): Observable<any> {
     let request: any = {
       payload: {
-       
         categoryId: categoryId,
         requestedFor: 'BYCATID',
         roleType: this.cookieService.get('roleType'),
@@ -288,21 +285,6 @@ export class CategoriesManagementService {
     };
     return this.http.post<any>(Constant.Site_Url + "getSubCategoryDetails", request);
   }
-  // getSubCategoryListByCatId1(allIds: any,categoryId: any): Observable<any> {
-  //   let request: any = {
-  //     payload: {
-  //       categoryTypeId: allIds.categoryTypeId,
-  //       superCategoryId: allIds.superCategoryId,
-  //       categoryId: categoryId,
-  //       requestedFor: 'BYCATID',
-  //       roleType: this.cookieService.get('roleType'),
-  //       token: this.cookieService.get('token'),
-  //       createdBy: this.cookieService.get('loginId'),
-  //       superadminId: this.cookieService.get('superadminId'),
-  //     }
-  //   };
-  //   return this.http.post<any>(Constant.Site_Url + "getSubCategoryDetails", request);
-  // }
 
   getLocationByType(locType: any): Observable<any> {
     let request: any = {

@@ -21,7 +21,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
 import { UserManagementService } from '../../../user-management/user-management.service';
+import { CookieService } from 'ngx-cookie-service';
 
+interface listData {
+  value: string;
+  name: string;
+}
 @Component({
   selector: 'app-enquiry',
   templateUrl: './enquiry.component.html',
@@ -42,6 +47,11 @@ export class EnquiryComponent {
   public subCategoryList: Array<any> = [];
   public pageSize = 10;
   public serialNumberArray: Array<number> = [];
+  public pickLocationList: any[] = [];
+  public dropLocationList: any[] = [];
+  filteredPickLocationList: any[] =[];
+  filteredDropLocationList: any[] =[];
+  roleType: string = '';
   public totalData = 0;
   showFilter = false;
   dataSource!: MatTableDataSource<users>;
@@ -84,6 +94,9 @@ export class EnquiryComponent {
     leadType: '',
     createdBy: '',
     notes: '',
+    records: '',
+    remarks: '',
+    reminderDate: '',
   };
   isEditForm: boolean = false;
   filteredCategoryTypeList: any[] = [];
@@ -92,6 +105,10 @@ export class EnquiryComponent {
   filteredSubCategoryList: any[] = [];
   firstDate: any = '';
   lastDate: any = '';
+  public userList: any[] = [];
+  leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
+  leadType: listData[] = Constant.LEAD_TYPE_LIST;
+  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
   constructor(
     // private data: DataService,
@@ -104,12 +121,16 @@ export class EnquiryComponent {
     private dialog: MatDialog,
     private categoriesManagementService: CategoriesManagementService,
     private userManagementService: UserManagementService,
-  ) {}
+    private cookieService: CookieService,
+  ) {
+    this.roleType = this.cookieService.get('roleType');
+  }
 
   ngOnInit() {
     (async () => {
       await 
       this.getEnquiryList();
+      this.getUserList();
       this.getUserListForDropDown();
 
       this.getCategoryType();
@@ -189,6 +210,22 @@ alert(dd)
         return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
       });
     }
+  }
+
+  public getUserList() {
+    this.userManagementService.getUserDetailsList().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.userList = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
   }
 
   public searchData(value: string): void {
@@ -305,6 +342,9 @@ alert(dd)
       leadType: rawData?.leadType,
       createdBy: rawData?.createdBy,
       notes: rawData?.notes,
+      records: '',
+      remarks: '',
+      reminderDate: '',
     };
   }
 
@@ -346,7 +386,8 @@ alert(dd)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload)
+            this.superCategoryList = JSON.parse(
+              JSON.stringify(response.listPayload)
             );
             this.filteredSuperCategoryList = this.superCategoryList;
           }

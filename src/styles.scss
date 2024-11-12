@@ -505,10 +505,13 @@ mat-option mat-pseudo-checkbox.mat-pseudo-checkbox {
 mat-option.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled):not(.mat-mdc-option-multiple) {
   background-color: #FF9F43;
 }
+mat-option.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+  background-color: #FF9F43;
+}
 
 mat-option.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
   // color: green;
-  color: black;
+  color: white;
   // background-color: #97A2D2;
   // width: 100%;
   // height: 100%;

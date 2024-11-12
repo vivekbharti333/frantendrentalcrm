@@ -124,8 +124,6 @@ export class LeadManagementService {
       customerEmailId: lead.customerEmailId,
       totalDays: lead.totalDays,
       quantity: lead.quantity,
-      childrenQuantity: lead.childrenQuantity,
-      infantQuantity: lead.infantQuantity,
       vendorRate: lead.vendorRate,
       payToVendor: lead.payToVendor,
       companyRate: lead.companyRate,
@@ -139,15 +137,12 @@ export class LeadManagementService {
       leadOrigine: lead.leadOrigine,
       leadType: lead.leadType,
       createdBy: lead.createdBy,
-      loginId: this.cookieService.get('loginId'),
+      // createdBy: this.cookieService.get('loginId'),
       notes: lead.notes,
-      remarks: lead.remarks,
       roleType: this.cookieService.get('roleType'),
       token: this.cookieService.get('token'),
       // createdBy: this.cookieService.get('loginId'),
       superadminId: this.cookieService.get('superadminId'),
-      teamleaderId: this.cookieService.get('teamleaderId'),
-      adminId: this.cookieService.get('adminId')
     };
     return payload;
   }
@@ -223,7 +218,7 @@ export class LeadManagementService {
         ? {
             superadminId: this.cookieService.get('superadminId'),
             adminId: this.cookieService.get('adminId'),
-            teamleaderId: this.cookieService.get('teamleaderId'),
+            teamLeaderId: this.cookieService.get('teamLeaderId'),
           }
         : {}),
       ...(roleType !== 'SUPERADMIN' &&
@@ -283,9 +278,10 @@ export class LeadManagementService {
         createdBy: this.cookieService.get('loginId'),
         superadminId: this.cookieService.get('superadminId'),
         adminId: this.cookieService.get('adminId'),
-        teamleaderId: this.cookieService.get('teamleaderId'),
+        teamLeaderId: this.cookieService.get('teamLeaderId'),
       },
     };
+    // return this.http.post<any>(Constant.Site_Url + 'getFollowupOne', request);
     return this.http.post<any>(Constant.Site_Url + 'getLeadListByStatus', request);
   }
 
@@ -317,19 +313,6 @@ export class LeadManagementService {
       },
     };
     return this.http.post<any>(Constant.Site_Url + 'getLeadListByStatus', request);
-  }                                                 
-  
-  getAllHotLeadList(): Observable<any> {
-    const request: any = {
-      payload: {
-        requestedFor: 'ALL',
-        roleType: this.cookieService.get('roleType'),
-        token: this.cookieService.get('token'),
-        createdBy: this.cookieService.get('loginId'),
-        superadminId: this.cookieService.get('superadminId'),
-      },
-    };
-    return this.http.post<any>(Constant.Site_Url + 'getAllHotLeadList', request);
   }
 
   // getAllReservedList(): Observable<any> {
