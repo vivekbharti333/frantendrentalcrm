@@ -373,16 +373,17 @@ export class AllLeadComponent {
   }
 
   public getSuperCategory(superCateId: any) {
-    const categoryId = superCateId?.id;
-    this.categoriesManagementService
-      .getSuperCategoryListByCategoryTypeId(categoryId)
+    // alert("getSuperCategory :"+superCateId);
+    this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(superCateId)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.superCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+
             this.filteredSuperCategoryList = this.superCategoryList;
+
+            const category = this.superCategoryList.find(item => item.superCategory === this.leadDetails.superCategory);
+            this.getCategory(category.id)
           }
         },
         error: (error: any) =>
@@ -395,16 +396,17 @@ export class AllLeadComponent {
   }
 
   public getCategory(categoryId: any) {
-    const superCatId = categoryId?.id;
-    this.categoriesManagementService
-      .getCategoryBySuperCatId(superCatId)
+    //const superCatId = categoryId?.id;
+    // alert("getCategory :"+categoryId);
+    this.categoriesManagementService.getCategoryBySuperCatId(categoryId)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.categoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.categoryList = JSON.parse( JSON.stringify(response.listPayload));
             this.filteredCategoryList = this.categoryList;
+
+            const subCategory = this.categoryList.find(item => item.category === this.leadDetails.category);
+            this.getSubCategory(subCategory.id);
           }
         },
         error: (error: any) =>
