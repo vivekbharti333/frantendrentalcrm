@@ -47,32 +47,19 @@
     <div class="table-top">
       <div class="search-set">
         <div class="search-input">
-          <a href="javascript:void(0);" class="btn btn-searchset"
-            ><i class="feather icon-search feather-search"></i
-          ></a>
+          <a href="javascript:void(0);" class="btn btn-searchset"><i class="feather icon-search feather-search"></i></a>
           <div class="dataTables_filter">
             <label>
-              <input
-                [readonly]="!isEditForm"
-                [(ngModel)]="searchDataValue"
-                [ngModelOptions]="{ standalone: true }"
-                (ngModelChange)="searchData(searchDataValue)"
-                type="search"
-                class="form-control"
-                placeholder="Search..."
-              />
+              <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="searchData(searchDataValue)" type="search" class="form-control"
+                placeholder="Search..." />
             </label>
           </div>
         </div>
       </div>
       <div class="search-path">
         <div class="d-flex align-items-center">
-          <a
-            class="btn btn-filter"
-            id="filter_search"
-            (click)="openFilter()"
-            [ngClass]="{ setclose: filter === true }"
-          >
+          <a class="btn btn-filter" id="filter_search" (click)="openFilter()" [ngClass]="{ setclose: filter === true }">
             <i class="feather icon-filter filter-icon"></i>
             <span><img src="assets/img/icons/closes.svg" alt="img" /></span>
           </a>
@@ -89,25 +76,18 @@
       </div>
     </div>
     <!-- /Filter -->
-    <div
-      class="card"
-      id="filter_inputs"
-      [ngClass]="{ 'd-block': filter, 'd-none': !filter }"
-    >
+    <div class="card" id="filter_inputs" [ngClass]="{ 'd-block': filter, 'd-none': !filter }">
       <div class="card-body pb-0">
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-12">
             <div class="input-blocks">
               <label class="form-label requiredField">Select Agent</label>
-              <mat-select
-                name="permissions"
-                class="select"
-                placeholder="Select Agent"
-                (selectionChange)="onAgentSelectionChange($event.value)"
-              >
+              <mat-select name="permissions" class="select" placeholder="Select Agent"
+                (selectionChange)="onAgentSelectionChange($event.value)">
+                <!-- <mat-option [value]="ALL">ALL</mat-option> -->
                 @for (dropDownUser of userForDropDown; track dropDownUser) {
                 <mat-option [value]="dropDownUser.loginId">
-                  {{ dropDownUser.firstName + " " + dropDownUser.lastName }}
+                  {{dropDownUser.firstName+" "+dropDownUser.lastName}}
                 </mat-option>
                 }
               </mat-select>
@@ -115,39 +95,20 @@
           </div>
           <div class="col-lg-2 col-sm-3 col-12">
             <div class="input-blocks">
+
               <label class="form-label requiredField">First Date</label>
-              <input
-                [readonly]="!isEditForm"
-                type="date"
-                class="form-control"
-                [(ngModel)]="firstDate"
-                name="firstDate"
-                id="firstDate"
-                #firstDate="ngModel"
-                (change)="setFilterDate($event, 'first')"
-                required
-              />
+              <input type="date" class="form-control" [(ngModel)]="firstDate" name="firstDate" id="firstDate"
+                #firstDate="ngModel" (change)="setFilterDate($event, 'first')" required />
             </div>
           </div>
           <div class="col-lg-2 col-sm-3 col-12">
             <div class="input-blocks">
               <label class="form-label requiredField">Last Date</label>
-              <input
-                [readonly]="!isEditForm"
-                type="date"
-                class="form-control"
-                [(ngModel)]="lastDate"
-                name="lastDate"
-                id="lastDate"
-                #lastDate="ngModel"
-                (change)="setFilterDate($event, 'last')"
-                required
-              />
+              <input type="date" class="form-control" [(ngModel)]="lastDate" name="lastDate" id="lastDate"
+                #lastDate="ngModel" (change)="setFilterDate($event, 'last')" required />
             </div>
           </div>
-          <div
-            class="d-flex justify-content-center align-items-end col-lg-2 col-sm-3 col-12"
-          >
+          <div class="d-flex justify-content-center align-items-end col-lg-2 col-sm-3 col-12">
             <div class="input-blocks">
               <a (click)="filterByDate()" class="btn btn-filters ms-auto">
                 <i class="feather icon-search feather-search"></i> Search
@@ -160,13 +121,11 @@
 
     <mat-tab-group>
       <mat-tab>
-        <ng-template mat-tab-label> Today's </ng-template>
+        <ng-template mat-tab-label>
+          Today's
+        </ng-template>
         <div class="table-responsive">
-          <table
-            matSort
-            (matSortChange)="sortData($event)"
-            class="table datanew"
-          >
+          <table matSort (matSortChange)="sortData($event)" class="table datanew">
             <thead>
               <tr>
                 <th></th>
@@ -184,52 +143,37 @@
               <tr>
                 <td></td>
                 <td>{{ data.subCategory }}</td>
-                <td>{{ data.customerName }}</td>
-                <td>{{ data.mobile }}</td>
+                <td>{{ data.customeName }}</td>
+                <td>{{ data.customerMobile }}</td>
                 <td>{{ data.createdBy }}</td>
                 <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
                 <td>{{ data.status }}</td>
 
                 <td class="action-table-data">
                   <div class="edit-delete-action">
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#view-units"
-                      (click)="
-                        openEditModal(viewLeadDialogTemplate, data, false)
-                      "
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#view-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, false)">
                       <i class="feather icon-info feather-info"></i>
                       <span class="tooltipText">View</span>
                     </a>
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#edit-units"
-                      (click)="
-                        openEditModal(viewLeadDialogTemplate, data, true)
-                      "
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#edit-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, true)">
                       <i class="feather icon-edit feather-edit textBlack"></i>
                       <span class="tooltipText">Edit</span>
                     </a>
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#edit-units"
+                      (click)="downloadInvoice(data.bookingId)">
+                      <i class="fa fa-download"></i>
+                      <span class="tooltipText">invoice</span>
+                    </a>
                     @if(data?.isDataCopied) {
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#copy-units"
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units">
                       <i class="feather icon-check feather-check"></i>
                       <span class="tooltipText">Copied!</span>
                     </a>
                     } @else {
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#copy-units"
-                      (click)="copyData(data, idx)"
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units"
+                      (click)="copyData(data, idx)">
                       <i class="feather icon-copy feather-copy"></i>
                       <span class="tooltipText">Copy</span>
                     </a>
@@ -244,13 +188,11 @@
       </mat-tab>
 
       <mat-tab>
-        <ng-template mat-tab-label> Yesterday's </ng-template>
+        <ng-template mat-tab-label>
+          Yesterday's
+        </ng-template>
         <div class="table-responsive">
-          <table
-            matSort
-            (matSortChange)="sortData($event)"
-            class="table datanew"
-          >
+          <table matSort (matSortChange)="sortData($event)" class="table datanew">
             <thead>
               <tr>
                 <th></th>
@@ -268,52 +210,32 @@
               <tr>
                 <td></td>
                 <td>{{ data.subCategory }}</td>
-                <td>{{ data.customerName }}</td>
-                <td>{{ data.mobile }}</td>
+                <td>{{ data.customeName }}</td>
+                <td>{{ data.customerMobile }}</td>
                 <td>{{ data.createdBy }}</td>
                 <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
                 <td>{{ data.status }}</td>
 
                 <td class="action-table-data">
                   <div class="edit-delete-action">
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#view-units"
-                      (click)="
-                        openEditModal(viewLeadDialogTemplate, data, false)
-                      "
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#view-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, false)">
                       <i class="feather icon-info feather-info"></i>
                       <span class="tooltipText">View</span>
                     </a>
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#edit-units"
-                      (click)="
-                        openEditModal(viewLeadDialogTemplate, data, true)
-                      "
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#edit-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, true)">
                       <i class="feather icon-edit feather-edit textBlack"></i>
                       <span class="tooltipText">Edit</span>
                     </a>
                     @if(data?.isDataCopied) {
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#copy-units"
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units">
                       <i class="feather icon-check feather-check"></i>
                       <span class="tooltipText">Copied!</span>
                     </a>
                     } @else {
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#copy-units"
-                      (click)="copyData(data, idx)"
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units"
+                      (click)="copyData(data, idx)">
                       <i class="feather icon-copy feather-copy"></i>
                       <span class="tooltipText">Copy</span>
                     </a>
@@ -328,13 +250,11 @@
       </mat-tab>
 
       <mat-tab>
-        <ng-template mat-tab-label> Day Before Yesterday's </ng-template>
+        <ng-template mat-tab-label>
+          Day Before Yesterday's
+        </ng-template>
         <div class="table-responsive">
-          <table
-            matSort
-            (matSortChange)="sortData($event)"
-            class="table datanew"
-          >
+          <table matSort (matSortChange)="sortData($event)" class="table datanew">
             <thead>
               <tr>
                 <th></th>
@@ -351,52 +271,38 @@
               @for (data of tableData; track data; let idx=$index) {
               <tr>
                 <td>{{ data.subCategory }}</td>
-                <td>{{ data.customerName }}</td>
-                <td>{{ data.mobile }}</td>
+                <td>{{ data.customeName }}</td>
+                <td>{{ data.customerMobile }}</td>
                 <td>{{ data.createdBy }}</td>
                 <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
                 <td>{{ data.status }}</td>
 
                 <td class="action-table-data">
                   <div class="edit-delete-action">
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#view-units"
-                      (click)="
-                        openEditModal(viewLeadDialogTemplate, data, false)
-                      "
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#view-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, false)">
                       <i class="feather icon-info feather-info"></i>
                       <span class="tooltipText">View</span>
                     </a>
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#edit-units"
-                      (click)="
-                        openEditModal(viewLeadDialogTemplate, data, true)
-                      "
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#edit-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, true)">
                       <i class="feather icon-edit feather-edit textBlack"></i>
-                      <span class="tooltipText">Edit</span>
+                      <span class="tooltipText">Edi1t</span>
+                    </a>
+
+                    <a class="me-2 p-2 mb-0 position-relative"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, true)">
+                      <i class="feather icon-edit feather-edit textBlack"></i>
+                      <span class="tooltipText">invoice donload</span>
                     </a>
                     @if(data?.isDataCopied) {
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#copy-units"
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units">
                       <i class="feather icon-check feather-check"></i>
                       <span class="tooltipText">Copied!</span>
                     </a>
                     } @else {
-                    <a
-                      class="me-2 p-2 mb-0 position-relative"
-                      data-bs-toggle="modal"
-                      data-bs-target="#copy-units"
-                      (click)="copyData(data, idx)"
-                    >
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units"
+                      (click)="copyData(data, idx)">
                       <i class="feather icon-copy feather-copy"></i>
                       <span class="tooltipText">Copy</span>
                     </a>
@@ -423,12 +329,7 @@
       {{ isEditForm ? "Edit Lead Details" : "View Lead Details" }}
     </h2>
     <div mat-dialog-close class="closeBtn">
-      <button
-        type="button"
-        class="close"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      >
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -439,144 +340,84 @@
         <div class="card">
           <div class="card-body">
             <div class="new-employee-field">
-              <table class="center-table">
-                <!-- <tr>
-                                <td>
-                                    <input [readonly]="!isEditForm" class="form-check-input" type="radio" name="companyName" [(ngModel)]="leadDetails.companyName" value="Vehicle" id="companyName1" checked>
-                                    <label class="form-check-label" for="companyName1">
-                                         Goa
-                                    </label>
-                                </td>
-                                <td>
-                                    <input [readonly]="!isEditForm" class="form-check-input" type="radio" name="companyName" [(ngModel)]="leadDetails.companyName" value="Other" id="companyName2">
-                                    <label class="form-check-label" for="companyName2">
-                                         Other
-                                    </label>
-                                </td>
-                            </tr> -->
-
-                <tr></tr>
-              </table>
-
-              <br />
+              <!-- <div class="card-title-head">
+                <h6>
+                  <span><i class="feather icon-info feather-edit"></i></span
+                  >Category Type details
+                </h6>
+              </div> -->
 
               <div class="row">
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label requiredField"
-                      >Category Type</label
-                    >
-                    <mat-select
-                      [(ngModel)]="leadDetails.categoryType"
-                      class="select"
-                      name="categoryType"
-                      placeholder="Select Category Type"
-                      (selectionChange)="getSuperCategory($event.value)"
-                      required
-                      #categoryType="ngModel"
-                    >
-                      <app-mat-select-search
-                        (filteredList)="setFilterList($event, 'categoryType')"
-                        [originalList]="categoryTypeList"
-                        [categoryName]="'categoryTypeName'"
-                      ></app-mat-select-search>
-                      <mat-option
-                        *ngFor="let cateType of filteredCategoryTypeList"
-                        [value]="cateType"
-                      >
+                    <label class="form-label requiredField">Category Type</label>
+                    <mat-select class="select" placeholder="Select Category Type" [(ngModel)]="leadDetails.categoryType" name="categoryType" 
+                    #categoryType="ngModel" required
+                      (selectionChange)="getSuperCategory($event)">
+
+                      <app-mat-select-search (filteredList)="setFilterList($event, 'categoryType')"
+                        [originalList]="categoryTypeList" [categoryName]="'categoryTypeName'">
+                      </app-mat-select-search>
+
+                      <mat-option *ngFor="let cateType of filteredCategoryTypeList" [value]="cateType.categoryTypeName">
                         {{ cateType.categoryTypeName }}
                       </mat-option>
                     </mat-select>
-                    @if(categoryType?.errors?.['required'] &&
-                    categoryType?.touched) {
-                    <div class="errorMessage">Category Type is required</div>
-                    }
+                    
+                    <div *ngIf="categoryType?.errors?.['required'] && categoryType?.touched" class="errorMessage">
+                      Category Type is required
+                    </div>
                   </div>
                 </div>
-
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label requiredField"
-                      >Super Category</label
-                    >
-                    <mat-select
-                      [(ngModel)]="leadDetails.superCategory"
-                      class="select custom-mat-select"
-                      name="superCategory"
-                      placeholder="Select a Super Category"
-                      (selectionChange)="getCategory($event.value)"
-                      required
-                      #superCategory="ngModel"
-                    >
-                      <app-mat-select-search
-                        (filteredList)="setFilterList($event, 'superCategory')"
-                        [originalList]="superCategoryList"
-                        [categoryName]="'superCategory'"
-                      ></app-mat-select-search>
-                      <mat-option
-                        *ngFor="let supCate of filteredSuperCategoryList"
-                        [value]="supCate"
-                      >
+                    <label class="form-label requiredField">Super Category</label>
+                    <mat-select class="select" placeholder="Select a Super Category"
+                      [(ngModel)]="leadDetails.superCategory" name="superCategory" #superCategory="ngModel" required
+                      (selectionChange)="getCategory($event.value)">
+
+                      <app-mat-select-search (filteredList)="setFilterList($event, 'superCategory')"
+                        [originalList]="superCategoryList" [categoryName]="'superCategory'">
+                      </app-mat-select-search>
+
+                      <mat-option *ngFor="let supCate of filteredSuperCategoryList" [value]="supCate.superCategory">
                         {{ supCate.superCategory }}
                       </mat-option>
                     </mat-select>
-                    @if(superCategory?.errors?.['required'] &&
-                    superCategory?.touched) {
-                    <div class="errorMessage">Super Category is required</div>
-                    }
+
+                    <div *ngIf="superCategory?.errors?.['required'] && superCategory?.touched" class="errorMessage">
+                      Super Category is required
+                    </div>
                   </div>
                 </div>
-
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label requiredField">Category</label>
-                    <mat-select
-                      [(ngModel)]="leadDetails.category"
-                      class="select custom-mat-select"
-                      name="category"
-                      placeholder="Select a Category"
-                      (selectionChange)="getSubCategory($event.value)"
-                      required
-                      #category="ngModel"
-                    >
-                      <app-mat-select-search
-                        (filteredList)="setFilterList($event, 'category')"
-                        [originalList]="categoryList"
-                        [categoryName]="'category'"
-                      ></app-mat-select-search>
-                      <mat-option
-                        *ngFor="let cate of filteredCategoryList"
-                        [value]="cate"
-                      >
+                      <mat-select class="select" placeholder="Select Category"
+                      [(ngModel)]="leadDetails.category" name="category" #category="ngModel" required
+                      (selectionChange)="getSubCategory($event.value)">
+                      
+                      <!-- <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
+                        [originalList]="categoryList" [categoryName]="'category'"></app-mat-select-search> -->
+                     
+                        <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate.category">
                         {{ cate.category }}
-                      </mat-option>
-                    </mat-select>
+                      </mat-option></mat-select>
                     @if(category?.errors?.['required'] && category?.touched) {
                     <div class="errorMessage">Category is required</div>
                     }
                   </div>
                 </div>
-
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label requiredField">Sub Category</label>
-                    <mat-select
-                      [(ngModel)]="leadDetails.subCategory"
-                      class="select custom-mat-select"
-                      name="subCategory"
-                      placeholder="Select a Sub Category"
-                      required
-                      #subCategory="ngModel"
-                    >
-                      <app-mat-select-search
-                        (filteredList)="setFilterList($event, 'subCategory')"
-                        [originalList]="subCategoryList"
-                        [categoryName]="'subCategory'"
-                      ></app-mat-select-search>
-                      <mat-option
-                        *ngFor="let subCate of filteredSubCategoryList"
-                        [value]="subCate"
-                      >
+                    
+                    <mat-select class="select" placeholder="Select a Sub Category"
+                      [(ngModel)]="leadDetails.subCategory" name="subCategory" #subCategory="ngModel" required>
+                     
+                      <app-mat-select-search (filteredList)="setFilterList($event, 'subCategory')"
+                        [originalList]="subCategoryList" [categoryName]="'subCategory'"></app-mat-select-search>
+                      <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate.subCategory">
                         {{ subCate.subCategory }}
                       </mat-option>
                     </mat-select>
@@ -598,8 +439,8 @@
                       [readonly]="!isEditForm"
                       type="datetime-local"
                       class="form-control"
-                      name="pickUpDateTime"
-                      [(ngModel)]="leadDetails.pickUpDateTime"
+                      name="pickupDateTime"
+                      [(ngModel)]="leadDetails.pickupDateTime"
                       required
                       #pickUpDateTime="ngModel"
                     />
@@ -613,38 +454,24 @@
                 </div>
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
-                    <label class="form-label requiredField"
-                      >Pickup Location</label
-                    >
-                    <!-- <input [readonly]="!isEditForm" type="text" class="form-control" name="pickUpLocation" [(ngModel)]="leadDetails.pickUpLocation" required #pickUpLocation="ngModel" />
-                    @if(pickUpLocation?.errors?.['required'] &&
-                    pickUpLocation?.touched) {
-                    <div class="errorMessage">Pickup Location is required</div>
-                    } -->
-                    <mat-select
-                      [(ngModel)]="leadDetails.pickUpLocation"
-                      class="select custom-mat-select"
-                      name="pickUpLocation"
-                      placeholder="Select Pickup Location"
-                      required
-                      #superCategory="ngModel"
-                    >
-                      <app-mat-select-search
+                    <label class="form-label requiredField">Pickup Location</label>
+
+                    <mat-select class="select" [(ngModel)]="leadDetails.pickupLocation" name="pickupLocation"
+                      placeholder="Select Pickup Location" #pickUpLocation="ngModel" required>
+
+                      <!-- <app-mat-select-search
                         (filteredList)="setFilterList($event, 'pickLocation')"
                         [originalList]="pickLocationList"
                         [categoryName]="'pickLocation'"
-                      ></app-mat-select-search>
-                      <mat-option
-                        *ngFor="let pickList of filteredPickLocationList"
-                        [value]="pickList"
-                      >
+                      ></app-mat-select-search> -->
+                      <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location" >
                         {{ pickList.location }}
                       </mat-option>
+
                     </mat-select>
-                    @if(pickUpLocation?.errors?.['required'] &&
-                    pickUpLocation?.touched) {
-                    <div class="errorMessage">Pickup Location is required</div>
-                    }
+                    <div *ngIf="pickUpLocation?.errors?.['required'] && pickUpLocation?.touched" class="errorMessage">
+                      Pickup Location is required
+                    </div>
                   </div>
                 </div>
 
@@ -713,7 +540,7 @@
                       ></app-mat-select-search>
                       <mat-option
                         *ngFor="let dropList of filteredDropLocationList"
-                        [value]="dropList"
+                        [value]="dropList.location"
                       >
                         {{ dropList.location }}
                       </mat-option>
@@ -994,12 +821,7 @@
                     @if(leadOrigine?.errors?.['required'] && leadOrigine?.touched) {
                     <div class="errorMessage">Lead Origine is required</div>
                     } -->
-                    <mat-select
-                      name="leadOrigine"
-                      [(ngModel)]="leadDetails.leadOrigine"
-                      class="select"
-                      placeholder="Select Lead Origine"
-                    >
+                    <mat-select name="leadOrigine" [(ngModel)]="leadDetails.leadOrigine" class="select" placeholder="Select Lead Origine">
                       @for (listData of leadOrigine; track listData) {
                       <mat-option [value]="listData.name">
                         {{ listData.name }}
@@ -1011,17 +833,8 @@
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
                     <label class="form-label requiredField">Lead Type</label>
-                    <!-- <input [readonly]="!isEditForm" type="text" class="form-control" name="leadType" [(ngModel)]="leadDetails.leadType" required
-                      #leadType="ngModel" />
-                    @if(leadType?.errors?.['required'] && leadType?.touched) {
-                    <div class="errorMessage">Lead Type is required</div>
-                    } -->
-                    <mat-select
-                      name="leadType"
-                      [(ngModel)]="leadDetails.leadType"
-                      class="select"
-                      placeholder="Select Lead Type"
-                    >
+                   
+                    <mat-select name="leadType" [(ngModel)]="leadDetails.leadType" class="select" placeholder="Select Lead Type">
                       @for (listData of leadType; track listData) {
                       <mat-option [value]="listData.name">
                         {{ listData.name }}
@@ -1038,62 +851,47 @@
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
                     <label class="form-label requiredField">Created By</label>
-                    <!-- <input [readonly]="!isEditForm" type="text" class="form-control" name="createdBy" [(ngModel)]="leadDetails.createdBy"
-                      #createdBy="ngModel" />
-                    @if(createdBy?.errors?.['required'] && createdBy?.touched) {
-                    <div class="errorMessage">Created By is required</div>
-                    } -->
                     @if(roleType === 'SUPERADMIN') {
-                    <mat-select
-                      [(ngModel)]="leadDetails.createdBy"
-                      class="select custom-mat-select"
-                      name="createdBy"
-                      placeholder="Select Agent Name"
-                      #createdBy="ngModel"
-                    >
-                      <mat-option *ngFor="let user of userList" [value]="user">
+                    <mat-select [(ngModel)]="leadDetails.createdBy" class="select custom-mat-select" name="createdBy"
+                      placeholder="Select Agent Name" #createdBy="ngModel">
+                      <mat-option *ngFor="let user of userForDropDown" [value]="user.loginId">
                         {{ user.firstName }}
                       </mat-option>
                     </mat-select>
                     @if(createdBy?.errors?.['required'] && createdBy?.touched) {
                     <div class="errorMessage">Created By is required</div>
                     } } @else {
-                    <input
-                      [readonly]="!isEditForm"
-                      type="text"
-                      class="form-control"
-                      name="createdBy"
-                      [(ngModel)]="leadDetails.createdBy"
-                      #createdBy="ngModel"
-                      readonly
-                    />
+                    <!-- <input [readonly]="!isEditForm" type="text" class="form-control" name="createdBy"
+                      [(ngModel)]="leadDetails.createdBy" #createdBy="ngModel" readonly />
                     @if(createdBy?.errors?.['required'] && createdBy?.touched) {
                     <div class="errorMessage">Created By is required</div>
-                    } }
+                    } -->
+                    <mat-select [(ngModel)]="leadDetails.createdBy" class="select custom-mat-select" name="createdBy"
+                      placeholder="Select Agent Name" #createdBy="ngModel">
+                      <mat-option *ngFor="let user of userForDropDown" [value]="user.loginId">
+                        {{ user.firstName }} {{ user.lastName }}
+                      </mat-option>
+                    </mat-select>
+                    @if(createdBy?.errors?.['required'] && createdBy?.touched) {
+                    <div class="errorMessage">Created By is required</div>
+                    } 
+                    } 
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
                     <label class="form-label">Status</label>
-                    <!-- <input [readonly]="!isEditForm" type="text" class="form-control" name="status" [(ngModel)]="leadDetails.status" #status="ngModel" />
-                    @if(status?.errors?.['required'] && status?.touched) {
-                    <div class="errorMessage">status is required</div>
-                    } -->
-                    <mat-select
-                      name="status"
-                      [(ngModel)]="leadDetails.status"
-                      class="select"
-                      placeholder="Select Status"
-                    >
+                
+                    <mat-select name="status" [(ngModel)]="leadDetails.status" class="select" placeholder="Select Status">
                       @for (listData of leadStatus; track listData) {
-                      <mat-option [value]="listData.name">
+                      <mat-option [value]="listData.value">
                         {{ listData.name }}
                       </mat-option>
                       }
                     </mat-select>
                   </div>
                 </div>
-              </div>
+                </div>
 
               <div class="card-title-head">
                 <h6>

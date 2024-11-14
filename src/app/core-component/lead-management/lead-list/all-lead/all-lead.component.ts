@@ -22,20 +22,27 @@ import { UserManagementService } from '../../../user-management/user-management.
 import {MatTabsModule} from '@angular/material/tabs';
 import { CookieService } from 'ngx-cookie-service';
 import { Constant } from 'src/app/core/constant/constants';
+import { DatePipe } from '@angular/common';
 
 interface listData {
   value: string;
   name: string;
 }
+
 @Component({
   selector: 'app-all-lead',
   templateUrl: './all-lead.component.html',
   styleUrl: './all-lead.component.scss',
   providers: [MessageService, ToastModule],
 })
+
 export class AllLeadComponent {
   public followupList: any;
   public userForDropDown : any[]=[];
+  public pickLocationList: any[] = [];
+  public dropLocationList: any[] = [];
+  filteredPickLocationList: any[] =[];
+  filteredDropLocationList: any[] =[];
 
   public routes = routes;
 
@@ -47,15 +54,11 @@ export class AllLeadComponent {
   public subCategoryList: Array<any> = [];
   public pageSize = 10;
   public serialNumberArray: Array<number> = [];
-  public pickLocationList: any[] = [];
-  public dropLocationList: any[] = [];
-  filteredPickLocationList: any[] =[];
-  filteredDropLocationList: any[] =[];
-  roleType: string = '';
   public totalData = 0;
   showFilter = false;
   dataSource!: MatTableDataSource<users>;
   public searchDataValue = '';
+  roleType: string = '';
   //** / pagination variables
   viewLeadDetailsDialog: any;
   firstDate: any = '';
@@ -65,8 +68,8 @@ export class AllLeadComponent {
     superCategory: '',
     category: '',
     subCategory: '',
-    pickUpDateTime: '',
-    pickUpLocation: '',
+    pickupDateTime: '',
+    pickupLocation: '',
     dropDateTime: '',
     dropLocation: '',
     totalDays: '',
@@ -99,17 +102,24 @@ export class AllLeadComponent {
     records: '',
     remarks: '',
     reminderDate: '',
+    // leadStatus:'',
   };
   isEditForm: boolean = false;
   filteredCategoryTypeList: any[] = [];
   filteredSuperCategoryList: any[] = [];
   filteredCategoryList: any[] = [];
   filteredSubCategoryList: any[] = [];
+
+  allIds = {
+    superCategoryId: '',
+    categoryTypeId: '',
+  }
+
+  
   public userList: any[] = [];
   leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
   leadType: listData[] = Constant.LEAD_TYPE_LIST;
   leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
-
   constructor(
     private data: DataService,
     private pagination: PaginationService,
@@ -122,17 +132,21 @@ export class AllLeadComponent {
     private categoriesManagementService: CategoriesManagementService,
     private userManagementService: UserManagementService,
     private cookieService: CookieService,
-  ) {
-    this.roleType = this.cookieService.get('roleType');
-  }
+    private datePipe: DatePipe
+  ) {}
 
   ngOnInit() {
     this.getAllLeadList();
-    this.getUserList();
     this.getUserListForDropDown();
     this.getCategoryType();
-
+    this.getPickLocation();
+    this.getDropLocation();
     
+  }
+
+  downloadInvoice(receiptNo : string) {
+    window.open(Constant.Site_Url+"paymentreceipt/"+receiptNo, '_blank');
+    // console.log(Constant.Site_Url+"paymentreceipt/"+receiptNo);
   }
 
   // getAllLeadList() {
@@ -162,24 +176,7 @@ export class AllLeadComponent {
     });
   }
 
-  public getUserList() {
-    this.userManagementService.getUserDetailsList().subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.userList = JSON.parse(JSON.stringify(response.listPayload));
-        }
-      },
-      error: (error: any) =>
-        this.messageService.add({
-          summary: '500',
-          detail: 'Server Error',
-          styleClass: 'danger-background-popover',
-        }),
-    });
-  }
-
   onAgentSelectionChange(dd:any){
-    alert(dd)
     this.leadManagementService.getAllLeadList('AGENT').subscribe((apiRes: any) => {
       this.setTableData(apiRes);
     });
@@ -276,32 +273,56 @@ export class AllLeadComponent {
       );
     });
   }
+
+  setDateTime(date: any): string {
+    // const currentDate = new Date(date);
+  
+    // const year = currentDate.getFullYear();
+    // const month = String(currentDate.getMonth() + 1).padStart(2, '0');  // Months are zero-indexed
+    // const day = String(currentDate.getDate()).padStart(2, '0');
+    // const hours = String(currentDate.getHours()).padStart(2, '0');
+    // const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+
+    // const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+    const currentDate = new Date(date);
+
+    // Adjust to local time zone
+    const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; // offset in milliseconds
+    const localDate = new Date(currentDate.getTime() - timeZoneOffset);
+
+    // Round minutes to the nearest 15-minute interval
+    const minutes = localDate.getMinutes();
+    const roundedMinutes = Math.ceil(minutes / 15) * 15;
+    localDate.setMinutes(roundedMinutes);
+    localDate.setSeconds(0);
+    localDate.setMilliseconds(0);
+
+    // Format the date to the required input format: YYYY-MM-DDTHH:MM
+    const year = localDate.getFullYear();
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const hours = String(localDate.getHours()).padStart(2, '0');
+    const minutesFormatted = String(localDate.getMinutes()).padStart(2, '0');
+
+    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutesFormatted}`;
+
+    return formattedDateTime;
+  }
+
   saveLeadData(rawData: any) {
-    const pickup = new Date(rawData?.pickupDateTime);
-    const drop = new Date(rawData?.dropDateTime);
-    const pickupDateTime = `${this.helper.addZeroInDateTime(
-      pickup.getDate()
-    )}-${this.helper.addZeroInDateTime(
-      pickup.getMonth() + 1
-    )}-${pickup.getFullYear()} ${this.helper.addZeroInDateTime(
-      pickup.getHours()
-    )}:${pickup.getMinutes()}`;
-    const dropDateTime = `${this.helper.addZeroInDateTime(
-      drop.getDate()
-    )}-${this.helper.addZeroInDateTime(
-      drop.getMonth() + 1
-    )}-${drop.getFullYear()} ${this.helper.addZeroInDateTime(
-      drop.getHours()
-    )}:${drop.getMinutes()}`;
     this.leadDetails = {
       categoryType: rawData?.categoryTypeName,
       superCategory: rawData?.superCategory,
       category: rawData?.category,
       subCategory: rawData?.subCategory,
-      pickUpDateTime: pickupDateTime,
-      pickUpLocation: rawData?.pickupLocation,
-      dropDateTime: dropDateTime,
+      pickupDateTime: this.setDateTime(rawData?.pickupDateTime),
+      pickupLocation: rawData?.pickupLocation,
+      pickupPoint: rawData?.pickupPoint,
+      dropDateTime: this.setDateTime(rawData?.dropDateTime),
+      // dropDateTime: this.datePipe.transform(rawData?.dropDateTime, 'yyyy-MM-ddTHH:mm');
       dropLocation: rawData?.dropLocation,
+      dropPoint: rawData?.dropPoint,
       totalDays: rawData?.totalDays,
       quantity: rawData?.quantity,
       vendorRate: rawData?.vendorRate,
@@ -322,17 +343,27 @@ export class AllLeadComponent {
       id: rawData?.id,
       companyName: rawData?.companyName,
       enquirySource: rawData?.enquirySource,
-      pickupPoint: rawData?.pickupPoint,
-      dropPoint: rawData?.dropPoint,
       status: rawData?.status,
       leadOrigine: rawData?.leadOrigine,
       leadType: rawData?.leadType,
       createdBy: rawData?.createdBy,
       notes: rawData?.notes,
-      records: '',
-      remarks: '',
-      reminderDate: '',
+      records: rawData?.records,
+      remarks: rawData?.remarks,
+      reminderDate: rawData?.reminderDate,
     };
+
+    this.getCategoryType();
+
+    const superCategory = this.categoryTypeList.find(item => item.categoryTypeName === this.leadDetails.categoryType);
+    this.getSuperCategory(superCategory.id);
+    this.allIds.superCategoryId = superCategory.id;
+
+   // const category = this.superCategoryList.find(item => item.superCategory === this.leadDetails.superCategory);
+  //  alert("superCategory "+this.leadDetails.superCategory +"category id "+this.superCategoryList);
+    //this.getCategory(category.id)
+          
+
   }
 
   async copyData(data: any, idx: number) {
@@ -353,14 +384,56 @@ export class AllLeadComponent {
     this.tableData[idx]['isDataCopied'] = val;
   }
 
+
+  public getPickLocation() {
+    this.categoriesManagementService.getLocationByType('PICK').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.pickLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredPickLocationList = this.pickLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+
+  public getDropLocation() {
+    this.categoriesManagementService.getLocationByType('DROP').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.dropLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredDropLocationList = this.dropLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+
   public getCategoryType() {
+// alert("getCategoryType ");
     this.categoriesManagementService.getCategoryTypeList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
-          this.categoryTypeList = JSON.parse(
-            JSON.stringify(response.listPayload)
-          );
+          this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
           this.filteredCategoryTypeList = this.categoryTypeList;
+
+    // const superCategory = this.categoryTypeList.find(item => item.categoryTypeName === this.leadDetails.categoryType);
+    // this.getSuperCategory(superCategory.id);
+    // this.allIds.categoryTypeId = superCategory.id
         }
       },
       error: (error: any) =>
@@ -394,6 +467,7 @@ export class AllLeadComponent {
           }),
       });
   }
+  
 
   public getCategory(categoryId: any) {
     //const superCatId = categoryId?.id;
@@ -419,15 +493,17 @@ export class AllLeadComponent {
   }
 
   public getSubCategory(subCategoryId: any) {
-    const categoryId = subCategoryId?.id;
-    this.categoriesManagementService
-      .getSubCategoryListByCatId(categoryId)
+    // const categoryId = subCategoryId?.id;
+    // alert("enter into getSubCategory")
+    this.categoriesManagementService.getSubCategoryListByCatId(subCategoryId)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.subCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.subCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+            this.subCategoryList.forEach(subCategory => {
+              console.log(subCategory); // Access each item
+              // You can perform actions on each subCategory here
+            });
             this.filteredSubCategoryList = this.subCategoryList;
           }
         },

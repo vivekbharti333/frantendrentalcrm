@@ -10,6 +10,7 @@ import { SpinnerService } from 'src/app/core/core.index';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
 import { UserManagementService } from 'src/app/core-component/user-management/user-management.service';
 import { CookieService } from 'ngx-cookie-service';
+import { CalendarModule } from 'primeng/calendar';
 
 interface data {
   id: number;
@@ -30,7 +31,7 @@ interface listData {
   selector: 'app-create-lead',
   templateUrl: './create-lead.component.html',
   styleUrl: './create-lead.component.scss',
-  providers: [MessageService, ToastModule],
+  providers: [MessageService, ToastModule, CalendarModule],
 })
 export class CreateLeadComponent {
   public loginUser: any;
@@ -42,21 +43,22 @@ export class CreateLeadComponent {
   public pickLocationList: any[] = [];
   public dropLocationList: any[] = [];
   public userList: any[] = [];
+
+  selectedDateTime: string = '';
+
   roleType: string = '';
   fullName: string = '';
   lead = {
-    // bookingId: '',
     companyName: 'Notes',
     enquirySource: 'Call',
     categoryTypeId: '',
     superCategoryId: '',
     categoryId: '',
     subCategoryId: '',
-
-    categoryTypeName: '', // Need to add in payload
-    superCategory: '', //
-    category: '', //
-    subCategory: '', //
+    categoryTypeName: '', 
+    superCategory: '', 
+    category: '', 
+    subCategory: '', 
     itemName: '',
     pickupDateTime: '',
     pickupLocation: '',
@@ -71,6 +73,8 @@ export class CreateLeadComponent {
     customerEmailId: '',
     totalDays: '',
     quantity: '',
+    childrenQuantity: '',
+    infantQuantity: '',
     vendorRate: '',
     payToVendor: '',
     companyRate: '',
@@ -81,7 +85,6 @@ export class CreateLeadComponent {
     securityAmount: '',
     deliveryAmountToCompany: '',
     deliveryAmountToVendor: '',
-    // vendorName: '',
     status: '',
     leadOrigine: '',
     leadType: '',
@@ -97,6 +100,9 @@ export class CreateLeadComponent {
     reminderDate: '',
     records: '',
   };
+
+  public isActivities:Boolean = false;
+
   filteredCategoryTypeList: any[] = [];
   filteredSuperCategoryList: any[] = [];
   filteredCategoryList: any[] = [];
@@ -120,9 +126,52 @@ export class CreateLeadComponent {
       this.cookiesService.get('firstName') +
       ' ' +
       this.cookiesService.get('lastName');
+
+      this.setDefaultDateTime();
+  }
+
+  setDefaultDateTime1(): void {
+    const currentDate = new Date();
+
+    // Adjust to local time zone
+    const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; // offset in milliseconds
+    const localDate = new Date(currentDate.getTime() - timeZoneOffset);
+
+    // Round minutes to the nearest 15-minute interval
+    const minutes = localDate.getMinutes();
+    const roundedMinutes = Math.ceil(minutes / 15) * 15;
+    localDate.setMinutes(roundedMinutes);
+    localDate.setSeconds(0);
+    localDate.setMilliseconds(0);
+
+    // Format the date to the required input format: YYYY-MM-DDTHH:MM
+    const year = localDate.getFullYear();
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const hours = String(localDate.getHours()).padStart(2, '0');
+    const minutesFormatted = String(localDate.getMinutes()).padStart(2, '0');
+
+    this.selectedDateTime = `${year}-${month}-${day}T${hours}:${minutesFormatted}`;
+  }
+
+  setDefaultDateTime(): void {
+    const currentDate = new Date();
+  
+    // Get the local date and time values
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');  // Months are zero-indexed
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+  
+    // Combine into the required format: YYYY-MM-DDTHH:MM
+    // this.selectedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    this.lead.dropDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    this.lead.pickupDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
   ngOnInit() {
+    this.setDefaultDateTime();
     this.getCategoryType();
     this.getUserList();
     this.getPickLocation();
@@ -130,6 +179,19 @@ export class CreateLeadComponent {
     this.roleType === 'SUPERADMIN'
       ? (this.lead.createdBy = '')
       : (this.lead.createdBy = this.fullName);
+
+      // if (this.filteredPickLocationList.length > 0) {
+      //   this.lead.pickupLocation = this.filteredPickLocationList[0];
+      // }
+  }
+
+  checkCategoryType(categoryType: any) {
+    console.log(categoryType.categoryTypeName, Constant.ACTIVITY); // For debugging
+    if (categoryType.categoryTypeName === Constant.ACTIVITY) {
+      this.isActivities = true;
+    } else {
+      this.isActivities = false;
+    }
   }
 
   onSelectionChange(event: Event): void {
@@ -172,13 +234,13 @@ export class CreateLeadComponent {
   leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
   submitLeadForm(form: NgForm) {
-    alert(this.lead.categoryTypeId);
-    alert(this.lead.categoryTypeName);
     this.leadManagementService.saveLeadDetails(this.lead).subscribe({
       next: (response: any) => {
+        alert("response : "+response.responseCode);
         if (response['responseCode'] == '200') {
           if (response['payload']['respCode'] == '200') {
             form.reset();
+            this.setDefaultDateTime();
             this.messageService.add({
               summary: response['payload']['respCode'],
               detail: response['payload']['respMesg'],
@@ -272,6 +334,7 @@ export class CreateLeadComponent {
   }
 
   public getSuperCategory(superCateId: any) {
+    this.checkCategoryType(superCateId);
     const categoryId = superCateId?.id;
     this.categoriesManagementService
       .getSuperCategoryListByCategoryTypeId(categoryId)
