@@ -201,6 +201,21 @@ export class LeadManagementService {
     return payload;
   }
 
+  changeLeadStatus(lead: any): Observable<any> {
+    const request: any = {
+      payload: {
+        requestedFor: 'ALL',
+        id: lead.id,
+        status: lead.status,
+        token: this.cookieService.get('token'),
+        loginId: this.cookieService.get('loginId'),
+        adminId: this.cookieService.get('adminId'),
+        superadminId: this.cookieService.get('superadminId'),
+      },
+    };
+    return this.http.post<any>(Constant.Site_Url + 'changeLeadStatus', request);
+  }
+
   getFollowupOneList(): Observable<any> {
     const roleType = this.cookieService.get('roleType');
     let requestPayload: any = {

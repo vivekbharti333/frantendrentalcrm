@@ -594,4 +594,26 @@ export class AllLeadComponent {
         }),
     });
   }
+
+
+  getBadgeClass(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'enquiry':
+        return 'badge-linesuccess';
+      case 'lost':
+        return 'badge-linedanger';
+      case 'info':
+        return 'badge-lineinfo';
+      case 'followup':
+        return 'badge-linewarning';
+      case 'win':
+        return 'badge-linewin';
+      case 'assigned':
+        return 'badge-lineassigned';
+      case 'reserved':
+        return 'badge-linereserved';
+      default:
+        return 'badge-default'; // Default class if no match
+    }
+  }
 }

@@ -147,7 +147,13 @@
                 <td>{{ data.customerMobile }}</td>
                 <td>{{ data.createdBy }}</td>
                 <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
-                <td>{{ data.status }}</td>
+                <!-- <td>{{ data.status }}</td> -->
+                <td>
+                  <button class="badge-button" [ngClass]="getBadgeClass(data.status)">
+                    {{ data.status }}
+                  </button>
+                </td>
+                
 
                 <td class="action-table-data">
                   <div class="edit-delete-action">

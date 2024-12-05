@@ -22,6 +22,11 @@ import { CategoriesManagementService } from 'src/app/core-component/categories-m
 import { Constant } from 'src/app/core/constant/constants';
 import { UserManagementService } from '../../../user-management/user-management.service';
 
+interface listData {
+  value: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-enquiry',
   templateUrl: './enquiry.component.html',
@@ -33,6 +38,8 @@ export class EnquiryComponent {
   public userForDropDown : any[]=[];
 
   public routes = routes;
+
+  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
   // pagination variables
   public tableData: Array<any> = [];
@@ -48,6 +55,7 @@ export class EnquiryComponent {
   public searchDataValue = '';
   //** / pagination variables
   viewEnquiryDetailsDialog: any;
+  viewChangeStatusDialog: any;
   enquiryDetails = {
     categoryType: '',
     superCategory: '',
@@ -205,16 +213,21 @@ alert(dd)
     this.filter = !this.filter;
   }
 
-  async openEditModal(
-    templateRef: TemplateRef<any>,
-    rawData: any,
-    isEditable: boolean
-  ) {
+  async openEditModal( templateRef: TemplateRef<any>, rawData: any, isEditable: boolean ) {
     this.isEditForm = isEditable;
     await this.getDropdownOnEditModal(rawData);
     this.saveEnquiryData(rawData);
     this.viewEnquiryDetailsDialog = this.dialog.open(templateRef, {
       width: '80%',
+    });
+  }
+
+  async openChangeStatusModal( templateRef: TemplateRef<any>, rawData: any, isEditable: boolean ) {
+    this.isEditForm = isEditable;
+    await this.getDropdownOnEditModal(rawData);
+    this.saveEnquiryData(rawData);
+    this.viewChangeStatusDialog = this.dialog.open(templateRef, {
+      width: '40%',
     });
   }
 
@@ -251,6 +264,7 @@ alert(dd)
       );
     });
   }
+
 
   saveEnquiryData(rawData: any) {
     const pickup = new Date(rawData?.pickupDateTime);
@@ -446,6 +460,43 @@ alert(dd)
           if (response['responseCode'] == '200') {
             if (response['payload']['respCode'] == '200') {
               // form.reset();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+            } else {
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        },
+        error: () =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
+  }
+
+  changeLeadStatus() {
+    this.viewChangeStatusDialog.close();
+  
+    this.leadManagementService.changeLeadStatus(this.enquiryDetails)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              this.getEnquiryList();
               this.messageService.add({
                 summary: response['payload']['respCode'],
                 detail: response['payload']['respMesg'],

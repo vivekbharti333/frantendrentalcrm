@@ -22,6 +22,11 @@ import { CategoriesManagementService } from 'src/app/core-component/categories-m
 import { Constant } from 'src/app/core/constant/constants';
 import { UserManagementService } from '../../../user-management/user-management.service';
 
+interface listData {
+  value: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-reserved',
   templateUrl: './reserved.component.html',
@@ -33,6 +38,8 @@ export class ReservedComponent {
   public userForDropDown : any[]=[];
 
   public routes = routes;
+  viewChangeStatusDialog: any;
+  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
   // pagination variables
   public tableData: Array<any> = [];
@@ -308,6 +315,15 @@ alert(dd)
     };
   }
 
+  async openChangeStatusModal( templateRef: TemplateRef<any>, rawData: any, isEditable: boolean ) {
+    this.isEditForm = isEditable;
+    await this.getDropdownOnEditModal(rawData);
+    this.saveReservedData(rawData);
+    this.viewChangeStatusDialog = this.dialog.open(templateRef, {
+      width: '40%',
+    });
+  }
+
   async copyData(data: any, idx: number) {
     this.saveReservedData(data);
     this.helper.copyData(this.reservedDetails);
@@ -446,6 +462,43 @@ alert(dd)
           if (response['responseCode'] == '200') {
             if (response['payload']['respCode'] == '200') {
               // form.reset();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+            } else {
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        },
+        error: () =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
+  }
+
+  changeLeadStatus() {
+    this.viewChangeStatusDialog.close();
+  
+    this.leadManagementService.changeLeadStatus(this.reservedDetails)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              this.getAllReservedList();
               this.messageService.add({
                 summary: response['payload']['respCode'],
                 detail: response['payload']['respMesg'],

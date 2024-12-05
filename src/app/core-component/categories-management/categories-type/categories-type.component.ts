@@ -105,10 +105,6 @@ export class CategoriesTypeComponent {
         next: (response: any) => {
           if (response['responseCode'] == '200') {
             if (response['payload']['respCode'] == '200') {
-              // alert(response['payload']['respMesg']);
-              //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
-              // this.user;
-              // this.modalInstance.hide();
               this.addCategoryTypeDialog.close();
               this.messageService.add({
                 summary: response['payload']['respCode'],

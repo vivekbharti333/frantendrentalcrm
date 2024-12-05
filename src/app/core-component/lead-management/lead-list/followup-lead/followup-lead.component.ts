@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
@@ -22,6 +22,12 @@ import { CategoriesManagementService } from 'src/app/core-component/categories-m
 import { Constant } from 'src/app/core/constant/constants';
 import { UserManagementService } from '../../../user-management/user-management.service';
 
+
+interface listData {
+  value: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-followup-lead',
   templateUrl: './followup-lead.component.html',
@@ -33,6 +39,8 @@ export class FollowupLeadComponent {
   public userForDropDown: any[] = [];
 
   public routes = routes;
+  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
+
   firstDate: any = '';
   lastDate: any = '';
 
@@ -48,6 +56,46 @@ export class FollowupLeadComponent {
   showFilter = false;
   dataSource!: MatTableDataSource<users>;
   public searchDataValue = '';
+
+  isEditForm: boolean = false;
+  viewChangeStatusDialog: any;
+  followupDetails = {
+    categoryType: '',
+    superCategory: '',
+    category: '',
+    subCategory: '',
+    pickUpDateTime: '',
+    pickUpLocation: '',
+    dropDateTime: '',
+    dropLocation: '',
+    totalDays: '',
+    quantity: '',
+    vendorRate: '',
+    companyRate: '',
+    bookingAmount: '',
+    balanceAmount: '',
+    totalAmount: '',
+    securityAmount: '',
+    payToVendor: '',
+    payToCompany: '',
+    deliveryToCompany: '',
+    deliveryToVendor: '',
+    customerName: '',
+    dialCode: '',
+    mobile: '',
+    alternateMobile: '',
+    emailId: '',
+    id: '',
+    companyName: '',
+    enquirySource: '',
+    pickupPoint: '',
+    dropPoint: '',
+    status: '',
+    leadOrigine: '',
+    leadType: '',
+    createdBy: '',
+    notes: '',
+  };
 
 
 
@@ -93,25 +141,136 @@ export class FollowupLeadComponent {
     alert(dd)
   }
 
-  onTabClick() {
-    console.log('Tab clicked!');
-    alert('Tab clicked!');
-    // Add your logic here
+
+
+
+  setFollowupData(rawData: any) {
+    const pickup = new Date(rawData?.pickupDateTime);
+    const drop = new Date(rawData?.dropDateTime);
+    const pickupDateTime = `${this.helper.addZeroInDateTime(
+      pickup.getDate()
+    )}-${this.helper.addZeroInDateTime(
+      pickup.getMonth() + 1
+    )}-${pickup.getFullYear()} ${this.helper.addZeroInDateTime(
+      pickup.getHours()
+    )}:${pickup.getMinutes()}`;
+    const dropDateTime = `${this.helper.addZeroInDateTime(
+      drop.getDate()
+    )}-${this.helper.addZeroInDateTime(
+      drop.getMonth() + 1
+    )}-${drop.getFullYear()} ${this.helper.addZeroInDateTime(
+      drop.getHours()
+    )}:${drop.getMinutes()}`;
+    this.followupDetails = {
+      categoryType: rawData?.categoryTypeName,
+      superCategory: rawData?.superCategory,
+      category: rawData?.category,
+      subCategory: rawData?.subCategory,
+      pickUpDateTime: pickupDateTime,
+      pickUpLocation: rawData?.pickupLocation,
+      dropDateTime: dropDateTime,
+      dropLocation: rawData?.dropLocation,
+      totalDays: rawData?.totalDays,
+      quantity: rawData?.quantity,
+      vendorRate: rawData?.vendorRate,
+      companyRate: rawData?.companyRate,
+      bookingAmount: rawData?.bookingAmount,
+      balanceAmount: rawData?.balanceAmount,
+      totalAmount: rawData?.totalAmount,
+      securityAmount: rawData?.securityAmount,
+      payToVendor: rawData?.payToVendor,
+      payToCompany: rawData?.payToCompany,
+      deliveryToCompany: rawData?.deliveryAmountToCompany,
+      deliveryToVendor: rawData?.deliveryAmountToVendor,
+      customerName: rawData?.customeName,
+      dialCode: rawData?.countryDialCode,
+      mobile: rawData?.customerMobile,
+      alternateMobile: '',
+      emailId: rawData?.customerEmailId,
+      id: rawData?.id,
+      companyName: rawData?.companyName,
+      enquirySource: rawData?.enquirySource,
+      pickupPoint: rawData?.pickupPoint,
+      dropPoint: rawData?.dropPoint,
+      status: rawData?.status,
+      leadOrigine: rawData?.leadOrigine,
+      leadType: rawData?.leadType,
+      createdBy: rawData?.createdBy,
+      notes: rawData?.notes,
+    };
   }
+
 
   getFollowupList1() {
+    // Function to format a Date object as YYYY-MM-DD
+    function formatDate(date: Date): string {
+        let year = date.getFullYear();
+        let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        let day = String(date.getDate()).padStart(2, '0'); // Ensures 2-digit format
+        return `${year}-${month}-${day}`;
+    }
     let currentDate = new Date();
-    let dateString = currentDate.toDateString();
-    let nextDay = currentDate.getDate() + 1;
+    let dateString = formatDate(currentDate); // Format the current date as YYYY-MM-DD
 
-    let nextDate = new Date(currentDate);  // Clone the current date
-    nextDate.setDate(currentDate.getDate() + 1);  // Add 1 day to the current date
-    let nextDayString = nextDate.toDateString();
+    let nextDate = new Date(currentDate); // Clone the current date
+    nextDate.setDate(currentDate.getDate() + 1); // Add 1 day
+    let nextDayString = formatDate(nextDate); // Format the next date as YYYY-MM-DD
 
+    // Call the service with the formatted dates
     this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, dateString, nextDayString).subscribe((apiRes: any) => {
-      this.setTableData(apiRes);
+        this.setTableData(apiRes); // Process the API response
     });
-  }
+}
+
+getFollowupList2() {
+  // Function to format a Date object as YYYY-MM-DD
+  function formatDate(date: Date): string {
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    let day = String(date.getDate()).padStart(2, '0'); // Ensures 2-digit format
+    return `${year}-${month}-${day}`;
+}
+let todayDate = new Date();
+// let dateString = formatDate(todayDate); // Format the current date as YYYY-MM-DD
+
+let firstDate = new Date(todayDate); // Clone the current date
+firstDate.setDate(todayDate.getDate() + 1); // Add 1 day
+let firstDayString = formatDate(firstDate);
+
+let nextDate = new Date(todayDate); // Clone the current date
+nextDate.setDate(todayDate.getDate() + 2); // Add 1 day
+let nextDayString = formatDate(nextDate); // Format the next date as YYYY-MM-DD
+
+// Call the service with the formatted dates
+this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, firstDayString, nextDayString).subscribe((apiRes: any) => {
+    this.setTableData(apiRes); // Process the API response
+});
+}
+
+getFollowupList3() {
+  // Function to format a Date object as YYYY-MM-DD
+  function formatDate(date: Date): string {
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    let day = String(date.getDate()).padStart(2, '0'); // Ensures 2-digit format
+    return `${year}-${month}-${day}`;
+}
+let todayDate = new Date();
+// let dateString = formatDate(todayDate); // Format the current date as YYYY-MM-DD
+
+let firstDate = new Date(todayDate); // Clone the current date
+firstDate.setDate(todayDate.getDate() + 2); // Add 1 day
+let firstDayString = formatDate(firstDate);
+
+let nextDate = new Date(todayDate); // Clone the current date
+nextDate.setDate(todayDate.getDate() + 3); // Add 1 day
+let nextDayString = formatDate(nextDate); // Format the next date as YYYY-MM-DD
+
+// Call the service with the formatted dates
+this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, firstDayString, nextDayString).subscribe((apiRes: any) => {
+    this.setTableData(apiRes); // Process the API response
+});
+}
 
   setTableData(apiRes: any) {
     this.tableData = [];
@@ -166,4 +325,51 @@ export class FollowupLeadComponent {
   openFilter() {
     this.filter = !this.filter;
   }
+
+
+  async openChangeStatusModal( templateRef: TemplateRef<any>, rawData: any, isEditable: boolean ) {
+    this.isEditForm = isEditable;
+    // await this.getDropdownOnEditModal(rawData);
+    this.setFollowupData(rawData);
+    this.viewChangeStatusDialog = this.dialog.open(templateRef, {
+      width: '40%',
+    });
+  }
+
+  changeLeadStatus() {
+    this.viewChangeStatusDialog.close();
+    this.leadManagementService.changeLeadStatus(this.followupDetails)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            if (response['payload']['respCode'] == '200') {
+              // this.getEnquiryList();
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'success-background-popover',
+              });
+            } else {
+              this.messageService.add({
+                summary: response['payload']['respCode'],
+                detail: response['payload']['respMesg'],
+                styleClass: 'danger-background-popover',
+              });
+            }
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        },
+        error: () =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+          }),
+      });
+  }
+  
 }
