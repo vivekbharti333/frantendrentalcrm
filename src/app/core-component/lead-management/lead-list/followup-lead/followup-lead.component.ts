@@ -204,10 +204,10 @@ export class FollowupLeadComponent {
   getFollowupList1() {
     // Function to format a Date object as YYYY-MM-DD
     function formatDate(date: Date): string {
-        let year = date.getFullYear();
-        let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        let day = String(date.getDate()).padStart(2, '0'); // Ensures 2-digit format
-        return `${year}-${month}-${day}`;
+      let year = date.getFullYear();
+      let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+      let day = String(date.getDate()).padStart(2, '0'); // Ensures 2-digit format
+      return `${year}-${month}-${day}`;
     }
     let currentDate = new Date();
     let dateString = formatDate(currentDate); // Format the current date as YYYY-MM-DD
@@ -218,59 +218,60 @@ export class FollowupLeadComponent {
 
     // Call the service with the formatted dates
     this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, dateString, nextDayString).subscribe((apiRes: any) => {
-        this.setTableData(apiRes); // Process the API response
+      this.setTableData(apiRes); // Process the API response
     });
-}
+  }
 
-getFollowupList2() {
-  // Function to format a Date object as YYYY-MM-DD
-  function formatDate(date: Date): string {
-    let year = date.getFullYear();
-    let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    let day = String(date.getDate()).padStart(2, '0'); // Ensures 2-digit format
-    return `${year}-${month}-${day}`;
-}
-let todayDate = new Date();
-// let dateString = formatDate(todayDate); // Format the current date as YYYY-MM-DD
+  getFollowupList2() {
+    // Function to format a Date object as YYYY-MM-DD
+    function formatDate(date: Date): string {
+      let year = date.getFullYear();
+      let month = String(date.getMonth() + 1).padStart(2, '0');
+      let day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    let todayDate = new Date();
 
-let firstDate = new Date(todayDate); // Clone the current date
-firstDate.setDate(todayDate.getDate() + 1); // Add 1 day
-let firstDayString = formatDate(firstDate);
+    let firstDate = new Date(todayDate);
+    firstDate.setDate(todayDate.getDate() - 1);
+    let firstDayString = formatDate(firstDate);
 
-let nextDate = new Date(todayDate); // Clone the current date
-nextDate.setDate(todayDate.getDate() + 2); // Add 1 day
-let nextDayString = formatDate(nextDate); // Format the next date as YYYY-MM-DD
+    let lastDate = new Date(todayDate);
+    lastDate.setDate(todayDate.getDate());
+    let lastDayString = formatDate(lastDate);
 
-// Call the service with the formatted dates
-this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, firstDayString, nextDayString).subscribe((apiRes: any) => {
-    this.setTableData(apiRes); // Process the API response
-});
-}
+    // Call the service with the formatted dates
+    this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, firstDayString, lastDayString).subscribe((apiRes: any) => {
+      this.setTableData(apiRes); // Process the API response
+    });
+  }
 
-getFollowupList3() {
-  // Function to format a Date object as YYYY-MM-DD
-  function formatDate(date: Date): string {
-    let year = date.getFullYear();
-    let month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    let day = String(date.getDate()).padStart(2, '0'); // Ensures 2-digit format
-    return `${year}-${month}-${day}`;
-}
-let todayDate = new Date();
-// let dateString = formatDate(todayDate); // Format the current date as YYYY-MM-DD
 
-let firstDate = new Date(todayDate); // Clone the current date
-firstDate.setDate(todayDate.getDate() + 2); // Add 1 day
-let firstDayString = formatDate(firstDate);
+  getFollowupList3() {
+    // Function to format a Date object as YYYY-MM-DD
+    function formatDate(date: Date): string {
+      let year = date.getFullYear();
+      let month = String(date.getMonth() + 1).padStart(2, '0');
+      let day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    let todayDate = new Date();
 
-let nextDate = new Date(todayDate); // Clone the current date
-nextDate.setDate(todayDate.getDate() + 3); // Add 1 day
-let nextDayString = formatDate(nextDate); // Format the next date as YYYY-MM-DD
+    let firstDate = new Date(todayDate);
+    firstDate.setDate(todayDate.getDate() - 2);
+    let firstDayString = formatDate(firstDate);
 
-// Call the service with the formatted dates
-this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, firstDayString, nextDayString).subscribe((apiRes: any) => {
-    this.setTableData(apiRes); // Process the API response
-});
-}
+    let lastDate = new Date(todayDate);
+    lastDate.setDate(todayDate.getDate() -1 );
+    let lastDayString = formatDate(lastDate);
+
+    // Call the service with the formatted dates
+    this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, firstDayString, lastDayString).subscribe((apiRes: any) => {
+      this.setTableData(apiRes); // Process the API response
+    });
+  }
+
+
 
   setTableData(apiRes: any) {
     this.tableData = [];
@@ -327,7 +328,7 @@ this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, firstDayString, 
   }
 
 
-  async openChangeStatusModal( templateRef: TemplateRef<any>, rawData: any, isEditable: boolean ) {
+  async openChangeStatusModal(templateRef: TemplateRef<any>, rawData: any, isEditable: boolean) {
     this.isEditForm = isEditable;
     // await this.getDropdownOnEditModal(rawData);
     this.setFollowupData(rawData);
@@ -371,5 +372,5 @@ this.leadManagementService.getLeadListByDate(Constant.FOLLOWUP, firstDayString, 
           }),
       });
   }
-  
+
 }

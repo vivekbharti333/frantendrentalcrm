@@ -135,16 +135,28 @@
                   {{ data }}
                 </mat-option>
               </mat-select>
-              <!-- <mat-select name="permissions" [(ngModel)]="user.permissions" multiple [ngModelOptions]="{standalone: true}"
-                class="select" placeholder="Male">
-                @for (data of permissionsList; track data) {
-                  <mat-option [value]="data.value">
-                    {{data.name}}
-                  </mat-option> 
-                }
-              </mat-select>  -->
             </div>
-          </div>
+          </div> 
+
+          <!-- <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+              <label class="form-label">Permission</label>
+              <mat-select 
+                name="permissions" 
+                [(ngModel)]="user.permissions" 
+                multiple 
+                [ngModelOptions]="{standalone: true}" 
+                class="select"  
+                placeholder="Select User Permission">
+                <mat-option 
+                  *ngFor="let data of permissionsList" 
+                  [value]="data" 
+                  [ngClass]="{'selected-item': user.permissions?.includes(data)}">
+                  {{ data }}
+                </mat-option>
+              </mat-select>
+            </div>
+          </div> -->
 
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
@@ -155,7 +167,6 @@
           <div class="col-lg-4 col-md-6" *ngIf="!teamLeaderFielShow">
             <div class="mb-3">
               <label class="form-label">Team Leader</label>
-              <!-- <input type="text" class="form-control" name="teamleaderId" [(ngModel)]="user.teamleaderId" required> -->
               <mat-select name="permissions" [(ngModel)]="user.teamleaderId" multiple [ngModelOptions]="{standalone: true}"
                 class="select" placeholder="Select Team Leader">
                 @for (dropDownUser of userForDropDown; track dropDownUser) {

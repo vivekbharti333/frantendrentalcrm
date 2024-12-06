@@ -17,21 +17,13 @@
       </div>
     </li>
     <li>
-      <a
-        (click)="toggleCollapse()"
-        data-bs-toggle="tooltip"
-        data-bs-placement="top"
-        title="Collapse"
-        id="collapse-header"
-        matTooltip="Collapse"
-        matTooltipPosition="above"
-      >
+      <a (click)="toggleCollapse()" data-bs-toggle="tooltip" data-bs-placement="top" title="Collapse"
+        id="collapse-header" matTooltip="Collapse" matTooltipPosition="above">
         @if (!isCollapsed) {
         <i class="feather icon-chevron-up feather-chevron-up"></i>
         } @if (isCollapsed) {
         <i class="feather icon-chevron-down feather-chevron-down"></i>
-        }</a
-      >
+        }</a>
     </li>
   </ul>
 </div>
@@ -49,27 +41,16 @@
         <div class="profile-pic-upload">
           <div class="profile-pic">
             <ng-container *ngIf="!user.userPicture; else showImage">
-              <span
-                ><i class="feather icon-plus-circle plus-down-add"></i> Profile
-                Photo</span
-              >
+              <span><i class="feather icon-plus-circle plus-down-add"></i> Profile
+                Photo</span>
             </ng-container>
             <ng-template #showImage>
-              <img
-                [src]="user.userPicture"
-                alt="Profile Picture"
-                class="uploaded-profile-pic"
-              />
+              <img [src]="user.userPicture" alt="Profile Picture" class="uploaded-profile-pic" />
             </ng-template>
           </div>
           <div class="input-blocks mb-0">
             <div class="image-upload mb-0">
-              <input
-                type="file"
-                class="form-control"
-                id="userPicture"
-                (change)="onFileSelected($event)"
-              />
+              <input type="file" class="form-control" id="userPicture" (change)="onFileSelected($event)" />
               <div class="image-uploads">
                 <h4>Change Image</h4>
               </div>
@@ -80,32 +61,20 @@
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label requiredField">First Name</label>
-              <input
-                type="text"
-                class="form-control"
-                name="firstName"
-                [(ngModel)]="user.firstName"
-                required
-                #firstName="ngModel"
-              />
+              <input type="text" class="form-control" name="firstName" [(ngModel)]="user.firstName" required
+                #firstName="ngModel" />
               @if(firstName?.errors?.['required'] && firstName?.touched) {
-                <div class="errorMessage">First Name is required</div>
+              <div class="errorMessage">First Name is required</div>
               }
             </div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label requiredField">Last Name</label>
-              <input
-                type="text"
-                class="form-control"
-                name="lastName"
-                [(ngModel)]="user.lastName"
-                required
-                #lastName="ngModel"
-              />
+              <input type="text" class="form-control" name="lastName" [(ngModel)]="user.lastName" required
+                #lastName="ngModel" />
               @if(lastName?.errors?.['required'] && lastName?.touched) {
-                <div class="errorMessage">Last Name is required</div>
+              <div class="errorMessage">Last Name is required</div>
               }
             </div>
           </div>
@@ -114,13 +83,8 @@
             <div class="input-blocks">
               <div class="input-groupicon calender-input date-input1">
                 <i class="feather icon-calendar info-img"></i>
-                <input
-                  type="date"
-                  class="datetimepicker form-control"
-                  placeholder="Select Date"
-                  name="dob"
-                  [(ngModel)]="user.dob"
-                />
+                <input type="date" class="datetimepicker form-control" placeholder="Select Date" name="dob"
+                  [(ngModel)]="user.dob" />
               </div>
             </div>
           </div>
@@ -128,63 +92,40 @@
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label requiredField">Mobile Number</label>
-              <input
-                type="text"
-                class="form-control"
-                name="mobileNo"
-                [(ngModel)]="user.mobileNo"
-                required
-                #mobileNo="ngModel"
-              />
+              <input type="text" class="form-control" name="mobileNo" [(ngModel)]="user.mobileNo" required
+                #mobileNo="ngModel" />
               @if(mobileNo?.errors?.['required'] && mobileNo?.touched) {
-                <div class="errorMessage">Mobile number is required</div>
+              <div class="errorMessage">Mobile number is required</div>
               } @if(mobileNo?.errors?.['minlength'] && mobileNo?.touched) {
-                <div class="errorMessage">Mobile number should be of 10 digits</div>
+              <div class="errorMessage">Mobile number should be of 10 digits</div>
               }
             </div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label requiredField">Alternate Mobile Number</label>
-              <input
-                type="text"
-                class="form-control"
-                name="alternateMobile"
-                [(ngModel)]="user.alternateMobile"
-                required
-                #alternateMobile="ngModel"
-              />
+              <input type="text" class="form-control" name="alternateMobile" [(ngModel)]="user.alternateMobile" required
+                #alternateMobile="ngModel" />
               @if(alternateMobile?.errors?.['required'] && alternateMobile?.touched) {
-                <div class="errorMessage">Alternate mobile number is required</div>
+              <div class="errorMessage">Alternate mobile number is required</div>
               }
             </div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label requiredField">Email Id</label>
-              <input
-                type="text"
-                class="form-control"
-                name="emailId"
-                [(ngModel)]="user.emailId"
-                required
-                #emailId="ngModel"
-              />
+              <input type="text" class="form-control" name="emailId" [(ngModel)]="user.emailId" required
+                #emailId="ngModel" />
               @if(emailId?.errors?.['required'] && emailId?.touched) {
-                <div class="errorMessage">Email id is required</div>
+              <div class="errorMessage">Email id is required</div>
               }
             </div>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label">Gender</label>
-              <mat-select
-                name="gender"
-                [(ngModel)]="user.gender"
-                [ngModelOptions]="{ standalone: true }"
-                class="select"
-                placeholder="Select Gender"
-              >
+              <mat-select name="gender" [(ngModel)]="user.gender" [ngModelOptions]="{ standalone: true }" class="select"
+                placeholder="Select Gender">
                 @for (data of genderType; track data) {
                 <mat-option [value]="data.name">
                   {{ data.name }}
@@ -196,15 +137,8 @@
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label requiredField">Role</label>
-              <mat-select
-                name="roleType"
-                [(ngModel)]="user.roleType"
-                [ngModelOptions]="{ standalone: true }"
-                class="select"
-                placeholder="Select User Role"
-                required
-                #roleType="ngModel"
-              >
+              <mat-select name="roleType" [(ngModel)]="user.roleType" [ngModelOptions]="{ standalone: true }"
+                class="select" placeholder="Select User Role" required #roleType="ngModel">
                 @for (data of userType; track data) {
                 <mat-option [value]="data.value">
                   {{ data.name }}
@@ -212,7 +146,7 @@
                 }
               </mat-select>
               @if(roleType?.errors?.['required'] && roleType?.touched) {
-                <div class="errorMessage">Role is required</div>
+              <div class="errorMessage">Role is required</div>
               }
             </div>
           </div>
@@ -220,22 +154,15 @@
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label requiredField">Permission</label>
-              <mat-select
-                name="permissions"
-                [(ngModel)]="user.permissions"
-                multiple
-                [ngModelOptions]="{ standalone: true }"
-                class="select"
-                placeholder="Select User Permission"
-                required
-                #permissions="ngModel"
-              >
+              <mat-select name="permissions" [(ngModel)]="user.permissions" multiple
+                [ngModelOptions]="{ standalone: true }" class="select" placeholder="Select User Permission" required
+                #permissions="ngModel">
                 <mat-option *ngFor="let data of permissionsList" [value]="data">
                   {{ data }}
                 </mat-option>
               </mat-select>
               @if(permissions?.errors?.['required'] && permissions?.touched) {
-                <div class="errorMessage">Permission is required</div>
+              <div class="errorMessage">Permission is required</div>
               }
               <!-- <mat-select name="permissions" [(ngModel)]="user.permissions" multiple [ngModelOptions]="{standalone: true}"
                       class="select" placeholder="Male">
@@ -251,16 +178,10 @@
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
               <label class="form-label">Admin</label>
-              <input
-                type="text"
-                class="form-control"
-                name="adminId"
-                [(ngModel)]="user.adminId"
-                required
-                #adminId="ngModel"
-              />
+              <input type="text" class="form-control" name="adminId" [(ngModel)]="user.adminId" required
+                #adminId="ngModel" />
               @if(adminId?.errors?.['required'] && adminId?.touched) {
-                <div class="errorMessage">Admin is required</div>
+              <div class="errorMessage">Admin is required</div>
               }
             </div>
           </div>
@@ -268,14 +189,8 @@
             <div class="mb-3">
               <label class="form-label">Team Leader</label>
               <!-- <input type="text" class="form-control" name="teamleaderId" [(ngModel)]="user.teamleaderId" required> -->
-              <mat-select
-                name="permissions"
-                [(ngModel)]="user.teamleaderId"
-                multiple
-                [ngModelOptions]="{ standalone: true }"
-                class="select"
-                placeholder="Select Team Leader"
-              >
+              <mat-select name="permissions" [(ngModel)]="user.teamleaderId" multiple
+                [ngModelOptions]="{ standalone: true }" class="select" placeholder="Select Team Leader">
                 @for (dropDownUser of userForDropDown; track dropDownUser) {
                 <mat-option [value]="dropDownUser.loginId">
                   {{ dropDownUser.firstName + " " + dropDownUser.lastName }}
@@ -289,116 +204,67 @@
         <div class="other-info">
           <div class="card-title-head">
             <h6>
-              <span><i class="feather icon-info feather-edit"></i></span
-              >Emergency Contact Information
+              <span><i class="feather icon-info feather-edit"></i></span>Emergency Contact Information
             </h6>
           </div>
           <div class="row">
             <div class="col-lg-4 col-md-6">
               <div class="mb-3">
-                <label class="form-label requiredField"
-                  >Emergency Contact Relation 1</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  name="emergencyContactRelation1"
-                  [(ngModel)]="user.emergencyContactRelation1"
-                  required
-                  #emergencyContactRelation1="ngModel"
-                />
+                <label class="form-label requiredField">Emergency Contact Relation 1</label>
+                <input type="text" class="form-control" name="emergencyContactRelation1"
+                  [(ngModel)]="user.emergencyContactRelation1" required #emergencyContactRelation1="ngModel" />
                 @if(emergencyContactRelation1?.errors?.['required'] && emergencyContactRelation1?.touched) {
-                  <div class="errorMessage">Emergency Contact Relation 1 is required</div>
+                <div class="errorMessage">Emergency Contact Relation 1 is required</div>
                 }
               </div>
             </div>
             <div class="col-lg-4 col-md-6">
               <div class="mb-3">
-                <label class="form-label requiredField"
-                  >Emergency Contact Name 1</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  name="emergencyContactName1"
-                  [(ngModel)]="user.emergencyContactName1"
-                  required
-                  #emergencyContactName1="ngModel"
-                />
+                <label class="form-label requiredField">Emergency Contact Name 1</label>
+                <input type="text" class="form-control" name="emergencyContactName1"
+                  [(ngModel)]="user.emergencyContactName1" required #emergencyContactName1="ngModel" />
                 @if(emergencyContactName1?.errors?.['required'] && emergencyContactName1?.touched) {
-                  <div class="errorMessage">Emergency Contact Name 1 is required</div>
+                <div class="errorMessage">Emergency Contact Name 1 is required</div>
                 }
               </div>
             </div>
             <div class="col-lg-4 col-md-6">
               <div class="mb-3">
-                <label class="form-label requiredField"
-                  >Emergency Contact No 1</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  name="emergencyContactNo1"
-                  [(ngModel)]="user.emergencyContactNo1"
-                  required
-                  #emergencyContactNo1="ngModel"
-                />
+                <label class="form-label requiredField">Emergency Contact No 1</label>
+                <input type="text" class="form-control" name="emergencyContactNo1"
+                  [(ngModel)]="user.emergencyContactNo1" required #emergencyContactNo1="ngModel" />
                 @if(emergencyContactNo1?.errors?.['required'] && emergencyContactNo1?.touched) {
-                  <div class="errorMessage">Emergency Contact No 1 is required</div>
+                <div class="errorMessage">Emergency Contact No 1 is required</div>
                 }
               </div>
             </div>
             <div class="col-lg-4 col-md-6">
               <div class="mb-3">
-                <label class="form-label requiredField"
-                  >Emergency Contact Relation 2</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  name="emergencyContactRelation2"
-                  [(ngModel)]="user.emergencyContactRelation2"
-                  required
-                  #emergencyContactRelation2="ngModel"
-                />
+                <label class="form-label requiredField">Emergency Contact Relation 2</label>
+                <input type="text" class="form-control" name="emergencyContactRelation2"
+                  [(ngModel)]="user.emergencyContactRelation2" required #emergencyContactRelation2="ngModel" />
                 @if(emergencyContactRelation2?.errors?.['required'] && emergencyContactRelation2?.touched) {
-                  <div class="errorMessage">Emergency Contact Relation 2 is required</div>
+                <div class="errorMessage">Emergency Contact Relation 2 is required</div>
                 }
               </div>
             </div>
             <div class="col-lg-4 col-md-6">
               <div class="mb-3">
-                <label class="form-label requiredField"
-                  >Emergency Contact Name 2</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  name="emergencyContactName2"
-                  [(ngModel)]="user.emergencyContactName2"
-                  required
-                  #emergencyContactName2="ngModel"
-                />
+                <label class="form-label requiredField">Emergency Contact Name 2</label>
+                <input type="text" class="form-control" name="emergencyContactName2"
+                  [(ngModel)]="user.emergencyContactName2" required #emergencyContactName2="ngModel" />
                 @if(emergencyContactName2?.errors?.['required'] && emergencyContactName2?.touched) {
-                  <div class="errorMessage">Emergency Contact Name 2 is required</div>
+                <div class="errorMessage">Emergency Contact Name 2 is required</div>
                 }
               </div>
             </div>
             <div class="col-lg-4 col-md-6">
               <div class="mb-3">
-                <label class="form-label requiredField"
-                  >Emergency Contact No 2</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  name="emergencyContactNo2"
-                  [(ngModel)]="user.emergencyContactNo2"
-                  required
-                  #emergencyContactNo2="ngModel"
-                />
+                <label class="form-label requiredField">Emergency Contact No 2</label>
+                <input type="text" class="form-control" name="emergencyContactNo2"
+                  [(ngModel)]="user.emergencyContactNo2" required #emergencyContactNo2="ngModel" />
                 @if(emergencyContactNo2?.errors?.['required'] && emergencyContactNo2?.touched) {
-                  <div class="errorMessage">Emergency Contact No 2 is required</div>
+                <div class="errorMessage">Emergency Contact No 2 is required</div>
                 }
               </div>
             </div>
@@ -410,12 +276,10 @@
             <div class="card-title-head">
               <!-- <h6><span><i class="feather icon-info feather-edit"></i></span>Address</h6> -->
               <h6 *ngIf="i === 0">
-                <span><i class="feather icon-info feather-edit"></i></span
-                >Current Address
+                <span><i class="feather icon-info feather-edit"></i></span>Current Address
               </h6>
               <h6 *ngIf="i === 1">
-                <span><i class="feather icon-info feather-edit"></i></span
-                >Parmanent Address
+                <span><i class="feather icon-info feather-edit"></i></span>Parmanent Address
               </h6>
             </div>
 
@@ -424,108 +288,51 @@
               <div class="row">
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label
-                      class="form-label"
-                      for="addressLine{{ i }}"
-                      >Address Line</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="addressLine{{ i }}"
-                      name="addressLine{{ i }}"
-                      [(ngModel)]="address.addressLine"
-                    />
+                    <label class="form-label" for="addressLine{{ i }}">Address Line</label>
+                    <input type="text" class="form-control" id="addressLine{{ i }}" name="addressLine{{ i }}"
+                      [(ngModel)]="address.addressLine" />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label
-                      class="form-label"
-                      for="landmark{{ i }}"
-                      >Landmark</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="landmark{{ i }}"
-                      name="landmark{{ i }}"
-                      [(ngModel)]="address.landmark"
-                    />
+                    <label class="form-label" for="landmark{{ i }}">Landmark</label>
+                    <input type="text" class="form-control" id="landmark{{ i }}" name="landmark{{ i }}"
+                      [(ngModel)]="address.landmark" />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label
-                      class="form-label"
-                      for="district{{ i }}"
-                      >District</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="district{{ i }}"
-                      name="district{{ i }}"
-                      [(ngModel)]="address.district"
-                    />
+                    <label class="form-label" for="district{{ i }}">District</label>
+                    <input type="text" class="form-control" id="district{{ i }}" name="district{{ i }}"
+                      [(ngModel)]="address.district" />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label" for="city{{ i }}"
-                      >City</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="city{{ i }}"
-                      name="city{{ i }}"
-                      [(ngModel)]="address.city"
-                    />
+                    <label class="form-label" for="city{{ i }}">City</label>
+                    <input type="text" class="form-control" id="city{{ i }}" name="city{{ i }}"
+                      [(ngModel)]="address.city" />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label" for="state{{ i }}"
-                      >State</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="state{{ i }}"
-                      name="state{{ i }}"
-                      [(ngModel)]="address.state"
-                    />
+                    <label class="form-label" for="state{{ i }}">State</label>
+                    <input type="text" class="form-control" id="state{{ i }}" name="state{{ i }}"
+                      [(ngModel)]="address.state" />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label" for="country{{ i }}"
-                      >Country</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="country{{ i }}"
-                      name="country{{ i }}"
-                      [(ngModel)]="address.country"
-                      value="INDIA"
-                      readonly
-                    />
+                    <label class="form-label" for="country{{ i }}">Country</label>
+                    <input type="text" class="form-control" id="country{{ i }}" name="country{{ i }}"
+                      [(ngModel)]="address.country" value="INDIA" readonly />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label" for="pincode{{ i }}"
-                      >Pincode</label
-                    >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="pincode{{ i }}"
-                      name="pincode{{ i }}"
-                      [(ngModel)]="address.pincode"
-                    />
+                    <label class="form-label" for="pincode{{ i }}">Pincode</label>
+                    <input type="text" class="form-control" id="pincode{{ i }}" name="pincode{{ i }}"
+                      [(ngModel)]="address.pincode" />
                   </div>
                 </div>
               </div>
@@ -537,11 +344,7 @@
   </div>
 
   <div class="text-end mb-3">
-    <button
-      type="submit"
-      class="btn btn-submit"
-      [disabled]="!userForm.form.valid"
-    >
+    <button type="submit" class="btn btn-submit" [disabled]="!userForm.form.valid">
       Save User
     </button>
   </div>
