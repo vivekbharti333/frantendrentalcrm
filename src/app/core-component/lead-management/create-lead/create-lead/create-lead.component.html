@@ -91,7 +91,7 @@
                 }
               </div>
             </div>
-            <input type="text" class="form-control" name="status" value="INFO"/>
+            <input type="text" class="form-control" name="status" value="INFO" />
           </div>
         </div>
       </div>
@@ -194,18 +194,15 @@
           <div class="row">
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
-                <label class="form-label requiredField">Pickup Date & Time</label> <!--[(ngModel)]="lead.pickupDateTime" -->
-                <input type="datetime-local" class="form-control" name="pickupDateTime" [(ngModel)]="lead.pickupDateTime" min="{{selectedDateTime}}" required #pickupDateTime="ngModel" />
-                <!-- @if(pickupDateTime?.errors?.['required'] &&
-                pickupDateTime?.touched) {
-                <div class="errorMessage">Pickup Date & Time is required</div>
-                } -->
-
+                <label class="form-label requiredField">Pickup Date & Time</label>
+                <input type="datetime-local" class="form-control" name="pickupDateTime"
+                  [(ngModel)]="lead.pickupDateTime" min="{{selectedDateTime}}" required #pickupDateTime="ngModel" />
                 <div *ngIf="pickupDateTime?.errors?.['required'] && pickupDateTime?.touched" class="errorMessage">
-                  Pickup Location is required
+                  Pickup Date & Time is required.
                 </div>
               </div>
             </div>
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Location</label>
@@ -217,7 +214,7 @@
                     {{ pickList.location }}
                   </mat-option>
                 </mat-select>
-            
+
                 <div *ngIf="pickupLocation?.errors?.['required'] && pickupLocation?.touched" class="errorMessage">
                   Pickup Location is required
                 </div>
@@ -237,21 +234,17 @@
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
-                <label class="form-label requiredField">Drop Date & Time</label> 
-                <input type="datetime-local" 
-                       class="form-control" 
-                       name="dropDateTime" 
-                       [(ngModel)]="lead.dropDateTime" 
-                       [min]="selectedDateTime" 
-                       step="00:15"
-                       required 
-                       #dropDateTime="ngModel" />
-                <div *ngIf="dropDateTime?.errors?.['required'] && dropDateTime?.touched" 
-                     class="errorMessage">
-                  Drop Date & Time is required
+                <label class="form-label requiredField">Drop Date & Time</label>
+                <input type="datetime-local" class="form-control" name="dropDateTime" [(ngModel)]="lead.dropDateTime"
+                  [min]="lead.pickupDateTime || selectedDateTime" step="00:15" required #dropDateTime="ngModel"
+                  (change)="calculateDays()" />
+                <div *ngIf="dropDateTime?.errors?.['required'] && dropDateTime?.touched" class="errorMessage">
+                  Drop Date & Time is required.
                 </div>
               </div>
             </div>
+
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Drop Location</label>
@@ -282,6 +275,18 @@
           </div>
 
           <div class="row">
+
+            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
+              <div class="mb-1">
+                <label class="form-label requiredField">Total Days</label>
+                <input type="number" class="form-control" name="totalDays" [(ngModel)]="lead.totalDays" required
+                  #totalDays="ngModel" />
+                <div *ngIf="totalDays?.errors?.['required'] && totalDays?.touched" class="errorMessage">
+                  Total Days is required
+                </div>
+              </div>
+            </div>
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-1">
                 <label class="form-label requiredField">Quantity</label>
@@ -292,37 +297,25 @@
                 </div>
               </div>
             </div>
-            
-              <div class="col-lg-2 col-md-2" *ngIf="isActivities">
-                <div class="mb-1">
-                  <label class="form-label requiredField">Child Quantity</label>
-                  <input type="number" class="form-control" name="childrenQuantity" [(ngModel)]="lead.childrenQuantity" min="0" required
-                    #childrenQuantity="ngModel" />
-                  <div *ngIf="childrenQuantity?.errors?.['required'] && childrenQuantity?.touched" class="errorMessage">
-                    Quantity is required
-                  </div>
-                </div>
-              </div>
-            
-              <div class="col-lg-2 col-md-2" *ngIf="isActivities">
-                <div class="mb-1">
-                  <label class="form-label requiredField">Infant Quantity</label>
-                  <input type="number" class="form-control" name="infantQuantity" [(ngModel)]="lead.infantQuantity" min="0" required
-                    #infantQuantity="ngModel" />
-                  <div *ngIf="infantQuantity?.errors?.['required'] && infantQuantity?.touched" class="errorMessage">
-                    Infant Quantity is required
-                  </div>
-                </div>
-              </div>
-            
 
-            <div class="col-lg-2 col-md-2"  *ngIf="!isActivities">
+            <div class="col-lg-2 col-md-2" *ngIf="isActivities">
               <div class="mb-1">
-                <label class="form-label requiredField">Total Days</label>
-                <input type="number" class="form-control" name="totalDays" [(ngModel)]="lead.totalDays" required
-                  #totalDays="ngModel" />
-                <div *ngIf="totalDays?.errors?.['required'] && totalDays?.touched" class="errorMessage">
-                  Total Days is required
+                <label class="form-label requiredField">Child Quantity</label>
+                <input type="number" class="form-control" name="childrenQuantity" [(ngModel)]="lead.childrenQuantity"
+                  min="0" required #childrenQuantity="ngModel" />
+                <div *ngIf="childrenQuantity?.errors?.['required'] && childrenQuantity?.touched" class="errorMessage">
+                  Quantity is required
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2" *ngIf="isActivities">
+              <div class="mb-1">
+                <label class="form-label requiredField">Infant Quantity</label>
+                <input type="number" class="form-control" name="infantQuantity" [(ngModel)]="lead.infantQuantity"
+                  min="0" required #infantQuantity="ngModel" />
+                <div *ngIf="infantQuantity?.errors?.['required'] && infantQuantity?.touched" class="errorMessage">
+                  Infant Quantity is required
                 </div>
               </div>
             </div>
@@ -353,7 +346,8 @@
                 <label class="form-label requiredField">Total Delivery</label>
                 <input type="text" class="form-control" name="deliveryAmountToCompany"
                   [(ngModel)]="lead.deliveryAmountToCompany" required #deliveryAmountToCompany="ngModel" />
-                <div *ngIf="deliveryAmountToCompany?.errors?.['required'] && deliveryAmountToCompany?.touched" class="errorMessage">
+                <div *ngIf="deliveryAmountToCompany?.errors?.['required'] && deliveryAmountToCompany?.touched"
+                  class="errorMessage">
                   Total Delivery is required
                 </div>
               </div>
@@ -363,12 +357,10 @@
               <div class="mb-2">
                 <label class="form-label requiredField">Delivery To Vendor</label>
                 <input type="text" class="form-control" name="deliveryAmountToVendor"
-                  [(ngModel)]="lead.deliveryAmountToVendor" required #deliveryAmountToVendor="ngModel" />
-                <!-- @if(deliveryAmountToVendor?.errors?.['required'] &&
-                deliveryAmountToVendor?.touched) {
-                <div class="errorMessage">Delivery To Vendor is required</div>
-                } -->
-                <div *ngIf="deliveryAmountToVendor?.errors?.['required'] && deliveryAmountToVendor?.touched" class="errorMessage">
+                  [(ngModel)]="lead.deliveryAmountToVendor" required #deliveryAmountToVendor="ngModel"
+                  (change)="calculateTotalAmount()" />
+                <div *ngIf="deliveryAmountToVendor?.errors?.['required'] && deliveryAmountToVendor?.touched"
+                  class="errorMessage">
                   Delivery To Vendor is required
                 </div>
               </div>
@@ -381,7 +373,8 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Booking Amount</label>
-                <input type="number" class="form-control" name="bookingAmount" [(ngModel)]="lead.bookingAmount" required #bookingAmount="ngModel" />
+                <input type="number" class="form-control" name="bookingAmount" [(ngModel)]="lead.bookingAmount" required
+                  #bookingAmount="ngModel" />
                 <div *ngIf="bookingAmount?.errors?.['required'] && bookingAmount?.touched" class="errorMessage">
                   Booking Amount is required
                 </div>
@@ -391,7 +384,8 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Balance Amount</label>
-                <input type="number" class="form-control" name="balanceAmount" [(ngModel)]="lead.balanceAmount" required #balanceAmount="ngModel" />
+                <input type="number" class="form-control" name="balanceAmount" [(ngModel)]="lead.balanceAmount" required
+                  #balanceAmount="ngModel" />
                 <div *ngIf="balanceAmount?.errors?.['required'] && balanceAmount?.touched" class="errorMessage">
                   Balance Amount is required
                 </div>
@@ -400,7 +394,8 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Amount</label>
-                <input type="number" class="form-control" name="totalAmount" [(ngModel)]="lead.totalAmount" required #totalAmount="ngModel" />
+                <input type="number" class="form-control" name="totalAmount" [(ngModel)]="lead.totalAmount" required
+                  #totalAmount="ngModel" />
                 <div *ngIf="totalAmount?.errors?.['required'] && totalAmount?.touched" class="errorMessage">
                   Total Amount is required
                 </div>
@@ -408,11 +403,11 @@
             </div>
             <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-2">
-                <label class="form-label requiredField">Security Amount</label>
-                <input type="number" class="form-control" name="securityAmount" [(ngModel)]="lead.securityAmount"
-                  required #securityAmount="ngModel" />
-                <div *ngIf="securityAmount?.errors?.['required'] && securityAmount?.touched" class="errorMessage">
-                  Security Amount is required
+                <label class="form-label requiredField">Actual Amount</label>
+                <input type="number" class="form-control" name="actualAmount" [(ngModel)]="lead.actualAmount"
+                  required #actualAmount="ngModel" (change)="calculatePayToCompanyAndPayToVendor()" />
+                <div *ngIf="actualAmount?.errors?.['required'] && actualAmount?.touched" class="errorMessage">
+                  Actual Amount is required
                 </div>
               </div>
             </div>
@@ -421,13 +416,21 @@
 
           <div class="row">
             <div class="col-lg-2 col-md-2"></div>
+            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
+              <div class="mb-2">
+                <label class="form-label requiredField">Security Amount</label>
+                <input type="number" class="form-control" name="securityAmount" [(ngModel)]="lead.securityAmount"
+                  required #securityAmount="ngModel" (change)="calculatePayToCompanyAndPayToVendor()"/>
+                <div *ngIf="securityAmount?.errors?.['required'] && securityAmount?.touched" class="errorMessage">
+                  Security Amount is required
+                </div>
+              </div>
+            </div>
             <div class="col-lg-2 col-md-2">
               <label class="form-label requiredField">Pay to Vendor</label>
               <input type="text" class="form-control" name="payToVendor" [(ngModel)]="lead.payToVendor" required
                 #payToVendor="ngModel" />
-              <div *ngIf="payToVendor?.errors?.['required'] && payToVendor?.touched" class="errorMessage">
-                Pay to Vendor is required
-              </div>
+              
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
@@ -438,7 +441,8 @@
                   Pay to Company is required
                 </div>
               </div>
-            </div>
+            </div> 
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Lead Origine</label>
@@ -458,6 +462,18 @@
                 <mat-select name="leadType" [(ngModel)]="lead.leadType" class="select" placeholder="Select Lead Type">
                   @for (listData of leadType; track listData) {
                   <mat-option [value]="listData.name">
+                    {{ listData.name }}
+                  </mat-option>
+                  }
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-2 col-md-2">
+              <div class="mb-2">
+                <label class="form-label">Status</label>
+                <mat-select name="status" [(ngModel)]="lead.status" class="select" placeholder="Select Status">
+                  @for (listData of leadStatus; track listData) {
+                  <mat-option [value]="listData.value">
                     {{ listData.name }}
                   </mat-option>
                   }
@@ -489,18 +505,7 @@
                 } }
               </div>
             </div>
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                <label class="form-label">Status</label>
-                <mat-select name="status" [(ngModel)]="lead.status" class="select" placeholder="Select Status">
-                  @for (listData of leadStatus; track listData) {
-                  <mat-option [value]="listData.value">
-                    {{ listData.name }}
-                  </mat-option>
-                  }
-                </mat-select>
-              </div>
-            </div>
+            
           </div>
 
           <div class="card-title-head">
@@ -558,66 +563,67 @@
 
           <div class="row ">
             <div class="remarks-box">
-            <p></p>
-            <div class="col-lg-4 col-md-4">
-              <div class="input-container">
-                <label for="reports"><b>Report: </b></label>{{ lead.vendorRate }}
+              <p></p>
+              <div class="col-lg-4 col-md-4">
+                <div class="input-container">
+                  <label for="reports"><b>Report: </b></label>{{ lead.vendorRate }}
+                </div>
+                <div class="input-container">
+                  <label for="delivery"><b>Delivery: </b></label>{{ lead.deliveryAmountToCompany }}
+                </div>
+                <div class="input-container">
+                  <label for="remarks" class="requiredField"><b>Remarks:</b></label>
+                  <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..."
+                    name="remarks" [(ngModel)]="lead.remarks" required #remarks="ngModel" />
+                  @if(remarks?.errors?.['required'] && remarks?.touched) {
+                  <div class="errorMessage">Remarks is required</div>
+                  }
+                </div>
+                <div class="input-container">
+                  <label for="pay-to-vendor"><b>Pay to vendor:</b></label>{{ lead.payToVendor }}
+                </div>
+                <div class="input-container">
+                  <label for="pay-to-company"><b>Pay to company:</b></label>
+                  {{ lead.payToCompany }}
+                  <!-- <input type="text" id="pay-to-company" class="form-control no-border" placeholder="Pay to company" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required> -->
+                </div>
               </div>
-              <div class="input-container">
-                <label for="delivery"><b>Delivery: </b></label>{{ lead.deliveryAmountToCompany }}
-              </div>
-              <div class="input-container">
-                <label for="remarks" class="requiredField"><b>Remarks:</b></label>
-                <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..."
-                  name="remarks" [(ngModel)]="lead.remarks" required #remarks="ngModel" />
-                @if(remarks?.errors?.['required'] && remarks?.touched) {
-                <div class="errorMessage">Remarks is required</div>
-                }
-              </div>
-              <div class="input-container">
-                <label for="pay-to-vendor"><b>Pay to vendor:</b></label>{{ lead.payToVendor }}
-              </div>
-              <div class="input-container">
-                <label for="pay-to-company"><b>Pay to company:</b></label>
-                {{ lead.payToCompany }}
-                <!-- <input type="text" id="pay-to-company" class="form-control no-border" placeholder="Pay to company" name="customerEmailId" [(ngModel)]="lead.customerEmailId" required> -->
-              </div>
-            </div>
 
-            <div class="col-lg-4 col-md-4 vl">
-              <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName"
-                value="Notes" id="notes1" checked />
-              <label class="form-check-label" for="notes1" style="margin-right: 20px; margin-left: 20px">
-                Notes
-              </label>
-              <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName"
-                value="Reminders" id="notes2" />
-              <label class="form-check-label" for="notes2" style="margin-left: 20px">
-                Reminders
-              </label>
+              <div class="col-lg-4 col-md-4 vl">
+                <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName"
+                  value="Notes" id="notes1" checked />
+                <label class="form-check-label" for="notes1" style="margin-right: 20px; margin-left: 20px">
+                  Notes
+                </label>
+                <input class="form-check-input" type="radio" name="companyName" [(ngModel)]="lead.companyName"
+                  value="Reminders" id="notes2" />
+                <label class="form-check-label" for="notes2" style="margin-left: 20px">
+                  Reminders
+                </label>
 
-              <div *ngIf="lead.companyName === 'Notes'">
-                <textarea class="form-control no-border" name="notes" [(ngModel)]="lead.notes" rows="4"
-                  placeholder="___________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
+                <div *ngIf="lead.companyName === 'Notes'">
+                  <textarea class="form-control no-border" name="notes" [(ngModel)]="lead.notes" rows="4"
+                    placeholder="___________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
+                </div>
+                <P></P>
+                <div *ngIf="lead.companyName === 'Reminders'">
+                  <input type="datetime-local" class="form-control" name="reminderDate"
+                    [(ngModel)]="lead.followupDateTime" required #reminderDate="ngModel" />
+                  @if(reminderDate?.errors?.['required'] && reminderDate?.touched)
+                  {
+                  <div class="errorMessage">Reminder Date is required</div>
+                  }
+                  <textarea class="form-control no-border" name="notes" [(ngModel)]="lead.notes" rows="2"
+                    placeholder="___________________________________________________________________________________________"></textarea>
+                </div>
               </div>
-              <P></P>
-              <div *ngIf="lead.companyName === 'Reminders'">
-                <input type="datetime-local" class="form-control" name="reminderDate"
-                  [(ngModel)]="lead.followupDateTime" required #reminderDate="ngModel" />
-                @if(reminderDate?.errors?.['required'] && reminderDate?.touched)
-                {
-                <div class="errorMessage">Reminder Date is required</div>
-                }
-                <textarea class="form-control no-border" name="notes" [(ngModel)]="lead.notes" rows="2"
-                  placeholder="___________________________________________________________________________________________"></textarea>
+              <div class="col-lg-4 col-md-4 vl">
+                <h4>Records</h4>
+                <textarea class="form-control no-border" name="records" [(ngModel)]="lead.records" rows="4"
+                  placeholder="No Records Found"></textarea>
               </div>
             </div>
-            <div class="col-lg-4 col-md-4 vl">
-              <h4>Records</h4>
-              <textarea class="form-control no-border" name="records" [(ngModel)]="lead.records" rows="4"
-                placeholder="No Records Found"></textarea>
-            </div>
-          </div></div>
+          </div>
         </div>
       </div>
       <div class="text-mid mb-3">

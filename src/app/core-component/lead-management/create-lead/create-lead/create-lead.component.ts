@@ -71,20 +71,21 @@ export class CreateLeadComponent {
     customerMobile: '',
     customerAlternateMobile: '',
     customerEmailId: '',
-    totalDays: '',
-    quantity: '',
+    totalDays: 1 as number | null,
+    quantity: 1,
     childrenQuantity: '',
     infantQuantity: '',
-    vendorRate: '',
-    payToVendor: '',
-    companyRate: '',
-    payToCompany: '',
-    bookingAmount: '',
-    balanceAmount: '',
-    totalAmount: '',
+    vendorRate: 0,
+    payToVendor: 0,
+    companyRate: 0,
+    payToCompany: 0,
+    bookingAmount: 0,
+    balanceAmount: 0,
+    totalAmount: 0,
+    actualAmount: 0,
     securityAmount: '',
-    deliveryAmountToCompany: '',
-    deliveryAmountToVendor: '',
+    deliveryAmountToCompany: 0,
+    deliveryAmountToVendor: 0,
     status: '',
     leadOrigine: '',
     leadType: '',
@@ -183,6 +184,73 @@ export class CreateLeadComponent {
       // if (this.filteredPickLocationList.length > 0) {
       //   this.lead.pickupLocation = this.filteredPickLocationList[0];
       // }
+  }
+
+  calculateDays() {
+    if (this.lead.dropDateTime && this.lead.pickupDateTime) {
+      const d1 = new Date(this.lead.dropDateTime);
+      const d2 = new Date(this.lead.pickupDateTime);
+
+      if (d1 < d2) {
+        alert('Drop Date & Time must be after Pickup Date & Time.');
+        this.lead.totalDays = null;
+        return;
+      }
+
+      const timeDifference = Math.abs(d1.getTime() - d2.getTime());
+      this.lead.totalDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    } else {
+      this.lead.totalDays = null;
+      alert('Please select both Pickup and Drop dates.');
+    }
+  }
+
+  calculateTotalAmount() {
+    // Check if `lead` and its properties are properly initialized
+    if (
+      this.lead &&
+      this.lead.companyRate != null &&
+      this.lead.totalDays != null &&
+      this.lead.deliveryAmountToCompany != null &&
+      this.lead.quantity != null
+    ) {
+      this.lead.totalAmount =  ((this.lead.companyRate * this.lead.totalDays) + this.lead.deliveryAmountToCompany) * this.lead.quantity;
+      
+      this.calculateBalanceAmount();
+    } else {
+      console.error('Some required fields are missing for total amount calculation.');
+      this.lead.totalAmount = 0; // Set a fallback value
+    }
+  }
+
+  calculateBalanceAmount() {
+    if (
+      this.lead.vendorRate != null &&
+      this.lead.totalDays != null &&
+      this.lead.deliveryAmountToVendor != null &&
+      this.lead.quantity != null
+    ) {
+      this.lead.balanceAmount = 
+        ((this.lead.vendorRate * this.lead.totalDays) + this.lead.deliveryAmountToVendor) * this.lead.quantity;
+
+        this.calculateBookingAmount();
+    } else {
+      console.error('Some required fields are missing for balance amount calculation.');
+      this.lead.balanceAmount = 0; // Set a default fallback value
+    }
+  }
+
+  calculateBookingAmount(){
+    this.lead.bookingAmount = (this.lead.totalAmount - this.lead.balanceAmount);
+  }
+
+  calculatePayToCompanyAndPayToVendor() {
+    const amountValue = (this.lead.bookingAmount - this.lead.actualAmount);
+
+    if (amountValue < 0) {
+      this.lead.payToVendor = amountValue;
+    } else if (amountValue >= 0)
+      this.lead.payToCompany = amountValue;
   }
 
   checkCategoryType(categoryType: any) {
