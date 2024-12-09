@@ -199,6 +199,9 @@ export class CreateLeadComponent {
 
       const timeDifference = Math.abs(d1.getTime() - d2.getTime());
       this.lead.totalDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+      this.calculateTotalAmount();
+      this.calculatePayToCompanyAndPayToVendor();
     } else {
       this.lead.totalDays = null;
       alert('Please select both Pickup and Drop dates.');
@@ -214,9 +217,12 @@ export class CreateLeadComponent {
       this.lead.deliveryAmountToCompany != null &&
       this.lead.quantity != null
     ) {
-      this.lead.totalAmount =  ((this.lead.companyRate * this.lead.totalDays) + this.lead.deliveryAmountToCompany) * this.lead.quantity;
+      const firstValue = this.lead.companyRate * this.lead.totalDays;
+      const secondValue = firstValue + Number(this.lead.deliveryAmountToCompany); // Ensure numeric addition
+      this.lead.totalAmount = secondValue * this.lead.quantity;
       
       this.calculateBalanceAmount();
+      this.calculatePayToCompanyAndPayToVendor();
     } else {
       console.error('Some required fields are missing for total amount calculation.');
       this.lead.totalAmount = 0; // Set a fallback value
@@ -230,10 +236,12 @@ export class CreateLeadComponent {
       this.lead.deliveryAmountToVendor != null &&
       this.lead.quantity != null
     ) {
-      this.lead.balanceAmount = 
-        ((this.lead.vendorRate * this.lead.totalDays) + this.lead.deliveryAmountToVendor) * this.lead.quantity;
+      const firstValue = this.lead.vendorRate * this.lead.totalDays;
+      const secondValue =  firstValue +  Number(this.lead.deliveryAmountToVendor);
+      this.lead.balanceAmount =  secondValue * this.lead.quantity;
 
         this.calculateBookingAmount();
+        this.calculatePayToCompanyAndPayToVendor();
     } else {
       console.error('Some required fields are missing for balance amount calculation.');
       this.lead.balanceAmount = 0; // Set a default fallback value
@@ -242,6 +250,7 @@ export class CreateLeadComponent {
 
   calculateBookingAmount(){
     this.lead.bookingAmount = (this.lead.totalAmount - this.lead.balanceAmount);
+    this.calculatePayToCompanyAndPayToVendor();
   }
 
   calculatePayToCompanyAndPayToVendor() {

@@ -280,7 +280,7 @@
               <div class="mb-1">
                 <label class="form-label requiredField">Total Days</label>
                 <input type="number" class="form-control" name="totalDays" [(ngModel)]="lead.totalDays" required
-                  #totalDays="ngModel" />
+                  #totalDays="ngModel" (change)="calculateTotalAmount()"/>
                 <div *ngIf="totalDays?.errors?.['required'] && totalDays?.touched" class="errorMessage">
                   Total Days is required
                 </div>
@@ -291,7 +291,7 @@
               <div class="mb-1">
                 <label class="form-label requiredField">Quantity</label>
                 <input type="number" class="form-control" name="quantity" [(ngModel)]="lead.quantity" min="0" required
-                  #quantity="ngModel" />
+                  #quantity="ngModel" (change)="calculateTotalAmount()"/>
                 <div *ngIf="quantity?.errors?.['required'] && quantity?.touched" class="errorMessage">
                   Quantity is required
                 </div>
@@ -324,7 +324,7 @@
               <div class="mb-2">
                 <label class="form-label requiredField">Company Rate</label>
                 <input type="text" class="form-control" name="companyRate" [(ngModel)]="lead.companyRate" required
-                  #companyRate="ngModel" />
+                  #companyRate="ngModel" (change)="calculateTotalAmount()"/>
                 <div *ngIf="companyRate?.errors?.['required'] && companyRate?.touched" class="errorMessage">
                   Company Rate is required
                 </div>
@@ -334,7 +334,7 @@
               <div class="mb-2">
                 <label class="form-label requiredField">Vendor Rate</label>
                 <input type="text" class="form-control" name="vendorRate" [(ngModel)]="lead.vendorRate" required
-                  #vendorRate="ngModel" />
+                  #vendorRate="ngModel" (change)="calculateTotalAmount()"/>
                 <div *ngIf="vendorRate?.errors?.['required'] && vendorRate?.touched" class="errorMessage">
                   Vendor Rate is required
                 </div>
@@ -345,7 +345,7 @@
               <div class="mb-2">
                 <label class="form-label requiredField">Total Delivery</label>
                 <input type="text" class="form-control" name="deliveryAmountToCompany"
-                  [(ngModel)]="lead.deliveryAmountToCompany" required #deliveryAmountToCompany="ngModel" />
+                  [(ngModel)]="lead.deliveryAmountToCompany" required #deliveryAmountToCompany="ngModel" (change)="calculateTotalAmount()"/>
                 <div *ngIf="deliveryAmountToCompany?.errors?.['required'] && deliveryAmountToCompany?.touched"
                   class="errorMessage">
                   Total Delivery is required
@@ -426,22 +426,22 @@
                 </div>
               </div>
             </div>
-            <div class="col-lg-2 col-md-2">
+            <!-- <div class="col-lg-2 col-md-2">
               <label class="form-label requiredField">Pay to Vendor</label>
               <input type="text" class="form-control" name="payToVendor" [(ngModel)]="lead.payToVendor" required
-                #payToVendor="ngModel" />
+                #payToVendor="ngModel" hidden/>
               
-            </div>
-            <div class="col-lg-2 col-md-2">
+            </div> -->
+            <!-- <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pay To Company</label>
                 <input type="text" class="form-control" name="payToCompany" [(ngModel)]="lead.payToCompany" required
-                  #payToCompany="ngModel" />
+                  #payToCompany="ngModel" hidden />
                 <div *ngIf="payToCompany?.errors?.['required'] && payToCompany?.touched" class="errorMessage">
                   Pay to Company is required
                 </div>
               </div>
-            </div> 
+            </div>  -->
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
