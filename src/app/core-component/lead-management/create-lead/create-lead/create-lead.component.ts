@@ -11,6 +11,7 @@ import { CategoriesManagementService } from 'src/app/core-component/categories-m
 import { UserManagementService } from 'src/app/core-component/user-management/user-management.service';
 import { CookieService } from 'ngx-cookie-service';
 import { CalendarModule } from 'primeng/calendar';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 interface data {
   id: number;
@@ -31,11 +32,15 @@ interface listData {
   selector: 'app-create-lead',
   templateUrl: './create-lead.component.html',
   styleUrl: './create-lead.component.scss',
-  providers: [MessageService, ToastModule, CalendarModule],
+  providers: [MessageService, CalendarModule],
 })
 export class CreateLeadComponent {
   public loginUser: any;
+
+  public addLeadForm!: FormGroup;
+
   public selectedOption: string = 'lead';
+  public notesType: string = 'Notes';
   public categoryTypeList: any[] = [];
   public superCategoryList: any[] = [];
   public categoryList: any[] = [];
@@ -45,63 +50,12 @@ export class CreateLeadComponent {
   public userList: any[] = [];
 
   selectedDateTime: string = '';
+  public minDate!: Date;
+  public maxDate!: Date;
 
-  roleType: string = '';
-  fullName: string = '';
-  lead = {
-    companyName: 'Notes',
-    enquirySource: 'Call',
-    categoryTypeId: '',
-    superCategoryId: '',
-    categoryId: '',
-    subCategoryId: '',
-    categoryTypeName: '', 
-    superCategory: '', 
-    category: '', 
-    subCategory: '', 
-    itemName: '',
-    pickupDateTime: '',
-    pickupLocation: '',
-    pickupPoint: '',
-    dropDateTime: '',
-    dropLocation: '',
-    dropPoint: '',
-    customeName: '',
-    countryDialCode: '',
-    customerMobile: '',
-    customerAlternateMobile: '',
-    customerEmailId: '',
-    totalDays: 1 as number | null,
-    quantity: 1,
-    childrenQuantity: '',
-    infantQuantity: '',
-    vendorRate: 0,
-    payToVendor: 0,
-    companyRate: 0,
-    payToCompany: 0,
-    bookingAmount: 0,
-    balanceAmount: 0,
-    totalAmount: 0,
-    actualAmount: 0,
-    securityAmount: '',
-    deliveryAmountToCompany: 0,
-    deliveryAmountToVendor: 0,
-    status: '',
-    leadOrigine: '',
-    leadType: '',
-    createdBy: '',
-    notes: '',
-    followupDateTime: '',
-    remarks: '',
-    preValue: `    Reports : 
-    Delivery : 
-    Comments : 
-    Pay to vendor : 
-    Pay to company :`,
-    reminderDate: '',
-    records: '',
-  };
-
+  public roleType: string = '';
+  public fullName: string = '';
+  
   public isActivities:Boolean = false;
 
   filteredCategoryTypeList: any[] = [];
@@ -111,7 +65,27 @@ export class CreateLeadComponent {
   filteredPickLocationList: any[] =[];
   filteredDropLocationList: any[] =[];
 
+  ngOnInit() {
+    this.createForms();
+    // this.setDefaultDateTime();
+    this.getCategoryType();
+    this.getUserList();
+    this.getPickLocation();
+    this.getDropLocation();
+
+    this.roleType === 'SUPERADMIN'
+      ? (this.addLeadForm.value.createdBy = '')
+      : (this.addLeadForm.value.createdBy = this.fullName);
+
+    this.minDate = new Date(); // Set to today's date
+    this.minDate.setHours(0, 0, 0, 0); // Ensure time is reset to midnight
+    this.maxDate = new Date();
+    this.maxDate.setFullYear(this.maxDate.getFullYear() + 1);
+    
+  }
+
   constructor(
+    private fb: FormBuilder,
     private sidebar: SidebarService,
     private leadManagementService: LeadManagementService,
     private authenticationService: AuthenticationService,
@@ -128,138 +102,153 @@ export class CreateLeadComponent {
       ' ' +
       this.cookiesService.get('lastName');
 
-      this.setDefaultDateTime();
+      // this.setDefaultDateTime();
   }
 
-  setDefaultDateTime1(): void {
-    const currentDate = new Date();
 
-    // Adjust to local time zone
-    const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; // offset in milliseconds
-    const localDate = new Date(currentDate.getTime() - timeZoneOffset);
+  createForms() {
+    this.addLeadForm = this.fb.group({
 
-    // Round minutes to the nearest 15-minute interval
-    const minutes = localDate.getMinutes();
-    const roundedMinutes = Math.ceil(minutes / 15) * 15;
-    localDate.setMinutes(roundedMinutes);
-    localDate.setSeconds(0);
-    localDate.setMilliseconds(0);
-
-    // Format the date to the required input format: YYYY-MM-DDTHH:MM
-    const year = localDate.getFullYear();
-    const month = String(localDate.getMonth() + 1).padStart(2, '0');
-    const day = String(localDate.getDate()).padStart(2, '0');
-    const hours = String(localDate.getHours()).padStart(2, '0');
-    const minutesFormatted = String(localDate.getMinutes()).padStart(2, '0');
-
-    this.selectedDateTime = `${year}-${month}-${day}T${hours}:${minutesFormatted}`;
+    companyName: ['Notes'],
+    enquirySource: ['Call'],
+    categoryTypeId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')]],
+    superCategoryId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')]],
+    categoryId: [''],
+    subCategoryId: [''],
+    categoryTypeName: [''],
+    superCategory: [''], 
+    category: [''], 
+    subCategory: [''], 
+    itemName: [''],
+    pickupDateTime: [''],
+    pickupLocation: [''],
+    pickupPoint: [''],
+    dropDateTime: [''],
+    dropLocation: [''],
+    dropPoint: [''],
+    customeName: [''],
+    countryDialCode: [''],
+    customerMobile: [''],
+    customerAlternateMobile: [''],
+    customerEmailId: [''],
+    totalDays: 1 as number | null,
+    quantity: 1,
+    childrenQuantity: [''],
+    infantQuantity: [''],
+    vendorRate: 0,
+    payToVendor: 0,
+    companyRate: 0,
+    payToCompany: 0,
+    bookingAmount: 0,
+    balanceAmount: 0,
+    totalAmount: 0,
+    actualAmount: 0,
+    securityAmount: [''],
+    deliveryAmountToCompany: 0,
+    deliveryAmountToVendor: 0,
+    status: [''],
+    leadOrigine: [''],
+    leadType: [''],
+    createdBy: [''],
+    notes: [''],
+    followupDateTime: [''],
+    remarks: [''],
+    preValue: `    Reports : 
+    Delivery : 
+    Comments : 
+    Pay to vendor : 
+    Pay to company :`,
+    reminderDate: [''],
+    records: [''],
+    });
   }
 
-  setDefaultDateTime(): void {
-    const currentDate = new Date();
-  
-    // Get the local date and time values
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');  // Months are zero-indexed
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const hours = String(currentDate.getHours()).padStart(2, '0');
-    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
-  
-    // Combine into the required format: YYYY-MM-DDTHH:MM
-    // this.selectedDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
-    this.lead.dropDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
-    this.lead.pickupDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
-  }
 
-  ngOnInit() {
-    this.setDefaultDateTime();
-    this.getCategoryType();
-    this.getUserList();
-    this.getPickLocation();
-    this.getDropLocation();
-    this.roleType === 'SUPERADMIN'
-      ? (this.lead.createdBy = '')
-      : (this.lead.createdBy = this.fullName);
-
-      // if (this.filteredPickLocationList.length > 0) {
-      //   this.lead.pickupLocation = this.filteredPickLocationList[0];
-      // }
-  }
 
   calculateDays() {
-    if (this.lead.dropDateTime && this.lead.pickupDateTime) {
-      const d1 = new Date(this.lead.dropDateTime);
-      const d2 = new Date(this.lead.pickupDateTime);
+    const leadValue = this.addLeadForm.value;
+    if (leadValue.dropDateTime && leadValue.pickupDateTime) {
+      const d1 = new Date(leadValue.dropDateTime);
+      const d2 = new Date(leadValue.pickupDateTime);
 
       if (d1 < d2) {
         alert('Drop Date & Time must be after Pickup Date & Time.');
-        this.lead.totalDays = null;
+        leadValue.totalDays = null;
         return;
       }
 
       const timeDifference = Math.abs(d1.getTime() - d2.getTime());
-      this.lead.totalDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      leadValue.totalDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
       this.calculateTotalAmount();
       this.calculatePayToCompanyAndPayToVendor();
     } else {
-      this.lead.totalDays = null;
+      leadValue.totalDays = null;
       alert('Please select both Pickup and Drop dates.');
     }
   }
 
   calculateTotalAmount() {
+    const leadValue = this.addLeadForm.value;
     // Check if `lead` and its properties are properly initialized
     if (
-      this.lead &&
-      this.lead.companyRate != null &&
-      this.lead.totalDays != null &&
-      this.lead.deliveryAmountToCompany != null &&
-      this.lead.quantity != null
+      leadValue &&
+      leadValue.companyRate != null &&
+      leadValue.totalDays != null &&
+      leadValue.deliveryAmountToCompany != null &&
+      leadValue.quantity != null
     ) {
-      const firstValue = this.lead.companyRate * this.lead.totalDays;
-      const secondValue = firstValue + Number(this.lead.deliveryAmountToCompany); // Ensure numeric addition
-      this.lead.totalAmount = secondValue * this.lead.quantity;
+      const firstValue = leadValue.companyRate * leadValue.totalDays;
+      const secondValue = firstValue + Number(leadValue.deliveryAmountToCompany); // Ensure numeric addition
+      // leadValue.totalAmount = secondValue * leadValue.quantity;
+
+      this.addLeadForm.patchValue({ totalAmount: secondValue * leadValue.quantity});
       
       this.calculateBalanceAmount();
       this.calculatePayToCompanyAndPayToVendor();
     } else {
       console.error('Some required fields are missing for total amount calculation.');
-      this.lead.totalAmount = 0; // Set a fallback value
+      leadValue.totalAmount = 0; // Set a fallback value
     }
   }
 
   calculateBalanceAmount() {
+    const leadValue = this.addLeadForm.value;
     if (
-      this.lead.vendorRate != null &&
-      this.lead.totalDays != null &&
-      this.lead.deliveryAmountToVendor != null &&
-      this.lead.quantity != null
+      leadValue.vendorRate != null &&
+      leadValue.totalDays != null &&
+      leadValue.deliveryAmountToVendor != null &&
+      leadValue.quantity != null
     ) {
-      const firstValue = this.lead.vendorRate * this.lead.totalDays;
-      const secondValue =  firstValue +  Number(this.lead.deliveryAmountToVendor);
-      this.lead.balanceAmount =  secondValue * this.lead.quantity;
+      const firstValue = leadValue.vendorRate * leadValue.totalDays;
+      const secondValue =  firstValue +  Number(leadValue.deliveryAmountToVendor);
+      // leadValue.balanceAmount =  secondValue * leadValue.quantity;
+      this.addLeadForm.patchValue({ balanceAmount: secondValue * leadValue.quantity});
 
         this.calculateBookingAmount();
         this.calculatePayToCompanyAndPayToVendor();
     } else {
       console.error('Some required fields are missing for balance amount calculation.');
-      this.lead.balanceAmount = 0; // Set a default fallback value
+      leadValue.balanceAmount = 0; // Set a default fallback value
     }
   }
 
   calculateBookingAmount(){
-    this.lead.bookingAmount = (this.lead.totalAmount - this.lead.balanceAmount);
+    const leadValue = this.addLeadForm.value;
+    // leadValue.bookingAmount = (leadValue.totalAmount - leadValue.balanceAmount);
+
+    this.addLeadForm.patchValue({ bookingAmount: leadValue.totalAmount - leadValue.balanceAmount}),
     this.calculatePayToCompanyAndPayToVendor();
   }
 
   calculatePayToCompanyAndPayToVendor() {
-    const amountValue = (this.lead.bookingAmount - this.lead.actualAmount);
+    const leadValue = this.addLeadForm.value;
+    const amountValue = (leadValue.bookingAmount - leadValue.actualAmount);
 
     if (amountValue < 0) {
-      this.lead.payToVendor = amountValue;
+      leadValue.payToVendor = amountValue;
     } else if (amountValue >= 0)
-      this.lead.payToCompany = amountValue;
+      leadValue.payToCompany = amountValue;
   }
 
   checkCategoryType(categoryType: any) {
@@ -310,14 +299,19 @@ export class CreateLeadComponent {
   leadType: listData[] = Constant.LEAD_TYPE_LIST;
   leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
-  submitLeadForm(form: NgForm) {
-    this.leadManagementService.saveLeadDetails(this.lead).subscribe({
+  submitLeadForm1(){
+    console.log("Enter ")
+    console.log("Value : "+this.addLeadForm.value)
+  }
+
+  submitLeadForm() {
+    this.leadManagementService.saveLeadDetails(this.addLeadForm.value).subscribe({
       next: (response: any) => {
         alert("response : "+response.responseCode);
         if (response['responseCode'] == '200') {
           if (response['payload']['respCode'] == '200') {
-            form.reset();
-            this.setDefaultDateTime();
+            this.addLeadForm.reset();
+            // this.setDefaultDateTime();
             this.messageService.add({
               summary: response['payload']['respCode'],
               detail: response['payload']['respMesg'],
@@ -352,26 +346,7 @@ export class CreateLeadComponent {
     this.sidebar.toggleCollapse();
     this.isCollapsed = !this.isCollapsed;
   }
-
-  public getCategoryType() {
-    this.categoriesManagementService.getCategoryTypeList().subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.categoryTypeList = JSON.parse(
-            JSON.stringify(response.listPayload)
-          );
-          this.filteredCategoryTypeList = this.categoryTypeList;
-        }
-      },
-      error: (error: any) =>
-        this.messageService.add({
-          summary: '500',
-          detail: 'Server Error',
-          styleClass: 'danger-background-popover',
-        }),
-    });
-  }
-
+  
   public getPickLocation() {
     this.categoriesManagementService.getLocationByType('PICK').subscribe({
       next: (response: any) => {
@@ -410,18 +385,50 @@ export class CreateLeadComponent {
     });
   }
 
+  public getCategoryType() { //✅
+    this.categoriesManagementService.getCategoryTypeList().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
+          this.filteredCategoryTypeList = this.categoryTypeList;
+  
+          if (this.filteredCategoryTypeList.length > 0) {
+            this.addLeadForm.patchValue({
+              categoryTypeId: this.filteredCategoryTypeList[1] // ✅ Set first item as selected
+            });
+            
+          }
+          this.getSuperCategory(this.filteredCategoryTypeList[1])
+        }
+      },
+      error: (error: any) => {  // ✅ Corrected error function syntax
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        });
+      }
+    });
+  }
+
   public getSuperCategory(superCateId: any) {
+    
     this.checkCategoryType(superCateId);
     const categoryId = superCateId?.id;
-    this.categoriesManagementService
-      .getSuperCategoryListByCategoryTypeId(categoryId)
+    console.log("Enter Hai : "+categoryId);
+    this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(categoryId)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.superCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
             this.filteredSuperCategoryList = this.superCategoryList;
+
+            if(this.filteredSuperCategoryList.length > 0){
+              this.addLeadForm.patchValue({
+                superCategoryId: this.filteredSuperCategoryList[0] // ✅ Set first item as selected
+              });
+            }
+            this.getCategory(this.filteredSuperCategoryList[0]);
           }
         },
         error: (error: any) =>
@@ -516,4 +523,10 @@ export class CreateLeadComponent {
         break;
     }
   }
+
+  onNotesTypeChange(value: string) {
+    this.notesType = value;
+  }
+
+ 
 }

@@ -45,6 +45,7 @@ export class SigninComponent {
     this.userManagementService.doLogin(this.login)
       .subscribe({
         next: (response: any) => {
+          console.log("response : "+response);
           if (response['responseCode'] == '200') {
             // alert(" response['responseCode'] "+response['responseCode']);
             if (response['payload']['respCode'] == '200') {

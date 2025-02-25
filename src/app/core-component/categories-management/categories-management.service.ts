@@ -129,7 +129,6 @@ export class CategoriesManagementService {
   }
 
   getSuperCategoryListByCategoryTypeId(cateTypeId: any): Observable<any> {
-    // alert(cateTypeId+"yjgygyg")
     let request: any = {
       payload: {
         categoryTypeId: cateTypeId,
