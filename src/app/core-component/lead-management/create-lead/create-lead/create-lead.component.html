@@ -67,9 +67,21 @@
               </div>
             </div>
             <div class="col-lg-4 col-md-4">
-              <div class="mb-3">
+              <!-- <div class="mb-3">
                 <label class="form-label requiredField">Customer EmailId</label>
                 <input type="text" class="form-control" formControlName="customerEmailId" required />
+              </div> -->
+              <div class="mb-3">
+                <label class="form-label requiredField">Category Type</label>
+                <mat-select formControlName="categoryTypeId" class="select" placeholder="Select Category Type"
+                  (selectionChange)="getSuperCategory($event.value)" required>
+                  <app-mat-select-search (filteredList)="setFilterList($event, 'categoryType')"
+                    [originalList]="categoryTypeList" [categoryName]="'categoryTypeName'">
+                  </app-mat-select-search>
+                  <mat-option *ngFor="let cateType of filteredCategoryTypeList" [value]="cateType">
+                    {{ cateType.categoryTypeName }}
+                  </mat-option>
+                </mat-select>
               </div>
             </div>
             <input type="text" class="form-control" formControlName="status" value="INFO" />
@@ -147,16 +159,25 @@
           </div>
 
           <div class="row">
+            <div class="col-lg-2 col-md-2"></div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label>
                 <input type="datetime-local" class="form-control" formControlName="pickupDateTime" min="{{selectedDateTime}}" required />
-                <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="pickupDateTime"  bsDatepicker container=".date-input1"
-                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', minDate: minDate, maxDate: maxDate }">
-
               </div>
-              
             </div>
+
+            <div class="col-lg-2 col-md-2">
+              <div class="mb-2">
+                <label class="form-label requiredField">Pickup Time</label>
+                <mat-select class="select custom-mat-select" placeholder="Select Pickup Time" formControlName="pickupTime" required>
+                  <mat-option *ngFor="let time of timeList" [value]="time.value">
+                    {{ time.name }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
@@ -177,16 +198,29 @@
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Point</label>
                 <input type="text" class="form-control" name="pickupPoint" formControlName="pickupPoint" required />
-
               </div>
             </div>
+            </div>
 
+          <div class="row">
+            <div class="col-lg-2 col-md-2"></div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Drop Date & Time</label>
                 <input type="datetime-local" class="form-control" name="dropDateTime" formControlName="dropDateTime"
                   required (change)="calculateDays()" />
 
+              </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2">
+              <div class="mb-2">
+                <label class="form-label requiredField">Drop Time</label>
+                <mat-select class="select custom-mat-select" placeholder="Select Drop Time" formControlName="dropTime" required>
+                  <mat-option *ngFor="let time of timeList" [value]="time">
+                    {{ time.name }}
+                  </mat-option>
+                </mat-select>
               </div>
             </div>
 
@@ -387,8 +421,8 @@
                 <!-- @if(createdBy?.errors?.['required'] && createdBy?.touched) {
                   <div class="errorMessage">Created By is required</div>
                   } } @else { -->
-                <input type="text" class="form-control" name="createdBy" formControlName="createdBy"
-                  value="FULL NAME" />
+                <!-- <input type="text" class="form-control" name="createdBy" formControlName="createdBy"
+                  value="FULL NAME" /> -->
                 <!-- #createdBy="ngModel" readonly />
                   @if(createdBy?.errors?.['required'] && createdBy?.touched) {
                   <div class="errorMessage">Created By is required</div>

@@ -5,7 +5,6 @@ import { MessageService } from 'primeng/api';
 import { AuthenticationService } from 'src/app/auth/authentication.service';
 import { LeadManagementService } from '../../lead-management.service';
 import { Constant } from 'src/app/core/constant/constants';
-import { ToastModule } from 'primeng/toast';
 import { SpinnerService } from 'src/app/core/core.index';
 import { CategoriesManagementService } from 'src/app/core-component/categories-management/categories-management.service';
 import { UserManagementService } from 'src/app/core-component/user-management/user-management.service';
@@ -17,6 +16,11 @@ interface data {
   id: number;
   name: string;
 }
+
+  interface timeData {
+    value: string;
+    name: string;
+  }
 
 interface su {
   id: number;
@@ -82,8 +86,9 @@ export class CreateLeadComponent {
     this.maxDate = new Date();
     this.maxDate.setFullYear(this.maxDate.getFullYear() + 1);
     
+    this.setDefaultDateTime();
   }
-
+  
   constructor(
     private fb: FormBuilder,
     private sidebar: SidebarService,
@@ -121,9 +126,11 @@ export class CreateLeadComponent {
     subCategory: [''], 
     itemName: [''],
     pickupDateTime: [''],
+    pickupTime: [''],
     pickupLocation: [''],
     pickupPoint: [''],
     dropDateTime: [''],
+    dropTime: [''],
     dropLocation: [''],
     dropPoint: [''],
     customeName: [''],
@@ -163,6 +170,54 @@ export class CreateLeadComponent {
     });
   }
 
+  public timeList: timeData[] = [
+    { value: '12:15 AM', name: '12:15 AM' },
+    { value: '12:30 AM', name: '12:30 AM' },
+    { value: '12:45 AM', name: '12:45 AM' },
+    { value: '1:00 AM', name: '1:00 AM' },
+    { value: '1:15 AM', name: '1:15 AM' },
+    { value: '1:30 AM', name: '1:30 AM' },
+    { value: '1:45 AM', name: '1:45 AM' },
+    { value: '2:00 AM', name: '2:00 AM' },
+    { value: '2:15 AM', name: '2:15 AM' },
+    { value: '2:30 AM', name: '2:30 AM' },
+    { value: '2:45 AM', name: '2:45 AM' },
+    { value: '3:00 AM', name: '3:00 AM' },
+    { value: '3:15 AM', name: '3:15 AM' },
+    { value: '3:30 AM', name: '3:30 AM' },
+    { value: '3:45 AM', name: '3:45 AM' },
+    { value: '4:00 AM', name: '4:00 AM' },
+    { value: '4:15 AM', name: '4:15 AM' },
+    { value: '4:30 AM', name: '4:30 AM' },
+    { value: '4:45 AM', name: '4:45 AM' },
+    { value: '5:00 AM', name: '5:00 AM' },
+    { value: '5:15 AM', name: '5:15 AM' },
+    { value: '5:30 AM', name: '5:30 AM' },
+    { value: '5:45 AM', name: '5:45 AM' }
+  ];
+  
+
+  
+
+  setDefaultDateTime(): void {
+    const currentDate = new Date();
+    
+    // Get the local date and time values
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');  // Months are zero-indexed
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+    
+    // Combine into the required format: YYYY-MM-DDTHH:MM
+    const dateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    
+    // Patch the value into the form
+    this.addLeadForm.patchValue({
+      dropDateTime: dateTime,
+      pickupDateTime: dateTime
+    });
+  }
 
 
   calculateDays() {
@@ -294,7 +349,6 @@ export class CreateLeadComponent {
     { id: 2, name: 'Bike' },
   ];
 
-  // leadOrigine: listData[] = [{ value: 'CALL', name: 'Call'}, {value: 'WHATSAPP', name: 'Whats App'}, {value: 'EMAIL', name: 'Email'},{value: 'OTHER', name: 'Other'}];
   leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
   leadType: listData[] = Constant.LEAD_TYPE_LIST;
   leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
