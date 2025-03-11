@@ -159,7 +159,7 @@
           </div>
 
           <div class="row">
-            <div class="col-lg-2 col-md-2"></div>
+            
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label>
@@ -167,7 +167,7 @@
               </div>
             </div>
 
-            <div class="col-lg-2 col-md-2">
+            <!-- <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Time</label>
                 <mat-select class="select custom-mat-select" placeholder="Select Pickup Time" formControlName="pickupTime" required>
@@ -176,7 +176,7 @@
                   </mat-option>
                 </mat-select>
               </div>
-            </div>
+            </div> -->
           
 
             <div class="col-lg-2 col-md-2">
@@ -200,10 +200,10 @@
                 <input type="text" class="form-control" name="pickupPoint" formControlName="pickupPoint" required />
               </div>
             </div>
-            </div>
+            <!-- </div>
 
-          <div class="row">
-            <div class="col-lg-2 col-md-2"></div>
+          <div class="row"> -->
+            
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Drop Date & Time</label>
@@ -213,7 +213,7 @@
               </div>
             </div>
 
-            <div class="col-lg-2 col-md-2">
+            <!-- <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Drop Time</label>
                 <mat-select class="select custom-mat-select" placeholder="Select Drop Time" formControlName="dropTime" required>
@@ -222,7 +222,7 @@
                   </mat-option>
                 </mat-select>
               </div>
-            </div>
+            </div> -->
 
 
             <div class="col-lg-2 col-md-2">
@@ -346,8 +346,10 @@
             <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-2">
                 <label class="form-label requiredField">Actual Amount</label>
-                <input type="number" class="form-control" formControlName="actualAmount" required
-                  (change)="calculatePayToCompanyAndPayToVendor()" />
+                <!-- <input type="number" class="form-control" formControlName="actualAmount" required
+                  (change)="calculatePayToCompanyAndPayToVendor()" /> -->
+                  <input type="number" class="form-control" formControlName="actualAmount" required
+                  (change)="calExtraAmount()" />
               </div>
             </div>
             <div class="col-lg-2 col-md-2"></div>

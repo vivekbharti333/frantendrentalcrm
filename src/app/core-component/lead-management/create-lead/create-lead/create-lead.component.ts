@@ -126,11 +126,11 @@ export class CreateLeadComponent {
     subCategory: [''], 
     itemName: [''],
     pickupDateTime: [''],
-    pickupTime: [''],
+    // pickupTime: [''],
     pickupLocation: [''],
     pickupPoint: [''],
     dropDateTime: [''],
-    dropTime: [''],
+    // dropTime: [''],
     dropLocation: [''],
     dropPoint: [''],
     customeName: [''],
@@ -170,33 +170,60 @@ export class CreateLeadComponent {
     });
   }
 
-  public timeList: timeData[] = [
-    { value: '12:15 AM', name: '12:15 AM' },
-    { value: '12:30 AM', name: '12:30 AM' },
-    { value: '12:45 AM', name: '12:45 AM' },
-    { value: '1:00 AM', name: '1:00 AM' },
-    { value: '1:15 AM', name: '1:15 AM' },
-    { value: '1:30 AM', name: '1:30 AM' },
-    { value: '1:45 AM', name: '1:45 AM' },
-    { value: '2:00 AM', name: '2:00 AM' },
-    { value: '2:15 AM', name: '2:15 AM' },
-    { value: '2:30 AM', name: '2:30 AM' },
-    { value: '2:45 AM', name: '2:45 AM' },
-    { value: '3:00 AM', name: '3:00 AM' },
-    { value: '3:15 AM', name: '3:15 AM' },
-    { value: '3:30 AM', name: '3:30 AM' },
-    { value: '3:45 AM', name: '3:45 AM' },
-    { value: '4:00 AM', name: '4:00 AM' },
-    { value: '4:15 AM', name: '4:15 AM' },
-    { value: '4:30 AM', name: '4:30 AM' },
-    { value: '4:45 AM', name: '4:45 AM' },
-    { value: '5:00 AM', name: '5:00 AM' },
-    { value: '5:15 AM', name: '5:15 AM' },
-    { value: '5:30 AM', name: '5:30 AM' },
-    { value: '5:45 AM', name: '5:45 AM' }
-  ];
+  // public timeList: timeData[] = [
+  //   { value: '12:15 AM', name: '12:15 AM' },
+  //   { value: '12:30 AM', name: '12:30 AM' },
+  //   { value: '12:45 AM', name: '12:45 AM' },
+  //   { value: '1:00 AM', name: '1:00 AM' },
+  //   { value: '1:15 AM', name: '1:15 AM' },
+  //   { value: '1:30 AM', name: '1:30 AM' },
+  //   { value: '1:45 AM', name: '1:45 AM' },
+  //   { value: '2:00 AM', name: '2:00 AM' },
+  //   { value: '2:15 AM', name: '2:15 AM' },
+  //   { value: '2:30 AM', name: '2:30 AM' },
+  //   { value: '2:45 AM', name: '2:45 AM' },
+  //   { value: '3:00 AM', name: '3:00 AM' },
+  //   { value: '3:15 AM', name: '3:15 AM' },
+  //   { value: '3:30 AM', name: '3:30 AM' },
+  //   { value: '3:45 AM', name: '3:45 AM' },
+  //   { value: '4:00 AM', name: '4:00 AM' },
+  //   { value: '4:15 AM', name: '4:15 AM' },
+  //   { value: '4:30 AM', name: '4:30 AM' },
+  //   { value: '4:45 AM', name: '4:45 AM' },
+  //   { value: '5:00 AM', name: '5:00 AM' },
+  //   { value: '5:15 AM', name: '5:15 AM' },
+  //   { value: '5:30 AM', name: '5:30 AM' },
+  //   { value: '5:45 AM', name: '5:45 AM' }
+  // ];
   
-
+  calExtraAmount() {
+    const leadValue = this.addLeadForm.value;
+  
+    if (leadValue.vendorRate != null && leadValue.totalDays != null && leadValue.deliveryAmountToVendor != null && leadValue.quantity != null) {
+      const firstValue = leadValue.vendorRate * leadValue.totalDays;
+      const secondValue =  firstValue +  Number(leadValue.deliveryAmountToVendor);
+      this.addLeadForm.patchValue({ balanceAmount: secondValue * leadValue.quantity});
+    } else {
+      console.error('Some required fields are missing for balance amount calculation.');
+      this.addLeadForm.patchValue({ balanceAmount: 0});
+    }
+  
+    const balAmt = leadValue.balanceAmount;
+    const bookAmt = leadValue.bookingAmount;
+    const actAmt = leadValue.actualAmount;
+    
+    if(bookAmt >= actAmt) {
+      const extraAmt = balAmt + actAmt;
+      this.addLeadForm.patchValue({ balanceAmount: (leadValue.balanceAmount + extraAmt) });
+    }
+  
+    if(bookAmt < actAmt) {
+      const extraAmt = balAmt - actAmt;
+      this.addLeadForm.patchValue({ balanceAmount: (leadValue.balanceAmount - extraAmt) });
+    }
+  }
+  
+  
   
 
   setDefaultDateTime(): void {
@@ -245,7 +272,7 @@ export class CreateLeadComponent {
 
   calculateTotalAmount() {
     const leadValue = this.addLeadForm.value;
-    // Check if `lead` and its properties are properly initialized
+    let secondValue = 0;
     if (
       leadValue &&
       leadValue.companyRate != null &&
@@ -255,7 +282,6 @@ export class CreateLeadComponent {
     ) {
       const firstValue = leadValue.companyRate * leadValue.totalDays;
       const secondValue = firstValue + Number(leadValue.deliveryAmountToCompany); // Ensure numeric addition
-      // leadValue.totalAmount = secondValue * leadValue.quantity;
 
       this.addLeadForm.patchValue({ totalAmount: secondValue * leadValue.quantity});
       
@@ -265,10 +291,13 @@ export class CreateLeadComponent {
       console.error('Some required fields are missing for total amount calculation.');
       leadValue.totalAmount = 0; // Set a fallback value
     }
+    return secondValue * leadValue.quantity;
   }
 
-  calculateBalanceAmount() {
+ 
+  calculateBalanceAmount(): number {
     const leadValue = this.addLeadForm.value;
+    let secondValue = 0;
     if (
       leadValue.vendorRate != null &&
       leadValue.totalDays != null &&
@@ -276,8 +305,7 @@ export class CreateLeadComponent {
       leadValue.quantity != null
     ) {
       const firstValue = leadValue.vendorRate * leadValue.totalDays;
-      const secondValue =  firstValue +  Number(leadValue.deliveryAmountToVendor);
-      // leadValue.balanceAmount =  secondValue * leadValue.quantity;
+      secondValue =  firstValue +  Number(leadValue.deliveryAmountToVendor);
       this.addLeadForm.patchValue({ balanceAmount: secondValue * leadValue.quantity});
 
         this.calculateBookingAmount();
@@ -286,24 +314,28 @@ export class CreateLeadComponent {
       console.error('Some required fields are missing for balance amount calculation.');
       leadValue.balanceAmount = 0; // Set a default fallback value
     }
+    return secondValue * leadValue.quantity
   }
 
-  calculateBookingAmount(){
+  calculateBookingAmount(): number {
     const leadValue = this.addLeadForm.value;
-    // leadValue.bookingAmount = (leadValue.totalAmount - leadValue.balanceAmount);
-
     this.addLeadForm.patchValue({ bookingAmount: leadValue.totalAmount - leadValue.balanceAmount}),
     this.calculatePayToCompanyAndPayToVendor();
+
+    return leadValue.totalAmount - leadValue.balanceAmount;
   }
 
-  calculatePayToCompanyAndPayToVendor() {
+  calculatePayToCompanyAndPayToVendor(): number {
     const leadValue = this.addLeadForm.value;
     const amountValue = (leadValue.bookingAmount - leadValue.actualAmount);
-
+    
+    this.calExtraAmount();
     if (amountValue < 0) {
       leadValue.payToVendor = amountValue;
-    } else if (amountValue >= 0)
+    } else if (amountValue >= 0) {
       leadValue.payToCompany = amountValue;
+    }
+     return amountValue;
   }
 
   checkCategoryType(categoryType: any) {
