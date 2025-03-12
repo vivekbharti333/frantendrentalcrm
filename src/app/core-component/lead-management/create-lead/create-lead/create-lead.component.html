@@ -163,7 +163,8 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label>
-                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" min="{{selectedDateTime}}" required />
+                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" min="{{selectedDateTime}}" 
+                required (blur)="calculateDays()" (blur)="calculateDays()"/>
               </div>
             </div>
 
@@ -208,7 +209,7 @@
               <div class="mb-2">
                 <label class="form-label requiredField">Drop Date & Time</label>
                 <input type="datetime-local" class="form-control" name="dropDateTime" formControlName="dropDateTime"
-                  required (change)="calculateDays()" />
+                  required (blur)="calculateDays()" (blur)="calculateDays()"/>
 
               </div>
             </div>
@@ -327,20 +328,20 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Booking Amount</label>
-                <input type="number" class="form-control" formControlName="bookingAmount" required />
+                <input type="number" class="form-control" formControlName="bookingAmount" required  readonly/>
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Balance Amount</label>
-                <input type="number" class="form-control" formControlName="balanceAmount" required />
+                <input type="number" class="form-control" formControlName="balanceAmount" required readonly/>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Amount</label>
-                <input type="number" class="form-control" formControlName="totalAmount" required />
+                <input type="number" class="form-control" formControlName="totalAmount" required readonly/>
               </div>
             </div>
             <div class="col-lg-2 col-md-2" *ngIf="!isActivities">

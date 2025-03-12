@@ -138,7 +138,8 @@ export class CreateLeadComponent {
     customerMobile: [''],
     customerAlternateMobile: [''],
     customerEmailId: [''],
-    totalDays: 1 as number | null,
+    totalDays: [''],
+    // totalDays: 1 as number | null,
     quantity: 1,
     childrenQuantity: [''],
     infantQuantity: [''],
@@ -197,33 +198,34 @@ export class CreateLeadComponent {
   // ];
   
   calExtraAmount() {
-    const leadValue = this.addLeadForm.value;
-  
-    if (leadValue.vendorRate != null && leadValue.totalDays != null && leadValue.deliveryAmountToVendor != null && leadValue.quantity != null) {
-      const firstValue = leadValue.vendorRate * leadValue.totalDays;
-      const secondValue =  firstValue +  Number(leadValue.deliveryAmountToVendor);
-      this.addLeadForm.patchValue({ balanceAmount: secondValue * leadValue.quantity});
-    } else {
-      console.error('Some required fields are missing for balance amount calculation.');
-      this.addLeadForm.patchValue({ balanceAmount: 0});
-    }
-  
-    const balAmt = leadValue.balanceAmount;
-    const bookAmt = leadValue.bookingAmount;
-    const actAmt = leadValue.actualAmount;
     
-    if(bookAmt >= actAmt) {
-      const extraAmt = balAmt + actAmt;
-      this.addLeadForm.patchValue({ balanceAmount: (leadValue.balanceAmount + extraAmt) });
-    }
+    const leadValue = this.addLeadForm.value;
+    let secondValue = 0;
+    if (
+      leadValue.vendorRate != null &&
+      leadValue.totalDays != null &&
+      leadValue.deliveryAmountToVendor != null &&
+      leadValue.quantity != null
+    ) {
+      const firstValue = leadValue.vendorRate * leadValue.totalDays;
+      secondValue =  firstValue +  Number(leadValue.deliveryAmountToVendor);
+      this.addLeadForm.patchValue({ balanceAmount: secondValue * leadValue.quantity});
+    } 
+
+    alert("Balance Amount : "+secondValue * leadValue.quantity);
   
-    if(bookAmt < actAmt) {
-      const extraAmt = balAmt - actAmt;
-      this.addLeadForm.patchValue({ balanceAmount: (leadValue.balanceAmount - extraAmt) });
+    const bookAmt = this.addLeadForm.value.bookingAmount;
+    const actAmt = this.addLeadForm.value.actualAmount;
+    const balAmt = this.addLeadForm.value.balanceAmount;
+  
+    if (bookAmt >= actAmt) {
+      const extraAmtPlus = actAmt - bookAmt; // Corrected logic
+      this.addLeadForm.patchValue({ balanceAmount: (balAmt + (bookAmt - actAmt)) });
+    } else {
+      const extraAmtMinus = bookAmt - actAmt; // Corrected logic
+      this.addLeadForm.patchValue({ balanceAmount: balAmt - (actAmt - bookAmt) });
     }
   }
-  
-  
   
 
   setDefaultDateTime(): void {
@@ -247,28 +249,56 @@ export class CreateLeadComponent {
   }
 
 
+  // calculateDays() {
+  //   const leadValue = this.addLeadForm.value;
+  //   if (leadValue.dropDateTime && leadValue.pickupDateTime) {
+  //     const d1 = new Date(leadValue.dropDateTime);
+  //     const d2 = new Date(leadValue.pickupDateTime);
+
+  //     if (d1 < d2) {
+  //       alert('Drop Date & Time must be after Pickup Date & Time.');
+  //       leadValue.totalDays = null;
+  //       return;
+  //     }
+
+  //     const timeDifference = Math.abs(d1.getTime() - d2.getTime());
+  //     leadValue.totalDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+  //     this.addLeadForm.patchValue({ totalDays: Math.ceil(timeDifference / (1000 * 3600 * 24))  });
+
+  //     this.calculateTotalAmount();
+  //     this.calculatePayToCompanyAndPayToVendor();
+  //   } else {
+  //     leadValue.totalDays = null;
+  //     alert('Please select both Pickup and Drop dates.');
+  //   }
+  // }
+
   calculateDays() {
-    const leadValue = this.addLeadForm.value;
-    if (leadValue.dropDateTime && leadValue.pickupDateTime) {
-      const d1 = new Date(leadValue.dropDateTime);
-      const d2 = new Date(leadValue.pickupDateTime);
-
-      if (d1 < d2) {
-        alert('Drop Date & Time must be after Pickup Date & Time.');
-        leadValue.totalDays = null;
-        return;
+    const pickupDateTime = this.addLeadForm.value.pickupDateTime;
+    const dropDateTime = this.addLeadForm.value.dropDateTime;
+  
+    if (pickupDateTime && dropDateTime) {
+      let pickDate = new Date(pickupDateTime);
+      let dropDate = new Date(dropDateTime);
+  
+      // Adjust pickup date if time is before 6:00 AM
+      if (pickDate.getHours() < 6) {
+        pickDate.setDate(pickDate.getDate() - 1);
       }
-
-      const timeDifference = Math.abs(d1.getTime() - d2.getTime());
-      leadValue.totalDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
-
-      this.calculateTotalAmount();
-      this.calculatePayToCompanyAndPayToVendor();
-    } else {
-      leadValue.totalDays = null;
-      alert('Please select both Pickup and Drop dates.');
+  
+      // Adjust drop date if time is before 9:00 AM
+      if (dropDate.getHours() >= 9) {
+        dropDate.setDate(dropDate.getDate() + 1);
+      }
+  
+      const timeDifference = dropDate.getTime() - pickDate.getTime();
+      const noOfDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
+  
+      this.addLeadForm.patchValue({ totalDays: noOfDays });
     }
   }
+  
 
   calculateTotalAmount() {
     const leadValue = this.addLeadForm.value;
@@ -329,7 +359,7 @@ export class CreateLeadComponent {
     const leadValue = this.addLeadForm.value;
     const amountValue = (leadValue.bookingAmount - leadValue.actualAmount);
     
-    this.calExtraAmount();
+    // this.calExtraAmount();
     if (amountValue < 0) {
       leadValue.payToVendor = amountValue;
     } else if (amountValue >= 0) {
@@ -339,7 +369,6 @@ export class CreateLeadComponent {
   }
 
   checkCategoryType(categoryType: any) {
-    console.log(categoryType.categoryTypeName, Constant.ACTIVITY); // For debugging
     if (categoryType.categoryTypeName === Constant.ACTIVITY) {
       this.isActivities = true;
     } else {
