@@ -67,6 +67,8 @@ export class SubCategoriesComponent {
     superCategoryId: '',
     categoryId: '',
     subCategory: '',
+    securityAmount: '',
+    vendorRate: '',
     description: '',
   };
 
@@ -78,6 +80,8 @@ export class SubCategoriesComponent {
     category: '',
     categoryId: '',
     subCategory: '',
+    // securityAmount: '',
+    // vendorRate: '',
     // description: '',
     createdAt: '',
     status: '',

@@ -222,6 +222,8 @@ export class CategoriesManagementService {
         superCategoryId: addSubCategory.superCategoryId,
         categoryId: addSubCategory.categoryId,
         subCategory: addSubCategory.subCategory,
+        securityAmount: addSubCategory.securityAmount,
+        vendorRate: addSubCategory.vendorRate,
         description: addSubCategory.description,
         token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),

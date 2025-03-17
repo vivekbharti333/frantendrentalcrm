@@ -124,7 +124,10 @@ export class CreateUserComponent {
   userType: data[] = [
     { value: 'ADMIN', name: 'ADMIN' },
     { value: 'TEAM_LEADER', name: 'TEAM LEADER' },
-    { value: 'SALE_EXECUTIVE', name: 'SALE EXECUTIVE' },
+    { value: 'VEHICLE_SALE_EXECUTIVE', name: 'VEHICLE SALE EXECUTIVE' },
+    { value: 'ACTIVITY_SALE_EXECUTIVE', name: 'ACTIVITY SALE EXECUTIVE' },
+    { value: 'UP_SALE_EXECUTIVE', name: 'UP SALE EXECUTIVE' },
+    { value: 'CUSTOMER_EXECUTIVE', name: 'CUSTOMER EXECUTIVE' },
   ];
   // permissionsList: data[] = [{ value: '1', name: 'admindb'}, {value: '2', name: 'admindbn'}, {value: '3', name: 'usermang'},{value: '3', name: 'usermang1'}];
   permissionsList: string[] = [

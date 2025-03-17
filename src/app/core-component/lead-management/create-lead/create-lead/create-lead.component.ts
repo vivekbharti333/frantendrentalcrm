@@ -43,7 +43,7 @@ export class CreateLeadComponent {
 
   public addLeadForm!: FormGroup;
 
-  public selectedOption: string = 'lead';
+  public selectedOption: string = 'vehicle';
   public notesType: string = 'Notes';
   public categoryTypeList: any[] = [];
   public superCategoryList: any[] = [];
@@ -61,6 +61,11 @@ export class CreateLeadComponent {
   public fullName: string = '';
   
   public isActivities:Boolean = false;
+
+  public vendorRate: any;
+  public deliveryAmtToVendor: any;
+  public payToVendor: any;
+  public payToCompany: any;
 
   filteredCategoryTypeList: any[] = [];
   filteredSuperCategoryList: any[] = [];
@@ -113,7 +118,6 @@ export class CreateLeadComponent {
 
   createForms() {
     this.addLeadForm = this.fb.group({
-
     companyName: ['Notes'],
     enquirySource: ['Call'],
     categoryTypeId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')]],
@@ -171,32 +175,14 @@ export class CreateLeadComponent {
     });
   }
 
-  // public timeList: timeData[] = [
-  //   { value: '12:15 AM', name: '12:15 AM' },
-  //   { value: '12:30 AM', name: '12:30 AM' },
-  //   { value: '12:45 AM', name: '12:45 AM' },
-  //   { value: '1:00 AM', name: '1:00 AM' },
-  //   { value: '1:15 AM', name: '1:15 AM' },
-  //   { value: '1:30 AM', name: '1:30 AM' },
-  //   { value: '1:45 AM', name: '1:45 AM' },
-  //   { value: '2:00 AM', name: '2:00 AM' },
-  //   { value: '2:15 AM', name: '2:15 AM' },
-  //   { value: '2:30 AM', name: '2:30 AM' },
-  //   { value: '2:45 AM', name: '2:45 AM' },
-  //   { value: '3:00 AM', name: '3:00 AM' },
-  //   { value: '3:15 AM', name: '3:15 AM' },
-  //   { value: '3:30 AM', name: '3:30 AM' },
-  //   { value: '3:45 AM', name: '3:45 AM' },
-  //   { value: '4:00 AM', name: '4:00 AM' },
-  //   { value: '4:15 AM', name: '4:15 AM' },
-  //   { value: '4:30 AM', name: '4:30 AM' },
-  //   { value: '4:45 AM', name: '4:45 AM' },
-  //   { value: '5:00 AM', name: '5:00 AM' },
-  //   { value: '5:15 AM', name: '5:15 AM' },
-  //   { value: '5:30 AM', name: '5:30 AM' },
-  //   { value: '5:45 AM', name: '5:45 AM' }
-  // ];
   
+  setSecurityAndVendorRate(event: any) {
+    const selectedSubCategory = event.value; // This now holds the full selected object
+
+    this.addLeadForm.patchValue({ vendorRate: selectedSubCategory.vendorRate});
+    this.addLeadForm.patchValue({ securityAmount: selectedSubCategory.securityAmount});
+  }
+
   calExtraAmount() {
     
     const leadValue = this.addLeadForm.value;
@@ -211,19 +197,19 @@ export class CreateLeadComponent {
       secondValue =  firstValue +  Number(leadValue.deliveryAmountToVendor);
       this.addLeadForm.patchValue({ balanceAmount: secondValue * leadValue.quantity});
     } 
-
-    alert("Balance Amount : "+secondValue * leadValue.quantity);
   
     const bookAmt = this.addLeadForm.value.bookingAmount;
     const actAmt = this.addLeadForm.value.actualAmount;
     const balAmt = this.addLeadForm.value.balanceAmount;
   
     if (bookAmt >= actAmt) {
-      const extraAmtPlus = actAmt - bookAmt; // Corrected logic
+     // const extraAmtPlus = actAmt - bookAmt; // Corrected logic
       this.addLeadForm.patchValue({ balanceAmount: (balAmt + (bookAmt - actAmt)) });
+      this.payToVendor = this.addLeadForm.value.balanceAmount;
     } else {
-      const extraAmtMinus = bookAmt - actAmt; // Corrected logic
+      // const extraAmtMinus = bookAmt - actAmt; // Corrected logic
       this.addLeadForm.patchValue({ balanceAmount: balAmt - (actAmt - bookAmt) });
+      this.payToVendor = this.addLeadForm.value.balanceAmount;
     }
   }
   
@@ -247,32 +233,6 @@ export class CreateLeadComponent {
       pickupDateTime: dateTime
     });
   }
-
-
-  // calculateDays() {
-  //   const leadValue = this.addLeadForm.value;
-  //   if (leadValue.dropDateTime && leadValue.pickupDateTime) {
-  //     const d1 = new Date(leadValue.dropDateTime);
-  //     const d2 = new Date(leadValue.pickupDateTime);
-
-  //     if (d1 < d2) {
-  //       alert('Drop Date & Time must be after Pickup Date & Time.');
-  //       leadValue.totalDays = null;
-  //       return;
-  //     }
-
-  //     const timeDifference = Math.abs(d1.getTime() - d2.getTime());
-  //     leadValue.totalDays = Math.ceil(timeDifference / (1000 * 3600 * 24));
-
-  //     this.addLeadForm.patchValue({ totalDays: Math.ceil(timeDifference / (1000 * 3600 * 24))  });
-
-  //     this.calculateTotalAmount();
-  //     this.calculatePayToCompanyAndPayToVendor();
-  //   } else {
-  //     leadValue.totalDays = null;
-  //     alert('Please select both Pickup and Drop dates.');
-  //   }
-  // }
 
   calculateDays() {
     const pickupDateTime = this.addLeadForm.value.pickupDateTime;
@@ -314,6 +274,9 @@ export class CreateLeadComponent {
       const secondValue = firstValue + Number(leadValue.deliveryAmountToCompany); // Ensure numeric addition
 
       this.addLeadForm.patchValue({ totalAmount: secondValue * leadValue.quantity});
+
+      this.deliveryAmtToVendor = this.addLeadForm.value.deliveryAmountToVendor;
+      this.vendorRate = this.addLeadForm.value.vendorRate;
       
       this.calculateBalanceAmount();
       this.calculatePayToCompanyAndPayToVendor();
@@ -362,8 +325,14 @@ export class CreateLeadComponent {
     // this.calExtraAmount();
     if (amountValue < 0) {
       leadValue.payToVendor = amountValue;
+      this.addLeadForm.patchValue({ payToVendor: amountValue})
+
+      this.payToVendor = this.addLeadForm.value.payToVendor;
+
     } else if (amountValue >= 0) {
       leadValue.payToCompany = amountValue;
+      this.addLeadForm.patchValue({ payToCompany: amountValue})
+      this.payToCompany = this.addLeadForm.value.payToCompany;
     }
      return amountValue;
   }
@@ -414,10 +383,10 @@ export class CreateLeadComponent {
   leadType: listData[] = Constant.LEAD_TYPE_LIST;
   leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
 
-  submitLeadForm1(){
-    console.log("Enter ")
-    console.log("Value : "+this.addLeadForm.value)
-  }
+  // submitLeadForm1(){
+  //   console.log("Enter ")
+  //   console.log("Value : "+this.addLeadForm.value)
+  // }
 
   submitLeadForm() {
     this.leadManagementService.saveLeadDetails(this.addLeadForm.value).subscribe({
@@ -527,6 +496,10 @@ export class CreateLeadComponent {
   }
 
   public getSuperCategory(superCateId: any) {
+
+    if (superCateId?.categoryTypeName === Constant.ACTIVITY) {
+      this.selectedOption = 'activity';
+  }
     
     this.checkCategoryType(superCateId);
     const categoryId = superCateId?.id;
