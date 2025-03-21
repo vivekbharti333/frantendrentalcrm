@@ -148,8 +148,10 @@ export class CreateLeadComponent {
     childrenQuantity: [''],
     infantQuantity: [''],
     vendorRate: 0,
+    vendorRateForKids: 0,
     payToVendor: 0,
     companyRate: 0,
+    companyRateForKids: 0,
     payToCompany: 0,
     bookingAmount: 0,
     balanceAmount: 0,
@@ -178,9 +180,11 @@ export class CreateLeadComponent {
   
   setSecurityAndVendorRate(event: any) {
     const selectedSubCategory = event.value; // This now holds the full selected object
+    alert(selectedSubCategory.vendorRateForKids);
 
-    this.addLeadForm.patchValue({ vendorRate: selectedSubCategory.vendorRate});
-    this.addLeadForm.patchValue({ securityAmount: selectedSubCategory.securityAmount});
+    this.addLeadForm.patchValue({ securityAmount: selectedSubCategory.securityAmount });
+    this.addLeadForm.patchValue({ vendorRate: selectedSubCategory.vendorRate });
+    this.addLeadForm.patchValue({ vendorRateForKids: selectedSubCategory.vendorRateForKids })
   }
 
   calExtraAmount() {
@@ -336,6 +340,67 @@ export class CreateLeadComponent {
     }
      return amountValue;
   }
+
+ 
+  // ----------------------------------------------Calculation for Activities Start----------------------------------------------------------------
+  calculateTotalAmountOfActivites() {
+    const leadValue = this.addLeadForm.value;
+
+    if (
+      leadValue &&
+      leadValue.companyRate != null &&
+      leadValue.quantity != null &&
+      leadValue.companyRateForKids != null &&
+      leadValue.childrenQuantity != null
+      
+    ) {
+      const firstValue = leadValue.companyRate * leadValue.quantity;
+      const secondValue = leadValue.companyRateForKids * leadValue.childrenQuantity; // Ensure numeric addition
+
+      this.addLeadForm.patchValue({ totalAmount: (firstValue + secondValue)});
+
+      this.calculateBalanceAmountOfActivites();
+      // this.calculatePayToCompanyAndPayToVendor();
+    } else {
+      console.error('Some required fields are missing for total amount calculation.');
+      leadValue.totalAmount = 0; // Set a fallback value
+    }
+    return 0;
+  }
+ 
+  calculateBalanceAmountOfActivites(): number {
+    const leadValue = this.addLeadForm.value;
+ 
+    if (
+      leadValue.vendorRate != null &&
+      leadValue.quantity != null &&
+      leadValue.vendorRateForKids != null &&
+      leadValue.childrenQuantity != null
+    ) {
+      const firstValue = (leadValue.vendorRate * leadValue.quantity);
+      const secondValue = (leadValue.vendorRateForKids * leadValue.childrenQuantity);
+      this.addLeadForm.patchValue({ balanceAmount: (firstValue + secondValue)});
+
+      // alert('Balence amount'+(firstValue + secondValue))
+
+        this.calculateTotalAmountOfActivites();
+        // this.calculatePayToCompanyAndPayToVendor();
+    } else {
+      console.error('Some required fields are missing for balance amount calculation.');
+      leadValue.balanceAmount = 0; // Set a default fallback value
+    }
+    return 0;
+  }
+
+  calculateBookingAmountOfActivites(): number {
+    const leadValue = this.addLeadForm.value;
+    this.addLeadForm.patchValue({ bookingAmount: leadValue.totalAmount - leadValue.balanceAmount});
+    // this.calculatePayToCompanyAndPayToVendor();
+
+    return leadValue.totalAmount - leadValue.balanceAmount;
+  }
+
+  // ----------------------------------------------Calculation for Activities End----------------------------------------------------------------
 
   checkCategoryType(categoryType: any) {
     if (categoryType.categoryTypeName === Constant.ACTIVITY) {

@@ -621,27 +621,29 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Company Rate</label>
-                <input type="text" class="form-control" placeholder="0" formControlName="companyRate" required (change)="calculateTotalAmount()" />
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                <label class="form-label requiredField">Vendor Rate</label>
-                <input type="text" class="form-control" formControlName="vendorRate" required (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" placeholder="0" formControlName="companyRate" required (change)="calculateTotalAmountOfActivites()" />
               </div>
             </div>
 
-            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
+            <div class="col-lg-2 col-md-2">
+              <div class="mb-2">
+                <label class="form-label requiredField">Vendor Rate</label>
+                <input type="text" class="form-control" formControlName="vendorRate" required (change)="calculateBalanceAmountOfActivites()" />
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-2 col-md-2" *ngIf="!isActivities"> -->
+              <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Company Rate (Kids)</label>
-                <input type="text" class="form-control" formControlName="deliveryAmountToCompany" required (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" formControlName="companyRateForKids" required (change)="calculateTotalAmountOfActivites()" />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Vendor Rate (Kids)</label>
-                <input type="text" class="form-control" formControlName="deliveryAmountToVendor" required (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" formControlName="vendorRateForKids" required (change)="calculateBalanceAmountOfActivites()" />
               </div>
             </div>
 

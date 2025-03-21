@@ -143,6 +143,9 @@
             <th mat-sort-header="userName">Super Category</th>
             <th mat-sort-header="userName">Category</th>
             <th mat-sort-header="userName">Sub Category</th>
+            <th mat-sort-header="userName">Security Amount</th>
+            <th mat-sort-header="userName">Vendor Rate</th>
+            <th mat-sort-header="userName">Vendor Rate (Kids)</th>
             <th mat-sort-header="status">Status</th>
             <th mat-sort-header="createdOn">Created On</th>
             <th class="no-sort">Action</th>
@@ -162,6 +165,9 @@
             <td>{{ data.superCategory }}</td>
             <td>{{ data.category }}</td>
             <td>{{ data.subCategory }}</td>
+            <td>{{ data.securityAmount }}</td>
+            <td>{{ data.vendorRate }}</td>
+            <td>{{ data.vendorRateForKids }}</td>
 
             <td>
               <button class="badge-button" [ngClass]="{
