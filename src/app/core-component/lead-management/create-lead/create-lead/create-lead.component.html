@@ -592,8 +592,7 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Quantity</label>
-                <input type="number" class="form-control" formControlName="quantity" min="0" required
-                  (change)="calculateTotalAmount()" />
+                <input type="number" class="form-control" formControlName="quantity" min="0" required (change)="calculateTotalAmountOfActivites()" />
 
               </div>
             </div>
@@ -601,14 +600,14 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Child Quantity</label>
-                <input type="number" class="form-control" formControlName="childrenQuantity" min="0" required />
+                <input type="number" class="form-control" formControlName="childrenQuantity" min="0" required (change)="calculateTotalAmountOfActivites()"/>
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Infant Quantity</label>
-                <input type="number" class="form-control" formControlName="infantQuantity" min="0" required />
+                <input type="number" class="form-control" formControlName="infantQuantity" min="0" required (change)="calculateTotalAmountOfActivites()"/>
               </div>
             </div>
           </div>
