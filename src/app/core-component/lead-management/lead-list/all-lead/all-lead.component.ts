@@ -185,6 +185,7 @@ export class AllLeadComponent {
   getAllLeadList() {
     this.leadManagementService.getAllLeadList(this.cookieService.get('roleType')).subscribe((apiRes: any) => {
       this.setTableData(apiRes);
+      console.log("Data : "+ apiRes);
     });
   }
 

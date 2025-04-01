@@ -345,9 +345,15 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <mat-select name="categoryTypeId" [(ngModel)]="addSubCategory.categoryTypeId" class="select"
+                    <!-- <mat-select name="categoryTypeId" [(ngModel)]="addSubCategory.categoryTypeId" class="select"
                       placeholder="Select Category Type" (selectionChange)="getSuperCategoryByCateTypeId($event)">
                       <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
+                        {{ cateType.categoryTypeName }}
+                      </mat-option>
+                    </mat-select> -->
+                    <mat-select name="categoryTypeId" [(ngModel)]="addSubCategory.categoryTypeId" class="select"
+                      placeholder="Select Category Type" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType">
                         {{ cateType.categoryTypeName }}
                       </mat-option>
                     </mat-select>
@@ -399,7 +405,7 @@
                       required />
                   </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6" *ngIf="fieldForActivity">
                   <div class="mb-3">
                     <label class="form-label">Vendor Rate for Kids</label>
                     <input type="text" class="form-control" name="vendorRate" [(ngModel)]="addSubCategory.vendorRateForKids"

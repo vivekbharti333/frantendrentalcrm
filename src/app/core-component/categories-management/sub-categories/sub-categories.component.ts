@@ -27,6 +27,8 @@ import { MatDialog } from '@angular/material/dialog';
   providers: [MessageService, ToastModule],
 })
 export class SubCategoriesComponent {
+
+  public fieldForActivity: boolean = false;
   // public userList: any;
 
   public routes = routes;
@@ -107,10 +109,17 @@ export class SubCategoriesComponent {
     });
   }
 
-  async getSuperCategoryByCateTypeId(rowData: any): Promise<any> {
+
+  async getSuperCategoryByCateTypeId(event: any): Promise<any> {
+   
     return new Promise((resolve, reject) => {
+      const selectedCateType = event.value; 
+
+      // Set flag based on category type
+    this.fieldForActivity = selectedCateType.categoryTypeName === 'ACTIVITY';
+      
       this.categoriesManagementService
-        .getSuperCategoryListByCategoryTypeId(rowData.value)
+        .getSuperCategoryListByCategoryTypeId(selectedCateType.id)
         .subscribe({
           next: (response: any) => {
             if (response['responseCode'] == '200') {
