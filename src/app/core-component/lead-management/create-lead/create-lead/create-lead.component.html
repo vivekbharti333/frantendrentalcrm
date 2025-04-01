@@ -138,7 +138,7 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label>
-                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" min="{{selectedDateTime}}" required (blur)="calculateDays()"/>
+                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" required (blur)="calculateDays()"/>
               </div>
             </div>
 
@@ -556,7 +556,8 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label>
-                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" min="{{selectedDateTime}}" required (blur)="calculateDays()"/>
+           <!-- <input type="datetime-local" class="form-control" formControlName="pickupDateTime" min="{{selectedDateTime}}" required (blur)="calculateDays()"/> -->
+                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" required (blur)="calculateDays()" />
               </div>
             </div>
 

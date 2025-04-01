@@ -72,6 +72,8 @@ export class SubCategoriesComponent {
     securityAmount: '',
     vendorRate: '',
     vendorRateForKids: '',
+    startTime: '',
+    endTime: '',
     description: '',
   };
 

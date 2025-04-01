@@ -218,13 +218,15 @@ export class CategoriesManagementService {
     const request: any = {
       payload: {
         subCategoryImage: addSubCategory.subCategoryImage,
-        categoryTypeId: addSubCategory.categoryTypeId,
+        categoryTypeId: addSubCategory.categoryTypeId['id'],
         superCategoryId: addSubCategory.superCategoryId,
         categoryId: addSubCategory.categoryId,
         subCategory: addSubCategory.subCategory,
         securityAmount: addSubCategory.securityAmount,
         vendorRate: addSubCategory.vendorRate,
         vendorRateForKids: addSubCategory.vendorRateForKids,
+        startTime: addSubCategory.startTime,
+        endTime: addSubCategory.endTime,
         description: addSubCategory.description,
         token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),

@@ -53,7 +53,7 @@ export class CreateLeadComponent {
   public dropLocationList: any[] = [];
   public userList: any[] = [];
 
-  selectedDateTime: string = '';
+  // selectedDateTime: string = '';
   public minDate!: Date;
   public maxDate!: Date;
 
@@ -121,10 +121,10 @@ export class CreateLeadComponent {
       companyName: ['Notes'],
       enquirySource: ['Call'],
       categoryTypeId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')]],
+      categoryTypeName: [''],
       superCategoryId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')]],
       categoryId: [''],
       subCategoryId: [''],
-      categoryTypeName: [''],
       superCategory: [''],
       category: [''],
       subCategory: [''],
@@ -180,12 +180,50 @@ export class CreateLeadComponent {
 
   setSecurityAndVendorRate(event: any) {
     const selectedSubCategory = event.value; // This now holds the full selected object
-    alert(selectedSubCategory.vendorRateForKids);
+    const addFormValue = this.addLeadForm.value;
+
+    // add date and time automatic from sub category
+    const startTime = selectedSubCategory.startTime;
+    const endTime = selectedSubCategory.endTime;
+
+    if(addFormValue.categoryTypeName == Constant.ACTIVITY){
+      this.addTimeToDate(selectedSubCategory.startTime);
+    }
 
     this.addLeadForm.patchValue({ securityAmount: selectedSubCategory.securityAmount });
     this.addLeadForm.patchValue({ vendorRate: selectedSubCategory.vendorRate });
     this.addLeadForm.patchValue({ vendorRateForKids: selectedSubCategory.vendorRateForKids })
   }
+
+  addTimeToDate(timeString: string): string {
+    const currentDate = new Date();
+  
+    // Extract hours and minutes from the time string (e.g., "14:53")
+    const [hours, minutes] = timeString.split(':').map(num => parseInt(num, 10));
+  
+    // Set the hours and minutes to the current date
+    currentDate.setHours(hours);
+    currentDate.setMinutes(minutes);
+    currentDate.setSeconds(0);  // Optional: Set seconds to 0
+    currentDate.setMilliseconds(0);  // Optional: Set milliseconds to 0
+  
+    // Manually format the date into yyyy-MM-ddTHH:mm format
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-based months
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedHours = String(currentDate.getHours()).padStart(2, '0');
+    const formattedMinutes = String(currentDate.getMinutes()).padStart(2, '0');
+  
+    const formattedDate = `${year}-${month}-${day}T${formattedHours}:${formattedMinutes}`;
+  
+    console.log("hi : " + formattedDate);
+  
+    // Set the formatted date to the form control
+    this.addLeadForm.patchValue({ pickupDateTime: formattedDate });
+  
+    return formattedDate;
+  }
+  
 
   calExtraAmount() {
 
@@ -546,12 +584,10 @@ calculateBookingAmountOfActivites(): number {
           this.filteredCategoryTypeList = this.categoryTypeList;
 
           if (this.filteredCategoryTypeList.length > 0) {
-            this.addLeadForm.patchValue({
-              categoryTypeId: this.filteredCategoryTypeList[1] // ✅ Set first item as selected
-            });
-
+            this.addLeadForm.patchValue({ categoryTypeId: this.filteredCategoryTypeList[1]});
           }
           this.getSuperCategory(this.filteredCategoryTypeList[1])
+          
         }
       },
       error: (error: any) => {  // ✅ Corrected error function syntax
@@ -568,11 +604,12 @@ calculateBookingAmountOfActivites(): number {
 
     if (superCateId?.categoryTypeName === Constant.ACTIVITY) {
       this.selectedOption = 'activity';
+      this.addLeadForm.patchValue({ categoryTypeName: 'ACTIVITY' })
     }
 
     this.checkCategoryType(superCateId);
     const categoryId = superCateId?.id;
-    console.log("Enter Hai : " + categoryId);
+   
     this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(categoryId)
       .subscribe({
         next: (response: any) => {
@@ -581,8 +618,7 @@ calculateBookingAmountOfActivites(): number {
             this.filteredSuperCategoryList = this.superCategoryList;
 
             if (this.filteredSuperCategoryList.length > 0) {
-              this.addLeadForm.patchValue({
-                superCategoryId: this.filteredSuperCategoryList[0] // ✅ Set first item as selected
+              this.addLeadForm.patchValue({ superCategoryId: this.filteredSuperCategoryList[0] // ✅ Set first item as selected
               });
             }
             this.getCategory(this.filteredSuperCategoryList[0]);
