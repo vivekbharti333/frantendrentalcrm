@@ -186,7 +186,7 @@ export class CreateLeadComponent {
     const startTime = selectedSubCategory.startTime;
     const endTime = selectedSubCategory.endTime;
 
-    if(addFormValue.categoryTypeName == Constant.ACTIVITY){
+    if (addFormValue.categoryTypeName == Constant.ACTIVITY) {
       this.addTimeToDate(selectedSubCategory.startTime);
     }
 
@@ -197,33 +197,33 @@ export class CreateLeadComponent {
 
   addTimeToDate(timeString: string): string {
     const currentDate = new Date();
-  
+
     // Extract hours and minutes from the time string (e.g., "14:53")
     const [hours, minutes] = timeString.split(':').map(num => parseInt(num, 10));
-  
+
     // Set the hours and minutes to the current date
     currentDate.setHours(hours);
     currentDate.setMinutes(minutes);
     currentDate.setSeconds(0);  // Optional: Set seconds to 0
     currentDate.setMilliseconds(0);  // Optional: Set milliseconds to 0
-  
+
     // Manually format the date into yyyy-MM-ddTHH:mm format
     const year = currentDate.getFullYear();
     const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // getMonth() returns 0-based months
     const day = String(currentDate.getDate()).padStart(2, '0');
     const formattedHours = String(currentDate.getHours()).padStart(2, '0');
     const formattedMinutes = String(currentDate.getMinutes()).padStart(2, '0');
-  
+
     const formattedDate = `${year}-${month}-${day}T${formattedHours}:${formattedMinutes}`;
-  
+
     console.log("hi : " + formattedDate);
-  
+
     // Set the formatted date to the form control
     this.addLeadForm.patchValue({ pickupDateTime: formattedDate });
-  
+
     return formattedDate;
   }
-  
+
 
   calExtraAmount() {
 
@@ -390,21 +390,21 @@ export class CreateLeadComponent {
     const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
 
     if (quantity >= 0 && childrenQuantity >= 0) {
-        const firstValue = companyRate * quantity;
-        const secondValue = companyRateForKids * childrenQuantity;
-        const totalAmount = firstValue + secondValue;
+      const firstValue = companyRate * quantity;
+      const secondValue = companyRateForKids * childrenQuantity;
+      const totalAmount = firstValue + secondValue;
 
-        this.addLeadForm.patchValue({ totalAmount });
+      this.addLeadForm.patchValue({ totalAmount });
 
-        // Call booking amount calculation after total amount is updated
-        this.calculateBalanceAmountOfActivites();
+      // Call booking amount calculation after total amount is updated
+      this.calculateBalanceAmountOfActivites();
     } else {
-        console.error('Invalid input values.');
-        this.addLeadForm.patchValue({ totalAmount: 0 });
+      console.error('Invalid input values.');
+      this.addLeadForm.patchValue({ totalAmount: 0 });
     }
-}
+  }
 
-calculateBalanceAmountOfActivites(): number {
+  calculateBalanceAmountOfActivites(): number {
     const leadValue = this.addLeadForm.value;
 
     const quantity = Number(leadValue.quantity) || 0;
@@ -413,25 +413,25 @@ calculateBalanceAmountOfActivites(): number {
     const vendorRateForKids = Number(leadValue.vendorRateForKids) || 0;
 
     if (quantity >= 0 && childrenQuantity >= 0) {
-        const firstValue = vendorRate * quantity;
-        const secondValue = vendorRateForKids * childrenQuantity;
-        const balanceAmount = firstValue + secondValue;
+      const firstValue = vendorRate * quantity;
+      const secondValue = vendorRateForKids * childrenQuantity;
+      const balanceAmount = firstValue + secondValue;
 
-        this.addLeadForm.patchValue({ balanceAmount });
+      this.addLeadForm.patchValue({ balanceAmount });
 
-        // Call booking amount calculation after balance amount is updated
-        this.calculateBookingAmountOfActivites();
+      // Call booking amount calculation after balance amount is updated
+      this.calculateBookingAmountOfActivites();
     } else {
-        console.error('Invalid input values.');
-        this.addLeadForm.patchValue({ balanceAmount: 0 });
+      console.error('Invalid input values.');
+      this.addLeadForm.patchValue({ balanceAmount: 0 });
     }
 
     return 0;
-}
+  }
 
-calculateBookingAmountOfActivites(): number {
+  calculateBookingAmountOfActivites(): number {
     const leadValue = this.addLeadForm.value;
-    
+
     const totalAmount = Number(leadValue.totalAmount) || 0;
     const balanceAmount = Number(leadValue.balanceAmount) || 0;
     const bookingAmount = totalAmount - balanceAmount;
@@ -439,7 +439,7 @@ calculateBookingAmountOfActivites(): number {
     this.addLeadForm.patchValue({ bookingAmount });
 
     return bookingAmount;
-}
+  }
 
 
   // ----------------------------------------------Calculation for Activities End----------------------------------------------------------------
@@ -549,11 +549,7 @@ calculateBookingAmountOfActivites(): number {
         }
       },
       error: (error: any) =>
-        this.messageService.add({
-          summary: '500',
-          detail: 'Server Error',
-          styleClass: 'danger-background-popover',
-        }),
+        this.messageService.add({ summary: '500', detail: 'Server Error', styleClass: 'danger-background-popover', }),
     });
   }
 
@@ -568,11 +564,7 @@ calculateBookingAmountOfActivites(): number {
         }
       },
       error: (error: any) =>
-        this.messageService.add({
-          summary: '500',
-          detail: 'Server Error',
-          styleClass: 'danger-background-popover',
-        }),
+        this.messageService.add({ summary: '500', detail: 'Server Error', styleClass: 'danger-background-popover', }),
     });
   }
 
@@ -584,10 +576,10 @@ calculateBookingAmountOfActivites(): number {
           this.filteredCategoryTypeList = this.categoryTypeList;
 
           if (this.filteredCategoryTypeList.length > 0) {
-            this.addLeadForm.patchValue({ categoryTypeId: this.filteredCategoryTypeList[1]});
+            this.addLeadForm.patchValue({ categoryTypeId: this.filteredCategoryTypeList[1] });
           }
           this.getSuperCategory(this.filteredCategoryTypeList[1])
-          
+
         }
       },
       error: (error: any) => {  // ✅ Corrected error function syntax
@@ -609,7 +601,7 @@ calculateBookingAmountOfActivites(): number {
 
     this.checkCategoryType(superCateId);
     const categoryId = superCateId?.id;
-   
+
     this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(categoryId)
       .subscribe({
         next: (response: any) => {
@@ -618,7 +610,8 @@ calculateBookingAmountOfActivites(): number {
             this.filteredSuperCategoryList = this.superCategoryList;
 
             if (this.filteredSuperCategoryList.length > 0) {
-              this.addLeadForm.patchValue({ superCategoryId: this.filteredSuperCategoryList[0] // ✅ Set first item as selected
+              this.addLeadForm.patchValue({
+                superCategoryId: this.filteredSuperCategoryList[0] // ✅ Set first item as selected
               });
             }
             this.getCategory(this.filteredSuperCategoryList[0]);

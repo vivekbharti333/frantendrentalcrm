@@ -227,6 +227,8 @@ export class CategoriesManagementService {
         vendorRateForKids: addSubCategory.vendorRateForKids,
         startTime: addSubCategory.startTime,
         endTime: addSubCategory.endTime,
+        pickupLocation: addSubCategory.pickupLocation,
+        dropLocation: addSubCategory.dropLocation,
         description: addSubCategory.description,
         token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),

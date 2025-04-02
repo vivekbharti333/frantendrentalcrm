@@ -35,6 +35,12 @@ export class SubCategoriesComponent {
   public categoryTypeList: any[] = [];
   public superCategoryList: any[] = [];
   public categoryList: any[] = [];
+  public pickLocationList: any[] = [];
+  public dropLocationList: any[] = [];
+
+  filteredPickLocationList: any[] = [];
+  filteredDropLocationList: any[] = [];
+
   public baseUrl = Constant.Site_Url;
 
   // pagination variables
@@ -49,7 +55,6 @@ export class SubCategoriesComponent {
   addSubCategoryDialog: any;
   editSubCategoryDialog: any;
   constructor(
-    private data: DataService,
     private pagination: PaginationService,
     private router: Router,
     private sidebar: SidebarService,
@@ -61,6 +66,8 @@ export class SubCategoriesComponent {
   ngOnInit() {
     this.getCategoryType();
     this.getSubCategory();
+    this.getPickLocation();
+    this.getDropLocation();
   }
 
   public addSubCategory = {
@@ -75,6 +82,8 @@ export class SubCategoriesComponent {
     startTime: '',
     endTime: '',
     description: '',
+    pickupLocation: '',
+    dropLocation: ''
   };
 
   public editSubCategory = {
@@ -169,6 +178,36 @@ export class SubCategoriesComponent {
             reject(error);
           },
         });
+    });
+  }
+
+  public getPickLocation() {
+    this.categoriesManagementService.getLocationByType('PICK').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.pickLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredPickLocationList = this.pickLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({ summary: '500', detail: 'Server Error', styleClass: 'danger-background-popover', }),
+    });
+  }
+
+  public getDropLocation() {
+    this.categoriesManagementService.getLocationByType('DROP').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.dropLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredDropLocationList = this.dropLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({ summary: '500', detail: 'Server Error', styleClass: 'danger-background-popover', }),
     });
   }
 
