@@ -67,12 +67,16 @@ export class CreateLeadComponent {
   public payToVendor: any;
   public payToCompany: any;
 
+  public discountType = '₹';
+
   filteredCategoryTypeList: any[] = [];
   filteredSuperCategoryList: any[] = [];
   filteredCategoryList: any[] = [];
   filteredSubCategoryList: any[] = [];
   filteredPickLocationList: any[] = [];
   filteredDropLocationList: any[] = [];
+
+
 
   ngOnInit() {
     this.createForms();
@@ -158,6 +162,8 @@ export class CreateLeadComponent {
       totalAmount: 0,
       actualAmount: 0,
       securityAmount: [''],
+      discountType: [''],
+      discount: 0,
       deliveryAmountToCompany: 0,
       deliveryAmountToVendor: 0,
       status: [''],
@@ -176,6 +182,19 @@ export class CreateLeadComponent {
       records: [''],
     });
   }
+
+  percentOrAmount() {
+    const addFormValue = this.addLeadForm.value;
+  
+    if (this.discountType === '₹') {
+      this.discountType = '%';
+      this.addLeadForm.patchValue({ discountType: 'Percent' });
+    } else if (this.discountType === '%') {
+      this.discountType = '₹';
+      this.addLeadForm.patchValue({ discountType: 'Amount' });
+    }
+  }
+  
 
 
   setSecurityAndVendorRate(event: any) {

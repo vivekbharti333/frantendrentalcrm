@@ -255,6 +255,18 @@
             <div class="col-lg-2 col-md-2"></div>
           </div>
 
+          <div class="col-lg-2 col-md-2">
+            <div class="mb-2">  
+              <label class="form-label">Discount</label>
+              <div class="input-group">
+                <!-- <span class="input-group-text">&#x20b9; </span> -->
+                <!-- <span class="input-group-text">&percnt; </span> -->
+                <input type="text" class="form-control" formControlName="discount">
+                <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()" style="cursor: pointer; width: 40px;">{{discountType}}</span>
+              </div>
+            </div>
+          </div>
+
           <div class="row">
             <div class="col-lg-2 col-md-2"></div>
             <div class="col-lg-2 col-md-2">

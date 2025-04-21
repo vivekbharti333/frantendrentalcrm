@@ -134,6 +134,8 @@ export class LeadManagementService {
       balanceAmount: lead.balanceAmount,
       totalAmount: lead.totalAmount,
       securityAmount: lead.securityAmount,
+      discountType: lead.discountType,
+      discount: lead.discount,
       // vendorName: lead.,
       status: lead.status,
       leadOrigine: lead.leadOrigine,
