@@ -85,6 +85,7 @@ export class CreateLeadComponent {
     this.getUserList();
     this.getPickLocation();
     this.getDropLocation();
+    this.calculateDays();
 
     this.roleType === 'SUPERADMIN'
       ? (this.addLeadForm.value.createdBy = '')
@@ -184,8 +185,6 @@ export class CreateLeadComponent {
   }
 
   percentOrAmount() {
-    const addFormValue = this.addLeadForm.value;
-  
     if (this.discountType === '₹') {
       this.discountType = '%';
       this.addLeadForm.patchValue({ discountType: 'Percent' });
@@ -194,6 +193,22 @@ export class CreateLeadComponent {
       this.addLeadForm.patchValue({ discountType: 'Amount' });
     }
   }
+
+  calculateTotalAmountAndBalaenceAmontAfterDiscount() {
+    const addFormValue = this.addLeadForm.value;
+    const discount = addFormValue.discount;
+
+    // Ensure discount is not more than the total amount
+    const totalAmt = addFormValue.totalAmount - discount;
+    const balanceAmt = addFormValue.balanceAmount;
+    const bookingAmt = totalAmt - balanceAmt;
+
+    // Update the form with all new values in one patchValue call
+    this.addLeadForm.patchValue({
+        totalAmount: totalAmt,
+        bookingAmount: bookingAmt
+    });
+}
   
 
 
@@ -309,7 +324,7 @@ export class CreateLeadComponent {
       }
 
       // Adjust drop date if time is before 9:00 AM
-      if (dropDate.getHours() >= 9) {
+      if (dropDate.getHours() > 9) {
         dropDate.setDate(dropDate.getDate() + 1);
       }
 
