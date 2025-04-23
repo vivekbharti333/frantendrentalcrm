@@ -85,7 +85,6 @@ export class CreateLeadComponent {
     this.getUserList();
     this.getPickLocation();
     this.getDropLocation();
-    this.calculateDays();
 
     this.roleType === 'SUPERADMIN'
       ? (this.addLeadForm.value.createdBy = '')
@@ -97,6 +96,7 @@ export class CreateLeadComponent {
     this.maxDate.setFullYear(this.maxDate.getFullYear() + 1);
 
     this.setDefaultDateTime();
+    this.calculateDays();
   }
 
   constructor(
@@ -250,8 +250,6 @@ export class CreateLeadComponent {
 
     const formattedDate = `${year}-${month}-${day}T${formattedHours}:${formattedMinutes}`;
 
-    console.log("hi : " + formattedDate);
-
     // Set the formatted date to the form control
     this.addLeadForm.patchValue({ pickupDateTime: formattedDate });
 
@@ -260,7 +258,6 @@ export class CreateLeadComponent {
 
 
   calExtraAmount() {
-
     const leadValue = this.addLeadForm.value;
     let secondValue = 0;
     if (
@@ -279,11 +276,9 @@ export class CreateLeadComponent {
     const balAmt = this.addLeadForm.value.balanceAmount;
 
     if (bookAmt >= actAmt) {
-      // const extraAmtPlus = actAmt - bookAmt; // Corrected logic
       this.addLeadForm.patchValue({ balanceAmount: (balAmt + (bookAmt - actAmt)) });
       this.payToVendor = this.addLeadForm.value.balanceAmount;
     } else {
-      // const extraAmtMinus = bookAmt - actAmt; // Corrected logic
       this.addLeadForm.patchValue({ balanceAmount: balAmt - (actAmt - bookAmt) });
       this.payToVendor = this.addLeadForm.value.balanceAmount;
     }

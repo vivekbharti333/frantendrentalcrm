@@ -193,6 +193,26 @@ export class SidebarService {
               permission: 'create-lead',
             },
             
+          ],
+        },
+        {
+          menuValue: 'Booking Management',
+          hasSubRoute: true,
+          showSubRoute: false,
+          icon: 'bar-chart',
+          subMenus: [
+            {
+              menuValue: 'Drop',
+              route: routes.drop,
+              permission: 'create-lead',
+            },
+            {
+              menuValue: 'Pickup',
+              route: routes.pickup,
+              permission: 'create-lead',
+            },
+            
+            
             
           ],
         },

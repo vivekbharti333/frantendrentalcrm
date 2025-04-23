@@ -950,7 +950,7 @@ export class routes {
     return this.usersManagement + '/delete-account';
   }
 
-  
+  // Lead Managemnt
   public static get leadManagement(): string {
     return this.core + '/lead-management';
   }
@@ -960,7 +960,6 @@ export class routes {
   public static get followupOne(): string {
     return this.leadManagement + '/follow-up-one';
   }
-
   public static get allLead(): string {
     return this.leadManagement + '/all-lead';
   }
@@ -995,6 +994,7 @@ export class routes {
     return this.leadManagement + '/reserved';
   }
 
+  // Category Management
   public static get categoryManagement(): string {
     return this.core + '/category-management';
   }
@@ -1009,6 +1009,17 @@ export class routes {
   }
   public static get subCategory(): string {
     return this.categoryManagement + '/sub-category';
+  }
+
+  // Booking Management
+  public static get bookingManagement(): string {
+    return this.core + '/booking-management';
+  }
+  public static get drop(): string {
+    return this.bookingManagement + '/drop';
+  }
+  public static get pickup(): string {
+    return this.bookingManagement + '/pick-up';
   }
   
   // core pages child routes *ends*

@@ -92,6 +92,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'booking-management',
+        loadChildren: () =>
+          import('./booking-management/booking-management.module').then(
+            (m) => m.BookingManagementModule 
+          ),
+      },
+      {
         path: 'category-management',
         loadChildren: () =>
           import('./categories-management/categories-management.module').then(

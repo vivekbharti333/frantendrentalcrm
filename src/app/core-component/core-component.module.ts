@@ -11,6 +11,7 @@ import { HeaderComponent } from '../common-component/header/header.component';
 import { LayoutComponent } from '../common-component/layout/layout.component';
 import { sharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
+// import { BookingManagementComponent } from './booking-management/booking-management.component';
 // import { CategoriesComponent } from './categories-management/categories/categories.component';
 // import { LeadManagementComponent } from './lead-management/lead-management.component';
 // import { CreateLeadComponent } from './lead-management/create-lead/create-lead/create-lead.component';
@@ -23,6 +24,7 @@ import { RouterModule } from '@angular/router';
     SidebarTwoComponent,
     SidebarThreeComponent,
     LayoutComponent,
+    // BookingManagementComponent,
     // CategoriesComponent,
     // LeadManagementComponent,
     // CreateLeadComponent,

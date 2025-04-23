@@ -1,18 +1,20 @@
-
 <p-toast></p-toast>
 
 <div class="row">
   <div class="col-lg-5 col-md-5 form-check"></div>
   <div class="col-lg-1 col-md-1 form-check">
-    <input type="radio" class="btn-check" name="formName" value="vehicle" id="vehicle" autocomplete="off" checked (change)="onSelectionChange($event)" />
+    <input type="radio" class="btn-check" name="formName" value="vehicle" id="vehicle" autocomplete="off" checked
+      (change)="onSelectionChange($event)" />
     <label class="btn" for="vehicle">Vehicle</label>
   </div>
   <div class="col-lg-1 col-md-1 form-check">
-    <input type="radio" class="btn-check" name="formName" value="info" id="info" autocomplete="off" (change)="onSelectionChange($event)" />
+    <input type="radio" class="btn-check" name="formName" value="info" id="info" autocomplete="off"
+      (change)="onSelectionChange($event)" />
     <label class="btn" for="info">Information</label>
   </div>
   <div class="col-lg-5 col-md-5 form-check">
-    <input type="radio" class="btn-check" name="formName" value="activity" id="activity" autocomplete="off" (change)="onSelectionChange($event)" />
+    <input type="radio" class="btn-check" name="formName" value="activity" id="activity" autocomplete="off"
+      (change)="onSelectionChange($event)" />
     <label class="btn" for="activity">Activity</label>
   </div>
 </div>
@@ -51,8 +53,10 @@
             <div class="col-lg-4 col-md-4">
               <div class="mb-3">
                 <label class="form-label requiredField">Category Type</label>
-                <mat-select formControlName="categoryTypeId" class="select" placeholder="Select Category Type" (selectionChange)="getSuperCategory($event.value)" required>
-                  <app-mat-select-search (filteredList)="setFilterList($event, 'categoryType')" [originalList]="categoryTypeList" [categoryName]="'categoryTypeName'">
+                <mat-select formControlName="categoryTypeId" class="select" placeholder="Select Category Type"
+                  (selectionChange)="getSuperCategory($event.value)" required>
+                  <app-mat-select-search (filteredList)="setFilterList($event, 'categoryType')"
+                    [originalList]="categoryTypeList" [categoryName]="'categoryTypeName'">
                   </app-mat-select-search>
                   <mat-option *ngFor="let cateType of filteredCategoryTypeList" [value]="cateType">
                     {{ cateType.categoryTypeName }}
@@ -124,7 +128,7 @@
               <div class="mb-3">
                 <label class="form-label requiredField">Sub Category</label>
                 <mat-select formControlName="subCategoryId" class="select custom-mat-select"
-                  placeholder="Select a Sub Category" (selectionChange)="setSecurityAndVendorRate($event)"required>
+                  placeholder="Select a Sub Category" (selectionChange)="setSecurityAndVendorRate($event)" required>
                   <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate">
                     {{ subCate.subCategory }}
                   </mat-option>
@@ -134,11 +138,12 @@
           </div>
 
           <div class="row">
-            
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label>
-                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" required (blur)="calculateDays()"/>
+                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" required
+                  (blur)="calculateDays()" />
               </div>
             </div>
 
@@ -162,11 +167,12 @@
                 <input type="text" class="form-control" name="pickupPoint" formControlName="pickupPoint" required />
               </div>
             </div>
-            
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Drop Date & Time</label>
-                <input type="datetime-local" class="form-control" formControlName="dropDateTime" required (blur)="calculateDays()" (blur)="calculateDays()"/>
+                <input type="datetime-local" class="form-control" formControlName="dropDateTime" required
+                  (blur)="calculateDays()" (blur)="calculateDays()" />
               </div>
             </div>
 
@@ -198,7 +204,8 @@
             <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-1">
                 <label class="form-label requiredField">Total Days</label>
-                <input type="number" class="form-control" formControlName="totalDays" required (change)="calculateTotalAmount()" />
+                <input type="number" class="form-control" formControlName="totalDays" required
+                  (change)="calculateTotalAmount()" />
               </div>
             </div>
 
@@ -228,27 +235,31 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Company Rate</label>
-                <input type="text" class="form-control" placeholder="0" formControlName="companyRate" required (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" placeholder="0" formControlName="companyRate" required
+                  (change)="calculateTotalAmount()" />
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Vendor Rate</label>
-                <input type="text" class="form-control" formControlName="vendorRate" required (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" formControlName="vendorRate" required
+                  (change)="calculateTotalAmount()" />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Delivery</label>
-                <input type="text" class="form-control" formControlName="deliveryAmountToCompany" required (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" formControlName="deliveryAmountToCompany" required
+                  (change)="calculateTotalAmount()" />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Delivery To Vendor</label>
-                <input type="text" class="form-control" formControlName="deliveryAmountToVendor" required (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" formControlName="deliveryAmountToVendor" required
+                  (change)="calculateTotalAmount()" />
               </div>
             </div>
 
@@ -260,44 +271,52 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Booking Amount</label>
-                <input type="number" class="form-control" formControlName="bookingAmount" required  readonly/>
+                <input type="number" class="form-control" formControlName="bookingAmount" required readonly />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Balance Amount</label>
-                <input type="number" class="form-control" formControlName="balanceAmount" required readonly/>
+                <input type="number" class="form-control" formControlName="balanceAmount" required readonly />
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Amount</label>
-                <input type="number" class="form-control" formControlName="totalAmount" required readonly/>
+                <input type="number" class="form-control" formControlName="totalAmount" required readonly />
               </div>
             </div>
-            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
+            <!-- <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-2">
                 <label class="form-label requiredField">Actual Amount</label>
                   <input type="number" class="form-control" formControlName="actualAmount" required
                   (change)="calExtraAmount()" />
               </div>
-            </div>
-            <!-- <div class="col-lg-2 col-md-2"> -->
-              <div class="col-lg-2 col-md-2">
-                <div class="mb-2">  
-                  <label class="form-label">Discount</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" formControlName="discount" (change)="calculateTotalAmountAndBalaenceAmontAfterDiscount()">
-                    <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()" style="cursor: pointer; width: 40px;">{{discountType}}</span>
-                  </div>
+            </div> -->
+            <div class="col-lg-2 col-md-2">
+              <div class="mb-2">
+                <label class="form-label">Discount</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" formControlName="discount"
+                    (change)="calculateTotalAmountAndBalaenceAmontAfterDiscount()">
+                  <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()"
+                    style="cursor: pointer; width: 40px;">{{discountType}}</span>
                 </div>
               </div>
             </div>
+          </div>
           <!-- </div> -->
 
           <div class="row">
-            <div class="col-lg-2 col-md-2"></div>
+            <div class="col-lg-4 col-md-4"></div>
+            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
+              <div class="mb-2">
+                <label class="form-label requiredField">Actual Amount</label>
+                <input type="number" class="form-control" formControlName="actualAmount" required
+                  (change)="calExtraAmount()" />
+              </div>
+            </div>
             <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-2">
                 <label class="form-label requiredField">Security Amount</label>
@@ -305,7 +324,10 @@
                   required (change)="calculatePayToCompanyAndPayToVendor()" />
               </div>
             </div>
+          </div>
 
+          <div class="row">
+            <div class="col-lg-2 col-md-2"></div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Lead Origine</label>
@@ -343,11 +365,6 @@
                 </mat-select>
               </div>
             </div>
-            <div class="col-lg-2 col-md-2"></div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-2 col-md-2"></div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Created By</label>
@@ -359,6 +376,22 @@
                 </mat-select>
               </div>
             </div>
+            <div class="col-lg-2 col-md-2"></div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-2 col-md-2"></div>
+            <!-- <div class="col-lg-2 col-md-2">
+              <div class="mb-2">
+                <label class="form-label requiredField">Created By</label>
+                <mat-select formControlName="createdBy" class="select custom-mat-select" name="createdBy"
+                  placeholder="Select Agent Name">
+                  <mat-option *ngFor="let user of userList" [value]="user.loginId">
+                    {{ user.firstName }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div> -->
 
           </div>
 
@@ -370,27 +403,32 @@
           <div class="row">
             <div class="col-lg-3 col-md-3">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Custome Name" formControlName="customeName" required />
+                <input type="text" class="form-control bottom-border" placeholder="Custome Name"
+                  formControlName="customeName" required />
               </div>
             </div>
             <div class="col-lg-1 col-md-3">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Dial Code" formControlName="countryDialCode" required />
+                <input type="text" class="form-control bottom-border" placeholder="Dial Code"
+                  formControlName="countryDialCode" required />
               </div>
             </div>
             <div class="col-lg-2 col-md-6">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Mobile" formControlName="customerMobile" required />
+                <input type="text" class="form-control bottom-border" placeholder="Mobile"
+                  formControlName="customerMobile" required />
               </div>
             </div>
             <div class="col-lg-2 col-md-6">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Alternate Mobile" formControlName="customerAlternateMobile" />
+                <input type="text" class="form-control bottom-border" placeholder="Alternate Mobile"
+                  formControlName="customerAlternateMobile" />
               </div>
             </div>
             <div class="col-lg-4 col-md-6">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Customer EmailId" formControlName="customerEmailId" required />
+                <input type="text" class="form-control bottom-border" placeholder="Customer EmailId"
+                  formControlName="customerEmailId" required />
               </div>
             </div>
           </div>
@@ -408,7 +446,8 @@
               </div>
               <div class="input-container">
                 <label for="remarks" class="requiredField"><b>Remarks:</b></label>
-                <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..." formControlName="remarks" required />
+                <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..."
+                  formControlName="remarks" required />
               </div>
               <div class="input-container">
                 <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
@@ -439,9 +478,9 @@
               </div>
 
               <div *ngIf="notesType === 'Reminders'">
-                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
-                    bsDatepicker container=".date-input2"
-                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', minDate: minDate, maxDate: maxDate}">
+                <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
+                  bsDatepicker container=".date-input2"
+                  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', minDate: minDate, maxDate: maxDate}">
                 <textarea class="form-control no-border" name="notes" formControlName="notes" rows="2"
                   placeholder="___________________________________________________________________________________________"></textarea>
               </div>
@@ -517,7 +556,7 @@
               <div class="mb-3">
                 <label class="form-label requiredField">Sub Category</label>
                 <mat-select formControlName="subCategoryId" class="select custom-mat-select"
-                  placeholder="Select a Sub Category" (selectionChange)="setSecurityAndVendorRate($event)"required>
+                  placeholder="Select a Sub Category" (selectionChange)="setSecurityAndVendorRate($event)" required>
                   <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate">
                     {{ subCate.subCategory }}
                   </mat-option>
@@ -529,7 +568,7 @@
           <div class="row">
             <div class="col-lg-4 col-md-4">
               <div class="mb-4">
-               
+
               </div>
             </div>
             <div class="col-lg-4 col-md-4">
@@ -537,10 +576,12 @@
 
                 <div class="d-flex justify-content-center">
                   <div class="btn-group" role="group">
-                    <input type="radio" class="btn-check" name="dropPoint" id="self" value="SELF" formControlName="dropPoint" autocomplete="off" checked />
+                    <input type="radio" class="btn-check" name="dropPoint" id="self" value="SELF"
+                      formControlName="dropPoint" autocomplete="off" checked />
                     <label class="btn btn-outline-primary rounded-pill" for="self">SELF</label>&nbsp;&nbsp;&nbsp;
-                    
-                    <input type="radio" class="btn-check" name="dropPoint" id="pickDrop" value="PICK_DROP" formControlName="dropPoint" autocomplete="off" />
+
+                    <input type="radio" class="btn-check" name="dropPoint" id="pickDrop" value="PICK_DROP"
+                      formControlName="dropPoint" autocomplete="off" />
                     <label class="btn btn-outline-primary rounded-pill" for="pickDrop">P&D</label>
                   </div>
                 </div>
@@ -550,11 +591,11 @@
 
             <div class="col-lg-4 col-md-4">
               <div class="mb-4">
-                
+
               </div>
             </div>
           </div>
-          
+
 
           <div class="row">
 
@@ -562,12 +603,13 @@
               <div class="mb-3">
               </div>
             </div>
-            
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Pickup Date & Time</label>
-           <!-- <input type="datetime-local" class="form-control" formControlName="pickupDateTime" min="{{selectedDateTime}}" required (blur)="calculateDays()"/> -->
-                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" required (blur)="calculateDays()" />
+                <!-- <input type="datetime-local" class="form-control" formControlName="pickupDateTime" min="{{selectedDateTime}}" required (blur)="calculateDays()"/> -->
+                <input type="datetime-local" class="form-control" formControlName="pickupDateTime" required
+                  (blur)="calculateDays()" />
               </div>
             </div>
 
@@ -595,7 +637,7 @@
           </div>
 
           <div class="row">
-      
+
             <div class="col-lg-3 col-md-3">
               <div class="mb-3">
               </div>
@@ -603,7 +645,8 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Quantity</label>
-                <input type="number" class="form-control" formControlName="quantity" min="0" required (change)="calculateTotalAmountOfActivites()" />
+                <input type="number" class="form-control" formControlName="quantity" min="0" required
+                  (change)="calculateTotalAmountOfActivites()" />
 
               </div>
             </div>
@@ -611,14 +654,16 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Child Quantity</label>
-                <input type="number" class="form-control" formControlName="childrenQuantity" min="0" required (change)="calculateTotalAmountOfActivites()"/>
+                <input type="number" class="form-control" formControlName="childrenQuantity" min="0" required
+                  (change)="calculateTotalAmountOfActivites()" />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Infant Quantity</label>
-                <input type="number" class="form-control" formControlName="infantQuantity" min="0" required (change)="calculateTotalAmountOfActivites()"/>
+                <input type="number" class="form-control" formControlName="infantQuantity" min="0" required
+                  (change)="calculateTotalAmountOfActivites()" />
               </div>
             </div>
           </div>
@@ -631,29 +676,33 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Company Rate</label>
-                <input type="text" class="form-control" placeholder="0" formControlName="companyRate" required (change)="calculateTotalAmountOfActivites()" />
+                <input type="text" class="form-control" placeholder="0" formControlName="companyRate" required
+                  (change)="calculateTotalAmountOfActivites()" />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Vendor Rate</label>
-                <input type="text" class="form-control" formControlName="vendorRate" required (change)="calculateBalanceAmountOfActivites()" />
+                <input type="text" class="form-control" formControlName="vendorRate" required
+                  (change)="calculateBalanceAmountOfActivites()" />
               </div>
             </div>
 
             <!-- <div class="col-lg-2 col-md-2" *ngIf="!isActivities"> -->
-              <div class="col-lg-2 col-md-2">
+            <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Company Rate (Kids)</label>
-                <input type="text" class="form-control" formControlName="companyRateForKids" required (change)="calculateTotalAmountOfActivites()" />
+                <input type="text" class="form-control" formControlName="companyRateForKids" required
+                  (change)="calculateTotalAmountOfActivites()" />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Vendor Rate (Kids)</label>
-                <input type="text" class="form-control" formControlName="vendorRateForKids" required (change)="calculateBalanceAmountOfActivites()" />
+                <input type="text" class="form-control" formControlName="vendorRateForKids" required
+                  (change)="calculateBalanceAmountOfActivites()" />
               </div>
             </div>
 
@@ -669,29 +718,23 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Booking Amount</label>
-                <input type="number" class="form-control" formControlName="bookingAmount" required  readonly/>
+                <input type="number" class="form-control" formControlName="bookingAmount" required readonly />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Balance Amount</label>
-                <input type="number" class="form-control" formControlName="balanceAmount" required readonly/>
+                <input type="number" class="form-control" formControlName="balanceAmount" required readonly />
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Amount</label>
-                <input type="number" class="form-control" formControlName="totalAmount" required readonly/>
+                <input type="number" class="form-control" formControlName="totalAmount" required readonly />
               </div>
             </div>
-            <!-- <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
-              <div class="mb-2">
-                <label class="form-label requiredField">Actual Amount</label>
-                  <input type="number" class="form-control" formControlName="actualAmount" required
-                  (change)="calExtraAmount()" />
-              </div>
-            </div> -->
+
             <div class="col-lg-2 col-md-2"></div>
           </div>
 
@@ -701,14 +744,6 @@
 
               </div>
             </div>
-            <!-- <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
-              <div class="mb-2">
-                <label class="form-label requiredField">Security Amount</label>
-                <input type="number" class="form-control" name="securityAmount" formControlName="securityAmount"
-                  required (change)="calculatePayToCompanyAndPayToVendor()" />
-              </div>
-            </div> -->
-
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Lead Origine</label>
@@ -722,6 +757,7 @@
                 </mat-select>
               </div>
             </div>
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Lead Type</label>
@@ -734,6 +770,7 @@
                 </mat-select>
               </div>
             </div>
+
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label">Status</label>
@@ -744,14 +781,6 @@
                   </mat-option>
                   }
                 </mat-select>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2"></div>
-          </div>
-
-          <div class="row">
-            <div class="col-lg-3 col-md-3">
-              <div class="mb-3">
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
@@ -765,8 +794,15 @@
                 </mat-select>
               </div>
             </div>
-
+            <div class="col-lg-2 col-md-2"></div>
           </div>
+
+          <!-- <div class="row">
+            <div class="col-lg-3 col-md-3">
+              <div class="mb-3">
+              </div>
+            </div>
+          </div> -->
 
           <div class="card-title-head">
             <h6>
@@ -776,27 +812,32 @@
           <div class="row">
             <div class="col-lg-3 col-md-3">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Custome Name" formControlName="customeName" required />
+                <input type="text" class="form-control bottom-border" placeholder="Custome Name"
+                  formControlName="customeName" required />
               </div>
             </div>
             <div class="col-lg-1 col-md-3">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Dial Code" formControlName="countryDialCode" required />
+                <input type="text" class="form-control bottom-border" placeholder="Dial Code"
+                  formControlName="countryDialCode" required />
               </div>
             </div>
             <div class="col-lg-2 col-md-6">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Mobile" formControlName="customerMobile" required />
+                <input type="text" class="form-control bottom-border" placeholder="Mobile"
+                  formControlName="customerMobile" required />
               </div>
             </div>
             <div class="col-lg-2 col-md-6">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Alternate Mobile" formControlName="customerAlternateMobile" />
+                <input type="text" class="form-control bottom-border" placeholder="Alternate Mobile"
+                  formControlName="customerAlternateMobile" />
               </div>
             </div>
             <div class="col-lg-4 col-md-6">
               <div class="mb-3">
-                <input type="text" class="form-control bottom-border" placeholder="Customer EmailId" formControlName="customerEmailId" required />
+                <input type="text" class="form-control bottom-border" placeholder="Customer EmailId"
+                  formControlName="customerEmailId" required />
               </div>
             </div>
           </div>
@@ -814,7 +855,8 @@
               </div>
               <div class="input-container">
                 <label for="remarks" class="requiredField"><b>Remarks:</b></label>
-                <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..." formControlName="remarks" required />
+                <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..."
+                  formControlName="remarks" required />
               </div>
               <div class="input-container">
                 <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
@@ -845,9 +887,9 @@
               </div>
 
               <div *ngIf="notesType === 'Reminders'">
-                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
-                    bsDatepicker container=".date-input2"
-                    [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', minDate: minDate, maxDate: maxDate}">
+                <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
+                  bsDatepicker container=".date-input2"
+                  [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', minDate: minDate, maxDate: maxDate}">
                 <textarea class="form-control no-border" name="notes" formControlName="notes" rows="2"
                   placeholder="___________________________________________________________________________________________"></textarea>
               </div>

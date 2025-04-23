@@ -42,6 +42,8 @@ export class CategoriesComponent {
   //** / pagination variables
   addCategoryDialog: any;
   editCategoryDialog: any;
+
+  
   constructor(
     private data: DataService,
     private pagination: PaginationService,
