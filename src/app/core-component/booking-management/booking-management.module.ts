@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core'; 
 import { MultiSelectModule } from 'primeng/multiselect';
+import { MatTabsModule} from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
 import { sharedModule } from 'src/app/shared/shared.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BookingManagementComponent } from './booking-management.component';
@@ -28,6 +30,8 @@ import { BookingManagementRoutingModule } from './booking-management-routing.mod
     MatOptionModule,
     MultiSelectModule,
     MatDialogModule,
+    MatTabsModule,
+    MatIconModule,
     BookingManagementRoutingModule
   ]
 })
