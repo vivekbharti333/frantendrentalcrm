@@ -194,7 +194,7 @@ export class CreateLeadComponent {
     }
   }
 
-  calculateTotalAmountAndBalaenceAmontAfterDiscount() {
+  calculateTotalAmountAndBalanceAmontAfterDiscount() {
     const addFormValue = this.addLeadForm.value;
     const discount = addFormValue.discount;
 
@@ -327,6 +327,15 @@ export class CreateLeadComponent {
       const noOfDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
 
       this.addLeadForm.patchValue({ totalDays: noOfDays });
+
+      // total amount cal
+      this.calculateTotalAmount();
+
+      // balance amount cal
+      this.calculateBalanceAmount();
+
+      // booking amount cal
+      this.calculateBookingAmount();
     }
   }
 
@@ -351,6 +360,9 @@ export class CreateLeadComponent {
 
       this.calculateBalanceAmount();
       this.calculatePayToCompanyAndPayToVendor();
+      this.calExtraAmount();
+      this.calculateTotalAmountAndBalanceAmontAfterDiscount();
+
     } else {
       console.error('Some required fields are missing for total amount calculation.');
       leadValue.totalAmount = 0; // Set a fallback value
@@ -383,8 +395,9 @@ export class CreateLeadComponent {
 
   calculateBookingAmount(): number {
     const leadValue = this.addLeadForm.value;
-    this.addLeadForm.patchValue({ bookingAmount: leadValue.totalAmount - leadValue.balanceAmount }),
+    this.addLeadForm.patchValue({ bookingAmount: leadValue.totalAmount - leadValue.balanceAmount });
       this.calculatePayToCompanyAndPayToVendor();
+      this.calculateTotalAmountAndBalanceAmontAfterDiscount();
 
     return leadValue.totalAmount - leadValue.balanceAmount;
   }
