@@ -314,13 +314,16 @@ export class CreateLeadComponent {
       let dropDate = new Date(dropDateTime);
 
       // Adjust pickup date if time is before 6:00 AM
-      if (pickDate.getHours() < 6) {
+      // if (pickDate.getHours() < 6) {
+      //   pickDate.setDate(pickDate.getDate() - 1);
+      // }
+      if (pickDate.getHours() < 6 || (pickDate.getHours() === 6 && pickDate.getMinutes() === 0)) {
         pickDate.setDate(pickDate.getDate() - 1);
       }
 
       // Adjust drop date if time is before 9:00 AM
-      if (dropDate.getHours() > 9) {
-        dropDate.setDate(dropDate.getDate() + 1);
+      if (dropDate.getHours() <= 9 || (pickDate.getHours() === 9 && pickDate.getMinutes() === 0)) {
+        dropDate.setDate(dropDate.getDate() - 1);
       }
 
       const timeDifference = dropDate.getTime() - pickDate.getTime();
@@ -422,7 +425,7 @@ export class CreateLeadComponent {
   }
 
 
-  // ----------------------------------------------Calculation for Activities Start----------------------------------------------------------------
+  // ---------------------------------------------- Calculation for Activities Start ----------------------------------------------------------------
   calculateTotalAmountOfActivites() {
     const leadValue = this.addLeadForm.value;
 
@@ -484,7 +487,7 @@ export class CreateLeadComponent {
   }
 
 
-  // ----------------------------------------------Calculation for Activities End----------------------------------------------------------------
+  // ---------------------------------------------- Calculation for Activities End ----------------------------------------------------------------
 
   checkCategoryType(categoryType: any) {
     if (categoryType.categoryTypeName === Constant.ACTIVITY) {
