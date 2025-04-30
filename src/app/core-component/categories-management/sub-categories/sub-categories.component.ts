@@ -19,13 +19,14 @@ import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
 import { MatDialog } from '@angular/material/dialog';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 @Component({
   selector: 'app-sub-categories',
   templateUrl: './sub-categories.component.html',
   styleUrl: './sub-categories.component.scss',
-  providers: [MessageService, ToastModule],
+  providers: [MessageService, ToastModule, NgxMaterialTimepickerModule],
 })
 export class SubCategoriesComponent {
 
