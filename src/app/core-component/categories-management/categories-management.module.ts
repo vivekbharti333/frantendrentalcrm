@@ -13,6 +13,7 @@ import { CategoriesManagementRoutingModule } from './categories-management-routi
 import { CategoriesTypeComponent } from './categories-type/categories-type.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
+
 @NgModule({
   declarations: [
     CategoriesManagementComponent,

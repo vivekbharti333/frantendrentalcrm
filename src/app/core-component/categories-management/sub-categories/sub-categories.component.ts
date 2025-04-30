@@ -20,6 +20,7 @@ import { CategoriesManagementService } from '../categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
 import { MatDialog } from '@angular/material/dialog';
 
+
 @Component({
   selector: 'app-sub-categories',
   templateUrl: './sub-categories.component.html',
