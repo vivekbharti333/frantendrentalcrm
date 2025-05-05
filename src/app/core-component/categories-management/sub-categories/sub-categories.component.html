@@ -388,21 +388,25 @@
               <div class="row">
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Pickup Date </label>
+                    <label class="form-label">Pickup Hub </label>
                     <input type="date" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
                       required />
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Drop Date </label>
-                    <input type="time" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <label class="form-label">Pickup Location </label>
+                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.pickupLocation" class="select"
+                      placeholder="Select a Super Category">
+                      <mat-option *ngFor="let pickLocation of filteredPickLocationList" [value]="pickLocation.location">
+                        {{ pickLocation.location }}
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Drop Time </label>
+                    <label class="form-label">Drop Hub </label>
                     <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
                       required />
                       
@@ -411,8 +415,12 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Drop Time </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.dropLocation" class="select"
+                      placeholder="Select a Super Category">
+                      <mat-option *ngFor="let dropLocation of filteredDropLocationList" [value]="dropLocation.location">
+                        {{ dropLocation.location }}
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
               </div>

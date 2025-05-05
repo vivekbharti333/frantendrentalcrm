@@ -85,6 +85,7 @@ export class CreateLeadComponent {
     this.getUserList();
     this.getPickLocation();
     this.getDropLocation();
+    this.calculateDays();
 
     this.roleType === 'SUPERADMIN'
       ? (this.addLeadForm.value.createdBy = '')
@@ -96,7 +97,6 @@ export class CreateLeadComponent {
     this.maxDate.setFullYear(this.maxDate.getFullYear() + 1);
 
     this.setDefaultDateTime();
-    this.calculateDays();
   }
 
   constructor(
@@ -194,14 +194,41 @@ export class CreateLeadComponent {
     }
   }
 
-  calculateTotalAmountAndBalanceAmontAfterDiscount() {
-    const addFormValue = this.addLeadForm.value;
-    const discount = addFormValue.discount;
+  calculateTotalAmountAndBalaenceAmontAfterDiscount1() {
+    // const addFormValue = this.addLeadForm.value;
+
+    //total amount start
+    if (
+      this.addLeadForm.value &&
+      this.addLeadForm.value.companyRate != null &&
+      this.addLeadForm.value.totalDays != null &&
+      this.addLeadForm.value.deliveryAmountToCompany != null &&
+      this.addLeadForm.value.quantity != null
+    ) {
+      const firstValue = this.addLeadForm.value.companyRate * this.addLeadForm.value.totalDays;
+      const secondValue = firstValue + Number(this.addLeadForm.value.deliveryAmountToCompany); // Ensure numeric addition
+
+      this.addLeadForm.patchValue({ totalAmount: secondValue * this.addLeadForm.value.quantity });
+      
+      
+   
+      //total amount end
+
+      // booking amount start
+      this.addLeadForm.patchValue({ bookingAmount: (secondValue * this.addLeadForm.value.quantity ) - this.addLeadForm.value.balanceAmount });
+      //bokking amount end
+    }
+
+    const discount = this.addLeadForm.value.discount;
+
 
     // Ensure discount is not more than the total amount
-    const totalAmt = addFormValue.totalAmount - discount;
-    const balanceAmt = addFormValue.balanceAmount;
+    const totalAmt = this.addLeadForm.value.totalAmount - discount;
+    const balanceAmt = this.addLeadForm.value.balanceAmount;
     const bookingAmt = totalAmt - balanceAmt;
+
+    
+    
 
     // Update the form with all new values in one patchValue call
     this.addLeadForm.patchValue({
@@ -209,6 +236,39 @@ export class CreateLeadComponent {
         bookingAmount: bookingAmt
     });
 }
+
+  calculateTotalAmountAndBalaenceAmontAfterDiscount() {
+    //total amount start
+    if (
+      this.addLeadForm.value &&
+      this.addLeadForm.value.companyRate != null &&
+      this.addLeadForm.value.totalDays != null &&
+      this.addLeadForm.value.deliveryAmountToCompany != null &&
+      this.addLeadForm.value.quantity != null
+    ) {
+      const firstValue = this.addLeadForm.value.companyRate * this.addLeadForm.value.totalDays;
+      const secondValue = firstValue + Number(this.addLeadForm.value.deliveryAmountToCompany); // Ensure numeric addition
+
+      // this.addLeadForm.patchValue({ totalAmount: secondValue * this.addLeadForm.value.quantity });
+   
+    //total amount end
+
+    // Ensure discount is not more than the total amount
+      const totalAmt = (secondValue * this.addLeadForm.value.quantity) - this.addLeadForm.value.discount;
+      const balanceAmt = this.addLeadForm.value.balanceAmount;
+      const bookingAmt = totalAmt - balanceAmt;
+
+      console.log("totalAmt : "+totalAmt);
+      console.log("balanceAmt : "+balanceAmt);
+      console.log("bookingAmt : "+bookingAmt);
+
+      // Update the form with all new values in one patchValue call
+      this.addLeadForm.patchValue({
+        totalAmount: totalAmt,
+        bookingAmount: bookingAmt
+      });
+    }
+  }
   
 
 
@@ -250,6 +310,8 @@ export class CreateLeadComponent {
 
     const formattedDate = `${year}-${month}-${day}T${formattedHours}:${formattedMinutes}`;
 
+    console.log("hi : " + formattedDate);
+
     // Set the formatted date to the form control
     this.addLeadForm.patchValue({ pickupDateTime: formattedDate });
 
@@ -258,6 +320,7 @@ export class CreateLeadComponent {
 
 
   calExtraAmount() {
+
     const leadValue = this.addLeadForm.value;
     let secondValue = 0;
     if (
@@ -276,9 +339,11 @@ export class CreateLeadComponent {
     const balAmt = this.addLeadForm.value.balanceAmount;
 
     if (bookAmt >= actAmt) {
+      // const extraAmtPlus = actAmt - bookAmt; // Corrected logic
       this.addLeadForm.patchValue({ balanceAmount: (balAmt + (bookAmt - actAmt)) });
       this.payToVendor = this.addLeadForm.value.balanceAmount;
     } else {
+      // const extraAmtMinus = bookAmt - actAmt; // Corrected logic
       this.addLeadForm.patchValue({ balanceAmount: balAmt - (actAmt - bookAmt) });
       this.payToVendor = this.addLeadForm.value.balanceAmount;
     }
@@ -314,31 +379,19 @@ export class CreateLeadComponent {
       let dropDate = new Date(dropDateTime);
 
       // Adjust pickup date if time is before 6:00 AM
-      // if (pickDate.getHours() < 6) {
-      //   pickDate.setDate(pickDate.getDate() - 1);
-      // }
-      if (pickDate.getHours() < 6 || (pickDate.getHours() === 6 && pickDate.getMinutes() === 0)) {
+      if (pickDate.getHours() < 6) {
         pickDate.setDate(pickDate.getDate() - 1);
       }
 
       // Adjust drop date if time is before 9:00 AM
-      if (dropDate.getHours() <= 9 || (pickDate.getHours() === 9 && pickDate.getMinutes() === 0)) {
-        dropDate.setDate(dropDate.getDate() - 1);
+      if (dropDate.getHours() > 9) {
+        dropDate.setDate(dropDate.getDate() + 1);
       }
 
       const timeDifference = dropDate.getTime() - pickDate.getTime();
       const noOfDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
 
       this.addLeadForm.patchValue({ totalDays: noOfDays });
-
-      // total amount cal
-      this.calculateTotalAmount();
-
-      // balance amount cal
-      this.calculateBalanceAmount();
-
-      // booking amount cal
-      this.calculateBookingAmount();
     }
   }
 
@@ -361,10 +414,12 @@ export class CreateLeadComponent {
       this.deliveryAmtToVendor = this.addLeadForm.value.deliveryAmountToVendor;
       this.vendorRate = this.addLeadForm.value.vendorRate;
 
+      // this.calExtraAmount();
+
       this.calculateBalanceAmount();
       this.calculatePayToCompanyAndPayToVendor();
-      this.calExtraAmount();
-      this.calculateTotalAmountAndBalanceAmontAfterDiscount();
+
+      this.addLeadForm.patchValue({ actualAmount: 0, discount: 0 });
 
     } else {
       console.error('Some required fields are missing for total amount calculation.');
@@ -389,6 +444,7 @@ export class CreateLeadComponent {
 
       this.calculateBookingAmount();
       this.calculatePayToCompanyAndPayToVendor();
+   
     } else {
       console.error('Some required fields are missing for balance amount calculation.');
       leadValue.balanceAmount = 0; // Set a default fallback value
@@ -398,9 +454,8 @@ export class CreateLeadComponent {
 
   calculateBookingAmount(): number {
     const leadValue = this.addLeadForm.value;
-    this.addLeadForm.patchValue({ bookingAmount: leadValue.totalAmount - leadValue.balanceAmount });
+    this.addLeadForm.patchValue({ bookingAmount: leadValue.totalAmount - leadValue.balanceAmount }),
       this.calculatePayToCompanyAndPayToVendor();
-      this.calculateTotalAmountAndBalanceAmontAfterDiscount();
 
     return leadValue.totalAmount - leadValue.balanceAmount;
   }
@@ -425,7 +480,7 @@ export class CreateLeadComponent {
   }
 
 
-  // ---------------------------------------------- Calculation for Activities Start ----------------------------------------------------------------
+  // ----------------------------------------------Calculation for Activities Start----------------------------------------------------------------
   calculateTotalAmountOfActivites() {
     const leadValue = this.addLeadForm.value;
 
@@ -487,7 +542,7 @@ export class CreateLeadComponent {
   }
 
 
-  // ---------------------------------------------- Calculation for Activities End ----------------------------------------------------------------
+  // ----------------------------------------------Calculation for Activities End----------------------------------------------------------------
 
   checkCategoryType(categoryType: any) {
     if (categoryType.categoryTypeName === Constant.ACTIVITY) {

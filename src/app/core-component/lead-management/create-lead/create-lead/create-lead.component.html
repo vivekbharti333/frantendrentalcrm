@@ -204,8 +204,7 @@
             <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-1">
                 <label class="form-label requiredField">Total Days</label>
-                <input type="number" class="form-control" formControlName="totalDays" required
-                  (change)="calculateTotalAmount()" />
+                <input type="number" class="form-control" formControlName="totalDays" required (change)="calculateTotalAmount()" />
               </div>
             </div>
 
@@ -213,7 +212,7 @@
               <div class="mb-1">
                 <label class="form-label requiredField">Quantity</label>
                 <input type="number" class="form-control" formControlName="quantity" min="0" required
-                  (change)="calculateDays()" />
+                  (change)="calculateTotalAmount()" />
 
               </div>
             </div>
@@ -235,31 +234,27 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Company Rate</label>
-                <input type="text" class="form-control" placeholder="0" formControlName="companyRate" required
-                  (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" placeholder="0" formControlName="companyRate" required (change)="calculateTotalAmount()" />
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Vendor Rate</label>
-                <input type="text" class="form-control" formControlName="vendorRate" required
-                  (change)="calculateBalanceAmount()" />
+                <input type="text" class="form-control" formControlName="vendorRate" required (change)="calculateTotalAmount()" />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Delivery</label>
-                <input type="text" class="form-control" formControlName="deliveryAmountToCompany" required
-                  (change)="calculateTotalAmount()" />
+                <input type="text" class="form-control" formControlName="deliveryAmountToCompany" required (change)="calculateTotalAmount()" />
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Delivery To Vendor</label>
-                <input type="text" class="form-control" formControlName="deliveryAmountToVendor" required
-                  (change)="calculateBalanceAmount()" />
+                <input type="text" class="form-control" formControlName="deliveryAmountToVendor" required (change)="calculateTotalAmount()" />
               </div>
             </div>
 
@@ -271,20 +266,20 @@
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Booking Amount</label>
-                <input type="number" class="form-control" formControlName="bookingAmount" required readonly />
+                <input type="number" class="form-control" formControlName="bookingAmount" required  readonly/>
               </div>
             </div>
 
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Balance Amount</label>
-                <input type="number" class="form-control" formControlName="balanceAmount" required readonly />
+                <input type="number" class="form-control" formControlName="balanceAmount" required readonly/>
               </div>
             </div>
             <div class="col-lg-2 col-md-2">
               <div class="mb-2">
                 <label class="form-label requiredField">Total Amount</label>
-                <input type="number" class="form-control" formControlName="totalAmount" required readonly />
+                <input type="number" class="form-control" formControlName="totalAmount" required readonly/>
               </div>
             </div>
             <!-- <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
@@ -299,7 +294,7 @@
                 <label class="form-label">Discount</label>
                 <div class="input-group">
                   <input type="text" class="form-control" formControlName="discount"
-                    (change)="calculateTotalAmountAndBalanceAmontAfterDiscount()">
+                    (change)="calculateTotalAmountAndBalaenceAmontAfterDiscount()">
                   <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()"
                     style="cursor: pointer; width: 40px;">{{discountType}}</span>
                 </div>
