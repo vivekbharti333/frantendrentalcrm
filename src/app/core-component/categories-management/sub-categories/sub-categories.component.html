@@ -308,7 +308,8 @@
       </button>
     </div>
   </div>
-  <form #addForm="ngForm" (ngSubmit)="submitSubCategoryForm()">
+  <!-- <form #addForm="ngForm" (ngSubmit)="submitSubCategoryForm()"> -->
+  <form [formGroup]="addSubCategory" (ngSubmit)="submitSubCategoryForm()">
     <mat-dialog-content class="modalContent">
       <div class="modal-body custom-modal-body">
         <div class="card">
@@ -322,7 +323,7 @@
               </div>
 
               <div class="profile-pic-upload">
-                <div class="profile-pic">
+                <!-- <div class="profile-pic">
                   <ng-container *ngIf="!addSubCategory.subCategoryImage; else showImage">
                     <span><i class="feather icon-plus-circle plus-down-add"></i>Sub Category Image</span>
                   </ng-container>
@@ -337,14 +338,14 @@
                       <h4>Change Image</h4>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </div>
 
               <div class="row">
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <mat-select name="categoryTypeId" [(ngModel)]="addSubCategory.categoryTypeId" class="select"
+                    <mat-select class="form-control" formControlName="categoryTypeId" class="select custom-mat-select"
                       placeholder="Select Category Type" (selectionChange)="getSuperCategoryByCateTypeId($event)">
                       <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType">
                         {{ cateType.categoryTypeName }}
@@ -356,7 +357,7 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Super Category</label>
-                    <mat-select name="superCategoryId" [(ngModel)]="addSubCategory.superCategoryId" class="select"
+                    <mat-select class="form-control" formControlName="superCategoryId" class="select custom-mat-select"
                       placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
                       <mat-option *ngFor="let superCate of superCategoryList" [value]="superCate.id">
                         {{ superCate.superCategory }}
@@ -367,20 +368,26 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category </label>
-                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.categoryId" class="select"
+                    <mat-select class="form-control" formControlName="categoryId" class="select custom-mat-select"
                       placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
                       <mat-option *ngFor="let cat of categoryList" [value]="cat.id">
                         {{ cat.category }}
                       </mat-option>
                     </mat-select>
+
+                    <!-- <mat-select formControlName="pickupLocation" class="select custom-mat-select" 
+                      placeholder="Select a Drop Location" required>
+                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
+                        {{ dropList.location }}
+                      </mat-option>
+                    </mat-select> -->
                   </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Sub Category </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
               </div>
@@ -389,38 +396,52 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Pickup Hub </label>
-                    <input type="date" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Pickup Location </label>
-                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.pickupLocation" class="select"
+                    <!-- <mat-select class="form-control" formControlName="categoryId" class="select"
                       placeholder="Select a Super Category">
                       <mat-option *ngFor="let pickLocation of filteredPickLocationList" [value]="pickLocation.location">
                         {{ pickLocation.location }}
                       </mat-option>
+                    </mat-select> -->
+
+                    <mat-select formControlName="pickupLocation" class="select custom-mat-select" 
+                      placeholder="Select a Drop Location" required>
+                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
+                        {{ dropList.location }}
+                      </mat-option>
                     </mat-select>
+
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Drop Hub </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
-                      
+                    <input type="text" class="form-control" formControlName="subCategory" required />
+
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Drop Time </label>
-                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.dropLocation" class="select"
-                      placeholder="Select a Super Category">
-                      <mat-option *ngFor="let dropLocation of filteredDropLocationList" [value]="dropLocation.location">
-                        {{ dropLocation.location }}
+                    <label class="form-label">Drop Location </label>
+                    <mat-select formControlName="dropLocation" class="select custom-mat-select" 
+                      placeholder="Select a Drop Location" required>
+                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
+                        {{ dropList.location }}
                       </mat-option>
                     </mat-select>
+
+                    <!-- <mat-select formControlName="dropLocation" class="select custom-mat-select" name="dropLocation"
+                      placeholder="Select a Drop Location" required>
+                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
+                        {{ dropList.location }}
+                      </mat-option>
+                    </mat-select> -->
+
                   </div>
                 </div>
               </div>
@@ -429,24 +450,15 @@
                 <div class="col-lg-3 col-md-6"></div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Pickup Location </label>
-                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.pickupLocation" class="select"
-                      placeholder="Select a Super Category">
-                      <mat-option *ngFor="let pickLocation of filteredPickLocationList" [value]="pickLocation.location">
-                        {{ pickLocation.location }}
-                      </mat-option>
-                    </mat-select>
+                    <label class="form-label">Pickup Time </label>
+                    <input type="time" class="form-control" step="900" min="00:00" max="23:45" />
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Drop Location </label>
-                    <mat-select name="categoryId" [(ngModel)]="addSubCategory.dropLocation" class="select"
-                      placeholder="Select a Super Category">
-                      <mat-option *ngFor="let dropLocation of filteredDropLocationList" [value]="dropLocation.location">
-                        {{ dropLocation.location }}
-                      </mat-option>
-                    </mat-select>
+                    <label class="form-label">Drop Time </label>
+                    <input type="time" class="form-control" formControlName="subCategory" required />
+                    <ngx-material-timepicker #picker></ngx-material-timepicker>
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6"></div>
@@ -457,29 +469,25 @@
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Company Rate </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Vendor Rate </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.vendorRate"
-                      required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Company Rate for Kids </label>
-                    <input type="text" class="form-control" name="subCategory"
-                      [(ngModel)]="addSubCategory.vendorRateForKids" required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Vendor Rate for Kids </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
               </div>
@@ -489,22 +497,19 @@
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Quantity </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Kids Quantity </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Infant Quantity </label>
-                    <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory"
-                      required />
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
 
@@ -515,8 +520,7 @@
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Security Amount </label>
-                    <input type="text" class="form-control" name="securityAmount"
-                      [(ngModel)]="addSubCategory.securityAmount" required />
+                    <input type="text" class="form-control" formControlName="securityAmount" required />
                   </div>
                 </div>
               </div>
@@ -527,7 +531,7 @@
     </mat-dialog-content>
     <mat-dialog-actions class="dialogAction">
       <div class="text-end mb-3">
-        <button type="submit" class="btn btn-submit" [disabled]="!addForm.form.valid">
+        <button type="submit" class="btn btn-submit" [disabled]="!addSubCategory.valid">
           Add Sub Category
         </button>
       </div>

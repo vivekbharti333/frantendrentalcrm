@@ -27,6 +27,8 @@ import { AssignedLeadComponent } from './lead-list/assigned-lead/assigned-lead.c
 import { FollowupLeadComponent } from './lead-list/followup-lead/followup-lead.component';
 import { CalendarModule } from 'primeng/calendar';
 
+
+
 @NgModule({
   declarations: [
     LeadManagementComponent,

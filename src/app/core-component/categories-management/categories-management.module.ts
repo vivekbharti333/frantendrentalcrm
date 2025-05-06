@@ -14,6 +14,7 @@ import { CategoriesTypeComponent } from './categories-type/categories-type.compo
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
+
 @NgModule({
   declarations: [
     CategoriesManagementComponent,

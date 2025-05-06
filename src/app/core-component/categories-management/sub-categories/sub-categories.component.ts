@@ -20,6 +20,9 @@ import { CategoriesManagementService } from '../categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
+
 
 
 @Component({
@@ -29,6 +32,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
   providers: [MessageService, ToastModule, NgxMaterialTimepickerModule],
 })
 export class SubCategoriesComponent {
+
+  public addSubCategory!: FormGroup;
 
   public fieldForActivity: boolean = false;
   // public userList: any;
@@ -57,6 +62,7 @@ export class SubCategoriesComponent {
   addSubCategoryDialog: any;
   editSubCategoryDialog: any;
   constructor(
+        private fb: FormBuilder,
     private pagination: PaginationService,
     private router: Router,
     private sidebar: SidebarService,
@@ -64,6 +70,7 @@ export class SubCategoriesComponent {
     private categoriesManagementService: CategoriesManagementService,
     private dialog: MatDialog
   ) {}
+  
 
   ngOnInit() {
     this.getCategoryType();
@@ -72,21 +79,47 @@ export class SubCategoriesComponent {
     this.getDropLocation();
   }
 
-  public addSubCategory = {
-    subCategoryImage: '',
-    categoryTypeId: '',
-    superCategoryId: '',
-    categoryId: '',
-    subCategory: '',
-    securityAmount: '',
-    vendorRate: '',
-    vendorRateForKids: '',
-    startTime: '',
-    endTime: '',
-    description: '',
-    pickupLocation: '',
-    dropLocation: ''
-  };
+  allowedTimes = [
+    '00:00', '00:15', '00:30', '00:45',
+    '01:00', '01:15', '01:30', '01:45',
+    // ... up to '23:45'
+  ];
+  
+
+  // public addSubCategory = {
+  //   subCategoryImage: '',
+  //   categoryTypeId: '',
+  //   superCategoryId: '',
+  //   categoryId: '',
+  //   subCategory: '',
+  //   securityAmount: '',
+  //   vendorRate: '',
+  //   vendorRateForKids: '',
+  //   startTime: '12:00',
+  //   endTime: '',
+  //   description: '',
+  //   pickupLocation: '',
+  //   dropLocation: ''
+  // };
+
+   createForms() {
+      this.addSubCategory = this.fb.group({
+        subCategoryImage: '',
+        categoryTypeId: '',
+        superCategoryId: '',
+        categoryId: '',
+        subCategory: '',
+        securityAmount: '',
+        vendorRate: '',
+        vendorRateForKids: '',
+        startTime: '12:00',
+        endTime: '',
+        description: '',
+        pickupLocation: '',
+        dropLocation: ''
+        
+      });
+    }
 
   public editSubCategory = {
     categoryTypeId: '',
@@ -296,17 +329,24 @@ export class SubCategoriesComponent {
     // this.isLoading = false;
   }
 
+
   openAddModal(templateRef: TemplateRef<any>) {
-    this.addSubCategoryDialog = this.dialog.open(templateRef);
+    this.addSubCategoryDialog = this.dialog.open(templateRef, {
+      width: '1400px', // or '80%', '40vw', etc.
+      maxWidth: '200vw', // optional, for responsiveness
+      disableClose: true // optional
+    });
   }
+  
 
   async openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
     const filterCategoryType: any = this.categoryTypeList.filter((item) => {
-      // this.editSubCategory.categoryTypeName = rowDate.categoryTypeName;
       if (item?.categoryTypeName === rowDate[3]) {
         return item;
       }
     });
+
+
     await this.getSuperCategoryByCateTypeId({
       value: filterCategoryType[0]?.id,
     });
@@ -332,14 +372,16 @@ export class SubCategoriesComponent {
       createdAt: rowDate[10],
       status: rowDate[9],
     };
-    console.log('rowData+++++', rowDate, this.editSubCategory);
-    this.editSubCategoryDialog = this.dialog.open(templateRef);
+  
+    this.editSubCategoryDialog = this.dialog.open(templateRef, {
+      width: '1400',      // Set the desired width
+      maxWidth: '200vw'     // Optional: responsive max width
+    });
+    
     setTimeout(() => {
-      console.log('++++Item', this.superCategoryList);
+      // Your logic here (e.g., focusing input, triggering UI updates)
     }, 1000);
-    // this.categoryType.categoryTypeName = rowDate.categoryTypeName;
-    // this.categoryType.status = rowDate.status; // Assign the value to user.firstName
-    // this.categoryType.isChecked = rowDate.isChecked;
+    
   }
 
   submitEditedSubCategoryForm() {
@@ -449,19 +491,19 @@ export class SubCategoriesComponent {
     this.filter = !this.filter;
   }
 
-  onFileSelected(event: any) {
-    const selectedFile = event.target.files[0];
+  // onFileSelected(event: any) {
+  //   const selectedFile = event.target.files[0];
 
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onload = (event: any) => {
-        const base64String = event.target.result.split(',')[1]; // Get the base64 part
+  //   if (selectedFile) {
+  //     const reader = new FileReader();
+  //     reader.onload = (event: any) => {
+  //       const base64String = event.target.result.split(',')[1]; // Get the base64 part
 
-        // Set the base64 string to the userPicture field
-        this.addSubCategory.subCategoryImage =
-          'data:image/png;base64,' + base64String;
-      };
-      reader.readAsDataURL(selectedFile);
-    }
-  }
+  //       // Set the base64 string to the userPicture field
+  //       this.addSubCategory.subCategoryImage =
+  //         'data:image/png;base64,' + base64String;
+  //     };
+  //     reader.readAsDataURL(selectedFile);
+  //   }
+  // }
 }
