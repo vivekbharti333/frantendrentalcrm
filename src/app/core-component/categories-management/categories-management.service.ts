@@ -203,7 +203,8 @@ export class CategoriesManagementService {
   getCategoryBySuperCatId(superCatId: any): Observable<any> {
     let request: any = {
       payload: {
-        requestedFor: 'BYCATID',
+        // requestedFor: 'BYCATID',
+        requestedFor: 'ALL',
         superCategoryId: superCatId,
         roleType: this.cookieService.get('roleType'),
         token: this.cookieService.get('token'),
@@ -223,8 +224,13 @@ export class CategoriesManagementService {
         categoryId: addSubCategory.categoryId,
         subCategory: addSubCategory.subCategory,
         securityAmount: addSubCategory.securityAmount,
+        companyRate: addSubCategory.companyRate,
+        companyRateForKids: addSubCategory.companyRateForKids,
         vendorRate: addSubCategory.vendorRate,
         vendorRateForKids: addSubCategory.vendorRateForKids,
+        quantity: addSubCategory.quantity,
+        childrenQuantity: addSubCategory.childrenQuantity,
+        infantQuantity: addSubCategory.infantQuantity,
         startTime: addSubCategory.startTime,
         endTime: addSubCategory.endTime,
         pickupLocation: addSubCategory.pickupLocation,
@@ -286,6 +292,7 @@ export class CategoriesManagementService {
        
         categoryId: categoryId,
         requestedFor: 'BYCATID',
+        // requestedFor: 'ALL',
         roleType: this.cookieService.get('roleType'),
         token: this.cookieService.get('token'),
         createdBy: this.cookieService.get('loginId'),

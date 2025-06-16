@@ -138,14 +138,14 @@
         <thead>
           <tr>
             <!-- <th></th> -->
-            <th mat-sort-header="categoryType">Sub Category Image</th>
+            <th mat-sort-header="subCatImage">Sub Category Image</th>
             <th mat-sort-header="categoryType">Category Type</th>
-            <th mat-sort-header="userName">Super Category</th>
-            <th mat-sort-header="userName">Category</th>
-            <th mat-sort-header="userName">Sub Category</th>
-            <th mat-sort-header="userName">Security Amount</th>
-            <th mat-sort-header="userName">Vendor Rate</th>
-            <th mat-sort-header="userName">Vendor Rate (Kids)</th>
+            <th mat-sort-header="superCate">Super Category</th>
+            <th mat-sort-header="cate">Category</th>
+            <th mat-sort-header="subCate">Sub Category</th>
+            <th mat-sort-header="securityAmt">Security Amount</th>
+            <th mat-sort-header="vendorRate">Vendor Rate</th>
+            <th mat-sort-header="vendorRateKids">Vendor Rate (Kids)</th>
             <th mat-sort-header="status">Status</th>
             <th mat-sort-header="createdOn">Created On</th>
             <th class="no-sort">Action</th>
@@ -155,11 +155,11 @@
           @for (data of tableData; track data) {
           <tr>
             <td>
-              <div class="userimgname">
+              <!-- <div class="userimgname">
                 <a href="javascript:void(0);" class="userslist-img bg-img">
                   <img src="{{ baseUrl }}cateImg/{{ data.subCategoryImage }}" alt="user image"
                     style="border-radius: 50%" /></a>
-              </div>
+              </div> -->
             </td>
             <td>{{ data.categoryTypeName }}</td>
             <td>{{ data.superCategory }}</td>
@@ -396,7 +396,7 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Pickup Hub </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <!-- <input type="text" class="form-control" formControlName="subCategory" required /> -->
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
@@ -421,7 +421,7 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Drop Hub </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <!-- <input type="text" class="form-control" formControlName="subCategory" required /> -->
 
                   </div>
                 </div>
@@ -451,13 +451,13 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Pickup Time </label>
-                    <input type="time" class="form-control" step="900" min="00:00" max="23:45" />
+                    <!-- <input type="time" class="form-control" step="900" min="00:00" max="23:45" /> -->
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Drop Time </label>
-                    <input type="time" class="form-control" formControlName="subCategory" required />
+                    <!-- <input type="time" class="form-control" formControlName="subCategory" required /> -->
                     <ngx-material-timepicker #picker></ngx-material-timepicker>
                   </div>
                 </div>
@@ -469,25 +469,25 @@
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Company Rate </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <input type="text" class="form-control" formControlName="companyRate" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Vendor Rate </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <input type="text" class="form-control" formControlName="vendorRate" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Company Rate for Kids </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <input type="text" class="form-control" formControlName="companyRateForKids" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Vendor Rate for Kids </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <input type="text" class="form-control" formControlName="vendorRateForKids" required />
                   </div>
                 </div>
               </div>
@@ -497,19 +497,19 @@
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Quantity </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <input type="text" class="form-control" formControlName="quantity" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Kids Quantity </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <input type="text" class="form-control" formControlName="childrenQuantity" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-2">
                     <label class="form-label">Infant Quantity </label>
-                    <input type="text" class="form-control" formControlName="subCategory" required />
+                    <input type="text" class="form-control" formControlName="infantQuantity" required />
                   </div>
                 </div>
 

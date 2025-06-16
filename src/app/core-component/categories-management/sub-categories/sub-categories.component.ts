@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -21,9 +19,6 @@ import { Constant } from 'src/app/core/constant/constants';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
-
-
 
 @Component({
   selector: 'app-sub-categories',
@@ -73,6 +68,7 @@ export class SubCategoriesComponent {
   
 
   ngOnInit() {
+    this.createForms();
     this.getCategoryType();
     this.getSubCategory();
     this.getPickLocation();
@@ -110,8 +106,13 @@ export class SubCategoriesComponent {
         categoryId: '',
         subCategory: '',
         securityAmount: '',
+        companyRate: '',
+        companyRateForKids: '',
         vendorRate: '',
         vendorRateForKids: '',
+        quantity: '',
+        childrenQuantity: '', 
+        infantQuantity: '',
         startTime: '12:00',
         endTime: '',
         description: '',
@@ -140,6 +141,7 @@ export class SubCategoriesComponent {
     this.categoriesManagementService.getCategoryTypeList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
+          console.log("hi : "+this.categoryTypeList);
           this.categoryTypeList = JSON.parse(
             JSON.stringify(response.listPayload)
           );
@@ -248,7 +250,7 @@ export class SubCategoriesComponent {
 
   submitSubCategoryForm() {
     this.categoriesManagementService
-      .addSubCategoryDetails(this.addSubCategory)
+      .addSubCategoryDetails(this.addSubCategory.value)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
@@ -428,7 +430,7 @@ export class SubCategoriesComponent {
     this.categoriesManagementService
       .getSubCategoryList()
       .subscribe((apiRes: any) => {
-        this.totalData = apiRes.listPayload.length;
+        this.totalData = apiRes.listPayload['length'];
         this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
           if (this.router.url == this.routes.subCategory) {
             this.getTableData({ skip: res.skip, limit: this.totalData });

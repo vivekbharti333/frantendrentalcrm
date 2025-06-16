@@ -1,43 +1,42 @@
-.text-mid{
-    margin-left: 45%;
-    margin-top: 2%;
+.text-mid {
+  margin-left: 45%;
+  margin-top: 2%;
 }
 
 .remarks-box {
-    width: 100%;    
-    height: 200px;
-    padding: 1px;
-    border: 3px solid rgb(247, 246, 246);
-    margin: 0;
-  }
+  width: 100%;
+  height: 200px;
+  padding: 1px;
+  border: 3px solid rgb(247, 246, 246);
+  margin: 0;
+}
 
-  .vl {
-    padding: 10px;
-    border-left: 3px solid rgb(198, 203, 198);
-    height: 150px;
-  }
+.vl {
+  padding: 10px;
+  border-left: 3px solid rgb(198, 203, 198);
+  height: 150px;
+}
 
-  .no-border {
-    border: none;
-  }
+.no-border {
+  border: none;
+}
 
-  .bottom-border {
-    border: none;
-    border-bottom: 1px solid #c4c0c0; /* Adjust thickness and color as needed */
-  }
-  .no-border {
-    border: none;
-    margin: 0; /* Ensure no margin on inputs */
-    padding: 3px; /* Optional padding inside inputs */
-
-  }
-  .center-table {
-    margin: auto;
-    text-align: center;
+.bottom-border {
+  border: none;
+  border-bottom: 1px solid #c4c0c0; /* Adjust thickness and color as needed */
+}
+.no-border {
+  border: none;
+  margin: 0; /* Ensure no margin on inputs */
+  padding: 3px; /* Optional padding inside inputs */
+}
+.center-table {
+  margin: auto;
+  text-align: center;
 }
 .center-table td {
-    padding: 0 20px; /* Adds margin between the two table cells */
-    height: 50px;
+  padding: 0 20px; /* Adds margin between the two table cells */
+  height: 50px;
 }
 .form-check-label {
   margin-left: 10px; /* Adjust this value to increase or decrease the space between the input and label */
@@ -63,3 +62,643 @@
 //   margin: 0; /* Ensure no margin on inputs */
 //   padding: 8px; /* Optional padding inside inputs */
 // }
+
+//New one
+
+.text-mid {
+  margin-left: 45%;
+  margin-top: 2%;
+}
+
+.remarks-box {
+  width: 100%;
+  height: 200px;
+  padding: 1px;
+  border: 3px solid rgb(247, 246, 246);
+  margin: 0;
+}
+.error {
+  color: #d32f2f; /* Material-style red */
+  font-size: 0.85rem;
+  margin-top: 4px;
+  margin-left: 2px;
+  font-weight: 500;
+}
+
+.input-pair.ng-invalid.ng-touched {
+  border-color: #d32f2f;
+  box-shadow: 0 0 0 1px #d32f2f;
+}
+
+.vl {
+  padding: 10px;
+  border-left: 3px solid rgb(198, 203, 198);
+  height: 150px;
+}
+
+.no-border {
+  border: none;
+}
+
+.bottom-border {
+  border: none;
+  border-bottom: 1px solid #c4c0c0; /* Adjust thickness and color as needed */
+}
+.no-border {
+  border: none;
+  margin: 0; /* Ensure no margin on inputs */
+  padding: 3px; /* Optional padding inside inputs */
+}
+.center-table {
+  margin: auto;
+  text-align: center;
+}
+.center-table td {
+  padding: 0 20px; /* Adds margin between the two table cells */
+  height: 50px;
+}
+.form-check-label {
+  margin-left: 10px; /* Adjust this value to increase or decrease the space between the input and label */
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  margin: 0; /* Remove margin between containers */
+  padding: 0; /* Remove padding between containers */
+}
+
+.input-container label {
+  margin-right: 10px; /* Space between the label and the input */
+  font-weight: bold;
+}
+
+.input-container input {
+  flex: 1; /* Allows the input to grow and fill the available space */
+}
+
+// .form-control {
+//   margin: 0; /* Ensure no margin on inputs */
+//   padding: 8px; /* Optional padding inside inputs */
+// }
+
+.vehicle-section {
+  border-radius: 35px;
+  border: 2px solid #ddd;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.section {
+  border-radius: 35px;
+  border: 2px solid #a19e9e;
+  margin-bottom: 20px;
+  padding: 20px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.row.justify-content-center {
+  display: flex;
+  justify-content: center;
+}
+
+input::placeholder {
+  color: #000; /* or #333 for a slightly lighter black */
+  opacity: 1; /* Ensures it's fully opaque */
+  font-size: 15px;
+  text-align: center;
+}
+
+.round-input {
+  border-radius: 35px;
+  border: 2px solid #ddd;
+}
+// .round-input {
+//   border-radius: 35px;
+//   border: 2px solid #ddd;
+// }
+input.form-control,
+select.form-control {
+  border: 2px solid #ddd; /* Slightly darker than default gray */
+}
+
+.joint-element {
+  border: none !important;
+  outline: none; /* Optional: removes blue border when focused */
+  box-shadow: none; /* Optional: removes shadow in case of Bootstrap/Material */
+}
+
+// .booking-container {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: flex-start;
+//   padding: 10px;
+//   padding-left: 20px;
+//   border-radius: 40px;
+//   border: 2px solid #ddd;
+//   max-width: 900px;
+//   margin: auto;
+//   flex-wrap: nowrap;
+//   gap: 10px;
+//   flex: 1 1 auto;
+//   padding-top: 10px;
+//   height: 50px;
+// }
+
+.booking-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #f9f9f9;
+  padding: 10px;
+  padding-left: 20px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  max-width: 900px;
+  margin: auto;
+  flex-wrap: nowrap;
+  gap: 10px;
+  flex: 1 1 auto;
+  padding-top: 5px;
+  height: 60px;
+}
+
+.search-dropdown-wrapper {
+  max-width: 500px;
+  margin: auto;
+  margin-top: 24px;
+  border-radius: 999px;
+  overflow: hidden; /* Ensures clean cut corners */
+  background-color: #f2f2f2;
+}
+
+.custom-search-select {
+  width: 100%;
+  border-radius: 999px;
+  background-color: #f2f2f2;
+}
+
+.custom-search-select .mat-form-field-flex {
+  border-radius: 999px;
+  padding-left: 12px;
+  background-color: #f2f2f2;
+}
+
+.custom-search-select .mat-form-field-appearance-fill .mat-form-field-outline {
+  display: none;
+}
+
+.custom-search-select .mat-form-field-appearance-fill .mat-form-field-infix {
+  padding: 10px 0;
+}
+
+.custom-search-select .mat-select-trigger {
+  font-size: 16px;
+  color: #757575;
+}
+
+.custom-search-select .mat-icon {
+  color: #999;
+  margin-right: 8px;
+}
+:host ::ng-deep .custom-search-select .mat-mdc-text-field-wrapper {
+  border: none !important;
+  box-shadow: none !important;
+  background-color: #f2f2f2;
+  border-radius: 999px !important; /* FULLY rounded */
+  padding: 0 12px;
+}
+
+:host ::ng-deep .custom-search-select .mat-mdc-form-field-flex {
+  border-radius: 999px !important;
+  align-items: center;
+}
+
+:host ::ng-deep .custom-search-select .mat-mdc-form-field-infix {
+  padding: 10px 0;
+}
+.type-field {
+  display: flex;
+}
+
+:host ::ng-deep .mat-mdc-select-trigger {
+  padding-left: 8px;
+}
+
+:host ::ng-deep .mat-mdc-select-arrow {
+  color: #757575;
+}
+::ng-deep .mat-select-arrow {
+  color: #999;
+}
+:host ::ng-deep mat-form-field .mat-mdc-text-field-wrapper {
+  border: none !important;
+}
+:host ::ng-deep .mat-mdc-select .mat-mdc-select-trigger {
+  background-color: transparent;
+}
+
+.date-time-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.datepicker-label-first {
+  margin-bottom: 0px;
+  margin-left: 22px;
+  // font-size: medium;
+  padding-right: 100px;
+}
+
+.days-lebel {
+  margin-bottom: 0px;
+  margin-left: 5px;
+  // font-size: medium;
+  padding-right: 65px;
+}
+
+.datepicker-label-second {
+  margin-bottom: 0px;
+  // margin-left: 5px;
+  font-size: medium;
+}
+
+.input-pair {
+  background-color: transparent;
+  border: none;
+  font-size: large;
+  margin-top: 0px;
+  padding-right: 0px; /* Reduce right padding */
+  text-align: left;
+  gap: 5px; /* Keep text aligned left */
+}
+
+.input-pair::-webkit-datetime-edit {
+  padding-right: 0px; /* Remove inner padding in Chrome */
+}
+
+.input-pair::-webkit-calendar-picker-indicator {
+  margin-left: -4px; /* Pull the icon closer to the text */
+}
+
+.input-pair input {
+  flex: 1;
+  width: 10px;
+}
+.w-36{
+  width: 36%;
+
+}
+.days-diff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 0 0 120px;
+  font-size: small;
+  border-color: #44d6db;
+  margin-right: 24px;
+}
+
+.no-border {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+}
+
+.days-no {
+  border-radius: 45px;
+  font-size: small;
+  color: #44d6db;
+  border: 2px solid #44d6db;
+}
+
+.grey-text {
+  color: #a19e9e;
+  font-weight: bold;
+  margin-bottom: 0px;
+}
+
+.col-lg-2,
+.col-md-2,
+.col-lg-3,
+.col-md-3,
+.col-lg-1,
+.col-md-1,
+.col-lg-4,
+.col-md-4,
+.col-lg-6,
+.col-md-6 {
+  padding-left: 3px; /* Adjust as needed */
+  padding-right: 3px; /* Adjust as needed */
+}
+
+/* Adjust the gap between flex items */
+.row {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.first-row-element {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.sample-color {
+  background: #f9f9f9;
+}
+
+input[readonly] {
+  background-color: white !important; /* Set the background color to white */
+}
+
+input.form-control.bottom-border {
+  border: none;
+  border-bottom: 2px solid #dfdddd; /* or your desired color */
+  border-radius: 10px;
+  outline: none;
+  box-shadow: none;
+  background-color: transparent; /* optional: removes background */
+  padding-left: 0; /* optional: makes it more aligned */
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+}
+.activity-datetime-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-family: sans-serif;
+  width: fit-content;
+  gap: 20px;
+}
+::ng-deep .mat-mdc-form-field-infix {
+  margin-top: 12px;
+}
+::ng-deep .mdc-notched-outline__notch {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.activity-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.label {
+  font-size: 12px;
+  color: #888;
+  margin-bottom: 2px;
+}
+
+.flat-input {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
+  text-align: left;
+}
+
+
+
+.time-range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.divider {
+  width: 1px;
+  height: 36px;
+  background-color: #ccc;
+}
+.radio-class {
+  display: flex;
+  gap: 12px;
+}
+.wider-spacing .col-lg-2,
+.wider-spacing .col-md-2,
+.wider-spacing .col-lg-3,
+.wider-spacing .col-md-3,
+.wider-spacing .col-lg-1,
+.wider-spacing .col-md-1,
+.wider-spacing .col-lg-4,
+.wider-spacing .col-md-4,
+.wider-spacing .col-lg-6,
+.wider-spacing .col-md-6 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.bottom-border::placeholder {
+  color: #888;
+  text-align: center;
+}
+
+input.form-control.no-border {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  background-color: transparent; /* optional: removes background */
+  padding-left: 0; /* optional: makes it more aligned */
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+}
+
+.no-border::placeholder {
+  color: #888;
+  text-align: left;
+}
+
+.custom-padding {
+  padding: 10px;
+}
+
+.custom-height {
+  height: 60px;
+}
+.height-test {
+  height: 66px;
+}
+
+::ng-deep mat-select.select {
+  border: 1px solid #ddd; /* Change to your desired color */
+  border-radius: 4px;
+}
+.flex-col{
+  display: flex;
+  flex-direction: column;
+}
+.wrapper {
+  display: flex;
+  align-items: center; /* vertical centering */
+  gap: 0.5rem;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.wrapper i {
+  font-size: 1.5rem; /* Bigger icon */
+  color: #888;
+  flex-shrink: 0;
+}
+
+.sample-color {
+  background: #f9f9f9;
+}
+
+.input-inside-element {
+  border: none;
+  background-color: #f9f9f9;
+  outline: none;
+  flex-grow: 1;
+}
+
+.input-inside-element::placeholder {
+  color: #888;
+  font-size: x-large;
+  text-align: left;
+}
+
+.custom-placeholder-element::placeholder {
+  color: #1a1919;
+  text-align: left;
+  font-size: x-large;
+}
+
+.input-inside-type-element {
+  border: none;
+  background-color: #f9f9f9;
+  outline: none;
+  min-width: 0;
+  flex-grow: 1;
+}
+
+.input-inside-type-element::placeholder {
+  color: black;
+  font-size: x-large;
+  text-align: left;
+}
+
+.row-1 {
+  gap: 30px;
+  display: flex;
+  justify-content: end;
+}
+
+.row-2 {
+  gap: 10px;
+}
+
+.row-3 {
+  gap: 10px;
+}
+
+.input-col {
+  max-width: 138px;
+  flex: 1 1 auto;
+  padding: 0px;
+}
+
+.input-col-2 {
+  max-width: 190px;
+  flex: 1 1 auto;
+}
+
+.input-col-3 {
+  max-width: 210px;
+  flex: 1 1 auto;
+}
+
+.row-6 {
+  gap: 10px;
+}
+
+.input-col-6 {
+  max-width: 210px;
+  flex: 1 1 auto;
+}
+
+.row-6-wrapper {
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  height: 40px;
+  align-items: center;
+}
+
+.row-6-input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+  padding-top: 8px;
+  flex-grow: 1;
+}
+
+.row-6-input::placeholder {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.datetimepick {
+  width: 180px;
+  padding: 0px 2px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: none;
+  background-color: transparent;
+  border: none;
+  font-size: large;
+  margin-top: 0px;
+  padding-right: 0px; /* Reduce right padding */
+  text-align: left;
+}
+
+.custom-icon {
+  color: #f09050;
+  font-size: large;
+  margin-right: 5px;
+}
+
+.additional-info-text {
+  font-size: 15px;
+  font-weight: bold;
+}
+@media (max-width: 768px) {
+  .booking-container {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    width: auto;
+  }
+  .days-diff {
+    width: 100%;
+  }
+  .activity-datetime-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 0px;
+    padding: 10px 16px;
+    font-family: sans-serif;
+    gap: 20px;
+  }
+}
