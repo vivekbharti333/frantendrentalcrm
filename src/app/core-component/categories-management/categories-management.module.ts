@@ -13,6 +13,10 @@ import { CategoriesManagementRoutingModule } from './categories-management-routi
 import { CategoriesTypeComponent } from './categories-type/categories-type.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core'; // for using native JS Date
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 
 @NgModule({
@@ -33,6 +37,10 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     MultiSelectModule,
     MatDialogModule,
    NgxMaterialTimepickerModule,
+   MatDatepickerModule,
+   MatNativeDateModule,
+   MatFormFieldModule,
+   MatInputModule
   ]
 })
 export class CategoriesManagementModule { }

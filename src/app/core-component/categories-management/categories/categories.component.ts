@@ -16,13 +16,16 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CategoriesManagementService } from '../categories-management.service';
 import { Constant } from 'src/app/core/constant/constants';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatDialog } from '@angular/material/dialog';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss',
-  providers: [MessageService, ToastModule],
+  providers: [MessageService, ToastModule, NgxMaterialTimepickerModule],
 })
 export class CategoriesComponent {
   public routes = routes;
@@ -30,6 +33,9 @@ export class CategoriesComponent {
   public superCategoryList: any[] = [];
   public editSuperCategoryList: any[] = [];
   public baseUrl = Constant.Site_Url;
+
+  public addCategoryForm!: FormGroup;
+  public editCategoryForm!: FormGroup;
 
   // pagination variables
   public tableData: Array<any> = [];
@@ -43,41 +49,71 @@ export class CategoriesComponent {
   addCategoryDialog: any;
   editCategoryDialog: any;
 
-  
+
   constructor(
-    private data: DataService,
+    private fb: FormBuilder,
     private pagination: PaginationService,
     private router: Router,
     private sidebar: SidebarService,
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
+    this.createForms();
     this.getCategoryDetailsList();
     this.getCategoryType();
     this.getSuperCategory();
   }
 
-  public addCategory = {
-    categoryImage: '',
-    categoryTypeId: '',
-    superCategoryId: '',
-    category: '',
-    superCategory: '',
-  };
+  createForms() {
+    this.addCategoryForm = this.fb.group({
+      categoryImage: '',
+      categoryTypeId: '',
+      superCategoryId: '',
+      category: '',
+      startDate: '',
+      endDate: '',
+      startTime: '12:00',
+      endTime: '',
+      pickupLocation: '',
+      dropLocation: '',
+      companyRate: '',
+      companyRateForKids: '',
+      vendorRate: '',
+      vendorRateForKids: '',
+      quantity: '',
+      childrenQuantity: '',
+      infantQuantity: '',
+      securityAmount: '',
+      description: '',
+    });
 
-  public editCategory = {
-    categoryId: '',
-    categoryTypeId: '',
-    categoryTypeName: '',
-    superCategoryId: '',
-    superCategory: '',
-    category: '',
-    createdAt: '',
-    status: '',
-  };
+    this.editCategoryForm = this.fb.group({
+      categoryImage: '',
+      categoryTypeId: '',
+      superCategoryId: '',
+      category: '',
+      startDate: '',
+      endDate: '',
+      startTime: '',
+      endTime: '',
+      pickupLocation: '',
+      dropLocation: '',
+      companyRate: '',
+      companyRateForKids: '',
+      vendorRate: '',
+      vendorRateForKids: '',
+      quantity: '',
+      childrenQuantity: '',
+      infantQuantity: '',
+      securityAmount: '',
+      description: '',
+      createdAt: '',
+      status: '',
+    });
+  }
 
   public getCategoryType() {
     this.categoriesManagementService.getCategoryTypeList().subscribe({
@@ -105,7 +141,9 @@ export class CategoriesComponent {
           this.editSuperCategoryList = JSON.parse(
             JSON.stringify(response.listPayload)
           );
-          this.superCategoryList = [];
+          this.superCategoryList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );;
         }
       },
       error: (error: any) =>
@@ -139,7 +177,7 @@ export class CategoriesComponent {
 
   submitCategoryForm() {
     this.categoriesManagementService
-      .addCategoryDetails(this.addCategory)
+      .addCategoryDetails(this.addCategoryForm.value)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
@@ -182,7 +220,7 @@ export class CategoriesComponent {
   }
 
   submitEditedCategoryForm() {
-    this.categoriesManagementService.editCategoryDetails(this.editCategory)
+    this.categoriesManagementService.editCategoryDetails(this.editCategoryForm.value)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
@@ -252,43 +290,57 @@ export class CategoriesComponent {
           detail: 'Server Error',
         }),
     });
-    // this.isLoading = false;
   }
 
   openAddModal(templateRef: TemplateRef<any>) {
-    // this.superCategory.categoryTypeName = rowDate[5];
-    // this.superCategory.status = rowDate[5];
-    // this.superCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
-    // this.superCategory.isChecked = rowDate[5];
-    // this.superCategory.categoryTypeId = rowDate[0]
     (this.addCategoryDialog = this.dialog.open(templateRef)),
-      {
-        width: '50rem',
-      };
+    {
+      width: '50rem',
+    };
   }
 
   openEditModal(templateRef: TemplateRef<any>, rowData: any) {
-    // this.getCategoryType();
+
+    const formatDate = (value: string | Date | null): string | null => {
+      if (!value) return null;
+      const date = new Date(value);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
     const filterCategoryType: any = this.categoryTypeList.filter((item) => {
       if (item?.categoryTypeName === rowData.categoryTypeName) {
         return item;
       }
     });
-    this.editCategory.categoryId = rowData.id;
-    this.editCategory.categoryTypeId = rowData.categoryTypeId;
-    this.editCategory.categoryTypeName = rowData.categoryTypeName;
-    this.editCategory.superCategoryId = rowData.superCategoryId;
-    this.editCategory.superCategory = rowData.superCategory;
-    this.editCategory.category = rowData.category;
-    this.editCategory.createdAt = rowData.createdAt;
-    this.editCategory.status = rowData.status;
-    // console.log('rowData++++++++', this.editCategory, filterCategoryType);
-    // this.editCategory.superCategory = rowDate[2]; // Assign the value to user.firstName
-    // this.editCategory.superCategoryId = rowData[1];
+    this.editCategoryForm.patchValue({
+      categoryTypeId: rowData['categoryTypeId'] ?? null,
+      superCategoryId: rowData['superCategoryId'] ?? null,
+      category: rowData['category'] ?? '',
+      startDate: formatDate(rowData['startDate']),
+      endDate: formatDate(rowData['endDate']),
+      startTime: rowData['startTime'] ?? '',
+      endTime: rowData['endTime'] ?? '',
+      pickupLocation: rowData['pickupLocation'] ?? '',
+      dropLocation: rowData['dropLocation'] ?? '',
+      companyRate: rowData['companyRate'] ?? 0,
+      companyRateForKids: rowData['companyRateForKids'] ?? 0,
+      vendorRate: rowData['vendorRate'] ?? 0,
+      vendorRateForKids: rowData['vendorRateForKids'] ?? 0,
+      quantity: rowData['quantity'] ?? 0,
+      childrenQuantity: rowData['childrenQuantity'] ?? 0,
+      infantQuantity: rowData['infantQuantity'] ?? 0,
+      securityAmount: rowData['securityAmount'] ?? 0,
+      description: rowData['description'] ?? '',
+      createdAt: rowData['createdAt'] ? new Date(rowData['createdAt']) : null,
+      status: rowData['status'] ?? true
+    });
+
     (this.editCategoryDialog = this.dialog.open(templateRef)),
-      {
-        width: '50rem',
-      };
+    {
+      width: '50rem',
+    };
   }
 
   getCategoryDetailsList() {
@@ -366,8 +418,8 @@ export class CategoriesComponent {
         const base64String = event.target.result.split(',')[1]; // Get the base64 part
 
         // Set the base64 string to the userPicture field
-        this.addCategory.categoryImage =
-          'data:image/png;base64,' + base64String;
+        // this.addCategoryForm.categoryImage =
+        //   'data:image/png;base64,' + base64String;
       };
       reader.readAsDataURL(selectedFile);
     }

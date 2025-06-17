@@ -143,9 +143,9 @@
             <th mat-sort-header="superCate">Super Category</th>
             <th mat-sort-header="cate">Category</th>
             <th mat-sort-header="subCate">Sub Category</th>
-            <th mat-sort-header="securityAmt">Security Amount</th>
+            <!-- <th mat-sort-header="securityAmt">Security Amount</th>
             <th mat-sort-header="vendorRate">Vendor Rate</th>
-            <th mat-sort-header="vendorRateKids">Vendor Rate (Kids)</th>
+            <th mat-sort-header="vendorRateKids">Vendor Rate (Kids)</th> -->
             <th mat-sort-header="status">Status</th>
             <th mat-sort-header="createdOn">Created On</th>
             <th class="no-sort">Action</th>
@@ -165,17 +165,17 @@
             <td>{{ data.superCategory }}</td>
             <td>{{ data.category }}</td>
             <td>{{ data.subCategory }}</td>
-            <td>{{ data.securityAmount }}</td>
+            <!-- <td>{{ data.securityAmount }}</td>
             <td>{{ data.vendorRate }}</td>
-            <td>{{ data.vendorRateForKids }}</td>
+            <td>{{ data.vendorRateForKids }}</td> -->
 
             <td>
               <button class="badge-button" [ngClass]="{
                   'badge-linesuccess': data.status === 'ACTIVE',
-                  'badge-linedanger': data.status === 'INACTIVE'
-                }" (click)="changeStatus(data)">
+                  'badge-linedanger': data.status === 'INACTIVE' }" (click)="changeStatus(data)">
                 {{ data.status }}
               </button>
+
             </td>
             <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
             <td class="action-table-data">
@@ -196,107 +196,6 @@
   </div>
 </div>
 
-<!-- Add Category Type -->
-<!-- <div class="modal fade" id="add-units">
-    <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
-      <div class="modal-content">
-        <div class="page-wrapper-new p-0">
-          <div class="content">
-            <div class="modal-header border-0 custom-modal-header">
-              <div class="page-title">
-                <h4>Edit User</h4>
-              </div>
-              <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body custom-modal-body">
-              <form #addForm="ngForm" (ngSubmit)="submitSubCategoryForm()">
-                <div class="card">
-                  <div class="card-body">
-                    <div class="new-employee-field">
-                      <div class="card-title-head">
-                        <h6><span><i class=" feather icon-info feather-edit"></i></span>Category Type details</h6>
-                      </div>
-
-                      <div class="profile-pic-upload">
-                        <div class="profile-pic">
-                          <ng-container *ngIf="!addSubCategory.subCategoryImage; else showImage">
-                            <span><i class="feather icon-plus-circle plus-down-add"></i>Super Category Image</span>
-                          </ng-container>
-                          <ng-template #showImage>
-                            <img [src]="addSubCategory.subCategoryImage" alt="Profile Picture" class="uploaded-profile-pic" />
-                          </ng-template>
-                        </div>
-                        <div class="input-blocks mb-0">
-                          <div class="image-upload mb-0">
-                            <input type="file" class="form-control" id="subCategoryImage" (change)="onFileSelected($event)">
-                            <div class="image-uploads">
-                              <h4>Change Image</h4>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div class="row">
-                        <div class="col-lg-3 col-md-6">
-                          <div class="mb-3">
-                            <label class="form-label">Category Type Name</label>
-                            <mat-select name="categoryTypeId" [(ngModel)]="addSubCategory.categoryTypeId" class="select" placeholder="Select Category Type" (selectionChange)="getSuperCategoryByCateTypeId($event)">
-                              <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id" >
-                                {{cateType.categoryTypeName}}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-6">
-                          <div class="mb-3">
-                            <label class="form-label">Super Category</label>
-                            <mat-select name="superCategoryId" [(ngModel)]="addSubCategory.superCategoryId" class="select" placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
-                              <mat-option *ngFor="let superCate of superCategoryList" [value]="superCate.id">
-                                {{superCate.superCategory }}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                          <div class="mb-3">
-                            <label class="form-label">Category </label>
-                           
-                            <mat-select name="categoryId" [(ngModel)]="addSubCategory.categoryId" class="select" placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
-                              <mat-option *ngFor="let cat of categoryList" [value]="cat.id">
-                                {{cat.category}}
-                              </mat-option>
-                            </mat-select>
-                          </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-6">
-                          <div class="mb-3">
-                            <label class="form-label">Sub Category </label>
-                            <input type="text" class="form-control" name="subCategory" [(ngModel)]="addSubCategory.subCategory" required>
-                            
-                          </div>
-                        </div>
-                      </div> 
-                     
-                    </div>
-                  </div>
-                </div>
-              
-              
-                <div class="text-end mb-3">
-                  <button type="submit" class="btn btn-submit" [disabled]="!addForm.form.valid">Save Category</button>
-                </div>
-              </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
-<!-- /Add Category Type -->
 
 <!-- Add Sub Category New Modal Start addSubCategoryTemplate -->
 <ng-template #addSubCategoryTemplate let-dialog>
@@ -308,7 +207,6 @@
       </button>
     </div>
   </div>
-  <!-- <form #addForm="ngForm" (ngSubmit)="submitSubCategoryForm()"> -->
   <form [formGroup]="addSubCategory" (ngSubmit)="submitSubCategoryForm()">
     <mat-dialog-content class="modalContent">
       <div class="modal-body custom-modal-body">
@@ -374,13 +272,6 @@
                         {{ cat.category }}
                       </mat-option>
                     </mat-select>
-
-                    <!-- <mat-select formControlName="pickupLocation" class="select custom-mat-select" 
-                      placeholder="Select a Drop Location" required>
-                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
-                        {{ dropList.location }}
-                      </mat-option>
-                    </mat-select> -->
                   </div>
                 </div>
 
@@ -392,138 +283,7 @@
                 </div>
               </div>
 
-              <div class="row">
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Pickup Hub </label>
-                    <!-- <input type="text" class="form-control" formControlName="subCategory" required /> -->
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Pickup Location </label>
-                    <!-- <mat-select class="form-control" formControlName="categoryId" class="select"
-                      placeholder="Select a Super Category">
-                      <mat-option *ngFor="let pickLocation of filteredPickLocationList" [value]="pickLocation.location">
-                        {{ pickLocation.location }}
-                      </mat-option>
-                    </mat-select> -->
 
-                    <mat-select formControlName="pickupLocation" class="select custom-mat-select" 
-                      placeholder="Select a Drop Location" required>
-                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
-                        {{ dropList.location }}
-                      </mat-option>
-                    </mat-select>
-
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Drop Hub </label>
-                    <!-- <input type="text" class="form-control" formControlName="subCategory" required /> -->
-
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Drop Location </label>
-                    <mat-select formControlName="dropLocation" class="select custom-mat-select" 
-                      placeholder="Select a Drop Location" required>
-                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
-                        {{ dropList.location }}
-                      </mat-option>
-                    </mat-select>
-
-                    <!-- <mat-select formControlName="dropLocation" class="select custom-mat-select" name="dropLocation"
-                      placeholder="Select a Drop Location" required>
-                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
-                        {{ dropList.location }}
-                      </mat-option>
-                    </mat-select> -->
-
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-3 col-md-6"></div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Pickup Time </label>
-                    <!-- <input type="time" class="form-control" step="900" min="00:00" max="23:45" /> -->
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label">Drop Time </label>
-                    <!-- <input type="time" class="form-control" formControlName="subCategory" required /> -->
-                    <ngx-material-timepicker #picker></ngx-material-timepicker>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6"></div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2 col-md-6"></div>
-                <div class="col-lg-2 col-md-6">
-                  <div class="mb-2">
-                    <label class="form-label">Company Rate </label>
-                    <input type="text" class="form-control" formControlName="companyRate" required />
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                  <div class="mb-2">
-                    <label class="form-label">Vendor Rate </label>
-                    <input type="text" class="form-control" formControlName="vendorRate" required />
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                  <div class="mb-2">
-                    <label class="form-label">Company Rate for Kids </label>
-                    <input type="text" class="form-control" formControlName="companyRateForKids" required />
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                  <div class="mb-2">
-                    <label class="form-label">Vendor Rate for Kids </label>
-                    <input type="text" class="form-control" formControlName="vendorRateForKids" required />
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-3 col-md-6"></div>
-                <div class="col-lg-2 col-md-6">
-                  <div class="mb-2">
-                    <label class="form-label">Quantity </label>
-                    <input type="text" class="form-control" formControlName="quantity" required />
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                  <div class="mb-2">
-                    <label class="form-label">Kids Quantity </label>
-                    <input type="text" class="form-control" formControlName="childrenQuantity" required />
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-6">
-                  <div class="mb-2">
-                    <label class="form-label">Infant Quantity </label>
-                    <input type="text" class="form-control" formControlName="infantQuantity" required />
-                  </div>
-                </div>
-
-              </div>
-
-              <div class="row">
-                <div class="col-lg-5 col-md-6"></div>
-                <div class="col-lg-2 col-md-6">
-                  <div class="mb-2">
-                    <label class="form-label">Security Amount </label>
-                    <input type="text" class="form-control" formControlName="securityAmount" required />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -531,7 +291,7 @@
     </mat-dialog-content>
     <mat-dialog-actions class="dialogAction">
       <div class="text-end mb-3">
-        <button type="submit" class="btn btn-submit" [disabled]="!addSubCategory.valid">
+        <button type="submit" class="btn btn-submit">
           Add Sub Category
         </button>
       </div>
@@ -550,7 +310,8 @@
       </button>
     </div>
   </div>
-  <form #editForm="ngForm" (ngSubmit)="submitEditedSubCategoryForm()">
+  <!-- <form #editForm="ngForm" (ngSubmit)="submitEditedSubCategoryForm()"> -->
+  <form [formGroup]="editSubCategory" (ngSubmit)="submitEditedSubCategoryForm()">
     <mat-dialog-content class="modalContent">
       <div class="modal-body custom-modal-body">
         <div class="card">
@@ -562,62 +323,70 @@
                 </h6>
               </div>
 
+              <div class="profile-pic-upload">
+                <!-- <div class="profile-pic">
+                  <ng-container *ngIf="!addSubCategory.subCategoryImage; else showImage">
+                    <span><i class="feather icon-plus-circle plus-down-add"></i>Sub Category Image</span>
+                  </ng-container>
+                  <ng-template #showImage>
+                    <img [src]="addSubCategory.subCategoryImage" alt="Profile Picture" class="uploaded-profile-pic" />
+                  </ng-template>
+                </div>
+                <div class="input-blocks mb-0">
+                  <div class="image-upload mb-0">
+                    <input type="file" class="form-control" id="subCategoryImage" (change)="onFileSelected($event)" />
+                    <div class="image-uploads">
+                      <h4>Change Image</h4>
+                    </div>
+                  </div>
+                </div> -->
+              </div>
+
               <div class="row">
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <mat-select name="categoryTypeId" [(ngModel)]="editSubCategory.categoryTypeId" class="select"
-                      placeholder="Select a Super Category" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                    <mat-select class="form-control" formControlName="categoryTypeId" class="select custom-mat-select"
+                      placeholder="Select Category Type" (selectionChange)="getSuperCategoryByCateTypeId($event)">
                       <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
                         {{ cateType.categoryTypeName }}
                       </mat-option>
                     </mat-select>
                   </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+
+                <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Super Category </label>
-                    <mat-select name="superCategoryId" [(ngModel)]="editSubCategory.superCategoryId" class="select"
+                    <label class="form-label">Super Category</label>
+                    <mat-select class="form-control" formControlName="superCategoryId" class="select custom-mat-select"
                       placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
-                      <mat-option *ngFor="let superCategory of superCategoryList" [value]="superCategory.id">
-                        {{ superCategory.superCategory }}
+                      <mat-option *ngFor="let superCate of superCategoryList" [value]="superCate.id">
+                        {{ superCate.superCategory }}
                       </mat-option>
                     </mat-select>
-                    <!-- <input
-                      type="text"
-                      class="form-control"
-                      name="superCategory"
-                      [(ngModel)]="editSubCategory.superCategory"
-                      required
-                    /> -->
                   </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Category</label>
-                    <mat-select name="superCategoryId" [(ngModel)]="editSubCategory.categoryId" class="select"
-                      placeholder="Select a Super Category">
-                      <mat-option *ngFor="let cate of categoryList" [value]="cate.id">
-                        {{ cate.category }}
+                    <label class="form-label">Category </label>
+                    <mat-select class="form-control" formControlName="categoryId" class="select custom-mat-select"
+                      placeholder="Select a Super Category" (selectionChange)="getCategoryBySuperCatId($event)">
+                      <mat-option *ngFor="let cat of categoryList" [value]="cat.id">
+                        {{ cat.category }}
                       </mat-option>
                     </mat-select>
-                    <!-- <input
-                      type="text"
-                      class="form-control"
-                      name="category"
-                      [(ngModel)]="editSubCategory.category"
-                      required
-                    /> -->
                   </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+
+                <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Sub Category</label>
-                    <input type="text" class="form-control" name="category" [(ngModel)]="editSubCategory.subCategory"
-                      required />
+                    <label class="form-label">Sub Category </label>
+                    <input type="text" class="form-control" formControlName="subCategory" required />
                   </div>
                 </div>
               </div>
+
+
             </div>
           </div>
         </div>
@@ -625,11 +394,10 @@
     </mat-dialog-content>
     <mat-dialog-actions class="dialogAction">
       <div class="text-end mb-3">
-        <button type="submit" class="btn btn-submit" [disabled]="!editForm.form.valid">
+        <button type="submit" class="btn btn-submit">
           Update Sub Category
         </button>
       </div>
-      <!-- <button mat-button (click)="dialog.close()">Close</button> -->
     </mat-dialog-actions>
   </form>
 </ng-template>

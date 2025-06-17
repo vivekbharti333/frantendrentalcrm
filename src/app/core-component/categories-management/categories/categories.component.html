@@ -37,12 +37,8 @@
       </li>
     </ul> -->
   <div class="page-btn">
-    <button
-      class="btn btn-added"
-      data-bs-toggle="modal"
-      data-bs-target="#add-units"
-      (click)="openAddModal(addCategoryTemplate)"
-    >
+    <button class="btn btn-added" data-bs-toggle="modal" data-bs-target="#add-units"
+      (click)="openAddModal(addCategoryTemplate)">
       <i class="feather icon-plus-circle me-2"></i>Add Category
     </button>
   </div>
@@ -54,31 +50,19 @@
     <div class="table-top">
       <div class="search-set">
         <div class="search-input">
-          <a href="javascript:void(0);" class="btn btn-searchset"
-            ><i class="feather icon-search feather-search"></i
-          ></a>
+          <a href="javascript:void(0);" class="btn btn-searchset"><i class="feather icon-search feather-search"></i></a>
           <div class="dataTables_filter">
             <label>
-              <input
-                [(ngModel)]="searchDataValue"
-                [ngModelOptions]="{ standalone: true }"
-                (ngModelChange)="searchData(searchDataValue)"
-                type="search"
-                class="form-control"
-                placeholder="Search..."
-              />
+              <input [(ngModel)]="searchDataValue" [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="searchData(searchDataValue)" type="search" class="form-control"
+                placeholder="Search..." />
             </label>
           </div>
         </div>
       </div>
       <div class="search-path">
         <div class="d-flex align-items-center">
-          <a
-            class="btn btn-filter"
-            id="filter_search"
-            (click)="openFilter()"
-            [ngClass]="{ setclose: filter === true }"
-          >
+          <a class="btn btn-filter" id="filter_search" (click)="openFilter()" [ngClass]="{ setclose: filter === true }">
             <i class="feather icon-filter filter-icon"></i>
             <span><img src="assets/img/icons/closes.svg" alt="img" /></span>
           </a>
@@ -95,11 +79,7 @@
       </div>
     </div>
     <!-- /Filter -->
-    <div
-      class="card"
-      id="filter_inputs"
-      [ngClass]="{ 'd-block': filter, 'd-none': !filter }"
-    >
+    <div class="card" id="filter_inputs" [ngClass]="{ 'd-block': filter, 'd-none': !filter }">
       <div class="card-body pb-0">
         <div class="row">
           <div class="col-lg-3 col-sm-6 col-12">
@@ -172,25 +152,18 @@
             <td>
               <div class="userimgname">
                 <a href="javascript:void(0);" class="userslist-img bg-img">
-                  <img
-                    src="{{ baseUrl }}cateImg/{{ data.categoryImage }}"
-                    alt="user image"
-                    style="border-radius: 50%"
-                /></a>
+                  <img src="{{ baseUrl }}cateImg/{{ data.categoryImage }}" alt="user image"
+                    style="border-radius: 50%" /></a>
               </div>
             </td>
             <td>{{ data.categoryTypeName }}</td>
             <td>{{ data.superCategory }}</td>
             <td>{{ data.category }}</td>
             <td>
-              <button
-                class="badge-button"
-                [ngClass]="{
+              <button class="badge-button" [ngClass]="{
                   'badge-linesuccess': data.status === 'ACTIVE',
                   'badge-linedanger': data.status === 'INACTIVE'
-                }"
-                (click)="changeStatus(data)"
-              >
+                }" (click)="changeStatus(data)">
                 {{ data.status }}
               </button>
             </td>
@@ -198,7 +171,8 @@
             <td class="action-table-data">
               <div class="edit-delete-action">
                 <!-- <a class="me-2 p-2 mb-0" href="javascript:void(0);"><i class="feather icon-eye action-eye"></i> </a> -->
-                <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units" (click)="openEditModal(editCategoryTemplate, data)">
+                <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units"
+                  (click)="openEditModal(editCategoryTemplate, data)">
                   <i class="feather icon-edit feather-edit"></i>
                 </a>
                 <!-- <a class="me-2 confirm-text p-2 mb-0" href="javascript:void(0);" (click)=confirmColor()> <i class="feather icon-trash-2 feather-trash-2"></i></a> -->
@@ -307,17 +281,12 @@
   <div class="modalHeaderContainer">
     <h2 mat-dialog-title class="p-0">Add Category</h2>
     <div mat-dialog-close class="closeBtn">
-      <button
-        type="button"
-        class="close"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      >
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
   </div>
-  <form #addForm="ngForm" (ngSubmit)="submitCategoryForm()">
+  <form [formGroup]="addCategoryForm" (ngSubmit)="submitCategoryForm()">
     <mat-dialog-content class="modalContent">
       <div class="modal-body custom-modal-body">
         <div class="card">
@@ -325,59 +294,36 @@
             <div class="new-employee-field">
               <div class="card-title-head">
                 <h6>
-                  <span><i class="feather icon-info feather-edit"></i></span
-                  >Category details
+                  <span><i class="feather icon-info feather-edit"></i></span>Category details
                 </h6>
               </div>
 
-              <div class="profile-pic-upload">
+              <!-- <div class="profile-pic-upload">
                 <div class="profile-pic">
-                  <ng-container
-                    *ngIf="!addCategory.categoryImage; else showImage"
-                  >
-                    <span
-                      ><i class="feather icon-plus-circle plus-down-add"></i
-                      >Category Image</span
-                    >
+                  <ng-container *ngIf="!addCategory.categoryImage; else showImage">
+                    <span><i class="feather icon-plus-circle plus-down-add"></i>Category Image</span>
                   </ng-container>
                   <ng-template #showImage>
-                    <img
-                      [src]="addCategory.categoryImage"
-                      alt="Profile Picture"
-                      class="uploaded-profile-pic"
-                    />
+                    <img [src]="addCategory.categoryImage" alt="Profile Picture" class="uploaded-profile-pic" />
                   </ng-template>
                 </div>
                 <div class="input-blocks mb-0">
                   <div class="image-upload mb-0">
-                    <input
-                      type="file"
-                      class="form-control"
-                      id="categoryImage"
-                      (change)="onFileSelected($event)"
-                    />
+                    <input type="file" class="form-control" formControlName="categoryImage" (change)="onFileSelected($event)" />
                     <div class="image-uploads">
                       <h4>Change Image</h4>
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <div class="row">
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <mat-select
-                      name="categoryTypeId"
-                      [(ngModel)]="addCategory.categoryTypeId"
-                      class="select"
-                      placeholder="Select a Super Category"
-                      (selectionChange)="getSuperCategoryByCateTypeId($event)"
-                    >
-                      <mat-option
-                        *ngFor="let cateType of categoryTypeList"
-                        [value]="cateType.id"
-                      >
+                    <mat-select name="categoryTypeId" formControlName="categoryTypeId" class="select"
+                      placeholder="Select a Super Category" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
                         {{ cateType.categoryTypeName }}
                       </mat-option>
                     </mat-select>
@@ -387,16 +333,9 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Super Category</label>
-                    <mat-select
-                      name="superCategoryId"
-                      [(ngModel)]="addCategory.superCategoryId"
-                      class="select"
-                      placeholder="Select a Super Category"
-                    >
-                      <mat-option
-                        *ngFor="let superCateType of superCategoryList"
-                        [value]="superCateType.id"
-                      >
+                    <mat-select name="superCategoryId" formControlName="superCategoryId" class="select"
+                      placeholder="Select a Super Category">
+                      <mat-option *ngFor="let superCateType of superCategoryList" [value]="superCateType.id">
                         {{ superCateType.superCategory }}
                       </mat-option>
                     </mat-select>
@@ -405,16 +344,143 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category </label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="category"
-                      [(ngModel)]="addCategory.category"
-                      required
-                    />
+                    <input type="text" class="form-control" formControlName="category" required />
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" class="form-control" formControlName="startDate" required />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" class="form-control" formControlName="endDate" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Start Time </label>
+                    <input type="text" class="form-control" formControlName="startTime" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">End Time </label>
+                    <input type="text" class="form-control" formControlName="endTime" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Pickup Location</label>
+                    <input type="text" class="form-control" formControlName="pickupLocation" required />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Drop Location</label>
+                    <input type="text" class="form-control" formControlName="dropLocation" required />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Company Rate</label>
+                    <input type="text" class="form-control" formControlName="companyRate" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Company Rate For Kids</label>
+                    <input type="text" class="form-control" formControlName="companyRateForKids" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Vendor Rate </label>
+                    <input type="text" class="form-control" formControlName="vendorRate" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Vendor Rate For Kids </label>
+                    <input type="text" class="form-control" formControlName="vendorRateForKids" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Adult Quantity</label>
+                    <input type="text" class="form-control" formControlName="quantity" required />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Children Quantity</label>
+                    <input type="text" class="form-control" formControlName="childrenQuantity" required />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Infant Quantity </label>
+                    <input type="text" class="form-control" formControlName="infantQuantity" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Security Amount </label>
+                    <input type="text" class="form-control" formControlName="securityAmount" required />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div class="mb-12">
+                    <label class="form-label">Description </label>
+                    <textarea class="form-control no-border" formControlName="description" rows="4"
+                      placeholder="Write Description..."></textarea>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -422,11 +488,7 @@
     </mat-dialog-content>
     <mat-dialog-actions class="dialogAction">
       <div class="text-end mb-3">
-        <button
-          type="submit"
-          class="btn btn-submit"
-          [disabled]="!addForm.form.valid"
-        >
+        <button type="submit" class="btn btn-submit">
           Save Category
         </button>
       </div>
@@ -437,79 +499,16 @@
 <!-- Add Category New Modal End -->
 
 <!-- Edit Category Type -->
-<!-- <div class="modal fade" id="edit-units">
-        <div class="modal-dialog modal-dialog-centered modal-xl custom-modal-two">
-          <div class="modal-content">
-            <div class="page-wrapper-new p-0">
-              <div class="content">
-                <div class="modal-header border-0 custom-modal-header">
-                  <div class="page-title">
-                    <h4>Edit Category</h4>
-                  </div>
-                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body custom-modal-body">
-                  <form #editForm="ngForm" (ngSubmit)="submitEditedCategoryForm()">
-                    <div class="card">
-                      <div class="card-body">
-                        <div class="new-employee-field">
-                          <div class="card-title-head">
-                            <h6><span><i class=" feather icon-info feather-edit"></i></span>Category details</h6>
-                          </div>
-                          
-                          <div class="row">
-                            <div class="col-lg-4 col-md-6">
-                              <div class="mb-3">
-                                <label class="form-label">Category Type Name</label>
-                                <mat-select name="categoryTypeId" [(ngModel)]="editCategory.superCategoryId" class="select" placeholder="Select a Super Category">
-                                  <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
-                                    {{cateType.categoryTypeName}}
-                                  </mat-option>
-                                </mat-select>
-                              </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                              <div class="mb-3">
-                                <label class="form-label">Super Category </label>
-                                <input type="text" class="form-control" name="superCategory" [(ngModel)]="editCategory.category" required>
-                              </div>
-                            </div>
-                          </div> 
-                         
-                        </div>
-                      </div>
-                    </div>
-                  
-                  
-                    <div class="text-end mb-3">
-                      <button type="submit" class="btn btn-submit" [disabled]="!editForm.form.valid">Update Category</button>
-                    </div>
-                  </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
-<!-- /Edit Category Type -->
-
 <ng-template #editCategoryTemplate let-dialog>
   <div class="modalHeaderContainer">
     <h2 mat-dialog-title class="p-0">Edit Category</h2>
     <div mat-dialog-close class="closeBtn">
-      <button
-        type="button"
-        class="close"
-        data-bs-dismiss="modal"
-        aria-label="Close"
-      >
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
   </div>
-  <form #editForm="ngForm" (ngSubmit)="submitEditedCategoryForm()">
+  <form [formGroup]="editCategoryForm" (ngSubmit)="submitEditedCategoryForm()">
     <mat-dialog-content class="modalContent">
       <div class="modal-body custom-modal-body">
         <div class="card">
@@ -517,48 +516,173 @@
             <div class="new-employee-field">
               <div class="card-title-head">
                 <h6>
-                  <span><i class="feather icon-info feather-edit"></i></span
-                  >Category details
+                  <span><i class="feather icon-info feather-edit"></i></span>Category details
                 </h6>
               </div>
-
               <div class="row">
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Category Type Name</label>
-                    <mat-select name="categoryTypeId" [(ngModel)]="editCategory.categoryTypeId" class="select" placeholder="Select a Super Category">
-                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id" >
+                    <mat-select name="categoryTypeId" formControlName="categoryTypeId" class="select"
+                      placeholder="Select a Super Category" (selectionChange)="getSuperCategoryByCateTypeId($event)">
+                      <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
                         {{ cateType.categoryTypeName }}
                       </mat-option>
                     </mat-select>
                   </div>
                 </div>
+
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Super Category </label>
-                    <mat-select name="superCategoryId" [(ngModel)]="editCategory.superCategoryId" class="select" placeholder="Select a Super Category">
-                      <mat-option
-                        *ngFor="let SuperCate of editSuperCategoryList"
-                        [value]="SuperCate.id"
-                      >
-                        {{ SuperCate.superCategory }}
+                    <label class="form-label">Super Category</label>
+                    <mat-select name="superCategoryId" formControlName="superCategoryId" class="select"
+                      placeholder="Select a Super Category">
+                      <mat-option *ngFor="let superCateType of superCategoryList" [value]="superCateType.id">
+                        {{ superCateType.superCategory }}
                       </mat-option>
                     </mat-select>
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Category</label>
-                    <input
-                      type="text"
-                      class="form-control"
-                      name="category"
-                      [(ngModel)]="editCategory.category"
-                      required
-                    />
+                    <label class="form-label">Category </label>
+                    <input type="text" class="form-control" formControlName="category" required />
                   </div>
                 </div>
               </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" class="form-control" formControlName="startDate" required />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" class="form-control" formControlName="endDate" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Start Time </label>
+                    <input type="text" class="form-control" formControlName="startTime" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">End Time </label>
+                    <input type="text" class="form-control" formControlName="endTime" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Pickup Location</label>
+                    <input type="text" class="form-control" formControlName="pickupLocation" required />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Drop Location</label>
+                    <input type="text" class="form-control" formControlName="dropLocation" required />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Company Rate</label>
+                    <input type="text" class="form-control" formControlName="companyRate" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Company Rate For Kids</label>
+                    <input type="text" class="form-control" formControlName="companyRateForKids" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Vendor Rate </label>
+                    <input type="text" class="form-control" formControlName="vendorRate" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Vendor Rate For Kids </label>
+                    <input type="text" class="form-control" formControlName="vendorRateForKids" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Adult Quantity</label>
+                    <input type="text" class="form-control" formControlName="quantity" required />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Children Quantity</label>
+                    <input type="text" class="form-control" formControlName="childrenQuantity" required />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Infant Quantity </label>
+                    <input type="text" class="form-control" formControlName="infantQuantity" required />
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Security Amount </label>
+                    <input type="text" class="form-control" formControlName="securityAmount" required />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12 col-md-12">
+                  <div class="mb-12">
+                    <label class="form-label">Description </label>
+                    <textarea class="form-control no-border" formControlName="description" rows="4"
+                      placeholder="Write Description..."></textarea>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -566,13 +690,7 @@
     </mat-dialog-content>
     <mat-dialog-actions class="dialogAction">
       <div class="text-end mb-3">
-        <button
-          type="submit"
-          class="btn btn-submit"
-          [disabled]="!editForm.form.valid"
-        >
-          Update Category
-        </button>
+        <button type="submit" class="btn btn-submit"> Update Category </button>
       </div>
       <!-- <button mat-button (click)="dialog.close()">Close</button> -->
     </mat-dialog-actions>

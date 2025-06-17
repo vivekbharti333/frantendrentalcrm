@@ -29,6 +29,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class SubCategoriesComponent {
 
   public addSubCategory!: FormGroup;
+  public editSubCategory!: FormGroup;
 
   public fieldForActivity: boolean = false;
   // public userList: any;
@@ -56,20 +57,23 @@ export class SubCategoriesComponent {
   //** / pagination variables
   addSubCategoryDialog: any;
   editSubCategoryDialog: any;
+
   constructor(
-        private fb: FormBuilder,
+    private fb: FormBuilder,
     private pagination: PaginationService,
     private router: Router,
     private sidebar: SidebarService,
     private messageService: MessageService,
     private categoriesManagementService: CategoriesManagementService,
     private dialog: MatDialog
-  ) {}
-  
+  ) { }
+
 
   ngOnInit() {
     this.createForms();
     this.getCategoryType();
+    this.getSuperCategory();
+    this.getCategory();
     this.getSubCategory();
     this.getPickLocation();
     this.getDropLocation();
@@ -80,68 +84,32 @@ export class SubCategoriesComponent {
     '01:00', '01:15', '01:30', '01:45',
     // ... up to '23:45'
   ];
-  
 
-  // public addSubCategory = {
-  //   subCategoryImage: '',
-  //   categoryTypeId: '',
-  //   superCategoryId: '',
-  //   categoryId: '',
-  //   subCategory: '',
-  //   securityAmount: '',
-  //   vendorRate: '',
-  //   vendorRateForKids: '',
-  //   startTime: '12:00',
-  //   endTime: '',
-  //   description: '',
-  //   pickupLocation: '',
-  //   dropLocation: ''
-  // };
-
-   createForms() {
-      this.addSubCategory = this.fb.group({
-        subCategoryImage: '',
-        categoryTypeId: '',
-        superCategoryId: '',
-        categoryId: '',
-        subCategory: '',
-        securityAmount: '',
-        companyRate: '',
-        companyRateForKids: '',
-        vendorRate: '',
-        vendorRateForKids: '',
-        quantity: '',
-        childrenQuantity: '', 
-        infantQuantity: '',
-        startTime: '12:00',
-        endTime: '',
-        description: '',
-        pickupLocation: '',
-        dropLocation: ''
-        
-      });
-    }
-
-  public editSubCategory = {
-    categoryTypeId: '',
-    categoryTypeName: '',
-    superCategory: '',
-    superCategoryId: '',
-    category: '',
-    categoryId: '',
-    subCategory: '',
-    // securityAmount: '',
-    // vendorRate: '',
-    // description: '',
-    createdAt: '',
-    status: '',
-  };
+  createForms() {
+    this.addSubCategory = this.fb.group({
+      subCategoryImage: '',
+      categoryTypeId: '',
+      superCategoryId: '',
+      categoryId: '',
+      subCategory: '',
+    });
+    this.editSubCategory = this.fb.group({
+      categoryTypeId: '',
+      categoryTypeName: '',
+      superCategory: '',
+      superCategoryId: '',
+      category: '',
+      categoryId: '',
+      subCategory: '',
+      createdAt: '',
+      status: '',
+    });
+  }
 
   public getCategoryType() {
     this.categoriesManagementService.getCategoryTypeList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
-          console.log("hi : "+this.categoryTypeList);
           this.categoryTypeList = JSON.parse(
             JSON.stringify(response.listPayload)
           );
@@ -157,15 +125,57 @@ export class SubCategoriesComponent {
     });
   }
 
+  public getSuperCategory() {
+    this.categoriesManagementService.getSuperCategoryList().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.superCategoryList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.superCategoryList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+  
+  public getCategory() {
+    this.categoriesManagementService.getCategoryDetailsList().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.categoryList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.categoryList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+
 
   async getSuperCategoryByCateTypeId(event: any): Promise<any> {
-   
+
     return new Promise((resolve, reject) => {
-      const selectedCateType = event.value; 
+      const selectedCateType = event.value;
 
       // Set flag based on category type
-    this.fieldForActivity = selectedCateType.categoryTypeName === 'ACTIVITY';
-      
+      this.fieldForActivity = selectedCateType.categoryTypeName === 'ACTIVITY';
+
       this.categoriesManagementService
         .getSuperCategoryListByCategoryTypeId(selectedCateType.id)
         .subscribe({
@@ -255,10 +265,6 @@ export class SubCategoriesComponent {
         next: (response: any) => {
           if (response['responseCode'] == '200') {
             if (response['payload']['respCode'] == '200') {
-              // alert(response['payload']['respMesg']);
-              //  this.toastr.success(response['payload']['respMesg'], response['payload']['respCode']);
-              // this.user;
-              // this.modalInstance.hide();
               this.addSubCategoryDialog.close();
               this.messageService.add({
                 summary: response['payload']['respCode'],
@@ -267,8 +273,6 @@ export class SubCategoriesComponent {
               });
               this.getSubCategory();
             } else {
-              // alert(response['payload']['respMesg']);
-
               this.messageService.add({
                 summary: response['payload']['respCode'],
                 detail: response['payload']['respMesg'],
@@ -306,8 +310,6 @@ export class SubCategoriesComponent {
               });
               this.getSubCategory();
             } else {
-              // alert(response['payload']['respMesg']);
-
               this.messageService.add({
                 summary: response['payload']['respCode'],
                 detail: response['payload']['respMesg'],
@@ -339,51 +341,31 @@ export class SubCategoriesComponent {
       disableClose: true // optional
     });
   }
-  
 
-  async openEditModal(templateRef: TemplateRef<any>, rowDate: any) {
+
+  async openEditModal(templateRef: TemplateRef<any>, rowData: any) {
     const filterCategoryType: any = this.categoryTypeList.filter((item) => {
-      if (item?.categoryTypeName === rowDate[3]) {
-        return item;
-      }
-    });
+      // if (item?.categoryTypeName === rowDate[3]) {
+      //   return item;
+      // }
 
+      this.editSubCategory.patchValue({
+        categoryTypeId: rowData['categoryTypeId'] ?? null,
+        categoryTypeName: rowData['categoryTypeName'] ?? null,
+        superCategory: rowData['superCategory'] ?? '',
+        superCategoryId: rowData['superCategoryId'],
+        category: rowData['category'] ?? '',
+        categoryId: rowData['categoryId'] ?? '',
+        subCategory: rowData['subCategory'],
+        status: rowData['status'],
+      });
 
-    await this.getSuperCategoryByCateTypeId({
-      value: filterCategoryType[0]?.id,
+      this.editSubCategoryDialog = this.dialog.open(templateRef, {
+        width: '1400px', // or '80%', '40vw', etc.
+        maxWidth: '200vw', // optional, for responsiveness
+        disableClose: true // optional
+      });
     });
-    const filterSuperCategory: any = this.superCategoryList.filter((item) => {
-      if (item?.superCategory === rowDate[5]) {
-        return item;
-      }
-    });
-    await this.getCategoryBySuperCatId({ value: filterSuperCategory[0]?.id });
-    const filterCategory: any = this.categoryList.filter((item) => {
-      if (item?.category === rowDate[7]) {
-        return item;
-      }
-    });
-    this.editSubCategory = {
-      categoryTypeId: filterCategoryType[0]?.id,
-      categoryTypeName: rowDate[3],
-      superCategory: rowDate[5],
-      superCategoryId: filterSuperCategory[0]?.id,
-      category: rowDate[7],
-      categoryId: filterCategory[0]?.id,
-      subCategory: rowDate[8],
-      createdAt: rowDate[10],
-      status: rowDate[9],
-    };
-  
-    this.editSubCategoryDialog = this.dialog.open(templateRef, {
-      width: '1400',      // Set the desired width
-      maxWidth: '200vw'     // Optional: responsive max width
-    });
-    
-    setTimeout(() => {
-      // Your logic here (e.g., focusing input, triggering UI updates)
-    }, 1000);
-    
   }
 
   submitEditedSubCategoryForm() {
