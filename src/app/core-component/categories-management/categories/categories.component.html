@@ -320,7 +320,7 @@
               <div class="row">
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Category Type Name</label>
+                    <label class="form-label">Service</label>
                     <mat-select name="categoryTypeId" formControlName="categoryTypeId" class="select"
                       placeholder="Select a Super Category" (selectionChange)="getSuperCategoryByCateTypeId($event)">
                       <mat-option *ngFor="let cateType of categoryTypeList" [value]="cateType.id">
@@ -332,7 +332,7 @@
 
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Super Category</label>
+                    <label class="form-label">Category</label>
                     <mat-select name="superCategoryId" formControlName="superCategoryId" class="select"
                       placeholder="Select a Super Category">
                       <mat-option *ngFor="let superCateType of superCategoryList" [value]="superCateType.id">
@@ -343,7 +343,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Category </label>
+                    <label class="form-label">Package Name </label>
                     <input type="text" class="form-control" formControlName="category" required />
                   </div>
                 </div>
@@ -356,7 +356,20 @@
                     <input type="date" class="form-control" formControlName="startDate" required />
                   </div>
                 </div>
-
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Start Time </label>
+                    <input type="time" class="form-control" formControlName="startTime" required step="900"/>
+                    <!-- <mat-select name="roleType" formControlName="startTime" class="select"
+                      placeholder="Select Start Time" required>
+                      @for (data of timeValue; track data) {
+                      <mat-option [value]="data.value">
+                        {{ data.name }}
+                      </mat-option>
+                      }
+                    </mat-select> -->
+                  </div>
+                </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">End Date</label>
@@ -365,18 +378,19 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Start Time </label>
-                    <input type="text" class="form-control" formControlName="startTime" required />
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
                     <label class="form-label">End Time </label>
-                    <input type="text" class="form-control" formControlName="endTime" required />
+                    <input type="time" class="form-control" formControlName="endTime" required step="900"/>
+                    <!-- <mat-select name="roleType" formControlName="endTime" class="select"
+                      placeholder="Select Start Time" required>
+                      @for (data of timeValue; track data) {
+                      <mat-option [value]="data.value">
+                        {{ data.name }}
+                      </mat-option>
+                      }
+                    </mat-select> -->
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
@@ -385,15 +399,15 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Pickup Location</label>
-                    <input type="text" class="form-control" formControlName="pickupLocation" required />
+                    <label class="form-label">Pickup Hub</label>
+                    <input type="text" class="form-control" formControlName="pickupHub" required />
                   </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Drop Location</label>
-                    <input type="text" class="form-control" formControlName="dropLocation" required />
+                    <label class="form-label">Drop Hub</label>
+                    <input type="text" class="form-control" formControlName="dropHub" required />
                   </div>
                 </div>
 
@@ -413,19 +427,19 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Company Rate For Kids</label>
-                    <input type="text" class="form-control" formControlName="companyRateForKids" required />
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
                     <label class="form-label">Vendor Rate </label>
                     <input type="text" class="form-control" formControlName="vendorRate" required />
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Vendor Rate For Kids </label>
+                    <label class="form-label">Company Kid Rate</label>
+                    <input type="text" class="form-control" formControlName="companyRateForKids" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Vendor Kid Rate </label>
                     <input type="text" class="form-control" formControlName="vendorRateForKids" required />
                   </div>
                 </div>
@@ -434,19 +448,19 @@
               <div class="row">
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Adult Quantity</label>
+                    <label class="form-label">Quantity</label>
                     <input type="text" class="form-control" formControlName="quantity" required />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Children Quantity</label>
+                    <label class="form-label">Kid Qty</label>
                     <input type="text" class="form-control" formControlName="childrenQuantity" required />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Infant Quantity </label>
+                    <label class="form-label">Infant Qty </label>
                     <input type="text" class="form-control" formControlName="infantQuantity" required />
                   </div>
                 </div>

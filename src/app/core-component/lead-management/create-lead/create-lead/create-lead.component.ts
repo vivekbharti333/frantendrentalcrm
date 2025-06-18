@@ -37,7 +37,7 @@ interface listData {
   styleUrl: './create-lead.component.scss',
   providers: [MessageService, CalendarModule],
 })
-export class CreateLeadComponent implements OnInit,AfterViewInit {
+export class CreateLeadComponent implements OnInit, AfterViewInit {
   pickupDate: string = '';
   dropoffDate: string = '';
   daysDifference: number = 0;
@@ -86,7 +86,7 @@ export class CreateLeadComponent implements OnInit,AfterViewInit {
   filteredPickLocationList: any[] = [];
   filteredDropLocationList: any[] = [];
 
-ngAfterViewInit(): void {
+  ngAfterViewInit(): void {
     // Helps redraw Material form fields
     setTimeout(() => {
       window.dispatchEvent(new Event('resize'));
@@ -196,40 +196,40 @@ ngAfterViewInit(): void {
     this.daysDifference = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
   }
 
-ngOnInit(): void {
-  this.initializeComponent();
-}
-initializeComponent(): void {
-  this.getCategory('');
-  this.createForms();
-  this.getCategoryType();
-  this.getUserList();
-  this.getPickLocation();
-  this.getDropLocation();
-  this.calculateDays();
+  ngOnInit(): void {
+    this.initializeComponent();
+  }
+  initializeComponent(): void {
+    this.getCategory('');
+    this.createForms();
+    this.getCategoryType();
+    this.getUserList();
+    this.getPickLocation();
+    this.getDropLocation();
+    this.calculateDays();
 
-  this.roleType === 'SUPERADMIN'
-    ? (this.addLeadForm.value.createdBy = '')
-    : (this.addLeadForm.value.createdBy = this.fullName);
+    this.roleType === 'SUPERADMIN'
+      ? (this.addLeadForm.value.createdBy = '')
+      : (this.addLeadForm.value.createdBy = this.fullName);
 
-  this.minDate = new Date();
-  this.minDate.setHours(0, 0, 0, 0);
-  this.maxDate = new Date();
-  this.maxDate.setFullYear(this.maxDate.getFullYear() + 1);
+    this.minDate = new Date();
+    this.minDate.setHours(0, 0, 0, 0);
+    this.maxDate = new Date();
+    this.maxDate.setFullYear(this.maxDate.getFullYear() + 1);
 
-  this.setDefaultDateTime();
+    this.setDefaultDateTime();
 
-  const now = new Date();
-  const pickup = this.roundToPrevious15Minutes(now);
-  const dropoff = new Date(pickup);
-  dropoff.setDate(dropoff.getDate() + 1);
+    const now = new Date();
+    const pickup = this.roundToPrevious15Minutes(now);
+    const dropoff = new Date(pickup);
+    dropoff.setDate(dropoff.getDate() + 1);
 
-  this.pickupDate = this.formatDateTime(pickup);
-  this.dropoffDate = this.formatDateTime(dropoff);
-  this.minDate = new Date(this.pickupDate);
+    this.pickupDate = this.formatDateTime(pickup);
+    this.dropoffDate = this.formatDateTime(dropoff);
+    this.minDate = new Date(this.pickupDate);
 
-  this.validateDateRange();
-}
+    this.validateDateRange();
+  }
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -262,10 +262,7 @@ initializeComponent(): void {
         [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],
       ],
       categoryTypeName: [''],
-      superCategoryId: [
-        '',
-        [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],
-      ],
+      superCategoryId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],],
       categoryId: [''],
       subCategoryId: [''],
       superCategory: [''],
@@ -543,57 +540,57 @@ initializeComponent(): void {
   //   }
   // }
 
-calculateDays() {
-  const pickupDateTime = this.addLeadForm.value.pickupDateTime;
-  const dropDateTime = this.addLeadForm.value.dropDateTime;
+  calculateDays() {
+    const pickupDateTime = this.addLeadForm.value.pickupDateTime;
+    const dropDateTime = this.addLeadForm.value.dropDateTime;
 
-  if (pickupDateTime && dropDateTime) {
-    let pickDate = new Date(pickupDateTime);
-    let dropDate = new Date(dropDateTime);
+    if (pickupDateTime && dropDateTime) {
+      let pickDate = new Date(pickupDateTime);
+      let dropDate = new Date(dropDateTime);
 
-    // Round both to nearest 15 minutes
-    pickDate = this.roundToNearest15Minutes(pickDate);
-    dropDate = this.roundToNearest15Minutes(dropDate);
+      // Round both to nearest 15 minutes
+      pickDate = this.roundToNearest15Minutes(pickDate);
+      dropDate = this.roundToNearest15Minutes(dropDate);
 
-    // Base day difference
-    let noOfDays = Math.floor(
-      (dropDate.setHours(0, 0, 0, 0) - pickDate.setHours(0, 0, 0, 0)) /
+      // Base day difference
+      let noOfDays = Math.floor(
+        (dropDate.setHours(0, 0, 0, 0) - pickDate.setHours(0, 0, 0, 0)) /
         (1000 * 60 * 60 * 24)
-    );
+      );
 
-    // Reset time to original (after date comparison)
-    pickDate = new Date(pickupDateTime);
-    dropDate = new Date(dropDateTime);
-    pickDate = this.roundToNearest15Minutes(pickDate);
-    dropDate = this.roundToNearest15Minutes(dropDate);
+      // Reset time to original (after date comparison)
+      pickDate = new Date(pickupDateTime);
+      dropDate = new Date(dropDateTime);
+      pickDate = this.roundToNearest15Minutes(pickDate);
+      dropDate = this.roundToNearest15Minutes(dropDate);
 
-    // Apply rules:
-    // If pickup is before 6:00 AM, add 1 day
-    if (pickDate.getHours() < 6) {
-      noOfDays += 1;
+      // Apply rules:
+      // If pickup is before 6:00 AM, add 1 day
+      if (pickDate.getHours() < 6) {
+        noOfDays += 1;
+      }
+
+      // If drop is after 9:00 AM, add 1 day
+      if (dropDate.getHours() > 9 || (dropDate.getHours() === 9 && dropDate.getMinutes() > 0)) {
+        noOfDays += 1;
+      }
+
+      // Ensure at least 1 day
+      if (noOfDays < 1) noOfDays = 1;
+
+      console.log({
+        pickupDateTime: this.formatDateTime(pickDate),
+        dropDateTime: this.formatDateTime(dropDate),
+        totalDays: noOfDays,
+      });
+
+      this.addLeadForm.patchValue({
+        pickupDateTime: this.formatDateTime(pickDate),
+        dropDateTime: this.formatDateTime(dropDate),
+        totalDays: noOfDays,
+      });
     }
-
-    // If drop is after 9:00 AM, add 1 day
-    if (dropDate.getHours() > 9 || (dropDate.getHours() === 9 && dropDate.getMinutes() > 0)) {
-      noOfDays += 1;
-    }
-
-    // Ensure at least 1 day
-    if (noOfDays < 1) noOfDays = 1;
-
-    console.log({
-      pickupDateTime: this.formatDateTime(pickDate),
-      dropDateTime: this.formatDateTime(dropDate),
-      totalDays: noOfDays,
-    });
-
-    this.addLeadForm.patchValue({
-      pickupDateTime: this.formatDateTime(pickDate),
-      dropDateTime: this.formatDateTime(dropDate),
-      totalDays: noOfDays,
-    });
   }
-}
 
 
 
@@ -773,7 +770,7 @@ calculateDays() {
   onSelectionChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
     this.selectedOption = inputElement.value;
-     this.initializeComponent();
+    this.initializeComponent();
   }
 
   public routes = routes;
