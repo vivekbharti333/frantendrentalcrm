@@ -95,15 +95,11 @@
                       {{ cate.category }}
                     </mat-option>
                   </mat-select>
-                  <!-- </div> -->
                 </div>
               </div>
 
               <div class="col-lg-2 col-md-2">
                 <div class="mb-2">
-                  <!-- <div class="round-input sample-color custom-height d-flex wrapper"> -->
-
-                  <!-- <label class="form-label requiredField">Variant</label> -->
                   <mat-select formControlName="subCategoryId"
                     class="select custom-mat-select no-border input-inside-element" placeholder="Select Variant"
                     (selectionChange)="setSecurityAndVendorRate($event)" required>
@@ -111,36 +107,8 @@
                       {{ subCate.subCategory }}
                     </mat-option>
                   </mat-select>
-
-                  <!-- <span class="dropdown-icon">&#x25BC;</span> -->
-                  <!-- </div> -->
                 </div>
               </div>
-
-              <!-- <div class="col-lg-6 col-md-6 ">
-              <div class="mb-3">
-                <label class="form-label requiredField datepicker-label-first">Pickup Date & Time</label>
-                 <label class="form-label requiredField days-lebel">Days</label>
-                <label for="dropoffDate" class="form-label requiredField datepicker-label-second">Drop-off Date & Time</label>
-                <div class="booking-container rounded-input">
-                  <div class="date-time-group">
-                    
-                    <input type="datetime-local" formControlName="pickupDateTime" id="pickupDate" name="pickupDate"
-                      step="900" [min]="minDate" [value]="pickupDate" (blur)="calculateDays()" class="datetimepick" />
-                  </div>
-
-                  <div class="days-diff">
-                    <input type="number" class="form-control no-border days-no" formControlName="totalDays" required
-                      (change)="calculateTotalAmount()" />
-                  </div>
-
-                  <div class="date-time-group">
-                    <input type="datetime-local" formControlName="dropDateTime" id="dropDateTime" name="dropDateTime"
-                      step="900" [min]="minDate" [value]="pickupDate" (blur)="calculateDays()" class="datetimepick" />
-                  </div>
-                </div>
-              </div>
-            </div> -->
 
               <div class="col-lg-5 col-md-5">
                 <div class="mb-3">
@@ -182,8 +150,7 @@
               <div class="row justify-content-center row-2">
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
-                    <!-- <input type="text" class="form-control" placeholder="STD. Locations" required /> -->
-                    <mat-select formControlName="pickupLocation" class="select custom-mat-select"
+                    <mat-select formControlName="pickupHub" class="select custom-mat-select"
                       placeholder="Pickup Location" required>
                       <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
                         [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search>
@@ -203,8 +170,7 @@
 
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
-                    <!-- <input type="text" class="form-control"  placeholder="STD. Locations" required/> -->
-                    <mat-select formControlName="dropLocation" placeholder="Drop Locations"
+                    <mat-select formControlName="dropHub" placeholder="Drop Locations"
                       class="select custom-mat-select" required>
                       <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
                         [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search>
@@ -327,182 +293,6 @@
                 </mat-form-field>
               </div>
             </div>
-
-            <!-- <div class="row">
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-               <mat-form-field appearance="outline">
-    <mat-label>Pickup Location</mat-label>
-    <mat-select formControlName="pickupLocation" class="select custom-mat-select" required>
-                  <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
-                    [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search> 
-                  <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
-                    {{ pickList.location }}
-                  </mat-option>
-                </mat-select>
-  </mat-form-field>
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                  <mat-form-field appearance="outline">
-    <mat-label>Pickup Point</mat-label>
-    <input matInput type="text" class="form-control" name="pickupPoint" formControlName="pickupPoint" required>
-  </mat-form-field>
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                <mat-form-field appearance="outline">
-    <mat-label>Drop Location</mat-label>
-    <mat-select formControlName="dropLocation" class="select custom-mat-select"
-                   required>
-                  <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
-                    [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search>
-                  <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
-                    {{ dropList.location }}
-                  </mat-option>
-                </mat-select>
-  </mat-form-field>
-
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                <mat-form-field appearance="outline">
-    <mat-label>Drop Point</mat-label>
-    <input matInput type="text" class="form-control" formControlName="dropPoint" required>
-  </mat-form-field>
-
-              </div>
-            </div>
-          </div> -->
-            <!-- 
-          <div class="row">
-             <div class="col-lg-2 col-md-2">
-              <div class="mb-1">
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-1">
-<mat-form-field appearance="outline">
-    <mat-label>Quantity</mat-label>
-    <input matInput type="number" class="form-control" formControlName="quantity" min="0" required (change)="calculateTotalAmount()" >
-  </mat-form-field>
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                  <mat-form-field appearance="outline">
-    <mat-label>Company Rate</mat-label>
-    <input matInput type="text" class="form-control" placeholder="0" formControlName="companyRate" required
-                  (change)="calculateTotalAmount()" >
-  </mat-form-field>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                  <mat-form-field appearance="outline">
-    <mat-label>Vendor Rate</mat-label>
-    <input matInput type="text" class="form-control" placeholder="0" formControlName="vendorRate" required
-                  (change)="calculateTotalAmount()" >
-  </mat-form-field>
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                  <mat-form-field appearance="outline">
-    <mat-label>Delivery To Vendor</mat-label>
-    <input matInput type="text" class="form-control" placeholder="0" formControlName="deliveryAmountToVendor" required
-                  (change)="calculateTotalAmount()" >
-  </mat-form-field>
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2"></div>
-          </div> -->
-
-            <!-- <div class="row">
-            <div class="col-lg-2 col-md-2"></div>
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                
-                <mat-form-field appearance="outline">
-    <mat-label>Booking Amount</mat-label>
-    <input matInput type="number" class="form-control" formControlName="bookingAmount" required readonly >
-  </mat-form-field>
-              </div>
-            </div>
-
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-        
-                <mat-form-field appearance="outline">
-    <mat-label>Balance Amount</mat-label>
-    <input matInput type="number" class="form-control" formControlName="balanceAmount" required readonly >
-  </mat-form-field>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-               
-                <mat-form-field appearance="outline">
-    <mat-label>Total Amount</mat-label>
-    <input matInput type="number" class="form-control" formControlName="totalAmount" required readonly >
-  </mat-form-field>
-              </div>
-            </div>
-           
-            <div class="col-lg-2 col-md-2">
-              <div class="mb-2">
-                
-                  <mat-form-field appearance="outline">
-    <mat-label>Discount</mat-label>
-    <input matInput type="text" class="form-control" formControlName="discount"
-                    (change)="calculateTotalAmountAndBalaenceAmontAfterDiscount()">
-                  <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()"
-                    style="cursor: pointer; width: 40px;">{{discountType}}</span>
-  </mat-form-field>
-                 
-              </div>
-            </div>
-          </div>
-          
-
-          <div class="row">
-            <div class="col-lg-4 col-md-4"></div>
-            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
-              <div class="mb-2">
-                
-                  <mat-form-field appearance="outline">
-    <mat-label>Actual Amount</mat-label>
-    <input matInput type="text" class="form-control" placeholder="0" formControlName="actualAmount" required
-                  (change)="calExtraAmount()" >
-  </mat-form-field>
-              </div>
-            </div>
-            <div class="col-lg-2 col-md-2" *ngIf="!isActivities">
-              <div class="mb-2">
-               
-                   <mat-form-field appearance="outline">
-    <mat-label>Security Amount</mat-label>
-    <input matInput type="text" class="form-control" formControlName="securityAmount" required
-                  (change)="calculatePayToCompanyAndPayToVendor()" >
-  </mat-form-field>
-              </div>
-            </div>
-          </div> -->
 
             <div class="row">
               <div class="col-lg-2 col-md-2"></div>
@@ -686,15 +476,6 @@
           <div class="vehicle-section">
             <!-- ----------------------------First Row --------------------------------------->
             <div class="row justify-content-center mb-3 row-1">
-              <!-- <div class="col-lg-4 col-md-4 ">
-                <div class="mb-3">
-                  <div class="round-input sample-color height-test d-flex wrapper">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search Vehicle or activities" class="input-inside-element"
-                      required />
-                  </div>
-                </div>
-              </div> -->
               <div class="col-lg-3 col-md-3">
                 <div class="mb-3">
                   <mat-select formControlName="categoryId"
@@ -706,7 +487,6 @@
                       {{ cate.category }}
                     </mat-option>
                   </mat-select>
-                  <!-- </div> -->
                 </div>
               </div>
 
@@ -729,7 +509,6 @@
                       <label class="label">Activity Date</label>
                       <input type="date" [(ngModel)]="activityDate" class="form-control" formControlName="date"
                         class="flat-input" />
-                      <!-- <input type="number" class="form-control" formControlName="date" min="0" required /> -->
                     </div>
 
                     <div class="divider"></div>
@@ -793,7 +572,7 @@
                 <div class="col-lg-2 col-md-2 input-col-2">
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Kid Quantity</mat-label>
-                    <input matInput type="number" formControlName="childrenQuantity" min="0" required
+                    <input matInput type="number" formControlName="kidQuantity" min="0" required
                       (change)="calculateTotalAmountOfActivites()" />
                   </mat-form-field>
                 </div>

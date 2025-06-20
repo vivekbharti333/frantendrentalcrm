@@ -400,14 +400,30 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Pickup Hub</label>
-                    <input type="text" class="form-control" formControlName="pickupHub" required />
+                    <!-- <input type="text" class="form-control" formControlName="pickupHub" required /> -->
+                     <mat-select formControlName="pickupHub" class="select custom-mat-select"
+                      placeholder="Pickup Hub" required>
+                      <!-- <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
+                        [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search> -->
+                      <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
+                        {{ pickList.location }}
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Drop Hub</label>
-                    <input type="text" class="form-control" formControlName="dropHub" required />
+                    <!-- <input type="text" class="form-control" formControlName="dropHub" required /> -->
+                    <mat-select formControlName="dropHub" placeholder="Drop Hub"
+                      class="select custom-mat-select" required>
+                      <!-- <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
+                        [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search> -->
+                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
+                        {{ dropList.location }}
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
 
@@ -455,7 +471,7 @@
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Kid Qty</label>
-                    <input type="text" class="form-control" formControlName="childrenQuantity" required />
+                    <input type="text" class="form-control" formControlName="kidQuantity" required />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
@@ -593,7 +609,7 @@
                 </div>
               </div>
 
-              <div class="row">
+                            <div class="row">
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
 
@@ -601,15 +617,31 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Pickup Location</label>
-                    <input type="text" class="form-control" formControlName="pickupLocation" required />
+                    <label class="form-label">Pickup Hub</label>
+                    <!-- <input type="text" class="form-control" formControlName="pickupHub" required /> -->
+                     <mat-select formControlName="pickupHub" class="select custom-mat-select"
+                      placeholder="Pickup Hub" required>
+                      <!-- <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
+                        [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search> -->
+                      <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
+                        {{ pickList.location }}
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
 
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Drop Location</label>
-                    <input type="text" class="form-control" formControlName="dropLocation" required />
+                    <label class="form-label">Drop Hub</label>
+                    <!-- <input type="text" class="form-control" formControlName="dropHub" required /> -->
+                    <mat-select formControlName="dropHub" placeholder="Drop Hub"
+                      class="select custom-mat-select" required>
+                      <!-- <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
+                        [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search> -->
+                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
+                        {{ dropList.location }}
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
 
@@ -629,19 +661,19 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Company Rate For Kids</label>
-                    <input type="text" class="form-control" formControlName="companyRateForKids" required />
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
                     <label class="form-label">Vendor Rate </label>
                     <input type="text" class="form-control" formControlName="vendorRate" required />
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Vendor Rate For Kids </label>
+                    <label class="form-label">Company Kid Rate</label>
+                    <input type="text" class="form-control" formControlName="companyRateForKids" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Vendor Kid Rate </label>
                     <input type="text" class="form-control" formControlName="vendorRateForKids" required />
                   </div>
                 </div>
@@ -650,19 +682,19 @@
               <div class="row">
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Adult Quantity</label>
+                    <label class="form-label">Quantity</label>
                     <input type="text" class="form-control" formControlName="quantity" required />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Children Quantity</label>
-                    <input type="text" class="form-control" formControlName="childrenQuantity" required />
+                    <label class="form-label">Kid Qty</label>
+                    <input type="text" class="form-control" formControlName="kidQuantity" required />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <label class="form-label">Infant Quantity </label>
+                    <label class="form-label">Infant Qty </label>
                     <input type="text" class="form-control" formControlName="infantQuantity" required />
                   </div>
                 </div>

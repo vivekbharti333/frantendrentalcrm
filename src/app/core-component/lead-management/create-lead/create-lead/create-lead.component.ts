@@ -257,10 +257,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     this.addLeadForm = this.fb.group({
       companyName: ['Notes'],
       enquirySource: ['Call'],
-      categoryTypeId: [
-        '',
-        [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],
-      ],
+      categoryTypeId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],],
       categoryTypeName: [''],
       superCategoryId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],],
       categoryId: [''],
@@ -270,12 +267,10 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       subCategory: [''],
       itemName: [''],
       pickupDateTime: [''],
-      // pickupTime: [''],
-      pickupLocation: [''],
+      pickupHub: [''],
       pickupPoint: [''],
       dropDateTime: [''],
-      // dropTime: [''],
-      dropLocation: [''],
+      dropHub: [''],
       dropPoint: [''],
       customeName: [''],
       countryDialCode: [''],
@@ -283,9 +278,8 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       customerAlternateMobile: [''],
       customerEmailId: [''],
       totalDays: [''],
-      // totalDays: 1 as number | null,
       quantity: 1,
-      childrenQuantity: [''],
+      kidQuantity: [''],
       infantQuantity: [''],
       vendorRate: 0,
       vendorRateForKids: 0,
@@ -310,10 +304,10 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       followupDateTime: [''],
       remarks: [''],
       preValue: `    Reports : 
-    Delivery : 
-    Comments : 
-    Pay to vendor : 
-    Pay to company :`,
+        Delivery : 
+        Comments : 
+        Pay to vendor : 
+        Pay to company :`,
       reminderDate: [''],
       records: [''],
     });
@@ -393,9 +387,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       //total amount end
 
       // Ensure discount is not more than the total amount
-      const totalAmt =
-        secondValue * this.addLeadForm.value.quantity -
-        this.addLeadForm.value.discount;
+      const totalAmt = secondValue * this.addLeadForm.value.quantity - this.addLeadForm.value.discount;
       const balanceAmt = this.addLeadForm.value.balanceAmount;
       const bookingAmt = totalAmt - balanceAmt;
 
@@ -592,9 +584,6 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     }
   }
 
-
-
-
   roundToNearest15Minutes(date: Date): Date {
     const ms = 1000 * 60 * 15;
     const rounded = Math.round(date.getTime() / ms) * ms;
@@ -634,8 +623,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
 
       this.addLeadForm.patchValue({ actualAmount: 0, discount: 0 });
     } else {
-      console.error(
-        'Some required fields are missing for total amount calculation.'
+      console.error('Some required fields are missing for total amount calculation.'
       );
       leadValue.totalAmount = 0; // Set a fallback value
     }
@@ -701,13 +689,13 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     const leadValue = this.addLeadForm.value;
 
     const quantity = Number(leadValue.quantity) || 0;
-    const childrenQuantity = Number(leadValue.childrenQuantity) || 0;
+    const kidQuantity = Number(leadValue.kidQuantity) || 0;
     const companyRate = Number(leadValue.companyRate) || 0;
     const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
 
-    if (quantity >= 0 && childrenQuantity >= 0) {
+    if (quantity >= 0 && kidQuantity >= 0) {
       const firstValue = companyRate * quantity;
-      const secondValue = companyRateForKids * childrenQuantity;
+      const secondValue = companyRateForKids * kidQuantity;
       const totalAmount = firstValue + secondValue;
 
       this.addLeadForm.patchValue({ totalAmount });
@@ -724,13 +712,13 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     const leadValue = this.addLeadForm.value;
 
     const quantity = Number(leadValue.quantity) || 0;
-    const childrenQuantity = Number(leadValue.childrenQuantity) || 0;
+    const kidQuantity = Number(leadValue.kidQuantity) || 0;
     const vendorRate = Number(leadValue.vendorRate) || 0;
     const vendorRateForKids = Number(leadValue.vendorRateForKids) || 0;
 
-    if (quantity >= 0 && childrenQuantity >= 0) {
+    if (quantity >= 0 && kidQuantity >= 0) {
       const firstValue = vendorRate * quantity;
-      const secondValue = vendorRateForKids * childrenQuantity;
+      const secondValue = vendorRateForKids * kidQuantity;
       const balanceAmount = firstValue + secondValue;
 
       this.addLeadForm.patchValue({ balanceAmount });
@@ -960,9 +948,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.categoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.categoryList = JSON.parse(JSON.stringify(response.listPayload));
             this.filteredCategoryList = this.categoryList;
           }
         },

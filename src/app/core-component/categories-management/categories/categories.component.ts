@@ -55,6 +55,10 @@ export class CategoriesComponent {
   //** / pagination variables
   addCategoryDialog: any;
   editCategoryDialog: any;
+  public pickLocationList: any[] = [];
+  public dropLocationList: any[] = [];
+  public filteredPickLocationList: any[] = [];
+  public filteredDropLocationList: any[] = [];
 
 
 
@@ -73,6 +77,8 @@ export class CategoriesComponent {
     this.getCategoryDetailsList();
     this.getCategoryType();
     this.getSuperCategory();
+    this.getPickUpHub();
+    this.getDropHub();
   }
 
   timeStepValidator(stepMinutes: number): ValidatorFn {
@@ -207,7 +213,7 @@ export class CategoriesComponent {
       vendorRate: '',
       vendorRateForKids: '',
       quantity: '',
-      childrenQuantity: '',
+      kidQuantity: '',
       infantQuantity: '',
       securityAmount: '',
       description: '',
@@ -229,7 +235,7 @@ export class CategoriesComponent {
       vendorRate: '',
       vendorRateForKids: '',
       quantity: '',
-      childrenQuantity: '',
+      kidQuantity: '',
       infantQuantity: '',
       securityAmount: '',
       description: '',
@@ -296,6 +302,44 @@ export class CategoriesComponent {
             styleClass: 'danger-background-popover',
           }),
       });
+  }
+
+  public getPickUpHub() {
+    this.categoriesManagementService.getLocationByType('PICK').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.pickLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredPickLocationList = this.pickLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+
+  public getDropHub() {
+    this.categoriesManagementService.getLocationByType('DROP').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.dropLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredDropLocationList = this.dropLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
   }
 
   submitCategoryForm() {
@@ -445,14 +489,14 @@ export class CategoriesComponent {
       endDate: formatDate(rowData['endDate']),
       startTime: rowData['startTime'] ?? '',
       endTime: rowData['endTime'] ?? '',
-      pickupLocation: rowData['pickupLocation'] ?? '',
-      dropLocation: rowData['dropLocation'] ?? '',
+      pickupHub: rowData['pickupHub'] ?? '',
+      dropHub: rowData['dropHub'] ?? '',
       companyRate: rowData['companyRate'] ?? 0,
       companyRateForKids: rowData['companyRateForKids'] ?? 0,
       vendorRate: rowData['vendorRate'] ?? 0,
       vendorRateForKids: rowData['vendorRateForKids'] ?? 0,
       quantity: rowData['quantity'] ?? 0,
-      childrenQuantity: rowData['childrenQuantity'] ?? 0,
+      kidQuantity: rowData['kidQuantity'] ?? 0,
       infantQuantity: rowData['infantQuantity'] ?? 0,
       securityAmount: rowData['securityAmount'] ?? 0,
       description: rowData['description'] ?? '',
