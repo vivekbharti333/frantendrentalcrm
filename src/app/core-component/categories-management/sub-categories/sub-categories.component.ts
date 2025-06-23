@@ -20,6 +20,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+interface data {
+  value: string;
+  name: string;
+}
+
 @Component({
   selector: 'app-sub-categories',
   templateUrl: './sub-categories.component.html',
@@ -78,12 +83,6 @@ export class SubCategoriesComponent {
     this.getPickLocation();
     this.getDropLocation();
   }
-
-  allowedTimes = [
-    '00:00', '00:15', '00:30', '00:45',
-    '01:00', '01:15', '01:30', '01:45',
-    // ... up to '23:45'
-  ];
 
   createForms() {
     this.addSubCategory = this.fb.group({

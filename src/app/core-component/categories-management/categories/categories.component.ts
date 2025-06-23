@@ -60,7 +60,7 @@ export class CategoriesComponent {
   public filteredPickLocationList: any[] = [];
   public filteredDropLocationList: any[] = [];
 
-
+// subCategoryList: { value: string; name: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -92,108 +92,40 @@ export class CategoriesComponent {
     return totalMinutes % stepMinutes === 0 ? null : { stepMismatch: true };
   };
 }
+subCategoryList: data[] = [
+    { value: 'Manual-HB', name: "Manual-HB" },
+    { value: 'Automatic-HB', name: "Automatic-HB" },
+    { value: 'Automatic-SD', name: "Automatic-SD" },
+    { value: 'Manual-MSUV', name: "Manual-SD" },
+    { value: 'Automatic-MSUV', name: "Automatic-MSUV" },
+    { value: 'Manual-SUV', name: "Manual-SUV" },
+    { value: 'Automatic-SUV', name: "Automatic-SUV" },
 
-  // timeValue: data[] = [
-  //   { value: '00:15', name: "00:15 O'clock" },
-  //   { value: '00:30', name: "00:30 O'clock" },
-  //   { value: '00:45', name: "00:45 O'clock" },
-  //   { value: '01:00', name: "01:00 O'clock" },
-  //   { value: '01:15', name: "01:15 O'clock" },
-  //   { value: '01:30', name: "01:30 O'clock" },
-  //   { value: '01:45', name: "01:45 O'clock" },
-  //   { value: '02:00', name: "02:00 O'clock" },
-  //   { value: '02:15', name: "02:15 O'clock" },
-  //   { value: '02:30', name: "02:30 O'clock" },
-  //   { value: '02:45', name: "02:45 O'clock" },
-  //   { value: '03:00', name: "03:00 O'clock" },
-  //   { value: '03:15', name: "03:15 O'clock" },
-  //   { value: '03:30', name: "03:30 O'clock" },
-  //   { value: '03:45', name: "03:45 O'clock" },
-  //   { value: '04:00', name: "04:00 O'clock" },
-  //   { value: '04:15', name: "04:15 O'clock" },
-  //   { value: '04:30', name: "04:30 O'clock" },
-  //   { value: '04:45', name: "04:45 O'clock" },
-  //   { value: '05:00', name: "05:00 O'clock" },
-  //   { value: '05:15', name: "05:15 O'clock" },
-  //   { value: '05:30', name: "05:30 O'clock" },
-  //   { value: '05:45', name: "05:45 O'clock" },
-  //   { value: '06:00', name: "06:00 O'clock" },
-  //   { value: '06:15', name: "06:15 O'clock" },
-  //   { value: '06:30', name: "06:30 O'clock" },
-  //   { value: '06:45', name: "06:45 O'clock" },
-  //   { value: '07:00', name: "07:00 O'clock" },
-  //   { value: '07:15', name: "07:15 O'clock" },
-  //   { value: '07:30', name: "07:30 O'clock" },
-  //   { value: '07:45', name: "07:45 O'clock" },
-  //   { value: '08:00', name: "08:00 O'clock" },
-  //   { value: '08:15', name: "08:15 O'clock" },
-  //   { value: '08:30', name: "08:30 O'clock" },
-  //   { value: '08:45', name: "08:45 O'clock" },
-  //   { value: '09:00', name: "09:00 O'clock" },
-  //   { value: '09:15', name: "09:15 O'clock" },
-  //   { value: '09:30', name: "09:30 O'clock" },
-  //   { value: '09:45', name: "09:45 O'clock" },
-  //   { value: '10:00', name: "10:00 O'clock" },
-  //   { value: '10:15', name: "10:15 O'clock" },
-  //   { value: '10:30', name: "10:30 O'clock" },
-  //   { value: '10:45', name: "10:45 O'clock" },
-  //   { value: '11:00', name: "11:00 O'clock" },
-  //   { value: '11:15', name: "11:15 O'clock" },
-  //   { value: '11:30', name: "11:30 O'clock" },
-  //   { value: '11:45', name: "11:45 O'clock" },
-  //   { value: '12:00', name: "12:00 O'clock" },
-  //   { value: '12:15', name: "12:15 O'clock" },
-  //   { value: '12:30', name: "12:30 O'clock" },
-  //   { value: '12:45', name: "12:45 O'clock" },
-  //   { value: '13:00', name: "13:00 O'clock" },
-  //   { value: '13:15', name: "13:15 O'clock" },
-  //   { value: '13:30', name: "13:30 O'clock" },
-  //   { value: '13:45', name: "13:45 O'clock" },
-  //   { value: '14:00', name: "14:00 O'clock" },
-  //   { value: '14:15', name: "14:15 O'clock" },
-  //   { value: '14:30', name: "14:30 O'clock" },
-  //   { value: '14:45', name: "14:45 O'clock" },
-  //   { value: '15:00', name: "15:00 O'clock" },
-  //   { value: '15:15', name: "15:15 O'clock" },
-  //   { value: '15:30', name: "15:30 O'clock" },
-  //   { value: '15:45', name: "15:45 O'clock" },
-  //   { value: '16:00', name: "16:00 O'clock" },
-  //   { value: '16:15', name: "16:15 O'clock" },
-  //   { value: '16:30', name: "16:30 O'clock" },
-  //   { value: '16:45', name: "16:45 O'clock" },
-  //   { value: '17:00', name: "17:00 O'clock" },
-  //   { value: '17:15', name: "17:15 O'clock" },
-  //   { value: '17:30', name: "17:30 O'clock" },
-  //   { value: '17:45', name: "17:45 O'clock" },
-  //   { value: '18:00', name: "18:00 O'clock" },
-  //   { value: '18:15', name: "18:15 O'clock" },
-  //   { value: '18:30', name: "18:30 O'clock" },
-  //   { value: '18:45', name: "18:45 O'clock" },
-  //   { value: '19:00', name: "19:00 O'clock" },
-  //   { value: '19:15', name: "19:15 O'clock" },
-  //   { value: '19:30', name: "19:30 O'clock" },
-  //   { value: '19:45', name: "19:45 O'clock" },
-  //   { value: '20:00', name: "20:00 O'clock" },
-  //   { value: '20:15', name: "20:15 O'clock" },
-  //   { value: '20:30', name: "20:30 O'clock" },
-  //   { value: '20:45', name: "20:45 O'clock" },
-  //   { value: '21:00', name: "21:00 O'clock" },
-  //   { value: '21:15', name: "21:15 O'clock" },
-  //   { value: '21:30', name: "21:30 O'clock" },
-  //   { value: '21:45', name: "21:45 O'clock" },
-  //   { value: '22:00', name: "22:00 O'clock" },
-  //   { value: '22:15', name: "22:15 O'clock" },
-  //   { value: '22:30', name: "22:30 O'clock" },
-  //   { value: '22:45', name: "22:45 O'clock" },
-  //   { value: '23:00', name: "23:00 O'clock" },
-  //   { value: '23:15', name: "23:15 O'clock" },
-  //   { value: '23:30', name: "23:30 O'clock" },
-  //   { value: '23:45', name: "23:45 O'clock" },
-  //   { value: '24:00', name: "24:00 O'clock" },
-  //   { value: '24:15', name: "24:15 O'clock" },
-  //   { value: '24:30', name: "24:30 O'clock" },
-  //   { value: '24:45', name: "24:45 O'clock" },
-  // ];
+    { value: 'Non-Gear', name: "Non-Gear" },
+    { value: 'Gear-STD', name: "Gear-STD" },
+    { value: 'Gear PRM', name: "Gear-PRM" },
+
+    { value: 'Activity', name: "Activity" },
+  ]
+
+  getsubCategoryList(requestFor: string) {
+//   const type = requestFor?.trim().toUpperCase();
+// alert("requestFor : "+requestFor+" type: "+type);
+//   switch (type) {
+//     case 'BIKE':
+//       return this.car;
+//     case 'CAR':
+//       return this.car;
+//     case 'CURISE':
+//     case 'WATERSPORT':
+//     case 'ADVENTURE':
+//     case 'YACHT':
+//     case 'SIGHTSEEING':
+//       return this.car;
+//     default:
+//       return [];
+//   }
+}
 
 
   createForms() {
@@ -202,6 +134,7 @@ export class CategoriesComponent {
       categoryTypeId: '',
       superCategoryId: '',
       category: '',
+      subCategory: '',
       startDate: '',
       endDate: '',
       startTime: '',
@@ -224,6 +157,7 @@ export class CategoriesComponent {
       categoryTypeId: '',
       superCategoryId: '',
       category: '',
+      subCategory: '',
       startDate: '',
       endDate: '',
       startTime: '',
@@ -284,15 +218,18 @@ export class CategoriesComponent {
     });
   }
 
+
   public getSuperCategoryByCateTypeId(rowData: any) {
+     
     this.categoriesManagementService
-      .getSuperCategoryListByCategoryTypeId(rowData.value)
+      .getSuperCategoryListByCategoryTypeId(rowData.id)
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
-            this.superCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
+            this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+
+            // this.subCategoryList = this.getsubCategoryList(rowData.categoryTypeName);
+           
           }
         },
         error: (error: any) =>
@@ -485,6 +422,7 @@ export class CategoriesComponent {
       categoryTypeId: rowData['categoryTypeId'] ?? null,
       superCategoryId: rowData['superCategoryId'] ?? null,
       category: rowData['category'] ?? '',
+      subCategory: rowData['subCategory'] ?? '',
       startDate: formatDate(rowData['startDate']),
       endDate: formatDate(rowData['endDate']),
       startTime: rowData['startTime'] ?? '',
