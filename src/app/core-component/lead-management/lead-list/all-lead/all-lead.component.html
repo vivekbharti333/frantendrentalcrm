@@ -357,12 +357,12 @@
             <div class="row justify-content-center mb-3 row-1">
               <div class="col-lg-3 col-md-3">
                 <div class="mb-3">
-                  <mat-select formControlName="categoryId"
+                  <mat-select formControlName="category"
                     class="select custom-mat-select no-border input-inside-element form-control"
                     placeholder="Select a Package" (selectionChange)="getSubCategory($event.value)" required>
                     <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
                       [originalList]="filteredCategoryList" [categoryName]="'pickLocation'"></app-mat-select-search>
-                    <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate">
+                    <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate.category">
                       {{ cate.category }}
                     </mat-option>
                   </mat-select>
@@ -371,10 +371,10 @@
 
               <div class="col-lg-2 col-md-2">
                 <div class="mb-2">
-                  <mat-select formControlName="subCategoryId"
+                  <mat-select formControlName="subCategory"
                     class="select custom-mat-select no-border input-inside-element" placeholder="Select Variant"
                     (selectionChange)="setSecurityAndVendorRate($event)" required>
-                    <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate">
+                    <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate.subCategory">
                       {{ subCate.subCategory }}
                     </mat-option>
                   </mat-select>

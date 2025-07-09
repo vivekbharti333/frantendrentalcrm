@@ -320,6 +320,7 @@ export class CategoriesManagementService {
   }
 
   getSubCategoryListByCatId(categoryId: any): Observable<any> {
+    console.log("categoryId : "+categoryId)
     let request: any = {
       payload: {
        

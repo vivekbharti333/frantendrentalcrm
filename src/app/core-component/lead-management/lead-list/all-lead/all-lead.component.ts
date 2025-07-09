@@ -185,9 +185,10 @@ export class AllLeadComponent {
 
   initializeComponent(): void {
     this.getCategory('');
+    this.getSubCategory('');
     this.createForms();
     this.getCategoryType();
-    // this.getUserList();
+    // this.getCategory();
     this.getPickLocation();
     this.getDropLocation();
     this.calculateDays();
@@ -371,10 +372,12 @@ export class AllLeadComponent {
     // await this.getDropdownOnEditModal(rawData);
     // this.saveLeadData(rawData);
 
+    this.getSubCategory(rawData['categoryId']);
+
     this.editLeadForm.patchValue({
-        categoryId: rawData['categoryId'],
-        subCategoryId: rawData['subCategoryId'],
-        superCategory: rawData['superCategory'],
+        // categoryId: rawData['categoryId'],
+        // subCategoryId: rawData['subCategoryId'],
+        // superCategory: rawData['superCategory'],
         category: rawData['category'],
         subCategory: rawData['subCategory'],
         itemName: rawData['itemName'],
@@ -398,23 +401,23 @@ export class AllLeadComponent {
         payToVendor: rawData['payToVendor'],
         companyRate: rawData['companyRate'],
         companyRateForKids: rawData['companyRateForKids'],
-        // payToCompany: 0,
-        // bookingAmount: 0,
-        // balanceAmount: 0,
-        // totalAmount: 0,
-        // actualAmount: 0,
-        // securityAmount: [''],
-        // discountType: [''],
-        // discount: 0,
-        // deliveryAmountToCompany: 0,
-        // deliveryAmountToVendor: 0,
-        // status: [''],
-        // leadOrigine: [''],
-        // leadType: [''],
-        // createdBy: [''],
-        // notes: [''],
-        // followupDateTime: [''],
-        // remarks: [''],
+        payToCompany: rawData['payToCompany'],
+        bookingAmount: rawData['bookingAmount'],
+        balanceAmount: rawData['balanceAmount'],
+        totalAmount: rawData['totalAmount'],
+        actualAmount: rawData['actualAmount'],
+        securityAmount: rawData['securityAmount'],
+        discountType: rawData['discountType'],
+        discount: rawData['discount'],
+        deliveryAmountToCompany: rawData['deliveryAmountToCompany'],
+        deliveryAmountToVendor: rawData['deliveryAmountToVendor'],
+        status: rawData['status'],
+        leadOrigine: rawData['leadOrigine'],
+        leadType: rawData['leadType'],
+        createdBy: rawData['createdBy'],
+        notes: rawData['notes'],
+        followupDateTime: rawData['followupDateTime'],
+        remarks: rawData['remarks'],
         // preValue: `    Reports : 
         //   Delivery : 
         //   Comments : 
@@ -1170,8 +1173,6 @@ export class AllLeadComponent {
   
 
   public getCategory(categoryId: any) {
-    //const superCatId = categoryId?.id;
-    // alert("getCategory :"+categoryId);
     this.categoriesManagementService.getCategoryBySuperCatId(categoryId)
       .subscribe({
         next: (response: any) => {
@@ -1180,7 +1181,7 @@ export class AllLeadComponent {
             this.filteredCategoryList = this.categoryList;
 
             const subCategory = this.categoryList.find(item => item.category === this.leadDetails.category);
-            this.getSubCategory(subCategory.id);
+            // this.getSubCategory(subCategory.id);
           }
         },
         error: (error: any) =>
@@ -1193,9 +1194,8 @@ export class AllLeadComponent {
   }
 
   public getSubCategory(subCategoryId: any) {
-    // const categoryId = subCategoryId?.id;
-    // alert("enter into getSubCategory")
-    this.categoriesManagementService.getSubCategoryListByCatId(subCategoryId)
+    console.log("Sub category : "+subCategoryId);
+    this.categoriesManagementService.getSubCategoryList()
       .subscribe({
         next: (response: any) => {
           if (response['responseCode'] == '200') {
