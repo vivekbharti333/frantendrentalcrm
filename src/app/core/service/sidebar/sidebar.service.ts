@@ -132,11 +132,11 @@ export class SidebarService {
               route: routes.createLead,
               permission: 'create-lead',
             },
-            {
-              menuValue: 'Follow up one',
-              route: routes.followupOne,
-              permission: 'create-lead',
-            },
+            // {
+            //   menuValue: 'Follow up one',
+            //   route: routes.followupOne,
+            //   permission: 'create-lead',
+            // },
             {
               menuValue: 'All Lead',
               route: routes.allLead,
@@ -147,14 +147,14 @@ export class SidebarService {
               route: routes.infoLead,
               permission: 'create-lead',
             },
-            {
-              menuValue: 'Enquiry',
-              route: routes.enquiry,
+             {
+              menuValue: 'Hot Lead',
+              route: routes.hotLead,
               permission: 'create-lead',
             },
             {
-              menuValue: 'Hot Lead',
-              route: routes.hotLead,
+              menuValue: 'Enquiry',
+              route: routes.enquiry,
               permission: 'create-lead',
             },
             {
@@ -163,7 +163,7 @@ export class SidebarService {
               permission: 'create-lead',
             },
             {
-              menuValue: 'importaint Lead',
+              menuValue: 'Importaint',
               route: routes.importaintLead,
               permission: 'create-lead',
             },
@@ -173,25 +173,25 @@ export class SidebarService {
               permission: 'create-lead',
             },
             {
-              menuValue: 'Won Lead',
+              menuValue: 'Won ',
               route: routes.wonLead,
               permission: 'create-lead',
             },
             {
-              menuValue: 'Lost Lead',
+              menuValue: 'Lost ',
               route: routes.lost,
               permission: 'create-lead',
             },
             {
-              menuValue: 'Assigned Lead',
+              menuValue: 'Assigned ',
               route: routes.assignedLead,
               permission: 'create-lead',
             },
-            {
-              menuValue: 'Reserved',
-              route: routes.reserved,
-              permission: 'create-lead',
-            },
+            // {
+            //   menuValue: 'Reserved',
+            //   route: routes.reserved,
+            //   permission: 'create-lead',
+            // },
             
           ],
         },

@@ -605,7 +605,7 @@
                 <div class="mb-2">
                   <mat-select formControlName="createdBy" class="select custom-mat-select" name="createdBy"
                     placeholder="Select Agent Name">
-                    <mat-option *ngFor="let user of userList" [value]="user.loginId">
+                    <mat-option *ngFor="let user of userForDropDown" [value]="user.loginId">
                       {{ user.firstName }}
                     </mat-option>
                   </mat-select>

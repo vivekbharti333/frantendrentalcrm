@@ -113,10 +113,10 @@ export class LeadManagementService {
       subCategory: lead.subCategoryId?.subCategory, //
       // itemName: lead.itemName,
       pickupDateTime: lead.pickupDateTime,
-      pickupLocation: lead.pickupLocation,
+      pickupHub: lead.pickupHub,
       pickupPoint: lead.pickupPoint,
       dropDateTime: lead.dropDateTime,
-      dropLocation: lead.dropLocation,
+      dropHub: lead.dropHub,
       dropPoint: lead.dropPoint,
       customeName: lead.customeName,
       countryDialCode: lead.countryDialCode,

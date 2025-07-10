@@ -369,19 +369,14 @@ export class AllLeadComponent {
   ) {
    
     this.isEditForm = isEditable;
-    // await this.getDropdownOnEditModal(rawData);
-    // this.saveLeadData(rawData);
-
     this.getSubCategory(rawData['categoryId']);
 
     this.editLeadForm.patchValue({
-        // categoryId: rawData['categoryId'],
-        // subCategoryId: rawData['subCategoryId'],
-        // superCategory: rawData['superCategory'],
+      
         category: rawData['category'],
         subCategory: rawData['subCategory'],
         itemName: rawData['itemName'],
-        pickupDateTime: rawData['pickupDateTime'],
+        pickupDateTime: this.formatDateTime(rawData['pickupDateTime']),
         pickupHub: rawData['pickupHub'],
         pickupPoint: rawData['pickupPoint'],
         dropDateTime: rawData['dropDateTime'],
@@ -427,11 +422,12 @@ export class AllLeadComponent {
         // records: 
   
 });
-
     this.viewLeadDetailsDialog = this.dialog.open(templateRef, {
       width: '80%',
     });
   }
+
+  
 
   async getDropdownOnEditModal(rawData: any) {
     const filterCategoryType: any = this.categoryTypeList.filter((item) => {
@@ -477,12 +473,19 @@ export class AllLeadComponent {
     return newDate;
   }
 
-   formatDateTime(date: Date): string {
-    const pad = (n: number) => n.toString().padStart(2, '0');
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-      date.getDate()
-    )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-  }
+formatDateTime(dateInput: any): string {
+  if (!dateInput) return ''; // handle undefined or null immediately
+
+  const date = new Date(dateInput);
+  if (isNaN(date.getTime())) return ''; // handle invalid date
+
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+    date.getDate()
+  )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+
 
   setError(field: 'pickupDate' | 'dropoffDate', message: string) {
     if (field === 'pickupDate') {
