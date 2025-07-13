@@ -379,7 +379,7 @@ export class AllLeadComponent {
         pickupDateTime: this.formatDateTime(rawData['pickupDateTime']),
         pickupHub: rawData['pickupHub'],
         pickupPoint: rawData['pickupPoint'],
-        dropDateTime: rawData['dropDateTime'],
+        dropDateTime: this.formatDateTime(rawData['dropDateTime']),
         dropHub: rawData['dropHub'],
         dropPoint: rawData['dropPoint'],
         customeName: rawData['customeName'],

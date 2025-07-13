@@ -202,7 +202,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   initializeComponent(): void {
     this.getCategory('');
     this.createForms();
-    this.getCategoryType();
+    // this.getCategoryType();
     this.getUserList();
     this.getPickLocation();
     this.getDropLocation();
@@ -273,7 +273,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       dropHub: [''],
       dropPoint: [''],
       customeName: [''],
-      countryDialCode: [''],
+      countryDialCode: ['+91'],
       customerMobile: [''],
       customerAlternateMobile: [''],
       customerEmailId: [''],
@@ -401,7 +401,8 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   }
 
   setSecurityAndVendorRate(event: any) {
-    const selectedSubCategory = event.value; // This now holds the full selected object
+    
+    const selectedSubCategory = event; // This now holds the full selected object
     const addFormValue = this.addLeadForm.value;
 
     // add date and time automatic from sub category
@@ -443,9 +444,6 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     const formattedMinutes = String(currentDate.getMinutes()).padStart(2, '0');
 
     const formattedDate = `${year}-${month}-${day}T${formattedHours}:${formattedMinutes}`;
-
-    console.log('hi : ' + formattedDate);
-
     // Set the formatted date to the form control
     this.addLeadForm.patchValue({ pickupDateTime: formattedDate });
 
@@ -453,8 +451,11 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   }
 
   calExtraAmount() {
-    const leadValue = this.addLeadForm.value;
-    let secondValue = 0;
+  const leadValue = this.addLeadForm.value;
+    if(leadValue.actualAmount === 0){
+      alert("Zero not allowed")
+    } else {
+      let secondValue = 0;
     if (
       leadValue.vendorRate != null &&
       leadValue.totalDays != null &&
@@ -473,39 +474,57 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     const balAmt = this.addLeadForm.value.balanceAmount;
 
     if (bookAmt >= actAmt) {
-      // const extraAmtPlus = actAmt - bookAmt; // Corrected logic
-      this.addLeadForm.patchValue({
-        balanceAmount: balAmt + (bookAmt - actAmt),
-      });
-      this.payToVendor = this.addLeadForm.value.balanceAmount;
+      const extraAmtPlus = bookAmt - actAmt ; // Corrected logic
+      this.addLeadForm.patchValue({ balanceAmount: balAmt + (bookAmt - actAmt), });
+      this.payToCompany = extraAmtPlus;
+      this.payToVendor = 0;
     } else {
-      // const extraAmtMinus = bookAmt - actAmt; // Corrected logic
-      this.addLeadForm.patchValue({
-        balanceAmount: balAmt - (actAmt - bookAmt),
-      });
-      this.payToVendor = this.addLeadForm.value.balanceAmount;
+      const extraAmtMinus = actAmt - bookAmt; // Corrected logic
+      this.addLeadForm.patchValue({balanceAmount: balAmt - (actAmt - bookAmt), });
+      this.payToVendor = extraAmtMinus;
+      this.payToCompany = 0;
+    }
     }
   }
 
-  setDefaultDateTime(): void {
-    const currentDate = new Date();
+setDefaultDateTime(): void {
+  const currentDate = new Date();
 
-    // Get the local date and time values
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const hours = String(currentDate.getHours()).padStart(2, '0');
-    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+  // Get pickup datetime values
+  const pickupYear = currentDate.getFullYear();
+  const pickupMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+  const pickupDay = String(currentDate.getDate()).padStart(2, '0');
+  const pickupHours = String(currentDate.getHours()).padStart(2, '0');
+  const pickupMinutes = String(currentDate.getMinutes()).padStart(2, '0');
 
-    // Combine into the required format: YYYY-MM-DDTHH:MM
-    const dateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+  const pickupDateTime = `${pickupYear}-${pickupMonth}-${pickupDay}T${pickupHours}:${pickupMinutes}`;
 
-    // Patch the value into the form
-    this.addLeadForm.patchValue({
-      dropDateTime: dateTime,
-      pickupDateTime: dateTime,
-    });
-  }
+  // Create drop datetime (next day at 09:00 AM)
+  const dropDate = new Date(currentDate);
+  dropDate.setDate(dropDate.getDate() + 1);
+  dropDate.setHours(9, 0, 0, 0); // <-- set time to 09:00 AM
+
+  const dropYear = dropDate.getFullYear();
+  const dropMonth = String(dropDate.getMonth() + 1).padStart(2, '0');
+  const dropDay = String(dropDate.getDate()).padStart(2, '0');
+  const dropHours = String(dropDate.getHours()).padStart(2, '0');
+  const dropMinutes = String(dropDate.getMinutes()).padStart(2, '0');
+
+  const dropDateTime = `${dropYear}-${dropMonth}-${dropDay}T${dropHours}:${dropMinutes}`;
+
+  // Calculate difference in days
+  const timeDiff = dropDate.getTime() - currentDate.getTime();
+  const noOfdays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+  // Patch the values into the form
+  this.addLeadForm.patchValue({
+    pickupDateTime: pickupDateTime,
+    dropDateTime: dropDateTime,
+    totalDays: noOfdays
+  });
+}
+
+
 
   // calculateDays() {
   //   const pickupDateTime = this.addLeadForm.value.pickupDateTime;
@@ -581,6 +600,15 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
         dropDateTime: this.formatDateTime(dropDate),
         totalDays: noOfDays,
       });
+
+      this.calculateTotalAmount();
+      this.calculateBookingAmount();
+
+       this.addLeadForm.patchValue({
+        actualAmount: 0,
+        
+      });
+
     }
   }
 
@@ -671,16 +699,16 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     const amountValue = leadValue.bookingAmount - leadValue.actualAmount;
 
     // this.calExtraAmount();
-    if (amountValue < 0) {
-      leadValue.payToVendor = amountValue;
-      this.addLeadForm.patchValue({ payToVendor: amountValue });
+    // if (amountValue < 0) {
+    //   leadValue.payToVendor = amountValue;
+    //   this.addLeadForm.patchValue({ payToVendor: amountValue });
 
-      this.payToVendor = this.addLeadForm.value.payToVendor;
-    } else if (amountValue >= 0) {
-      leadValue.payToCompany = amountValue;
-      this.addLeadForm.patchValue({ payToCompany: amountValue });
-      this.payToCompany = this.addLeadForm.value.payToCompany;
-    }
+    //   this.payToVendor = this.addLeadForm.value.payToVendor;
+    // } else if (amountValue >= 0) {
+    //   leadValue.payToCompany = amountValue;
+    //   this.addLeadForm.patchValue({ payToCompany: amountValue });
+    //   this.payToCompany = this.addLeadForm.value.payToCompany;
+    // }
     return amountValue;
   }
 
@@ -962,6 +990,9 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   }
 
   public getSubCategory(subCategoryId: any) {
+
+    this.setSecurityAndVendorRate(subCategoryId);
+
     const categoryId = subCategoryId?.id;
     this.categoriesManagementService
       .getSubCategoryListByCatId(categoryId)
