@@ -361,46 +361,44 @@
               </div>
 
               <div class="row">
-                <div class="col-lg-3 col-md-6">
+                <!-- <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Start Date</label>
                     <input type="date" class="form-control" formControlName="startDate" required />
                   </div>
-                </div>
+                </div> -->
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Start Time </label>
                     <input type="time" class="form-control" formControlName="startTime" required step="900"/>
-                    <!-- <mat-select name="roleType" formControlName="startTime" class="select"
-                      placeholder="Select Start Time" required>
-                      @for (data of timeValue; track data) {
-                      <mat-option [value]="data.value">
-                        {{ data.name }}
-                      </mat-option>
-                      }
-                    </mat-select> -->
                   </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <!-- <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">End Date</label>
                     <input type="date" class="form-control" formControlName="endDate" required />
                   </div>
-                </div>
+                </div> -->
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">End Time </label>
                     <input type="time" class="form-control" formControlName="endTime" required step="900"/>
-                    <!-- <mat-select name="roleType" formControlName="endTime" class="select"
-                      placeholder="Select Start Time" required>
-                      @for (data of timeValue; track data) {
-                      <mat-option [value]="data.value">
-                        {{ data.name }}
-                      </mat-option>
-                      }
-                    </mat-select> -->
                   </div>
                 </div>
+
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Pick & drop Hub </label>
+                    <input type="text" class="form-control" formControlName="pickDropHub" required />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Activity Location </label>
+                    <input type="text" class="form-control" formControlName="activityLocation" required/>
+                  </div>
+                </div>
+
               </div>
               <div class="row">
                 <div class="col-lg-3 col-md-6">
@@ -411,11 +409,8 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Pickup Hub</label>
-                    <!-- <input type="text" class="form-control" formControlName="pickupHub" required /> -->
                      <mat-select formControlName="pickupHub" class="select custom-mat-select"
                       placeholder="Pickup Hub" required>
-                      <!-- <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
-                        [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search> -->
                       <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
                         {{ pickList.location }}
                       </mat-option>
@@ -426,11 +421,8 @@
                 <div class="col-lg-3 col-md-6">
                   <div class="mb-3">
                     <label class="form-label">Drop Hub</label>
-                    <!-- <input type="text" class="form-control" formControlName="dropHub" required /> -->
                     <mat-select formControlName="dropHub" placeholder="Drop Hub"
                       class="select custom-mat-select" required>
-                      <!-- <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
-                        [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search> -->
                       <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
                         {{ dropList.location }}
                       </mat-option>
