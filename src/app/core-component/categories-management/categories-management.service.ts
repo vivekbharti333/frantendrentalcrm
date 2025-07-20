@@ -145,8 +145,10 @@ export class CategoriesManagementService {
   addCategoryDetails(addCategory: any): Observable<any> {
     let request: any = {
       payload: {
+        pickDropHub: addCategory.pickDropHub,
+        activityLocation: addCategory.activityLocation,
         categoryImage: addCategory.categoryImage,
-        categoryTypeId: addCategory.categoryTypeId,
+        categoryTypeId: addCategory.categoryTypeId['id'],
         superCategoryId: addCategory.superCategoryId,
         category: addCategory.category,
         subCategory: addCategory.subCategory,

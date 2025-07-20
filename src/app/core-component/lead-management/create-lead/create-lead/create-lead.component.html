@@ -88,7 +88,7 @@
                 <div class="mb-3">
                   <mat-select formControlName="categoryId"
                     class="select custom-mat-select no-border input-inside-element form-control"
-                    placeholder="Select a Package" (selectionChange)="getSubCategory($event.value)" required>
+                    placeholder="Select a Package" (selectionChange)="setSecurityAndVendorRate($event.value)" required>
                     <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
                       [originalList]="filteredCategoryList" [categoryName]="'pickLocation'"></app-mat-select-search>
                     <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate">
@@ -100,13 +100,18 @@
 
               <div class="col-lg-2 col-md-2">
                 <div class="mb-2">
-                  <mat-select formControlName="subCategoryId"
+                   <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Sub Category</mat-label>
+                    <input matInput type="text" formControlName="subCategory" required />
+                  </mat-form-field>
+                  <!-- <input type="text" formControlName="subCategory" id="subCategory" name="subCategory" /> -->
+                  <!-- <mat-select formControlName="subCategory"
                     class="select custom-mat-select no-border input-inside-element" placeholder="Select Variant"
                     (selectionChange)="setSecurityAndVendorRate($event)" required>
                     <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate">
                       {{ subCate.subCategory }}
                     </mat-option>
-                  </mat-select>
+                  </mat-select> -->
                 </div>
               </div>
 
@@ -493,13 +498,10 @@
 
               <div class="col-lg-2 col-md-2">
                 <div class="mb-2">
-                  <mat-select formControlName="subCategoryId"
-                    class="select custom-mat-select no-border input-inside-element" placeholder="Select Variant"
-                    (selectionChange)="setSecurityAndVendorRate($event)" required>
-                    <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate">
-                      {{ subCate.subCategory }}
-                    </mat-option>
-                  </mat-select>
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Sub Category</mat-label>
+                    <input matInput type="text" formControlName="subCategory" required />
+                  </mat-form-field>
                 </div>
               </div>
 
@@ -508,7 +510,7 @@
                   <div class="activity-datetime-container">
                     <div class="activity-section">
                       <label class="label">Activity Date</label>
-                      <input type="date" [(ngModel)]="activityDate" class="form-control" formControlName="date"
+                      <input type="date"  class="form-control" formControlName="activityDate"
                         class="flat-input" />
                     </div>
 
@@ -517,13 +519,13 @@
                     <div class="time-range">
                       <div class="flex flex-col">
                         <label class="label">Start Time</label>
-                        <input type="time" step="900" [(ngModel)]="startTime" formControlName="startTime"
+                        <input type="time" step="900" formControlName="startTime"
                           (change)="adjustToNearest15Min($event, 'startTime')" class="flat-input" />
                       </div>
                       <div class="flex flex-col">
                         <label class="label">End Time</label>
 
-                        <input type="time" step="900" [(ngModel)]="endTime" formControlName="EndTime"
+                        <input type="time" step="900" formControlName="endTime"
                           (change)="adjustToNearest15Min($event, 'endTime')" class="flat-input" />
                       </div>
                     </div>
@@ -536,13 +538,13 @@
             <div class="container">
               <div class="radio-class">
                 <label class="radio-option">
-                  <input type="radio" name="locationType" [(ngModel)]="locationType" value="self" />
+                  <input type="radio" name="locationType" formControlName="locationType" value="self" />
                   <span class="custom-radio"></span>
                   <span class="ml-2">Self</span>
                 </label>
 
                 <label class="radio-option">
-                  <input type="radio" name="locationType" [(ngModel)]="locationType" value="pandd" />
+                  <input type="radio" name="locationType" formControlName="locationType" value="pandd" />
                   <span class="custom-radio"></span>
                   <span class="ml-2">P&D</span>
                 </label>
@@ -550,8 +552,15 @@
 
               <div class="col-lg-2 col-md-2 input-col-2">
                 <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Location</mat-label>
-                  <input matInput type="text" required />
+                  <mat-label>Activity Location</mat-label>
+                  <input matInput type="text" formControlName="activityLocation" required />
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-2 col-md-2 input-col-2">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Pickup & Drop Hub</mat-label>
+                  <input matInput type="text" formControlName="pickDropHub" required />
                 </mat-form-field>
               </div>
             </div>
@@ -563,7 +572,7 @@
                 <!-- Adult Quantity -->
                 <div class="col-lg-2 col-md-2 input-col-2">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Adult Quantity</mat-label>
+                    <mat-label>Quantity</mat-label>
                     <input matInput type="number" formControlName="quantity" min="0" required
                       (change)="calculateTotalAmountOfActivites()" />
                   </mat-form-field>
@@ -595,7 +604,7 @@
                 <!-- Adult Company Rate -->
                 <div class="col-lg-2 col-md-2 input-col-2">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Adult Company Rate</mat-label>
+                    <mat-label>Adult Rate </mat-label>
                     <input matInput type="text" formControlName="companyRate" required
                       (change)="calculateTotalAmountOfActivites()" />
                   </mat-form-field>
@@ -604,24 +613,25 @@
                 <!-- Adult Vendor Rate (1) -->
                 <div class="col-lg-2 col-md-2 input-col-2">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Adult Vendor Rate</mat-label>
-                    <input matInput type="text" />
+                    <mat-label>Adult Report</mat-label>
+                    <input matInput type="text" formControlName="vendorRate" (change)="calculateBalanceAmountOfActivites()"/>
                   </mat-form-field>
                 </div>
 
-                <!-- Adult Vendor Rate (2) -->
+                <!-- Kid Company Rate (2) -->
                 <div class="col-lg-2 col-md-2 input-col-2">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Adult Vendor Rate</mat-label>
-                    <input matInput type="text" />
+                    <mat-label>Kid Rate</mat-label>
+                    <input matInput type="text" formControlName="companyRateForKids" required
+                    (change)="calculateTotalAmountOfActivites()" />
                   </mat-form-field>
                 </div>
 
                 <!-- Kid Vendor Rate -->
                 <div class="col-lg-2 col-md-2 input-col-2">
                   <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Kid Vendor Rate</mat-label>
-                    <input matInput type="text" />
+                    <mat-label>Kid Report</mat-label>
+                    <input matInput type="text" formControlName="vendorRateForKids" (change)="calculateBalanceAmountOfActivites()"/>
                   </mat-form-field>
                 </div>
               </div>

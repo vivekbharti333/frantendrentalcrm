@@ -130,6 +130,8 @@ subCategoryList: data[] = [
 
   createForms() {
     this.addCategoryForm = this.fb.group({
+      pickDropHub: '',
+      activityLocation: '',
       categoryImage: '',
       categoryTypeId: '',
       superCategoryId: '',

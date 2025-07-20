@@ -44,10 +44,10 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   pickupError: string = '';
   dropoffError: string = '';
 
-  activityDate: string = '2025-05-01';
+  // activityDate: string = '2025-05-01';
   startTime: string = '10:00';
   endTime: string = '18:00';
-  locationType: string = 'self';
+  // locationType: string = 'self';
 
   public loginUser: any;
 
@@ -78,6 +78,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   public payToCompany: any;
 
   public discountType = '₹';
+  public currentDate: any;
 
   filteredCategoryTypeList: any[] = [];
   filteredSuperCategoryList: any[] = [];
@@ -198,6 +199,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.initializeComponent();
+    this.currentDate = new Date().toISOString().substring(0, 10); // Define ttoday here
   }
   initializeComponent(): void {
     this.getCategory('');
@@ -255,7 +257,13 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
 
   createForms() {
     this.addLeadForm = this.fb.group({
-      companyName: ['Notes'],
+    activityDate: [this.currentDate],  // <-- fixed comma
+    startTime: [],
+    endTime: [],
+    locationType:['self'],
+    pickDropHub: '',
+    activityLocation: '',
+    companyName: ['Notes'],
       enquirySource: ['Call'],
       categoryTypeId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],],
       categoryTypeName: [''],
@@ -413,13 +421,15 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       this.addTimeToDate(selectedSubCategory.startTime);
     }
 
-    this.addLeadForm.patchValue({
-      securityAmount: selectedSubCategory.securityAmount,
-    });
+    this.addLeadForm.patchValue({subCategory: selectedSubCategory.subCategory,});
+    this.addLeadForm.patchValue({startTime: selectedSubCategory.startTime,});
+    this.addLeadForm.patchValue({endTime: selectedSubCategory.endTime,});
+    this.addLeadForm.patchValue({activityLocation: selectedSubCategory.activityLocation,});
+    this.addLeadForm.patchValue({pickDropHub: selectedSubCategory.pickDropHub,});
+    
+    this.addLeadForm.patchValue({ securityAmount: selectedSubCategory.securityAmount,});
     this.addLeadForm.patchValue({ vendorRate: selectedSubCategory.vendorRate });
-    this.addLeadForm.patchValue({
-      vendorRateForKids: selectedSubCategory.vendorRateForKids,
-    });
+    this.addLeadForm.patchValue({vendorRateForKids: selectedSubCategory.vendorRateForKids,});
   }
 
   addTimeToDate(timeString: string): string {
@@ -716,17 +726,24 @@ setDefaultDateTime(): void {
   calculateTotalAmountOfActivites() {
     const leadValue = this.addLeadForm.value;
 
+    // const quantity = Number(leadValue.quantity) || 0;
+    // const kidQuantity = Number(leadValue.kidQuantity) || 0;
+    // const companyRate = Number(leadValue.companyRate) || 0;
+    // const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
+
     const quantity = Number(leadValue.quantity) || 0;
     const kidQuantity = Number(leadValue.kidQuantity) || 0;
+    const infantQuantity = Number(leadValue.infantQuantity) || 0;
     const companyRate = Number(leadValue.companyRate) || 0;
     const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
 
+
     if (quantity >= 0 && kidQuantity >= 0) {
-      const firstValue = companyRate * quantity;
+      const firstValue = (companyRate * quantity);
       const secondValue = companyRateForKids * kidQuantity;
       const totalAmount = firstValue + secondValue;
 
-      this.addLeadForm.patchValue({ totalAmount });
+      this.addLeadForm.patchValue({ totalAmount : totalAmount });
 
       // Call booking amount calculation after total amount is updated
       this.calculateBalanceAmountOfActivites();
@@ -749,9 +766,7 @@ setDefaultDateTime(): void {
       const secondValue = vendorRateForKids * kidQuantity;
       const balanceAmount = firstValue + secondValue;
 
-      this.addLeadForm.patchValue({ balanceAmount });
-
-      // Call booking amount calculation after balance amount is updated
+      this.addLeadForm.patchValue({ balanceAmount : balanceAmount});
       this.calculateBookingAmountOfActivites();
     } else {
       console.error('Invalid input values.');
@@ -768,7 +783,7 @@ setDefaultDateTime(): void {
     const balanceAmount = Number(leadValue.balanceAmount) || 0;
     const bookingAmount = totalAmount - balanceAmount;
 
-    this.addLeadForm.patchValue({ bookingAmount });
+    this.addLeadForm.patchValue({ bookingAmount : bookingAmount});
 
     return bookingAmount;
   }
@@ -989,35 +1004,36 @@ setDefaultDateTime(): void {
       });
   }
 
-  public getSubCategory(subCategoryId: any) {
+  public getSubCategory(categoryDetails: any) {
 
-    this.setSecurityAndVendorRate(subCategoryId);
+    this.setSecurityAndVendorRate(categoryDetails);
+    this.addLeadForm.patchValue({subCategory: categoryDetails.subCategory,});
 
-    const categoryId = subCategoryId?.id;
-    this.categoriesManagementService
-      .getSubCategoryListByCatId(categoryId)
-      .subscribe({
-        next: (response: any) => {
-          if (response['responseCode'] == '200') {
-            this.subCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
-            this.filteredSubCategoryList = this.subCategoryList;
+    // const categoryId = subCategoryId?.id;
+    // this.categoriesManagementService
+    //   .getSubCategoryListByCatId(categoryId)
+    //   .subscribe({
+    //     next: (response: any) => {
+    //       if (response['responseCode'] == '200') {
+    //         this.subCategoryList = JSON.parse(
+    //           JSON.stringify(response.listPayload)
+    //         );
+    //         this.filteredSubCategoryList = this.subCategoryList;
 
-            if (this.filteredSubCategoryList.length > 0) {
-              this.addLeadForm.patchValue({
-                subCategoryId: this.filteredSubCategoryList[0], //
-              });
-            }
-          }
-        },
-        error: (error: any) =>
-          this.messageService.add({
-            summary: '500',
-            detail: 'Server Error',
-            styleClass: 'danger-background-popover',
-          }),
-      });
+    //         if (this.filteredSubCategoryList.length > 0) {
+    //           this.addLeadForm.patchValue({
+    //             subCategoryId: this.filteredSubCategoryList[0], //
+    //           });
+    //         }
+    //       }
+    //     },
+    //     error: (error: any) =>
+    //       this.messageService.add({
+    //         summary: '500',
+    //         detail: 'Server Error',
+    //         styleClass: 'danger-background-popover',
+    //       }),
+    //   });
   }
 
   compareSubCategories(o1: any, o2: any): boolean {

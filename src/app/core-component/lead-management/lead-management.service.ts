@@ -103,6 +103,8 @@ export class LeadManagementService {
       // superCategory: lead.superCategory,
       // category: lead.category,
       // subCategory: lead.subCategory,
+          pickDropHub: lead.pickDropHub,
+    activityLocation: lead.activityLocation,
       categoryTypeId: lead.categoryTypeId?.id,
       superCategoryId: lead.superCategoryId?.id,
       categoryId: lead.categoryId?.id,
