@@ -675,10 +675,10 @@
                 <div class="mb-2">
                   <div class="input-group">
                     <input type="text" class="form-control" placeholder="Discount" formControlName="discount" (change)="
-                        calculateTotalAmountAndBalaenceAmontAfterDiscount()
+                        calculateTotalAmountAndBalenceAmontAfterDiscountActivity()
                       " />
-                    <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()"
-                      style="cursor: pointer; width: 40px">{{ discountType }}</span>
+                    <!-- <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()"
+                      style="cursor: pointer; width: 40px">{{ discountType }}</span> -->
                   </div>
                 </div>
               </div>
@@ -687,7 +687,7 @@
               <div class="col-lg-2 col-md-2 input-col-2">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Actual Paid Amount</mat-label>
-                  <input matInput type="number" formControlName="actualAmount" required min="1" (change)="calExtraAmount()" />
+                  <input matInput type="number" formControlName="actualAmount" required min="1" (change)="calExtraAmountForActivity()" />
                 </mat-form-field>
               </div>
             </div>
@@ -809,10 +809,11 @@
                 </div>
                 <div class="input-container">
                   <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
-                  {{ payToVendor }}
+                  {{ payToVendorAct }}
                 </div>
                 <div class="input-container">
                   <label for="pay-to-company"><b>Pay to company:</b></label>
+                  {{payToCompanyAct}}
                 </div>
               </div>
 

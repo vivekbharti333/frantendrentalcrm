@@ -75,7 +75,9 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   public vendorRate: any;
   public deliveryAmtToVendor: any;
   public payToVendor: any;
+  public payToVendorAct: any;
   public payToCompany: any;
+  public payToCompanyAct: any;
 
   public discountType = '₹';
   public currentDate: any;
@@ -786,6 +788,59 @@ setDefaultDateTime(): void {
     this.addLeadForm.patchValue({ bookingAmount : bookingAmount});
 
     return bookingAmount;
+  }
+
+    calExtraAmountForActivity() {
+  const leadValue = this.addLeadForm.value;
+    if(leadValue.actualAmount === 0){
+      alert("Zero not allowed")
+    } else {
+      let secondValue = 0;
+    // if (
+    //   leadValue.vendorRate != null &&
+    //   leadValue.totalDays != null &&
+    //   leadValue.deliveryAmountToVendor != null &&
+    //   leadValue.quantity != null
+    // ) {
+    //   const firstValue = leadValue.vendorRate * leadValue.totalDays;
+    //   secondValue = firstValue + Number(leadValue.deliveryAmountToVendor);
+    //   this.addLeadForm.patchValue({ balanceAmount: secondValue * leadValue.quantity, });
+    // }
+
+    const bookAmt = this.addLeadForm.value.bookingAmount;
+    const actAmt = this.addLeadForm.value.actualAmount;
+    const balAmt = this.addLeadForm.value.balanceAmount;
+
+    if (bookAmt >= actAmt) {
+      const extraAmtPlus = bookAmt - actAmt ; // Corrected logic
+      this.addLeadForm.patchValue({ balanceAmount: balAmt + (bookAmt - actAmt), });
+      this.payToCompanyAct = extraAmtPlus;
+      this.payToVendorAct = 0;
+    } else {
+      const extraAmtMinus = actAmt - bookAmt; // Corrected logic
+      this.addLeadForm.patchValue({balanceAmount: balAmt - (actAmt - bookAmt), });
+      this.payToVendorAct = extraAmtMinus;
+      this.payToCompanyAct = 0;
+    }
+    }
+  }
+
+  calculateTotalAmountAndBalenceAmontAfterDiscountActivity() {
+    if (
+      this.addLeadForm.value &&
+      this.addLeadForm.value.quantity != null
+    ) {
+      // Ensure discount is not more than the total amount
+      const totalAmt = this.addLeadForm.value.totalAmount - this.addLeadForm.value.discount;
+      const balanceAmt = this.addLeadForm.value.balanceAmount;
+      const bookingAmt = this.addLeadForm.value.bookingAmount - this.addLeadForm.value.discount;
+      
+      // Update the form with all new values in one patchValue call
+      this.addLeadForm.patchValue({
+        totalAmount: totalAmt,
+        bookingAmount: bookingAmt,
+      });
+    }
   }
 
   // ----------------------------------------------Calculation for Activities End----------------------------------------------------------------
