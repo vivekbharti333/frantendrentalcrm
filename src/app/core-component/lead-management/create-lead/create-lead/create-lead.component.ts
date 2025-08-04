@@ -796,16 +796,6 @@ setDefaultDateTime(): void {
       alert("Zero not allowed")
     } else {
       let secondValue = 0;
-    // if (
-    //   leadValue.vendorRate != null &&
-    //   leadValue.totalDays != null &&
-    //   leadValue.deliveryAmountToVendor != null &&
-    //   leadValue.quantity != null
-    // ) {
-    //   const firstValue = leadValue.vendorRate * leadValue.totalDays;
-    //   secondValue = firstValue + Number(leadValue.deliveryAmountToVendor);
-    //   this.addLeadForm.patchValue({ balanceAmount: secondValue * leadValue.quantity, });
-    // }
 
     const bookAmt = this.addLeadForm.value.bookingAmount;
     const actAmt = this.addLeadForm.value.actualAmount;
@@ -1063,32 +1053,6 @@ setDefaultDateTime(): void {
 
     this.setSecurityAndVendorRate(categoryDetails);
     this.addLeadForm.patchValue({subCategory: categoryDetails.subCategory,});
-
-    // const categoryId = subCategoryId?.id;
-    // this.categoriesManagementService
-    //   .getSubCategoryListByCatId(categoryId)
-    //   .subscribe({
-    //     next: (response: any) => {
-    //       if (response['responseCode'] == '200') {
-    //         this.subCategoryList = JSON.parse(
-    //           JSON.stringify(response.listPayload)
-    //         );
-    //         this.filteredSubCategoryList = this.subCategoryList;
-
-    //         if (this.filteredSubCategoryList.length > 0) {
-    //           this.addLeadForm.patchValue({
-    //             subCategoryId: this.filteredSubCategoryList[0], //
-    //           });
-    //         }
-    //       }
-    //     },
-    //     error: (error: any) =>
-    //       this.messageService.add({
-    //         summary: '500',
-    //         detail: 'Server Error',
-    //         styleClass: 'danger-background-popover',
-    //       }),
-    //   });
   }
 
   compareSubCategories(o1: any, o2: any): boolean {
@@ -1138,4 +1102,190 @@ setDefaultDateTime(): void {
   onNotesTypeChange(value: string) {
     this.notesType = value;
   }
+
+
+  public calculateTotalAmountForActivity(): number {
+    const leadValue = this.addLeadForm.value;
+
+    const quantity = Number(leadValue.quantity) || 0;
+    const companyRate = Number(leadValue.companyRate) || 0;
+    const kidQuantity = Number(leadValue.kidQuantity) || 0;
+    const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
+    const infantQuantity = Number(leadValue.infantQuantity) || 0;
+    const companyRateForInfants = Number(leadValue.companyRateForInfants) || 0;
+    const discount = Number(leadValue.discount) || 0;
+
+    const totalBeforeDiscount =
+      (quantity * companyRate) +
+      (kidQuantity * companyRateForKids) +
+      (infantQuantity * companyRateForInfants);
+
+    const totalAmount = Math.max(totalBeforeDiscount - discount, 0); // Prevent negative total
+     // const totalAmount = Math.max(totalBeforeDiscount - discount, 0).toFixed(2);
+
+    this.addLeadForm.patchValue({ totalAmount });
+
+    return totalAmount;
+  }
+
+
+  calculateBalenceAmontForActivity() {
+    const leadValue = this.addLeadForm.value;
+
+    const adultVendorRate = Number(leadValue.vendorRate) || 0;
+    const adultQuantity = Number(leadValue.quantity) || 0;
+    const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
+    const kidQuantity = Number(leadValue.kidQuantity) || 0;
+    const discount = Number(leadValue.discount) || 0;
+
+    const balenceAmt =
+      (adultQuantity * adultVendorRate) +
+      (kidQuantity * kidsVendorRate);
+
+       const balenceAmount = Math.max(balenceAmt, 0); // Prevent negative total
+      
+      // Update the form with all new values in one patchValue call
+      this.addLeadForm.patchValue({
+        bookingAmount: balenceAmount,
+      });
+    }
+
+    calculateBookingAmontForActivity() {
+    const leadValue = this.addLeadForm.value;
+
+    const totalAmount = Number(leadValue.totalAmount) || 0;
+    const balenceAmount = Number(leadValue.balenceAmount) || 0;
+
+    const bookingAmt =
+      (totalAmount - balenceAmount);
+
+       const bookingAmount = Math.max(bookingAmt, 0); // Prevent negative total
+      
+      // Update the form with all new values in one patchValue call
+      this.addLeadForm.patchValue({ bookingAmount: bookingAmount, });
+    }
+
+  calActualAmountForActivity() {
+    const leadValue = this.addLeadForm.value;
+    if (leadValue.actualAmount === 0) {
+      alert("Zero not allowed")
+    } else {
+      let secondValue = 0;
+
+      const bookAmt = this.addLeadForm.value.bookingAmount;
+      const actAmt = this.addLeadForm.value.actualAmount;
+      const balAmt = this.addLeadForm.value.balanceAmount;
+
+      if (bookAmt >= actAmt) {
+        const extraAmtPlus = bookAmt - actAmt; // Corrected logic
+        this.addLeadForm.patchValue({ balanceAmount: balAmt + (bookAmt - actAmt), });
+        this.payToCompanyAct = extraAmtPlus;
+        this.payToVendorAct = 0;
+      } else {
+        const extraAmtMinus = actAmt - bookAmt; // Corrected logic
+        this.addLeadForm.patchValue({ balanceAmount: balAmt - (actAmt - bookAmt), });
+        this.payToVendorAct = extraAmtMinus;
+        this.payToCompanyAct = 0;
+      }
+    }
+  }
+
+  // calculationForActivity() {
+  //   const leadValue = this.addLeadForm.value;
+
+  //   const adultQuantity = Number(leadValue.quantity) || 0;
+  //   const adultCompanyRate = Number(leadValue.companyRate) || 0;
+  //   const kidQuantity = Number(leadValue.kidQuantity) || 0;
+  //   const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
+  //   const adultVendorRate = Number(leadValue.vendorRate) || 0;
+  //   const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
+  //   const discount = Number(leadValue.discount) || 0;
+
+  //   //Total Amount
+  //   const totalBeforeDiscount = (adultQuantity * adultCompanyRate) + (kidQuantity * companyRateForKids);
+  //   const totalAmount = Math.max(totalBeforeDiscount - discount, 0); // Prevent negative total
+
+  //   this.addLeadForm.patchValue({ totalAmount: totalAmount });
+
+
+  //   //Balence Amount
+  //   const balenceAmt = (adultQuantity * adultVendorRate) + (kidQuantity * kidsVendorRate);
+  //   const balenceAmount = Math.max(balenceAmt, 0); // Prevent negative total
+
+  //   this.addLeadForm.patchValue({ balenceAmount: balenceAmount, });
+
+  //   //Booking Amount
+  //   const bookingAmt = (totalAmount - balenceAmount);
+  //   const bookingAmount = Math.max(bookingAmt, 0); // Prevent negative total
+
+  //   this.addLeadForm.patchValue({ bookingAmount: bookingAmount, });
+
+  //   //Actual Amount
+  //   const actualAmt = this.addLeadForm.value.actualAmount;
+
+  //   if (bookingAmount >= actualAmt) {
+  //     const extraAmtPlus = bookingAmount - actualAmt; // Corrected logic
+  //     this.addLeadForm.patchValue({ balanceAmount: balenceAmount + (bookingAmount - actualAmt), });
+  //     this.payToCompanyAct = extraAmtPlus;
+  //     this.payToVendorAct = 0;
+  //   } else {
+  //     const extraAmtMinus = actualAmt - bookingAmount; // Corrected logic
+  //     this.addLeadForm.patchValue({ balanceAmount: balenceAmount - (actualAmt - bookingAmount), });
+  //     this.payToVendorAct = extraAmtMinus;
+  //     this.payToCompanyAct = 0;
+  //   }
+
+  // }
+
+
+  calculationForActivity(): void {
+    const leadValue = this.addLeadForm.value;
+
+    const adultQuantity = Number(leadValue.quantity) || 0;
+    const adultCompanyRate = Number(leadValue.companyRate) || 0;
+    const kidQuantity = Number(leadValue.kidQuantity) || 0;
+    const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
+    const adultVendorRate = Number(leadValue.vendorRate) || 0;
+    const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
+    const discount = Number(leadValue.discount) || 0;
+    const actualAmt = Number(leadValue.actualAmount) || 0;
+
+    // Total Amount (Company Rate)
+    const totalBeforeDiscount = (adultQuantity * adultCompanyRate) + (kidQuantity * companyRateForKids);
+    const totalAmount = Math.max(totalBeforeDiscount - discount, 0);
+
+    // Balance Amount (Vendor Rate)
+    const balanceAmt = (adultQuantity * adultVendorRate) + (kidQuantity * kidsVendorRate);
+    const balanceAmount = Math.max(balanceAmt, 0);
+
+    // Booking Amount
+    const bookingAmount = Math.max(totalAmount - balanceAmount, 0);
+
+    // Extra Calculation
+    let finalBalanceAmount = balanceAmount;
+
+    if (bookingAmount >= actualAmt) {
+      const extraAmt = bookingAmount - actualAmt;
+      this.payToCompanyAct = extraAmt;
+      this.payToVendorAct = 0;
+      finalBalanceAmount = balanceAmount + extraAmt;
+    } else {
+      const extraAmt = actualAmt - bookingAmount;
+      this.payToCompanyAct = 0;
+      this.payToVendorAct = extraAmt;
+      finalBalanceAmount = Math.max(balanceAmount - extraAmt, 0);
+    }
+
+    // Patch all values at once
+    this.addLeadForm.patchValue({
+      totalAmount: totalAmount,
+      balanceAmount: finalBalanceAmount,
+      bookingAmount: bookingAmount,
+    });
+
+    // this.payToCompanyAct = payToCompanyAct;
+    // this.payToVendorAct = payToVendorAct;
+  }
+
+
 }
