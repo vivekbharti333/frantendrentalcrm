@@ -1190,52 +1190,55 @@ setDefaultDateTime(): void {
     }
   }
 
-  // calculationForActivity() {
-  //   const leadValue = this.addLeadForm.value;
 
-  //   const adultQuantity = Number(leadValue.quantity) || 0;
-  //   const adultCompanyRate = Number(leadValue.companyRate) || 0;
-  //   const kidQuantity = Number(leadValue.kidQuantity) || 0;
-  //   const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
-  //   const adultVendorRate = Number(leadValue.vendorRate) || 0;
-  //   const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
-  //   const discount = Number(leadValue.discount) || 0;
+//   calculationForActivity() {
+//     const leadValue = this.addLeadForm.value;
 
-  //   //Total Amount
-  //   const totalBeforeDiscount = (adultQuantity * adultCompanyRate) + (kidQuantity * companyRateForKids);
-  //   const totalAmount = Math.max(totalBeforeDiscount - discount, 0); // Prevent negative total
+//     const adultQuantity = Number(leadValue.quantity) || 0;
+//     const adultCompanyRate = Number(leadValue.companyRate) || 0;
+//     const kidQuantity = Number(leadValue.kidQuantity) || 0;
+//     const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
+//     const adultVendorRate = Number(leadValue.vendorRate) || 0;
+//     const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
+//     const discount = Number(leadValue.discount) || 0;
 
-  //   this.addLeadForm.patchValue({ totalAmount: totalAmount });
+//     //Total Amount
+//     const totalBeforeDiscount = (adultQuantity * adultCompanyRate) + (kidQuantity * companyRateForKids);
+//     const totalAmount = Math.max(totalBeforeDiscount - discount, 0); // Prevent negative total
 
+//     this.addLeadForm.patchValue({ totalAmount: totalAmount });
 
-  //   //Balence Amount
-  //   const balenceAmt = (adultQuantity * adultVendorRate) + (kidQuantity * kidsVendorRate);
-  //   const balenceAmount = Math.max(balenceAmt, 0); // Prevent negative total
+//     //Balence Amount
+//     const balenceAmt = (adultQuantity * adultVendorRate) + (kidQuantity * kidsVendorRate);
+//     const balenceAmount = Math.max(balenceAmt, 0); // Prevent negative total
 
-  //   this.addLeadForm.patchValue({ balenceAmount: balenceAmount, });
+//     this.addLeadForm.patchValue({ balenceAmount: balenceAmount });
 
-  //   //Booking Amount
-  //   const bookingAmt = (totalAmount - balenceAmount);
-  //   const bookingAmount = Math.max(bookingAmt, 0); // Prevent negative total
+//     //Booking Amount
+//     const bookingAmt = (totalAmount - balenceAmount);
+//     const bookingAmount = Math.max(bookingAmt, 0); // Prevent negative total
 
-  //   this.addLeadForm.patchValue({ bookingAmount: bookingAmount, });
+//     this.addLeadForm.patchValue({ bookingAmount: bookingAmount, });
+  
+//     //Actual Amount
+//     const actualAmt = this.addLeadForm.value.actualAmount;
 
-  //   //Actual Amount
-  //   const actualAmt = this.addLeadForm.value.actualAmount;
-
-  //   if (bookingAmount >= actualAmt) {
-  //     const extraAmtPlus = bookingAmount - actualAmt; // Corrected logic
-  //     this.addLeadForm.patchValue({ balanceAmount: balenceAmount + (bookingAmount - actualAmt), });
-  //     this.payToCompanyAct = extraAmtPlus;
-  //     this.payToVendorAct = 0;
-  //   } else {
-  //     const extraAmtMinus = actualAmt - bookingAmount; // Corrected logic
-  //     this.addLeadForm.patchValue({ balanceAmount: balenceAmount - (actualAmt - bookingAmount), });
-  //     this.payToVendorAct = extraAmtMinus;
-  //     this.payToCompanyAct = 0;
-  //   }
-
-  // }
+//     if(actualAmt != 0){
+// if (bookingAmount >= actualAmt ) {
+//       const extraAmtPlus = bookingAmount - actualAmt; // Corrected logic
+//       this.addLeadForm.patchValue({ balanceAmount: balenceAmount + (bookingAmount - actualAmt), });
+//       this.payToCompanyAct = extraAmtPlus;
+//       this.payToVendorAct = 0;
+//     } else {
+//       const extraAmtMinus = actualAmt - bookingAmount; // Corrected logic
+//       this.addLeadForm.patchValue({ balanceAmount: balenceAmount - (actualAmt - bookingAmount), });
+//       this.payToVendorAct = extraAmtMinus;
+//       this.payToCompanyAct = 0;
+//     }
+//     }else {
+//        this.addLeadForm.patchValue({ balanceAmount: balenceAmount });
+//     }
+//   }
 
 
   calculationForActivity(): void {
@@ -1264,28 +1267,83 @@ setDefaultDateTime(): void {
     // Extra Calculation
     let finalBalanceAmount = balanceAmount;
 
-    if (bookingAmount >= actualAmt) {
-      const extraAmt = bookingAmount - actualAmt;
-      this.payToCompanyAct = extraAmt;
-      this.payToVendorAct = 0;
-      finalBalanceAmount = balanceAmount + extraAmt;
-    } else {
-      const extraAmt = actualAmt - bookingAmount;
-      this.payToCompanyAct = 0;
-      this.payToVendorAct = extraAmt;
-      finalBalanceAmount = Math.max(balanceAmount - extraAmt, 0);
+    if (actualAmt != 0) {
+      if (bookingAmount >= actualAmt) {
+        const extraAmt = bookingAmount - actualAmt;
+        this.payToCompanyAct = extraAmt;
+        this.payToVendorAct = 0;
+        finalBalanceAmount = balanceAmount + extraAmt;
+      } else {
+        const extraAmt = actualAmt - bookingAmount;
+        this.payToCompanyAct = 0;
+        this.payToVendorAct = extraAmt;
+        finalBalanceAmount = Math.max(balanceAmount - extraAmt, 0);
+      }
     }
-
     // Patch all values at once
     this.addLeadForm.patchValue({
       totalAmount: totalAmount,
       balanceAmount: finalBalanceAmount,
       bookingAmount: bookingAmount,
     });
-
-    // this.payToCompanyAct = payToCompanyAct;
-    // this.payToVendorAct = payToVendorAct;
   }
+
+  ////////////////////
+calculationForVehicle() {
+  const leadValue = this.addLeadForm.value;
+
+  const companyRate = Number(leadValue.companyRate) || 0;
+  const totalDays = Number(leadValue.totalDays) || 0;
+  const deliveryAmountToCompany = Number(leadValue.deliveryAmountToCompany) || 0;
+  const quantity = Number(leadValue.quantity) || 0;
+  const discount = Number(leadValue.discount) || 0;
+  const actualAmt = Number(leadValue.actualAmount) || 0;
+  const vendorRate = Number(leadValue.vendorRate) || 0;
+  const deliveryAmountToVendor = Number(leadValue.deliveryAmountToVendor) || 0;
+  const existingBalanceAmount = Number(leadValue.balanceAmount) || 0;
+
+  // === Total Amount ===
+  const compRatePerDay = companyRate * totalDays;
+  const totalCompanyAmount = (compRatePerDay + deliveryAmountToCompany) * quantity;
+  const totalAmount = totalCompanyAmount - discount;
+
+  // === Balance Amount ===
+  const vendorRatePerDay = vendorRate * totalDays;
+  const totalVendorAmount = (vendorRatePerDay + deliveryAmountToVendor) * quantity;
+
+  let balanceAmount = totalVendorAmount;
+
+  // === Booking Amount ===
+  const bookingAmount = totalAmount - existingBalanceAmount;
+
+  // === Adjusted Balance Based on Actual Amount ===
+  if (actualAmt > 0) {
+    if (bookingAmount >= actualAmt) {
+      const extraAmt = bookingAmount - actualAmt;
+      this.payToCompanyAct = extraAmt;
+      this.payToVendorAct = 0;
+      balanceAmount += extraAmt;
+    } else {
+      const extraAmt = actualAmt - bookingAmount;
+      this.payToCompanyAct = 0;
+      this.payToVendorAct = extraAmt;
+      balanceAmount = Math.max(balanceAmount - extraAmt, 0);
+    }
+  }
+
+  // ✅ Always patch values
+  this.addLeadForm.patchValue({
+    totalAmount: totalAmount,
+    balanceAmount: balanceAmount,
+    bookingAmount: bookingAmount
+  });
+}
+
+
+  
+
+
+  
 
 
 }
