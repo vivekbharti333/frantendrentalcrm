@@ -1320,13 +1320,13 @@ calculationForVehicle() {
   if (actualAmt > 0) {
     if (bookingAmount >= actualAmt) {
       const extraAmt = bookingAmount - actualAmt;
-      this.payToCompanyAct = extraAmt;
-      this.payToVendorAct = 0;
+      this.payToCompany = extraAmt;
+      this.payToVendor = 0;
       balanceAmount += extraAmt;
     } else {
       const extraAmt = actualAmt - bookingAmount;
-      this.payToCompanyAct = 0;
-      this.payToVendorAct = extraAmt;
+      this.payToCompany = 0;
+      this.payToVendor = extraAmt;
       balanceAmount = Math.max(balanceAmount - extraAmt, 0);
     }
   }

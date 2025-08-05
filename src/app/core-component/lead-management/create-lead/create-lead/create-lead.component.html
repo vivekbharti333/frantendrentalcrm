@@ -104,14 +104,6 @@
                     <mat-label>Sub Category</mat-label>
                     <input matInput type="text" formControlName="subCategory" required />
                   </mat-form-field>
-                  <!-- <input type="text" formControlName="subCategory" id="subCategory" name="subCategory" /> -->
-                  <!-- <mat-select formControlName="subCategory"
-                    class="select custom-mat-select no-border input-inside-element" placeholder="Select Variant"
-                    (selectionChange)="setSecurityAndVendorRate($event)" required>
-                    <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate">
-                      {{ subCate.subCategory }}
-                    </mat-option>
-                  </mat-select> -->
                 </div>
               </div>
 
@@ -120,7 +112,6 @@
                   <div class="booking-container ">
                     <div class="w-36">
                       <label for="pickupDate" class="grey-text ">Pickup Date & Time</label>
-                      <!-- <input type="datetime-local" id="pickupDate" name="pickupDate" step="900"[min]="minDate" [value]="pickupDate" (change)="onDateChange($event, 'pickupDate')"class="datetimepick" /> -->
                       <input type="datetime-local" formControlName="pickupDateTime" id="pickupDate" name="pickupDate"
                         step="900" [min]="minDate" [value]="pickupDate" (blur)="calculateDays()" class="datetimepick" />
                       <div class="error" *ngIf="pickupError">
@@ -130,15 +121,13 @@
 
                     <div class="days-diff">
                       <div type="text" class="form-control no-border days-no">
-                        <!-- {{ daysDifference }} days -->
                         <input type="number" class="form-control no-border days-no" formControlName="totalDays" required
-                          (change)="calculateTotalAmount()" />
+                          (change)="calculationForVehicle()" />
                       </div>
                     </div>
 
                     <div class="date-time-group">
                       <label for="dropoffDate" class="grey-text datepicker-label">Drop-off Date & Time</label>
-                      <!-- <input type="datetime-local" id="dropoffDate" name="dropoffDate" step="900" [min]="pickupDate" [value]="dropoffDate"(change)="onDateChange($event, 'dropoffDate')" class="datetimepick"/> -->
                       <input type="datetime-local" formControlName="dropDateTime" id="dropDateTime" name="dropDateTime"
                         step="900" [min]="this.addLeadForm.value.pickupDateTime" [value]="dropoffDate"
                         (blur)="calculateDays()" class="datetimepick" />
@@ -201,7 +190,7 @@
                 <div class="col-lg-2 col-md-2 input-col">
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Quantity</mat-label>
-                    <input matInput type="number" formControlName="quantity" min="0" required (change)="calculateTotalAmount()" />
+                    <input matInput type="number" formControlName="quantity" min="0" required (change)="calculationForVehicle()" />
                   </mat-form-field>
                 </div>
 
@@ -209,7 +198,7 @@
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Company Rate</mat-label>
                     <input matInput type="text" formControlName="companyRate" required
-                      (change)="calculateTotalAmount()" />
+                      (change)="calculationForVehicle()" />
                   </mat-form-field>
                 </div>
 
@@ -217,7 +206,7 @@
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Vendor Rate</mat-label>
                     <input matInput type="text" formControlName="vendorRate" required
-                      (change)="calculateTotalAmount()" />
+                      (change)="calculationForVehicle()" />
                   </mat-form-field>
                 </div>
 
@@ -225,7 +214,7 @@
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Total Delivery</mat-label>
                     <input matInput type="text" formControlName="deliveryAmountToCompany" required
-                      (change)="calculateTotalAmount()" />
+                      (change)="calculationForVehicle()" />
                   </mat-form-field>
                 </div>
 
@@ -233,7 +222,7 @@
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Vendor Delivery</mat-label>
                     <input matInput type="text" formControlName="deliveryAmountToVendor" required
-                      (change)="calculateTotalAmount()" />
+                      (change)="calculationForVehicle()" />
                   </mat-form-field>
                 </div>
               </div>
@@ -274,7 +263,7 @@
                      <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Discount</mat-label>
                     <input matInput type="text" class="form-control" placeholder="Discount" formControlName="discount" (change)="
-                        calculateTotalAmountAndBalaenceAmontAfterDiscount() " />
+                        calculationForVehicle() " />
                     <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()"
                       style="cursor: pointer; width: 40px" hidden>{{ discountType }}</span>
                       </mat-form-field>
@@ -285,7 +274,7 @@
               <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Actual Amount</mat-label>
-                  <input matInput type="number" formControlName="actualAmount" required (change)="calExtraAmount()" />
+                  <input matInput type="number" formControlName="actualAmount" required (change)="calculationForVehicle()" />
                 </mat-form-field>
               </div>
 
@@ -294,7 +283,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Security Deposit</mat-label>
                   <input matInput type="number" formControlName="securityAmount" required
-                    (change)="calculatePayToCompanyAndPayToVendor()" />
+                    (change)="calculationForVehicle()" />
                 </mat-form-field>
               </div>
             </div>
