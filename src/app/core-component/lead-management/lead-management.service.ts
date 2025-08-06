@@ -100,9 +100,7 @@ export class LeadManagementService {
     const payload = {
       companyName: lead.companyName,
       enquirySource: lead.enquirySource,
-      // superCategory: lead.superCategory,
-      // category: lead.category,
-      // subCategory: lead.subCategory,
+      
           pickDropHub: lead.pickDropHub,
     activityLocation: lead.activityLocation,
       categoryTypeId: lead.categoryTypeId?.id,
@@ -145,6 +143,7 @@ export class LeadManagementService {
       createdBy: lead.createdBy,
       loginId: this.cookieService.get('loginId'),
       notes: lead.notes,
+      nextFollowupDate: lead.nextFollowupDate,
       remarks: lead.remarks,
       roleType: this.cookieService.get('roleType'),
       token: this.cookieService.get('token'),

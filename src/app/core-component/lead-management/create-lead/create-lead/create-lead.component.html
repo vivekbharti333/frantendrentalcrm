@@ -31,38 +31,46 @@
             </h6>
           </div>
           <div class="row">
-            <div class="col-lg-4 col-md-4">
+            <div class="col-lg-3 col-md-3">
               <div class="mb-3">
-                <label class="form-label requiredField">Customer Name</label>
-                <input class="form-control" type="text" formControlName="customeName" maxlength="100" />
+                <mat-select formControlName="categoryId"
+                    class="select custom-mat-select no-border input-inside-element form-control"
+                    placeholder="Select a Package" (selectionChange)="setSecurityAndVendorRate($event.value)" required>
+                    <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
+                      [originalList]="filteredCategoryList" [categoryName]="'pickLocation'"></app-mat-select-search>
+                    <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate">
+                      {{ cate.category }}
+                    </mat-option>
+                  </mat-select>
               </div>
             </div>
             <div class="col-lg-1 col-md-1">
               <div class="mb-3">
-                <label class="form-label requiredField">Dial Code</label>
-                <input type="text" class="form-control" formControlName="countryDialCode" required />
+                <!-- <label class="form-label requiredField">Dial Code</label>
+                <input type="text" class="form-control" formControlName="countryDialCode" required /> -->
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Dial Code</mat-label>
+                    <input matInput type="text" formControlName="countryDialCode" required />
+                  </mat-form-field>
               </div>
             </div>
             <div class="col-lg-3 col-md-3">
               <div class="mb-3">
-                <label class="form-label requiredField">Customer Mobile</label>
-                <input type="text" class="form-control" formControlName="customerMobile" required />
+                <!-- <label class="form-label requiredField">Customer Mobile</label>
+                <input type="text" class="form-control" formControlName="customerMobile" required /> -->
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Mobile</mat-label>
+                    <input matInput type="text" formControlName="customerMobile" required />
+                  </mat-form-field>
               </div>
             </div>
-            <div class="col-lg-4 col-md-4">
-              <div class="mb-3">
-                <label class="form-label requiredField">Category Type</label>
-                <mat-select formControlName="categoryTypeId" class="select" placeholder="Select Category Type"
-                  (selectionChange)="getSuperCategory($event.value)" required>
-                  <app-mat-select-search (filteredList)="setFilterList($event, 'categoryType')"
-                    [originalList]="categoryTypeList" [categoryName]="'categoryTypeName'">
-                  </app-mat-select-search>
-                  <mat-option *ngFor="let cateType of filteredCategoryTypeList" [value]="cateType">
-                    {{ cateType.categoryTypeName }}
-                  </mat-option>
-                </mat-select>
-              </div>
-            </div>
+            <div class="col-lg-3 col-md-3">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Total Amount</mat-label>
+                    <input matInput type="text" formControlName="totalAmount" required />
+                  </mat-form-field>
+                </div>
+
             <input type="text" class="form-control" formControlName="status" value="INFO" />
           </div>
         </div>
@@ -431,7 +439,7 @@
                 </div>
 
                 <div *ngIf="notesType === 'Reminders'">
-                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
+                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="nextFollowupDate"
                     bsDatepicker container=".date-input2" [bsConfig]="{
                       dateInputFormat: 'DD/MM/YYYY',
                       minDate: minDate,
@@ -824,7 +832,7 @@
                 </div>
 
                 <div *ngIf="notesType === 'Reminders'">
-                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
+                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="nextFollowupDate"
                     bsDatepicker container=".date-input2" [bsConfig]="{
                       dateInputFormat: 'DD/MM/YYYY',
                       minDate: minDate,

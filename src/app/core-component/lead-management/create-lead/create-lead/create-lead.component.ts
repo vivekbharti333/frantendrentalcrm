@@ -311,7 +311,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       leadType: [''],
       createdBy: [''],
       notes: [''],
-      followupDateTime: [''],
+      nextFollowupDate: [''],
       remarks: [''],
       preValue: `    Reports : 
         Delivery : 
