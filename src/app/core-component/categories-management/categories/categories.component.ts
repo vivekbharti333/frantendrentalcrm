@@ -134,6 +134,7 @@ subCategoryList: data[] = [
       activityLocation: '',
       categoryImage: '',
       categoryTypeId: '',
+      categoryTypeName: '',
       superCategoryId: '',
       category: '',
       subCategory: '',
@@ -157,6 +158,7 @@ subCategoryList: data[] = [
     this.editCategoryForm = this.fb.group({
       categoryImage: '',
       categoryTypeId: '',
+      categoryTypeName: '',
       superCategoryId: '',
       category: '',
       subCategory: '',

@@ -37,6 +37,7 @@ interface listData {
   styleUrl: './create-lead.component.scss',
   providers: [MessageService, CalendarModule],
 })
+
 export class CreateLeadComponent implements OnInit, AfterViewInit {
   pickupDate: string = '';
   dropoffDate: string = '';
@@ -44,10 +45,8 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   pickupError: string = '';
   dropoffError: string = '';
 
-  // activityDate: string = '2025-05-01';
   startTime: string = '10:00';
   endTime: string = '18:00';
-  // locationType: string = 'self';
 
   public loginUser: any;
 
@@ -122,7 +121,6 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     } else {
       this.endTime = correctedTime;
     }
-
     // Update input display value explicitly
     input.value = correctedTime;
   }
@@ -249,23 +247,18 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   ) {
     this.loginUser = this.authenticationService.getLoginUser();
     this.roleType = this.cookiesService.get('roleType');
-    this.fullName =
-      this.cookiesService.get('firstName') +
-      ' ' +
-      this.cookiesService.get('lastName');
-
-    // this.setDefaultDateTime();
+    this.fullName = this.cookiesService.get('firstName') + ' ' + this.cookiesService.get('lastName');
   }
 
   createForms() {
     this.addLeadForm = this.fb.group({
-    activityDate: [this.currentDate],  // <-- fixed comma
-    startTime: [],
-    endTime: [],
-    locationType:['self'],
-    pickDropHub: '',
-    activityLocation: '',
-    companyName: ['Notes'],
+      activityDate: [this.currentDate],  // <-- fixed comma
+      startTime: [],
+      endTime: [],
+      locationType: ['self'],
+      pickDropHub: '',
+      activityLocation: '',
+      companyName: ['Notes'],
       enquirySource: ['Call'],
       categoryTypeId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],],
       categoryTypeName: [''],
@@ -302,7 +295,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       totalAmount: 0,
       actualAmount: 0,
       securityAmount: [''],
-      discountType: [''],
+      discountType: ['Amount'],
       discount: 0,
       deliveryAmountToCompany: 0,
       deliveryAmountToVendor: 0,
@@ -333,105 +326,29 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     }
   }
 
-  calculateTotalAmountAndBalaenceAmontAfterDiscount1() {
-    // const addFormValue = this.addLeadForm.value;
-
-    //total amount start
-    if (
-      this.addLeadForm.value &&
-      this.addLeadForm.value.companyRate != null &&
-      this.addLeadForm.value.totalDays != null &&
-      this.addLeadForm.value.deliveryAmountToCompany != null &&
-      this.addLeadForm.value.quantity != null
-    ) {
-      const firstValue =
-        this.addLeadForm.value.companyRate * this.addLeadForm.value.totalDays;
-      const secondValue =
-        firstValue + Number(this.addLeadForm.value.deliveryAmountToCompany); // Ensure numeric addition
-
-      this.addLeadForm.patchValue({
-        totalAmount: secondValue * this.addLeadForm.value.quantity,
-      });
-
-      //total amount end
-
-      // booking amount start
-      this.addLeadForm.patchValue({
-        bookingAmount:
-          secondValue * this.addLeadForm.value.quantity -
-          this.addLeadForm.value.balanceAmount,
-      });
-      //bokking amount end
-    }
-
-    const discount = this.addLeadForm.value.discount;
-
-    // Ensure discount is not more than the total amount
-    const totalAmt = this.addLeadForm.value.totalAmount - discount;
-    const balanceAmt = this.addLeadForm.value.balanceAmount;
-    const bookingAmt = totalAmt - balanceAmt;
-
-    // Update the form with all new values in one patchValue call
-    this.addLeadForm.patchValue({
-      totalAmount: totalAmt,
-      bookingAmount: bookingAmt,
-    });
-  }
-
-  calculateTotalAmountAndBalaenceAmontAfterDiscount() {
-    //total amount start
-    if (
-      this.addLeadForm.value &&
-      this.addLeadForm.value.companyRate != null &&
-      this.addLeadForm.value.totalDays != null &&
-      this.addLeadForm.value.deliveryAmountToCompany != null &&
-      this.addLeadForm.value.quantity != null
-    ) {
-      const firstValue =
-        this.addLeadForm.value.companyRate * this.addLeadForm.value.totalDays;
-      const secondValue =
-        firstValue + Number(this.addLeadForm.value.deliveryAmountToCompany); // Ensure numeric addition
-
-      // this.addLeadForm.patchValue({ totalAmount: secondValue * this.addLeadForm.value.quantity });
-
-      //total amount end
-
-      // Ensure discount is not more than the total amount
-      const totalAmt = secondValue * this.addLeadForm.value.quantity - this.addLeadForm.value.discount;
-      const balanceAmt = this.addLeadForm.value.balanceAmount;
-      const bookingAmt = totalAmt - balanceAmt;
-
-
-      // Update the form with all new values in one patchValue call
-      this.addLeadForm.patchValue({
-        totalAmount: totalAmt,
-        bookingAmount: bookingAmt,
-      });
-    }
-  }
 
   setSecurityAndVendorRate(event: any) {
-    
+
     const selectedSubCategory = event; // This now holds the full selected object
     const addFormValue = this.addLeadForm.value;
-
-    // add date and time automatic from sub category
-    const startTime = selectedSubCategory.startTime;
-    const endTime = selectedSubCategory.endTime;
 
     if (addFormValue.categoryTypeName == Constant.ACTIVITY) {
       this.addTimeToDate(selectedSubCategory.startTime);
     }
+    this.addLeadForm.patchValue({
+      categoryTypeName: selectedSubCategory.categoryTypeName,
+      superCategory: selectedSubCategory.superCategory,
+      category: selectedSubCategory.category,
+      subCategory: selectedSubCategory.subCategory,
+      startTime: selectedSubCategory.startTime,
+      endTime: selectedSubCategory.endTime,
+      activityLocation: selectedSubCategory.activityLocation,
+      pickDropHub: selectedSubCategory.pickDropHub,
+      securityAmount: selectedSubCategory.securityAmount,
+      vendorRate: selectedSubCategory.vendorRate,
+      vendorRateForKids: selectedSubCategory.vendorRateForKids,
+    });
 
-    this.addLeadForm.patchValue({subCategory: selectedSubCategory.subCategory,});
-    this.addLeadForm.patchValue({startTime: selectedSubCategory.startTime,});
-    this.addLeadForm.patchValue({endTime: selectedSubCategory.endTime,});
-    this.addLeadForm.patchValue({activityLocation: selectedSubCategory.activityLocation,});
-    this.addLeadForm.patchValue({pickDropHub: selectedSubCategory.pickDropHub,});
-    
-    this.addLeadForm.patchValue({ securityAmount: selectedSubCategory.securityAmount,});
-    this.addLeadForm.patchValue({ vendorRate: selectedSubCategory.vendorRate });
-    this.addLeadForm.patchValue({vendorRateForKids: selectedSubCategory.vendorRateForKids,});
   }
 
   addTimeToDate(timeString: string): string {
@@ -462,106 +379,44 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     return formattedDate;
   }
 
-  calExtraAmount() {
-  const leadValue = this.addLeadForm.value;
-    if(leadValue.actualAmount === 0){
-      alert("Zero not allowed")
-    } else {
-      let secondValue = 0;
-    if (
-      leadValue.vendorRate != null &&
-      leadValue.totalDays != null &&
-      leadValue.deliveryAmountToVendor != null &&
-      leadValue.quantity != null
-    ) {
-      const firstValue = leadValue.vendorRate * leadValue.totalDays;
-      secondValue = firstValue + Number(leadValue.deliveryAmountToVendor);
-      this.addLeadForm.patchValue({
-        balanceAmount: secondValue * leadValue.quantity,
-      });
-    }
 
-    const bookAmt = this.addLeadForm.value.bookingAmount;
-    const actAmt = this.addLeadForm.value.actualAmount;
-    const balAmt = this.addLeadForm.value.balanceAmount;
+  setDefaultDateTime(): void {
+    const currentDate = new Date();
 
-    if (bookAmt >= actAmt) {
-      const extraAmtPlus = bookAmt - actAmt ; // Corrected logic
-      this.addLeadForm.patchValue({ balanceAmount: balAmt + (bookAmt - actAmt), });
-      this.payToCompany = extraAmtPlus;
-      this.payToVendor = 0;
-    } else {
-      const extraAmtMinus = actAmt - bookAmt; // Corrected logic
-      this.addLeadForm.patchValue({balanceAmount: balAmt - (actAmt - bookAmt), });
-      this.payToVendor = extraAmtMinus;
-      this.payToCompany = 0;
-    }
-    }
+    // Get pickup datetime values
+    const pickupYear = currentDate.getFullYear();
+    const pickupMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const pickupDay = String(currentDate.getDate()).padStart(2, '0');
+    const pickupHours = String(currentDate.getHours()).padStart(2, '0');
+    const pickupMinutes = String(currentDate.getMinutes()).padStart(2, '0');
+
+    const pickupDateTime = `${pickupYear}-${pickupMonth}-${pickupDay}T${pickupHours}:${pickupMinutes}`;
+
+    // Create drop datetime (next day at 09:00 AM)
+    const dropDate = new Date(currentDate);
+    dropDate.setDate(dropDate.getDate() + 1);
+    dropDate.setHours(9, 0, 0, 0); // <-- set time to 09:00 AM
+
+    const dropYear = dropDate.getFullYear();
+    const dropMonth = String(dropDate.getMonth() + 1).padStart(2, '0');
+    const dropDay = String(dropDate.getDate()).padStart(2, '0');
+    const dropHours = String(dropDate.getHours()).padStart(2, '0');
+    const dropMinutes = String(dropDate.getMinutes()).padStart(2, '0');
+
+    const dropDateTime = `${dropYear}-${dropMonth}-${dropDay}T${dropHours}:${dropMinutes}`;
+
+    // Calculate difference in days
+    const timeDiff = dropDate.getTime() - currentDate.getTime();
+    const noOfdays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    // Patch the values into the form
+    this.addLeadForm.patchValue({
+      pickupDateTime: pickupDateTime,
+      dropDateTime: dropDateTime,
+      totalDays: noOfdays
+    });
   }
 
-setDefaultDateTime(): void {
-  const currentDate = new Date();
-
-  // Get pickup datetime values
-  const pickupYear = currentDate.getFullYear();
-  const pickupMonth = String(currentDate.getMonth() + 1).padStart(2, '0');
-  const pickupDay = String(currentDate.getDate()).padStart(2, '0');
-  const pickupHours = String(currentDate.getHours()).padStart(2, '0');
-  const pickupMinutes = String(currentDate.getMinutes()).padStart(2, '0');
-
-  const pickupDateTime = `${pickupYear}-${pickupMonth}-${pickupDay}T${pickupHours}:${pickupMinutes}`;
-
-  // Create drop datetime (next day at 09:00 AM)
-  const dropDate = new Date(currentDate);
-  dropDate.setDate(dropDate.getDate() + 1);
-  dropDate.setHours(9, 0, 0, 0); // <-- set time to 09:00 AM
-
-  const dropYear = dropDate.getFullYear();
-  const dropMonth = String(dropDate.getMonth() + 1).padStart(2, '0');
-  const dropDay = String(dropDate.getDate()).padStart(2, '0');
-  const dropHours = String(dropDate.getHours()).padStart(2, '0');
-  const dropMinutes = String(dropDate.getMinutes()).padStart(2, '0');
-
-  const dropDateTime = `${dropYear}-${dropMonth}-${dropDay}T${dropHours}:${dropMinutes}`;
-
-  // Calculate difference in days
-  const timeDiff = dropDate.getTime() - currentDate.getTime();
-  const noOfdays = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-  // Patch the values into the form
-  this.addLeadForm.patchValue({
-    pickupDateTime: pickupDateTime,
-    dropDateTime: dropDateTime,
-    totalDays: noOfdays
-  });
-}
-
-
-
-  // calculateDays() {
-  //   const pickupDateTime = this.addLeadForm.value.pickupDateTime;
-  //   const dropDateTime = this.addLeadForm.value.dropDateTime;
-
-  //   if (pickupDateTime && dropDateTime) {
-  //     let pickDate = new Date(pickupDateTime);
-  //     let dropDate = new Date(dropDateTime);
-
-  //     // Adjust pickup date if time is before 6:00 AM
-  //     if (pickDate.getHours() < 6) {
-  //       pickDate.setDate(pickDate.getDate() - 1);
-  //     }
-
-  //     // Adjust drop date if time is before 9:00 AM
-  //     if (dropDate.getHours() > 9) {
-  //       dropDate.setDate(dropDate.getDate() + 1);
-  //     }
-
-  //     const timeDifference = dropDate.getTime() - pickDate.getTime();
-  //     const noOfDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
-
-  //     this.addLeadForm.patchValue({ totalDays: noOfDays });
-  //   }
-  // }
 
   calculateDays() {
     const pickupDateTime = this.addLeadForm.value.pickupDateTime;
@@ -613,12 +468,9 @@ setDefaultDateTime(): void {
         totalDays: noOfDays,
       });
 
-      this.calculateTotalAmount();
-      this.calculateBookingAmount();
-
-       this.addLeadForm.patchValue({
+      this.addLeadForm.patchValue({
         actualAmount: 0,
-        
+
       });
 
     }
@@ -635,205 +487,18 @@ setDefaultDateTime(): void {
   //   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   // }
 
-  calculateTotalAmount() {
-    const leadValue = this.addLeadForm.value;
-    let secondValue = 0;
-    if (
-      leadValue &&
-      leadValue.companyRate != null &&
-      leadValue.totalDays != null &&
-      leadValue.deliveryAmountToCompany != null &&
-      leadValue.quantity != null
-    ) {
-      const firstValue = leadValue.companyRate * leadValue.totalDays;
-      const secondValue =
-        firstValue + Number(leadValue.deliveryAmountToCompany); // Ensure numeric addition
 
-      this.addLeadForm.patchValue({
-        totalAmount: secondValue * leadValue.quantity,
-      });
 
-      this.deliveryAmtToVendor = this.addLeadForm.value.deliveryAmountToVendor;
-      this.vendorRate = this.addLeadForm.value.vendorRate;
 
-      // this.calExtraAmount();
 
-      this.calculateBalanceAmount();
-      this.calculatePayToCompanyAndPayToVendor();
-
-      this.addLeadForm.patchValue({ actualAmount: 0, discount: 0 });
-    } else {
-      console.error('Some required fields are missing for total amount calculation.'
-      );
-      leadValue.totalAmount = 0; // Set a fallback value
-    }
-    return secondValue * leadValue.quantity;
-  }
-
-  calculateBalanceAmount(): number {
-    const leadValue = this.addLeadForm.value;
-    let secondValue = 0;
-    if (
-      leadValue.vendorRate != null &&
-      leadValue.totalDays != null &&
-      leadValue.deliveryAmountToVendor != null &&
-      leadValue.quantity != null
-    ) {
-      const firstValue = leadValue.vendorRate * leadValue.totalDays;
-      secondValue = firstValue + Number(leadValue.deliveryAmountToVendor);
-      this.addLeadForm.patchValue({
-        balanceAmount: secondValue * leadValue.quantity,
-      });
-
-      this.calculateBookingAmount();
-      this.calculatePayToCompanyAndPayToVendor();
-    } else {
-      console.error(
-        'Some required fields are missing for balance amount calculation.'
-      );
-      leadValue.balanceAmount = 0; // Set a default fallback value
-    }
-    return secondValue * leadValue.quantity;
-  }
-
-  calculateBookingAmount(): number {
-    const leadValue = this.addLeadForm.value;
-    this.addLeadForm.patchValue({
-      bookingAmount: leadValue.totalAmount - leadValue.balanceAmount,
-    }),
-      this.calculatePayToCompanyAndPayToVendor();
-
-    return leadValue.totalAmount - leadValue.balanceAmount;
-  }
 
   calculatePayToCompanyAndPayToVendor(): number {
     const leadValue = this.addLeadForm.value;
     const amountValue = leadValue.bookingAmount - leadValue.actualAmount;
 
-    // this.calExtraAmount();
-    // if (amountValue < 0) {
-    //   leadValue.payToVendor = amountValue;
-    //   this.addLeadForm.patchValue({ payToVendor: amountValue });
-
-    //   this.payToVendor = this.addLeadForm.value.payToVendor;
-    // } else if (amountValue >= 0) {
-    //   leadValue.payToCompany = amountValue;
-    //   this.addLeadForm.patchValue({ payToCompany: amountValue });
-    //   this.payToCompany = this.addLeadForm.value.payToCompany;
-    // }
     return amountValue;
   }
 
-  // ----------------------------------------------Calculation for Activities Start----------------------------------------------------------------
-  calculateTotalAmountOfActivites() {
-    const leadValue = this.addLeadForm.value;
-
-    // const quantity = Number(leadValue.quantity) || 0;
-    // const kidQuantity = Number(leadValue.kidQuantity) || 0;
-    // const companyRate = Number(leadValue.companyRate) || 0;
-    // const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
-
-    const quantity = Number(leadValue.quantity) || 0;
-    const kidQuantity = Number(leadValue.kidQuantity) || 0;
-    const infantQuantity = Number(leadValue.infantQuantity) || 0;
-    const companyRate = Number(leadValue.companyRate) || 0;
-    const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
-
-
-    if (quantity >= 0 && kidQuantity >= 0) {
-      const firstValue = (companyRate * quantity);
-      const secondValue = companyRateForKids * kidQuantity;
-      const totalAmount = firstValue + secondValue;
-
-      this.addLeadForm.patchValue({ totalAmount : totalAmount });
-
-      // Call booking amount calculation after total amount is updated
-      this.calculateBalanceAmountOfActivites();
-    } else {
-      console.error('Invalid input values.');
-      this.addLeadForm.patchValue({ totalAmount: 0 });
-    }
-  }
-
-  calculateBalanceAmountOfActivites(): number {
-    const leadValue = this.addLeadForm.value;
-
-    const quantity = Number(leadValue.quantity) || 0;
-    const kidQuantity = Number(leadValue.kidQuantity) || 0;
-    const vendorRate = Number(leadValue.vendorRate) || 0;
-    const vendorRateForKids = Number(leadValue.vendorRateForKids) || 0;
-
-    if (quantity >= 0 && kidQuantity >= 0) {
-      const firstValue = vendorRate * quantity;
-      const secondValue = vendorRateForKids * kidQuantity;
-      const balanceAmount = firstValue + secondValue;
-
-      this.addLeadForm.patchValue({ balanceAmount : balanceAmount});
-      this.calculateBookingAmountOfActivites();
-    } else {
-      console.error('Invalid input values.');
-      this.addLeadForm.patchValue({ balanceAmount: 0 });
-    }
-
-    return 0;
-  }
-
-  calculateBookingAmountOfActivites(): number {
-    const leadValue = this.addLeadForm.value;
-
-    const totalAmount = Number(leadValue.totalAmount) || 0;
-    const balanceAmount = Number(leadValue.balanceAmount) || 0;
-    const bookingAmount = totalAmount - balanceAmount;
-
-    this.addLeadForm.patchValue({ bookingAmount : bookingAmount});
-
-    return bookingAmount;
-  }
-
-    calExtraAmountForActivity() {
-  const leadValue = this.addLeadForm.value;
-    if(leadValue.actualAmount === 0){
-      alert("Zero not allowed")
-    } else {
-      let secondValue = 0;
-
-    const bookAmt = this.addLeadForm.value.bookingAmount;
-    const actAmt = this.addLeadForm.value.actualAmount;
-    const balAmt = this.addLeadForm.value.balanceAmount;
-
-    if (bookAmt >= actAmt) {
-      const extraAmtPlus = bookAmt - actAmt ; // Corrected logic
-      this.addLeadForm.patchValue({ balanceAmount: balAmt + (bookAmt - actAmt), });
-      this.payToCompanyAct = extraAmtPlus;
-      this.payToVendorAct = 0;
-    } else {
-      const extraAmtMinus = actAmt - bookAmt; // Corrected logic
-      this.addLeadForm.patchValue({balanceAmount: balAmt - (actAmt - bookAmt), });
-      this.payToVendorAct = extraAmtMinus;
-      this.payToCompanyAct = 0;
-    }
-    }
-  }
-
-  calculateTotalAmountAndBalenceAmontAfterDiscountActivity() {
-    if (
-      this.addLeadForm.value &&
-      this.addLeadForm.value.quantity != null
-    ) {
-      // Ensure discount is not more than the total amount
-      const totalAmt = this.addLeadForm.value.totalAmount - this.addLeadForm.value.discount;
-      const balanceAmt = this.addLeadForm.value.balanceAmount;
-      const bookingAmt = this.addLeadForm.value.bookingAmount - this.addLeadForm.value.discount;
-      
-      // Update the form with all new values in one patchValue call
-      this.addLeadForm.patchValue({
-        totalAmount: totalAmt,
-        bookingAmount: bookingAmt,
-      });
-    }
-  }
-
-  // ----------------------------------------------Calculation for Activities End----------------------------------------------------------------
 
   checkCategoryType(categoryType: any) {
     if (categoryType.categoryTypeName === Constant.ACTIVITY) {
@@ -850,32 +515,32 @@ setDefaultDateTime(): void {
   }
 
   public routes = routes;
-  public selectedValue1 = '';
-  public selectedValue2 = '';
-  public selectedValue3 = '';
-  public selectedValue4 = '';
-  public selectedValue5 = '';
-  public selectedValue6 = '';
-  public selectedValue7 = '';
-  public selectedValue8 = '';
-  public selectedValue9 = '';
-  public selectedValue10 = '';
-  public selectedValue11 = '';
+  // public selectedValue1 = '';
+  // public selectedValue2 = '';
+  // public selectedValue3 = '';
+  // public selectedValue4 = '';
+  // public selectedValue5 = '';
+  // public selectedValue6 = '';
+  // public selectedValue7 = '';
+  // public selectedValue8 = '';
+  // public selectedValue9 = '';
+  // public selectedValue10 = '';
+  // public selectedValue11 = '';
 
-  selectedList1: data[] = [
-    { id: 1, name: 'Car' },
-    { id: 2, name: 'Bike' },
-  ];
+  // selectedList1: data[] = [
+  //   { id: 1, name: 'Car' },
+  //   { id: 2, name: 'Bike' },
+  // ];
 
-  selectedList2: data[] = [
-    { id: 1, name: 'Car' },
-    { id: 2, name: 'Bike' },
-  ];
+  // selectedList2: data[] = [
+  //   { id: 1, name: 'Car' },
+  //   { id: 2, name: 'Bike' },
+  // ];
 
-  selectedList3: data[] = [
-    { id: 1, name: 'Car' },
-    { id: 2, name: 'Bike' },
-  ];
+  // selectedList3: data[] = [
+  //   { id: 1, name: 'Car' },
+  //   { id: 2, name: 'Bike' },
+  // ];
 
   leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
   leadType: listData[] = Constant.LEAD_TYPE_LIST;
@@ -945,6 +610,13 @@ setDefaultDateTime(): void {
     });
   }
 
+  public getSubCategory(categoryDetails: any) {
+
+    this.setSecurityAndVendorRate(categoryDetails);
+    this.addLeadForm.patchValue({subCategory: categoryDetails.subCategory,});
+  }
+
+
   public getDropLocation() {
     this.categoriesManagementService.getLocationByType('DROP').subscribe({
       next: (response: any) => {
@@ -962,71 +634,6 @@ setDefaultDateTime(): void {
           styleClass: 'danger-background-popover',
         }),
     });
-  }
-
-  public getCategoryType() {
-    //✅
-    this.categoriesManagementService.getCategoryTypeList().subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.categoryTypeList = JSON.parse(
-            JSON.stringify(response.listPayload)
-          );
-          this.filteredCategoryTypeList = this.categoryTypeList;
-
-          if (this.filteredCategoryTypeList.length > 0) {
-            this.addLeadForm.patchValue({
-              categoryTypeId: this.filteredCategoryTypeList[1],
-            });
-          }
-          this.getSuperCategory(this.filteredCategoryTypeList[1]);
-        }
-      },
-      error: (error: any) => {
-        // ✅ Corrected error function syntax
-        this.messageService.add({
-          summary: '500',
-          detail: 'Server Error',
-          styleClass: 'danger-background-popover',
-        });
-      },
-    });
-  }
-
-  public getSuperCategory(superCateId: any) {
-    if (superCateId?.categoryTypeName === Constant.ACTIVITY) {
-      this.selectedOption = 'activity';
-      this.addLeadForm.patchValue({ categoryTypeName: 'ACTIVITY' });
-    }
-
-    this.checkCategoryType(superCateId);
-    const categoryId = superCateId?.id;
-
-    this.categoriesManagementService
-      .getSuperCategoryListByCategoryTypeId(categoryId)
-      .subscribe({
-        next: (response: any) => {
-          if (response['responseCode'] == '200') {
-            this.superCategoryList = JSON.parse(
-              JSON.stringify(response.listPayload)
-            );
-            this.filteredSuperCategoryList = this.superCategoryList;
-
-            if (this.filteredSuperCategoryList.length > 0) {
-              this.addLeadForm.patchValue({
-                superCategoryId: this.filteredSuperCategoryList[0], // ✅ Set first item as selected
-              });
-            }
-            this.getCategory(this.filteredSuperCategoryList[0]);
-          }
-        },
-        error: (error: any) =>
-          this.messageService.add({
-            summary: '500',
-            detail: 'Server Error',
-            styleClass: 'danger-background-popover',
-          }),
-      });
   }
 
   public getCategory(categoryId: any) {
@@ -1049,15 +656,6 @@ setDefaultDateTime(): void {
       });
   }
 
-  public getSubCategory(categoryDetails: any) {
-
-    this.setSecurityAndVendorRate(categoryDetails);
-    this.addLeadForm.patchValue({subCategory: categoryDetails.subCategory,});
-  }
-
-  compareSubCategories(o1: any, o2: any): boolean {
-    return o1 && o2 ? o1.id === o2.id : o1 === o2;
-  }
 
   public getUserList() {
     this.userManagementService.getUserDetailsList().subscribe({
@@ -1103,144 +701,6 @@ setDefaultDateTime(): void {
     this.notesType = value;
   }
 
-
-  public calculateTotalAmountForActivity(): number {
-    const leadValue = this.addLeadForm.value;
-
-    const quantity = Number(leadValue.quantity) || 0;
-    const companyRate = Number(leadValue.companyRate) || 0;
-    const kidQuantity = Number(leadValue.kidQuantity) || 0;
-    const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
-    const infantQuantity = Number(leadValue.infantQuantity) || 0;
-    const companyRateForInfants = Number(leadValue.companyRateForInfants) || 0;
-    const discount = Number(leadValue.discount) || 0;
-
-    const totalBeforeDiscount =
-      (quantity * companyRate) +
-      (kidQuantity * companyRateForKids) +
-      (infantQuantity * companyRateForInfants);
-
-    const totalAmount = Math.max(totalBeforeDiscount - discount, 0); // Prevent negative total
-     // const totalAmount = Math.max(totalBeforeDiscount - discount, 0).toFixed(2);
-
-    this.addLeadForm.patchValue({ totalAmount });
-
-    return totalAmount;
-  }
-
-
-  calculateBalenceAmontForActivity() {
-    const leadValue = this.addLeadForm.value;
-
-    const adultVendorRate = Number(leadValue.vendorRate) || 0;
-    const adultQuantity = Number(leadValue.quantity) || 0;
-    const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
-    const kidQuantity = Number(leadValue.kidQuantity) || 0;
-    const discount = Number(leadValue.discount) || 0;
-
-    const balenceAmt =
-      (adultQuantity * adultVendorRate) +
-      (kidQuantity * kidsVendorRate);
-
-       const balenceAmount = Math.max(balenceAmt, 0); // Prevent negative total
-      
-      // Update the form with all new values in one patchValue call
-      this.addLeadForm.patchValue({
-        bookingAmount: balenceAmount,
-      });
-    }
-
-    calculateBookingAmontForActivity() {
-    const leadValue = this.addLeadForm.value;
-
-    const totalAmount = Number(leadValue.totalAmount) || 0;
-    const balenceAmount = Number(leadValue.balenceAmount) || 0;
-
-    const bookingAmt =
-      (totalAmount - balenceAmount);
-
-       const bookingAmount = Math.max(bookingAmt, 0); // Prevent negative total
-      
-      // Update the form with all new values in one patchValue call
-      this.addLeadForm.patchValue({ bookingAmount: bookingAmount, });
-    }
-
-  calActualAmountForActivity() {
-    const leadValue = this.addLeadForm.value;
-    if (leadValue.actualAmount === 0) {
-      alert("Zero not allowed")
-    } else {
-      let secondValue = 0;
-
-      const bookAmt = this.addLeadForm.value.bookingAmount;
-      const actAmt = this.addLeadForm.value.actualAmount;
-      const balAmt = this.addLeadForm.value.balanceAmount;
-
-      if (bookAmt >= actAmt) {
-        const extraAmtPlus = bookAmt - actAmt; // Corrected logic
-        this.addLeadForm.patchValue({ balanceAmount: balAmt + (bookAmt - actAmt), });
-        this.payToCompanyAct = extraAmtPlus;
-        this.payToVendorAct = 0;
-      } else {
-        const extraAmtMinus = actAmt - bookAmt; // Corrected logic
-        this.addLeadForm.patchValue({ balanceAmount: balAmt - (actAmt - bookAmt), });
-        this.payToVendorAct = extraAmtMinus;
-        this.payToCompanyAct = 0;
-      }
-    }
-  }
-
-
-//   calculationForActivity() {
-//     const leadValue = this.addLeadForm.value;
-
-//     const adultQuantity = Number(leadValue.quantity) || 0;
-//     const adultCompanyRate = Number(leadValue.companyRate) || 0;
-//     const kidQuantity = Number(leadValue.kidQuantity) || 0;
-//     const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
-//     const adultVendorRate = Number(leadValue.vendorRate) || 0;
-//     const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
-//     const discount = Number(leadValue.discount) || 0;
-
-//     //Total Amount
-//     const totalBeforeDiscount = (adultQuantity * adultCompanyRate) + (kidQuantity * companyRateForKids);
-//     const totalAmount = Math.max(totalBeforeDiscount - discount, 0); // Prevent negative total
-
-//     this.addLeadForm.patchValue({ totalAmount: totalAmount });
-
-//     //Balence Amount
-//     const balenceAmt = (adultQuantity * adultVendorRate) + (kidQuantity * kidsVendorRate);
-//     const balenceAmount = Math.max(balenceAmt, 0); // Prevent negative total
-
-//     this.addLeadForm.patchValue({ balenceAmount: balenceAmount });
-
-//     //Booking Amount
-//     const bookingAmt = (totalAmount - balenceAmount);
-//     const bookingAmount = Math.max(bookingAmt, 0); // Prevent negative total
-
-//     this.addLeadForm.patchValue({ bookingAmount: bookingAmount, });
-  
-//     //Actual Amount
-//     const actualAmt = this.addLeadForm.value.actualAmount;
-
-//     if(actualAmt != 0){
-// if (bookingAmount >= actualAmt ) {
-//       const extraAmtPlus = bookingAmount - actualAmt; // Corrected logic
-//       this.addLeadForm.patchValue({ balanceAmount: balenceAmount + (bookingAmount - actualAmt), });
-//       this.payToCompanyAct = extraAmtPlus;
-//       this.payToVendorAct = 0;
-//     } else {
-//       const extraAmtMinus = actualAmt - bookingAmount; // Corrected logic
-//       this.addLeadForm.patchValue({ balanceAmount: balenceAmount - (actualAmt - bookingAmount), });
-//       this.payToVendorAct = extraAmtMinus;
-//       this.payToCompanyAct = 0;
-//     }
-//     }else {
-//        this.addLeadForm.patchValue({ balanceAmount: balenceAmount });
-//     }
-//   }
-
-
   calculationForActivity(): void {
     const leadValue = this.addLeadForm.value;
 
@@ -1285,65 +745,65 @@ setDefaultDateTime(): void {
       totalAmount: totalAmount,
       balanceAmount: finalBalanceAmount,
       bookingAmount: bookingAmount,
+
+      payToCompany: this.payToCompanyAct,
+      payToVendor: this.payToVendorAct
     });
   }
 
-  ////////////////////
-calculationForVehicle() {
-  const leadValue = this.addLeadForm.value;
+  calculationForVehicle() {
+    const leadValue = this.addLeadForm.value;
 
-  const companyRate = Number(leadValue.companyRate) || 0;
-  const totalDays = Number(leadValue.totalDays) || 0;
-  const deliveryAmountToCompany = Number(leadValue.deliveryAmountToCompany) || 0;
-  const quantity = Number(leadValue.quantity) || 0;
-  const discount = Number(leadValue.discount) || 0;
-  const actualAmt = Number(leadValue.actualAmount) || 0;
-  const vendorRate = Number(leadValue.vendorRate) || 0;
-  const deliveryAmountToVendor = Number(leadValue.deliveryAmountToVendor) || 0;
-  const existingBalanceAmount = Number(leadValue.balanceAmount) || 0;
+    const companyRate = Number(leadValue.companyRate) || 0;
+    const totalDays = Number(leadValue.totalDays) || 0;
+    const deliveryAmountToCompany = Number(leadValue.deliveryAmountToCompany) || 0;
+    const quantity = Number(leadValue.quantity) || 0;
+    const discount = Number(leadValue.discount) || 0;
+    const actualAmt = Number(leadValue.actualAmount) || 0;
+    const vendorRate = Number(leadValue.vendorRate) || 0;
+    const deliveryAmountToVendor = Number(leadValue.deliveryAmountToVendor) || 0;
+    const existingBalanceAmount = Number(leadValue.balanceAmount) || 0;
 
-  // === Total Amount ===
-  const compRatePerDay = companyRate * totalDays;
-  const totalCompanyAmount = (compRatePerDay + deliveryAmountToCompany) * quantity;
-  const totalAmount = totalCompanyAmount - discount;
+    // === Total Amount ===
+    const compRatePerDay = companyRate * totalDays;
+    const totalCompanyAmount = (compRatePerDay + deliveryAmountToCompany) * quantity;
+    const totalAmount = totalCompanyAmount - discount;
 
-  // === Balance Amount ===
-  const vendorRatePerDay = vendorRate * totalDays;
-  const totalVendorAmount = (vendorRatePerDay + deliveryAmountToVendor) * quantity;
+    // === Balance Amount ===
+    const vendorRatePerDay = vendorRate * totalDays;
+    const totalVendorAmount = (vendorRatePerDay + deliveryAmountToVendor) * quantity;
 
-  let balanceAmount = totalVendorAmount;
+    let balanceAmount = totalVendorAmount;
 
-  // === Booking Amount ===
-  const bookingAmount = totalAmount - existingBalanceAmount;
+    // === Booking Amount ===
+    const bookingAmount = totalAmount - existingBalanceAmount;
 
-  // === Adjusted Balance Based on Actual Amount ===
-  if (actualAmt > 0) {
-    if (bookingAmount >= actualAmt) {
-      const extraAmt = bookingAmount - actualAmt;
-      this.payToCompany = extraAmt;
-      this.payToVendor = 0;
-      balanceAmount += extraAmt;
-    } else {
-      const extraAmt = actualAmt - bookingAmount;
-      this.payToCompany = 0;
-      this.payToVendor = extraAmt;
-      balanceAmount = Math.max(balanceAmount - extraAmt, 0);
+    // === Adjusted Balance Based on Actual Amount ===
+    if (actualAmt > 0) {
+      if (bookingAmount >= actualAmt) {
+        const extraAmt = bookingAmount - actualAmt;
+        this.payToCompany = extraAmt;
+        this.payToVendor = 0;
+        balanceAmount += extraAmt;
+      } else {
+        const extraAmt = actualAmt - bookingAmount;
+        this.payToCompany = 0;
+        this.payToVendor = extraAmt;
+        balanceAmount = Math.max(balanceAmount - extraAmt, 0);
+      }
     }
+
+    // ✅ Always patch values
+    this.addLeadForm.patchValue({
+      totalAmount: totalAmount,
+      balanceAmount: balanceAmount,
+      bookingAmount: bookingAmount,
+      payToCompany: this.payToCompany,
+      payToVendor: this.payToVendor
+    });
   }
 
-  // ✅ Always patch values
-  this.addLeadForm.patchValue({
-    totalAmount: totalAmount,
-    balanceAmount: balanceAmount,
-    bookingAmount: bookingAmount
-  });
-}
 
-
-  
-
-
-  
 
 
 }

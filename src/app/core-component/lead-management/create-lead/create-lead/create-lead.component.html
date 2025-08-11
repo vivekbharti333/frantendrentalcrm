@@ -218,7 +218,7 @@
                   </mat-form-field>
                 </div>
 
-                <div class="col-lg-2 col-md-2 input-col" *ngIf="!isActivities">
+                <div class="col-lg-2 col-md-2 input-col">
                   <mat-form-field appearance="outline" class="w-100">
                     <mat-label>Total Delivery</mat-label>
                     <input matInput type="text" formControlName="deliveryAmountToCompany" required
@@ -279,7 +279,21 @@
                 </div>
               </div>
               <!-- Actual Amount -->
+              <!-- <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Actual Amount</mat-label>
+                  <input matInput type="number" formControlName="actualAmount" required (change)="calculationForVehicle()" />
+                </mat-form-field>
+              </div>
+
               <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Security Deposit</mat-label>
+                  <input matInput type="number" formControlName="securityAmount" required
+                    (change)="calculationForVehicle()" />
+                </mat-form-field>
+              </div> -->
+              <div class="col-lg-2 col-md-2 input-col-3">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Actual Amount</mat-label>
                   <input matInput type="number" formControlName="actualAmount" required (change)="calculationForVehicle()" />
@@ -287,13 +301,15 @@
               </div>
 
               <!-- Security Deposit -->
-              <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
+              <div class="col-lg-2 col-md-2 input-col-3">
                 <mat-form-field appearance="outline" class="w-100">
                   <mat-label>Security Deposit</mat-label>
                   <input matInput type="number" formControlName="securityAmount" required
                     (change)="calculationForVehicle()" />
                 </mat-form-field>
               </div>
+         
+
             </div>
 
             <div class="row">
@@ -483,7 +499,7 @@
                 <div class="mb-3">
                   <mat-select formControlName="categoryId"
                     class="select custom-mat-select no-border input-inside-element form-control"
-                    placeholder="Select a Package" (selectionChange)="getSubCategory($event.value)" required>
+                    placeholder="Select a Package" (selectionChange)="setSecurityAndVendorRate($event.value)" required>
                     <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
                       [originalList]="filteredCategoryList" [categoryName]="'pickLocation'"></app-mat-select-search>
                     <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate">
