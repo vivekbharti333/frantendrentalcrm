@@ -54,7 +54,8 @@ export class AllLeadComponent {
   filteredDropLocationList: any[] =[];
 
   public editLeadForm!: FormGroup;
-   public minDate!: Date;
+  public changeStatusForm!: FormGroup;
+  public minDate!: Date;
   public maxDate!: Date;
 
   public roleType: string = '';
@@ -80,6 +81,9 @@ export class AllLeadComponent {
   endTime: string = '18:00';
   locationType: string = 'self';
 
+  public name: any;
+  public mobile: any;
+
 
   public routes = routes;
 
@@ -98,6 +102,8 @@ export class AllLeadComponent {
   // roleType: string = '';
   //** / pagination variables
   viewLeadDetailsDialog: any;
+  statusLeadDialogTemplate: any;
+
   firstDate: any = '';
   lastDate: any = '';
   leadDetails = {
@@ -275,24 +281,20 @@ export class AllLeadComponent {
         reminderDate: [''],
         records: [''],
       });
+
+      this.changeStatusForm = this.fb.group({
+        id: [],
+        customeName: [''],
+        countryDialCode: [''],
+        customerMobile: [''],
+        status: [''],
+         });
     }
 
   downloadInvoice(receiptNo : string) {
     window.open(Constant.Site_Url+"paymentreceipt/"+receiptNo, '_blank');
     // console.log(Constant.Site_Url+"paymentreceipt/"+receiptNo);
   }
-
-  // getAllLeadList() {
-  //   this.leadManagementService.getAllLeadList().subscribe((apiRes: any) => {
-  //     this.totalData = apiRes.totalNumber;
-  //     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-  //       if (this.router.url == this.routes.allLead) {
-  //         this.getTableData({ skip: res.skip, limit: this.totalData });
-  //         this.pageSize = res.pageSize;
-  //       }
-  //     });
-  //   });
-  // }
 
   public getUserListForDropDown() {
     this.userManagementService.getUserListForDropDown().subscribe({
@@ -360,6 +362,25 @@ export class AllLeadComponent {
       });
     }
   }
+
+  openStatusModel(templateRef: TemplateRef<any>,
+    rawData: any){
+
+       this.changeStatusForm.patchValue({
+        id: rawData['id'],
+        customeName: rawData['customeName'],
+        countryDialCode: rawData['countryDialCode'],
+        customerMobile: rawData['customerMobile'],
+        status: rawData['status']
+       })
+      this.name = rawData.customeName;
+      this.mobile = rawData.countryDialCode+" "+ rawData.customerMobile;
+
+       this.statusLeadDialogTemplate = this.dialog.open(templateRef, {
+      width: '30%',
+    });
+    }
+
 
   async openEditModal(
     templateRef: TemplateRef<any>,
@@ -680,38 +701,7 @@ formatDateTime(dateInput: any): string {
   }
 
   calExtraAmount() {
-    const leadValue = this.editLeadForm.value;
-    let secondValue = 0;
-    if (
-      leadValue.vendorRate != null &&
-      leadValue.totalDays != null &&
-      leadValue.deliveryAmountToVendor != null &&
-      leadValue.quantity != null
-    ) {
-      const firstValue = leadValue.vendorRate * leadValue.totalDays;
-      secondValue = firstValue + Number(leadValue.deliveryAmountToVendor);
-      this.editLeadForm.patchValue({
-        balanceAmount: secondValue * leadValue.quantity,
-      });
-    }
-
-    const bookAmt = this.editLeadForm.value.bookingAmount;
-    const actAmt = this.editLeadForm.value.actualAmount;
-    const balAmt = this.editLeadForm.value.balanceAmount;
-
-    if (bookAmt >= actAmt) {
-      // const extraAmtPlus = actAmt - bookAmt; // Corrected logic
-      this.editLeadForm.patchValue({
-        balanceAmount: balAmt + (bookAmt - actAmt),
-      });
-      this.payToVendor = this.editLeadForm.value.balanceAmount;
-    } else {
-      // const extraAmtMinus = bookAmt - actAmt; // Corrected logic
-      this.editLeadForm.patchValue({
-        balanceAmount: balAmt - (actAmt - bookAmt),
-      });
-      this.payToVendor = this.editLeadForm.value.balanceAmount;
-    }
+    
   }
 
   setDefaultDateTime(): void {
@@ -733,31 +723,6 @@ formatDateTime(dateInput: any): string {
       pickupDateTime: dateTime,
     });
   }
-
-  // calculateDays() {
-  //   const pickupDateTime = this.editLeadForm.value.pickupDateTime;
-  //   const dropDateTime = this.editLeadForm.value.dropDateTime;
-
-  //   if (pickupDateTime && dropDateTime) {
-  //     let pickDate = new Date(pickupDateTime);
-  //     let dropDate = new Date(dropDateTime);
-
-  //     // Adjust pickup date if time is before 6:00 AM
-  //     if (pickDate.getHours() < 6) {
-  //       pickDate.setDate(pickDate.getDate() - 1);
-  //     }
-
-  //     // Adjust drop date if time is before 9:00 AM
-  //     if (dropDate.getHours() > 9) {
-  //       dropDate.setDate(dropDate.getDate() + 1);
-  //     }
-
-  //     const timeDifference = dropDate.getTime() - pickDate.getTime();
-  //     const noOfDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24)); // Convert milliseconds to days
-
-  //     this.editLeadForm.patchValue({ totalDays: noOfDays });
-  //   }
-  // }
 
   calculateDays() {
     const pickupDateTime = this.editLeadForm.value.pickupDateTime;
@@ -816,11 +781,6 @@ formatDateTime(dateInput: any): string {
     const rounded = Math.round(date.getTime() / ms) * ms;
     return new Date(rounded);
   }
-
-  // formatDateTime(date: Date): string {
-  //   const pad = (n: number) => n.toString().padStart(2, '0');
-  //   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-  // }
 
   calculateTotalAmount() {
     const leadValue = this.editLeadForm.value;
@@ -1026,7 +986,6 @@ formatDateTime(dateInput: any): string {
       pickupLocation: rawData?.pickupLocation,
       pickupPoint: rawData?.pickupPoint,
       dropDateTime: this.setDateTime(rawData?.dropDateTime),
-      // dropDateTime: this.datePipe.transform(rawData?.dropDateTime, 'yyyy-MM-ddTHH:mm');
       dropLocation: rawData?.dropLocation,
       dropPoint: rawData?.dropPoint,
       totalDays: rawData?.totalDays,
@@ -1064,12 +1023,6 @@ formatDateTime(dateInput: any): string {
     const superCategory = this.categoryTypeList.find(item => item.categoryTypeName === this.leadDetails.categoryType);
     this.getSuperCategory(superCategory.id);
     this.allIds.superCategoryId = superCategory.id;
-
-   // const category = this.superCategoryList.find(item => item.superCategory === this.leadDetails.superCategory);
-  //  alert("superCategory "+this.leadDetails.superCategory +"category id "+this.superCategoryList);
-    //this.getCategory(category.id)
-          
-
   }
 
   async copyData(data: any, idx: number) {
@@ -1136,10 +1089,6 @@ formatDateTime(dateInput: any): string {
         if (response['responseCode'] == '200') {
           this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
           this.filteredCategoryTypeList = this.categoryTypeList;
-
-    // const superCategory = this.categoryTypeList.find(item => item.categoryTypeName === this.leadDetails.categoryType);
-    // this.getSuperCategory(superCategory.id);
-    // this.allIds.categoryTypeId = superCategory.id
         }
       },
       error: (error: any) =>
@@ -1260,10 +1209,47 @@ formatDateTime(dateInput: any): string {
     if (date === 'last') {
       this.lastDate = eve.target.value;
     }
-
-    // this.firstDate = new Date().toISOString().slice(0, 16);
-    // this.lastDate = new Date().toISOString().slice(0, 16);
   }
+
+    changeLeadStatus() {
+    this.leadManagementService.changeLeadStatus(this.changeStatusForm.value).subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+            this.changeStatusForm.reset();
+            this.getAllLeadList();
+
+            this.statusLeadDialogTemplate.close();
+
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'success-background-popover',
+            });
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        } else {
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      },
+      error: () =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+        }),
+    });
+  }
+
+
   updateLeadDetails() {
     this.leadManagementService.updateLeadDetails(this.leadDetails).subscribe({
       next: (response: any) => {

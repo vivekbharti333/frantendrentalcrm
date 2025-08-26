@@ -62,6 +62,11 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
   public dropLocationList: any[] = [];
   public userList: any[] = [];
 
+  public routes = routes;
+  public leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
+  public leadType: listData[] = Constant.LEAD_TYPE_LIST;
+  public leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
+
   // selectedDateTime: string = '';
   public minDate!: Date;
   public maxDate!: Date;
@@ -393,8 +398,8 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     const pickupDateTime = `${pickupYear}-${pickupMonth}-${pickupDay}T${pickupHours}:${pickupMinutes}`;
 
     // Create drop datetime (next day at 09:00 AM)
-    const dropDate = new Date(currentDate);
-    dropDate.setDate(dropDate.getDate() + 1);
+    const dropDate = new Date();
+    dropDate.setDate(dropDate.getDate() + 2);
     dropDate.setHours(9, 0, 0, 0); // <-- set time to 09:00 AM
 
     const dropYear = dropDate.getFullYear();
@@ -514,37 +519,7 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
     this.initializeComponent();
   }
 
-  public routes = routes;
-  // public selectedValue1 = '';
-  // public selectedValue2 = '';
-  // public selectedValue3 = '';
-  // public selectedValue4 = '';
-  // public selectedValue5 = '';
-  // public selectedValue6 = '';
-  // public selectedValue7 = '';
-  // public selectedValue8 = '';
-  // public selectedValue9 = '';
-  // public selectedValue10 = '';
-  // public selectedValue11 = '';
-
-  // selectedList1: data[] = [
-  //   { id: 1, name: 'Car' },
-  //   { id: 2, name: 'Bike' },
-  // ];
-
-  // selectedList2: data[] = [
-  //   { id: 1, name: 'Car' },
-  //   { id: 2, name: 'Bike' },
-  // ];
-
-  // selectedList3: data[] = [
-  //   { id: 1, name: 'Car' },
-  //   { id: 2, name: 'Bike' },
-  // ];
-
-  leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
-  leadType: listData[] = Constant.LEAD_TYPE_LIST;
-  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
+  
 
   submitLeadForm() {
     this.leadManagementService

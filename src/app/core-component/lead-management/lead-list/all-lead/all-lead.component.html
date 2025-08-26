@@ -149,7 +149,8 @@
                 <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
                 <!-- <td>{{ data.status }}</td> -->
                 <td>
-                  <button class="badge-button" [ngClass]="getBadgeClass(data.status)">
+                  <button class="badge-button" [ngClass]="getBadgeClass(data.status)"
+                    (click)="openStatusModel(statusLeadDialogTemplate, data)">
                     {{ data.status }}
                   </button>
                 </td>
@@ -331,6 +332,63 @@
 
 
 
+<ng-template #statusLeadDialogTemplate let-dialog>
+  <div class="modalHeaderContainer">
+    <h2 mat-dialog-title class="p-0">
+      Change Status
+    </h2>
+    <div mat-dialog-close class="closeBtn">
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="new-employee-field">
+        <br />
+
+        <div class="vehicle-section">
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <b>Name:</b> {{name}}
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+              <b>Mobile:</b> {{mobile}}
+            </div>
+
+          </div><br>
+
+          <form [formGroup]="changeStatusForm" (ngSubmit)="changeLeadStatus()">
+            <div class="row">
+              <div class="col-lg-8 col-md-8">
+
+                <mat-select name="status" formControlName="status" class="select" placeholder="Select Status">
+                  @for (listData of leadStatus; track listData) {
+                  <mat-option [value]="listData.value">
+                    {{ listData.name }}
+                  </mat-option>
+                  }
+                </mat-select>
+
+              </div>
+              <div class="col-lg-4 col-md-4">
+                <button type="submit" class="btn btn-primary w-100">Submit</button>
+              </div>
+
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-template>
+
 
 <ng-template #viewLeadDialogTemplate let-dialog>
   <div class="modalHeaderContainer">
@@ -345,723 +403,234 @@
   </div>
 
   <div class="fixed-height-scroll">
-   
-
-  <form [formGroup]="editLeadForm" (ngSubmit)="updateLeadDetails()">
-    <div class="card">
-      <div class="card-body">
-        <div class="new-employee-field">
-          <br />
-
-          <div class="vehicle-section">
-            <div class="row justify-content-center mb-3 row-1">
-              <div class="col-lg-3 col-md-3">
-                <div class="mb-3">
-                  <mat-select formControlName="category"
-                    class="select custom-mat-select no-border input-inside-element form-control"
-                    placeholder="Select a Package" (selectionChange)="getSubCategory($event.value)" required>
-                    <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
-                      [originalList]="filteredCategoryList" [categoryName]="'pickLocation'"></app-mat-select-search>
-                    <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate.category">
-                      {{ cate.category }}
-                    </mat-option>
-                  </mat-select>
-                </div>
-              </div>
-
-              <div class="col-lg-2 col-md-2">
-                <div class="mb-2">
-                  <mat-select formControlName="subCategory"
-                    class="select custom-mat-select no-border input-inside-element" placeholder="Select Variant"
-                    (selectionChange)="setSecurityAndVendorRate($event)" required>
-                    <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate.subCategory">
-                      {{ subCate.subCategory }}
-                    </mat-option>
-                  </mat-select>
-                </div>
-              </div>
-
-              <div class="col-lg-5 col-md-5">
-                <div class="mb-3">
-                  <div class="booking-container ">
-                    <div class="w-36">
-                      <label for="pickupDate" class="grey-text ">Pickup Date & Time</label>
-                      <!-- <input type="datetime-local" id="pickupDate" name="pickupDate" step="900"[min]="minDate" [value]="pickupDate" (change)="onDateChange($event, 'pickupDate')"class="datetimepick" /> -->
-                      <input type="datetime-local" formControlName="pickupDateTime" id="pickupDate" name="pickupDate"
-                        step="900" [min]="minDate" [value]="pickupDate" (blur)="calculateDays()" class="datetimepick" />
-                      <div class="error" *ngIf="pickupError">
-                        {{ pickupError }}
-                      </div>
-                    </div>
-
-                    <div class="days-diff">
-                      <div type="text" class="form-control no-border days-no">
-                        <!-- {{ daysDifference }} days -->
-                        <input type="number" class="form-control no-border days-no" formControlName="totalDays" required
-                          (change)="calculateTotalAmount()" />
-                      </div>
-                    </div>
-
-                    <div class="date-time-group">
-                      <label for="dropoffDate" class="grey-text datepicker-label">Drop-off Date & Time</label>
-                      <!-- <input type="datetime-local" id="dropoffDate" name="dropoffDate" step="900" [min]="pickupDate" [value]="dropoffDate"(change)="onDateChange($event, 'dropoffDate')" class="datetimepick"/> -->
-                      <input type="datetime-local" formControlName="dropDateTime" id="dropDateTime" name="dropDateTime"
-                        step="900" [min]="this.editLeadForm.value.pickupDateTime" [value]="dropoffDate"
-                        (blur)="calculateDays()" class="datetimepick" />
-                      <div class="error" *ngIf="dropoffError">
-                        {{ dropoffError }}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="container">
-              <div class="row justify-content-center row-2">
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <mat-select formControlName="pickupHub" class="select custom-mat-select"
-                      placeholder="Pickup Location" required>
-                      <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
-                        [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search>
-                      <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
-                        {{ pickList.location }}
-                      </mat-option>
-                    </mat-select>
-                  </div>
-                </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Pickup Point</mat-label>
-                    <input matInput type="text" formControlName="pickupPoint" required />
-                  </mat-form-field>
-                </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <mat-select formControlName="dropHub" placeholder="Drop Locations"
-                      class="select custom-mat-select" required>
-                      <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
-                        [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search>
-                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
-                        {{ dropList.location }}
-                      </mat-option>
-                    </mat-select>
-                  </div>
-                </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Drop Point</mat-label>
-                    <input matInput type="text" formControlName="dropPoint" required />
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-
-            <!-- hjhjkhkhkhjkhh -->
-
-            <!-- ----------------------------Thrird Row --------------------------------------->
-            <div class="container">
-              <div class="row justify-content-center row-3">
-                <div class="col-lg-2 col-md-2 input-col">
-                  <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Quantity</mat-label>
-                    <input matInput type="number" formControlName="quantity" min="0" required />
-                  </mat-form-field>
-                </div>
-
-                <div class="col-lg-2 col-md-2 input-col">
-                  <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Company Rate</mat-label>
-                    <input matInput type="text" formControlName="companyRate" required
-                      (change)="calculateTotalAmount()" />
-                  </mat-form-field>
-                </div>
-
-                <div class="col-lg-2 col-md-2 input-col">
-                  <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Vendor Rate</mat-label>
-                    <input matInput type="text" formControlName="vendorRate" required
-                      (change)="calculateTotalAmount()" />
-                  </mat-form-field>
-                </div>
-
-                <div class="col-lg-2 col-md-2 input-col" *ngIf="!isActivities">
-                  <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Total Delivery</mat-label>
-                    <input matInput type="text" formControlName="deliveryAmountToCompany" required
-                      (change)="calculateTotalAmount()" />
-                  </mat-form-field>
-                </div>
-
-                <div class="col-lg-2 col-md-2 input-col">
-                  <mat-form-field appearance="outline" class="w-100">
-                    <mat-label>Vendor Delivery</mat-label>
-                    <input matInput type="text" formControlName="deliveryAmountToVendor" required
-                      (change)="calculateTotalAmount()" />
-                  </mat-form-field>
-                </div>
-              </div>
-            </div>
-
-            <!-- ----------------------------Fourth Row --------------------------------------->
-
-            <div class="row justify-content-center row-4">
-              <div class="col-lg-2 col-md-2 input-col-2">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Booking Amount</mat-label>
-                  <input matInput type="number" formControlName="bookingAmount" required readonly />
-                </mat-form-field>
-              </div>
-
-              <div class="col-lg-2 col-md-2 input-col-2">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Balance Amount</mat-label>
-                  <input matInput type="number" formControlName="balanceAmount" required readonly />
-                </mat-form-field>
-              </div>
-
-              <div class="col-lg-2 col-md-2 input-col-2">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Total Amount</mat-label>
-                  <input matInput type="number" formControlName="totalAmount" required readonly />
-                </mat-form-field>
-              </div>
-            </div>
-
-            <!-- ----------------------------Fifth Row --------------------------------------->
-
-            <div class="row justify-content-center row-5">
-              <!-- Discount + Type -->
-              <div class="col-lg-2 col-md-2 input-col-3">
-                <div class="mb-2">
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Discount" formControlName="discount" (change)="
-                        calculateTotalAmountAndBalaenceAmontAfterDiscount()
-                      " />
-                    <span class="input-group-text no-select" formControlName="discountType" (click)="percentOrAmount()"
-                      style="cursor: pointer; width: 40px">{{ discountType }}</span>
-                  </div>
-                </div>
-              </div>
-              <!-- Actual Amount -->
-              <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Actual Amount</mat-label>
-                  <input matInput type="number" formControlName="actualAmount" required (change)="calExtraAmount()" />
-                </mat-form-field>
-              </div>
-
-              <!-- Security Deposit -->
-              <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Security Deposit</mat-label>
-                  <input matInput type="number" formControlName="securityAmount" required
-                    (change)="calculatePayToCompanyAndPayToVendor()" />
-                </mat-form-field>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-lg-2 col-md-2"></div>
-              <div class="col-lg-2 col-md-2">
-                <div class="mb-2">
-                  <mat-select name="leadOrigine" placeholder="Select Lead Origine" formControlName="leadOrigine"
-                    class="select" placeholder="Select Lead Origine">
-                    @for (listData of leadOrigine; track listData) {
-                    <mat-option [value]="listData.name">
-                      {{ listData.name }}
-                    </mat-option>
-                    }
-                  </mat-select>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-2">
-                <div class="mb-2">
-                  <mat-select name="leadType" formControlName="leadType" placeholder="Select Lead Type" class="select">
-                    @for (listData of leadType; track listData) {
-                    <mat-option [value]="listData.name">
-                      {{ listData.name }}
-                    </mat-option>
-                    }
-                  </mat-select>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-2">
-                <div class="mb-2">
-                  <mat-select name="status" formControlName="status" class="select" placeholder="Select Status">
-                    @for (listData of leadStatus; track listData) {
-                    <mat-option [value]="listData.value">
-                      {{ listData.name }}
-                    </mat-option>
-                    }
-                  </mat-select>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-2">
-                <div class="mb-2">
-                  <mat-select formControlName="createdBy" class="select custom-mat-select" name="createdBy"
-                    placeholder="Select Agent Name">
-                    <mat-option *ngFor="let user of userForDropDown" [value]="user.loginId">
-                      {{ user.firstName }}
-                    </mat-option>
-                  </mat-select>
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-2"></div>
-            </div>
-            <div class="row">
-              <div class="col-lg-2 col-md-2"></div>
-            </div>
-          </div>
-
-          <div class="section customer-details-section wider-spacing">
-            <div class="card-title-head">
-              <h6>
-                <span><i class="feather icon-info feather-edit"></i></span>Customer Details
-              </h6>
-            </div>
-            <div class="row">
-              <div class="col-lg-3 col-md-3">
-                <div class="mb-3">
-                  <input type="text" class="form-control bottom-border" placeholder="Custome Name"
-                    formControlName="customeName" required />
-                </div>
-              </div>
-              <div class="col-lg-1 col-md-3">
-                <div class="mb-3">
-                  <input type="text" class="form-control bottom-border" placeholder="Dial Code"
-                    formControlName="countryDialCode" required />
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-6">
-                <div class="mb-3">
-                  <input type="text" class="form-control bottom-border" placeholder="Mobile"
-                    formControlName="customerMobile" required />
-                </div>
-              </div>
-              <div class="col-lg-2 col-md-6">
-                <div class="mb-3">
-                  <input type="text" class="form-control bottom-border" placeholder="Alternate Mobile"
-                    formControlName="customerAlternateMobile" />
-                </div>
-              </div>
-              <div class="col-lg-4 col-md-6">
-                <div class="mb-3">
-                  <input type="text" class="form-control bottom-border" placeholder="Customer EmailId"
-                    formControlName="customerEmailId" required />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="section additional-info-section">
-            <div class="custom-card-title-head" [ngStyle]="{ 'border-bottom': 'none', 'box-shadow': 'none' }">
-              <h6 class="additional-info-text">
-                <span><i class="feather icon-info feather-edit custom-icon"></i></span>Additional Info
-              </h6>
-            </div>
-            <div class="row">
-              <p></p>
-              <div class="col-lg-4 col-md-4">
-                <div class="input-container">
-                  <label for="reports"><b>Report: </b></label>
-                  {{ vendorRate }}
-                </div>
-                <div class="input-container">
-                  <label for="delivery"><b>Delivery: </b></label>
-                  {{ deliveryAmtToVendor }}
-                </div>
-                <div class="input-container">
-                  <label for="remarks" class="requiredField"><b>Remarks:</b></label>
-                  <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..."
-                    formControlName="remarks" required />
-                </div>
-                <div class="input-container">
-                  <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
-                  {{ payToVendor }}
-                </div>
-                <div class="input-container">
-                  <label for="pay-to-company"><b>Pay to company:</b></label>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-4 vl">
-                <!-- <input class="form-check-input" type="radio" name="notesType" [value]="'Notes'" id="notes1"
-                  (change)="onNotesTypeChange('Notes')" [checked]="notesType === 'Notes'" />
-                <label class="form-check-label" for="notes1" style="margin-right: 20px; margin-left: 20px">
-                  Notes
-                </label> -->
-
-                <!-- <input class="form-check-input" type="radio" name="notesType" [value]="'Reminders'" id="notes2"
-                  (change)="onNotesTypeChange('Reminders')" [checked]="notesType === 'Reminders'" />
-                <label class="form-check-label" for="notes2" style="margin-left: 20px">
-                  Reminders </label><br /><br /> -->
-
-                <!-- <div *ngIf="notesType === 'Notes'">
-                  <textarea class="form-control no-border" name="notes" formControlName="notes" rows="4"
-                    placeholder="___________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
-                </div> -->
-
-                <!-- <div *ngIf="notesType === 'Reminders'">
-                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
-                    bsDatepicker container=".date-input2" [bsConfig]="{
-                      dateInputFormat: 'DD/MM/YYYY',
-                      minDate: minDate,
-                      maxDate: maxDate
-                    }" />
-                  <textarea class="form-control no-border" name="notes" formControlName="notes" rows="2"
-                    placeholder="___________________________________________________________________________________________"></textarea>
-                </div> -->
-              </div>
-
-              <div class="col-lg-4 col-md-4 vl">
-                <h4>Records</h4>
-                <textarea class="form-control no-border" name="records" formControlName="records" rows="4"
-                  placeholder="No Records Found"></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="text-mid mb-3">
-        <button type="submit" class="btn btn-submit">Save Lead</button>
-      </div>
-      <div class="text-mid mb-3"></div>
-    </div>
-  </form>
-
-</div>
 
 
+    <form [formGroup]="editLeadForm" (ngSubmit)="updateLeadDetails()">
+      <div class="card">
+        <div class="card-body">
+          <div class="new-employee-field">
+            <br />
 
-
-  <!-- <form #leadForm="ngForm">
-    <mat-dialog-content class="modalContent">
-      <div class="modal-body custom-modal-body">
-        <div class="card">
-          <div class="card-body">
-            <div class="new-employee-field">
-
-
-              <div class="row">
-                <div class="col-lg-3 col-md-6">
+            <div class="vehicle-section">
+              <div class="row justify-content-center mb-3 row-1">
+                <div class="col-lg-3 col-md-3">
                   <div class="mb-3">
-                    <label class="form-label requiredField">Category Type</label>
-                    <mat-select class="select" placeholder="Select Category Type" [(ngModel)]="leadDetails.categoryType"
-                      name="categoryType" #categoryType="ngModel" required (selectionChange)="getSuperCategory($event)">
-
-                      <app-mat-select-search (filteredList)="setFilterList($event, 'categoryType')"
-                        [originalList]="categoryTypeList" [categoryName]="'categoryTypeName'">
-                      </app-mat-select-search>
-
-                      <mat-option *ngFor="let cateType of filteredCategoryTypeList" [value]="cateType.categoryTypeName">
-                        {{ cateType.categoryTypeName }}
-                      </mat-option>
-                    </mat-select>
-
-                    <div *ngIf="categoryType?.errors?.['required'] && categoryType?.touched" class="errorMessage">
-                      Category Type is required
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label requiredField">Super Category</label>
-                    <mat-select class="select" placeholder="Select a Super Category"
-                      [(ngModel)]="leadDetails.superCategory" name="superCategory" #superCategory="ngModel" required
-                      (selectionChange)="getCategory($event.value)">
-
-                      <app-mat-select-search (filteredList)="setFilterList($event, 'superCategory')"
-                        [originalList]="superCategoryList" [categoryName]="'superCategory'">
-                      </app-mat-select-search>
-
-                      <mat-option *ngFor="let supCate of filteredSuperCategoryList" [value]="supCate.superCategory">
-                        {{ supCate.superCategory }}
-                      </mat-option>
-                    </mat-select>
-
-                    <div *ngIf="superCategory?.errors?.['required'] && superCategory?.touched" class="errorMessage">
-                      Super Category is required
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label requiredField">Category</label>
-                    <mat-select class="select" placeholder="Select Category" [(ngModel)]="leadDetails.category"
-                      name="category" #category="ngModel" required (selectionChange)="getSubCategory($event.value)">
-
+                    <mat-select formControlName="category"
+                      class="select custom-mat-select no-border input-inside-element form-control"
+                      placeholder="Select a Package" (selectionChange)="getSubCategory($event.value)" required>
+                      <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
+                        [originalList]="filteredCategoryList" [categoryName]="'pickLocation'"></app-mat-select-search>
                       <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate.category">
                         {{ cate.category }}
-                      </mat-option></mat-select>
-                    @if(category?.errors?.['required'] && category?.touched) {
-                    <div class="errorMessage">Category is required</div>
-                    }
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
-                  <div class="mb-3">
-                    <label class="form-label requiredField">Sub Category</label>
 
-                    <mat-select class="select" placeholder="Select a Sub Category" [(ngModel)]="leadDetails.subCategory"
-                      name="subCategory" #subCategory="ngModel" required>
-
-                      <app-mat-select-search (filteredList)="setFilterList($event, 'subCategory')"
-                        [originalList]="subCategoryList" [categoryName]="'subCategory'"></app-mat-select-search>
+                <div class="col-lg-2 col-md-2">
+                  <div class="mb-2">
+                    <mat-select formControlName="subCategory"
+                      class="select custom-mat-select no-border input-inside-element" placeholder="Select Variant"
+                      (selectionChange)="setSecurityAndVendorRate($event)" required>
                       <mat-option *ngFor="let subCate of filteredSubCategoryList" [value]="subCate.subCategory">
                         {{ subCate.subCategory }}
                       </mat-option>
                     </mat-select>
-                    @if(subCategory?.errors?.['required'] &&
-                    subCategory?.touched) {
-                    <div class="errorMessage">Sub Category is required</div>
-                    }
                   </div>
                 </div>
-              </div>
 
-              <div class="row">
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Pickup Date & Time</label>
-                    <input [readonly]="!isEditForm" type="datetime-local" class="form-control" name="pickupDateTime"
-                      [(ngModel)]="leadDetails.pickupDateTime" required #pickUpDateTime="ngModel" />
-                    @if(pickUpDateTime?.errors?.['required'] &&
-                    pickUpDateTime?.touched) {
-                    <div class="errorMessage">
-                      Pickup Date & Time is required
+                <div class="col-lg-5 col-md-5">
+                  <div class="mb-3">
+                    <div class="booking-container ">
+                      <div class="w-36">
+                        <label for="pickupDate" class="grey-text ">Pickup Date & Time</label>
+                        <!-- <input type="datetime-local" id="pickupDate" name="pickupDate" step="900"[min]="minDate" [value]="pickupDate" (change)="onDateChange($event, 'pickupDate')"class="datetimepick" /> -->
+                        <input type="datetime-local" formControlName="pickupDateTime" id="pickupDate" name="pickupDate"
+                          step="900" [min]="minDate" [value]="pickupDate" (blur)="calculateDays()"
+                          class="datetimepick" />
+                        <div class="error" *ngIf="pickupError">
+                          {{ pickupError }}
+                        </div>
+                      </div>
+
+                      <div class="days-diff">
+                        <div type="text" class="form-control no-border days-no">
+                          <!-- {{ daysDifference }} days -->
+                          <input type="number" class="form-control no-border days-no" formControlName="totalDays"
+                            required (change)="calculateTotalAmount()" />
+                        </div>
+                      </div>
+
+                      <div class="date-time-group">
+                        <label for="dropoffDate" class="grey-text datepicker-label">Drop-off Date & Time</label>
+                        <!-- <input type="datetime-local" id="dropoffDate" name="dropoffDate" step="900" [min]="pickupDate" [value]="dropoffDate"(change)="onDateChange($event, 'dropoffDate')" class="datetimepick"/> -->
+                        <input type="datetime-local" formControlName="dropDateTime" id="dropDateTime"
+                          name="dropDateTime" step="900" [min]="this.editLeadForm.value.pickupDateTime"
+                          [value]="dropoffDate" (blur)="calculateDays()" class="datetimepick" />
+                        <div class="error" *ngIf="dropoffError">
+                          {{ dropoffError }}
+                        </div>
+                      </div>
                     </div>
-                    }
                   </div>
                 </div>
-                <div class="col-lg-2 col-md-2">
+              </div>
+
+              <div class="container">
+                <div class="row justify-content-center row-2">
+                  <div class="col-lg-2 col-md-2">
+                    <div class="mb-2">
+                      <mat-select formControlName="pickupHub" class="select custom-mat-select"
+                        placeholder="Pickup Location" required>
+                        <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
+                          [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search>
+                        <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
+                          {{ pickList.location }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Pickup Point</mat-label>
+                      <input matInput type="text" formControlName="pickupPoint" required />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2">
+                    <div class="mb-2">
+                      <mat-select formControlName="dropHub" placeholder="Drop Locations"
+                        class="select custom-mat-select" required>
+                        <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
+                          [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search>
+                        <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
+                          {{ dropList.location }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Drop Point</mat-label>
+                      <input matInput type="text" formControlName="dropPoint" required />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <!-- hjhjkhkhkhjkhh -->
+
+              <!-- ----------------------------Thrird Row --------------------------------------->
+              <div class="container">
+                <div class="row justify-content-center row-3">
+                  <div class="col-lg-2 col-md-2 input-col">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Quantity</mat-label>
+                      <input matInput type="number" formControlName="quantity" min="0" required />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2 input-col">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Company Rate</mat-label>
+                      <input matInput type="text" formControlName="companyRate" required
+                        (change)="calculateTotalAmount()" />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2 input-col">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Vendor Rate</mat-label>
+                      <input matInput type="text" formControlName="vendorRate" required
+                        (change)="calculateTotalAmount()" />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2 input-col" *ngIf="!isActivities">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Total Delivery</mat-label>
+                      <input matInput type="text" formControlName="deliveryAmountToCompany" required
+                        (change)="calculateTotalAmount()" />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2 input-col">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Vendor Delivery</mat-label>
+                      <input matInput type="text" formControlName="deliveryAmountToVendor" required
+                        (change)="calculateTotalAmount()" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ----------------------------Fourth Row --------------------------------------->
+
+              <div class="row justify-content-center row-4">
+                <div class="col-lg-2 col-md-2 input-col-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Booking Amount</mat-label>
+                    <input matInput type="number" formControlName="bookingAmount" required readonly />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-2 col-md-2 input-col-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Balance Amount</mat-label>
+                    <input matInput type="number" formControlName="balanceAmount" required readonly />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-2 col-md-2 input-col-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Total Amount</mat-label>
+                    <input matInput type="number" formControlName="totalAmount" required readonly />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- ----------------------------Fifth Row --------------------------------------->
+
+              <div class="row justify-content-center row-5">
+                <!-- Discount + Type -->
+                <div class="col-lg-2 col-md-2 input-col-3">
                   <div class="mb-2">
-                    <label class="form-label requiredField">Pickup Location</label>
-
-                    <mat-select class="select" [(ngModel)]="leadDetails.pickupLocation" name="pickupLocation"
-                      placeholder="Select Pickup Location" #pickUpLocation="ngModel" required>
-
-                      <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
-                        {{ pickList.location }}
-                      </mat-option>
-
-                    </mat-select>
-                    <div *ngIf="pickUpLocation?.errors?.['required'] && pickUpLocation?.touched" class="errorMessage">
-                      Pickup Location is required
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Discount" formControlName="discount"
+                        (change)="
+                        calculateTotalAmountAndBalaenceAmontAfterDiscount()
+                      " />
+                      <span class="input-group-text no-select" formControlName="discountType"
+                        (click)="percentOrAmount()" style="cursor: pointer; width: 40px">{{ discountType }}</span>
                     </div>
                   </div>
                 </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Pickup Point</label>
-                    <input [readonly]="!isEditForm" type="text" class="form-control" name="pickupPoint"
-                      [(ngModel)]="leadDetails.pickupPoint" required #pickUpLocation="ngModel" />
-                    @if(pickUpLocation?.errors?.['required'] &&
-                    pickUpLocation?.touched) {
-                    <div class="errorMessage">Pickup Point is required</div>
-                    }
-                  </div>
+                <!-- Actual Amount -->
+                <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Actual Amount</mat-label>
+                    <input matInput type="number" formControlName="actualAmount" required (change)="calExtraAmount()" />
+                  </mat-form-field>
                 </div>
 
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Drop Date & Time</label>
-                    <input [readonly]="!isEditForm" type="datetime-local" class="form-control" name="dropDateTime"
-                      [(ngModel)]="leadDetails.dropDateTime" required #dropDateTime="ngModel" />
-                    @if(dropDateTime?.errors?.['required'] &&
-                    dropDateTime?.touched) {
-                    <div class="errorMessage">Drop Date & Time is required</div>
-                    }
-                  </div>
+                <!-- Security Deposit -->
+                <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Security Deposit</mat-label>
+                    <input matInput type="number" formControlName="securityAmount" required
+                      (change)="calculatePayToCompanyAndPayToVendor()" />
+                  </mat-form-field>
                 </div>
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Drop Location</label>
-
-                    <mat-select [(ngModel)]="leadDetails.dropLocation" class="select custom-mat-select"
-                      name="dropLocation" placeholder="Select a Drop Location" required #superCategory="ngModel">
-                      <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
-                        [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search>
-                      <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
-                        {{ dropList.location }}
-                      </mat-option>
-                    </mat-select>
-                    @if(dropLocation?.errors?.['required'] &&
-                    dropLocation?.touched) {
-                    <div class="errorMessage">Drop Location is required</div>
-                    }
-                  </div>
-                </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Drop Point</label>
-                    <input [readonly]="!isEditForm" type="text" class="form-control" name="dropPoint"
-                      [(ngModel)]="leadDetails.dropPoint" required #dropLocation="ngModel" />
-                    @if(dropLocation?.errors?.['required'] &&
-                    dropLocation?.touched) {
-                    <div class="errorMessage">Drop Location is required</div>
-                    }
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Total Days</label>
-                    <input [readonly]="!isEditForm" type="number" class="form-control" name="totalDays"
-                      [(ngModel)]="leadDetails.totalDays" required #totalDays="ngModel" />
-                    @if(totalDays?.errors?.['required'] && totalDays?.touched) {
-                    <div class="errorMessage">Total Days is required</div>
-                    }
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Quantity</label>
-                    <input [readonly]="!isEditForm" type="number" class="form-control" name="quantity"
-                      [(ngModel)]="leadDetails.quantity" required #quantity="ngModel" />
-                    @if(quantity?.errors?.['required'] && quantity?.touched) {
-                    <div class="errorMessage">Quantity is required</div>
-                    }
-                  </div>
-                </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Company Rate</label>
-                    <input [readonly]="!isEditForm" type="text" class="form-control" name="companyRate"
-                      [(ngModel)]="leadDetails.companyRate" required #companyRate="ngModel" />
-                    @if(companyRate?.errors?.['required'] &&
-                    companyRate?.touched) {
-                    <div class="errorMessage">Company Rate is required</div>
-                    }
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Vendor Rate</label>
-                    <input [readonly]="!isEditForm" type="text" class="form-control" name="vendorRate"
-                      [(ngModel)]="leadDetails.vendorRate" required #vendorRate="ngModel" />
-                    @if(vendorRate?.errors?.['required'] && vendorRate?.touched)
-                    {
-                    <div class="errorMessage">Vendor Rate is required</div>
-                    }
-                  </div>
-                </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Total Delivery</label>
-                    <input [readonly]="!isEditForm" type="text" class="form-control" name="deliveryToCompany"
-                      [(ngModel)]="leadDetails.deliveryToCompany" required #deliveryToCompany="ngModel" />
-                    @if(deliveryToCompany?.errors?.['required'] &&
-                    deliveryToCompany?.touched) {
-                    <div class="errorMessage">Total Delivery</div>
-                    }
-                  </div>
-                </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Delivery To Vendor</label>
-                    <input [readonly]="!isEditForm" type="text" class="form-control" name="deliveryToVendor"
-                      [(ngModel)]="leadDetails.deliveryToVendor" required #deliveryToVendor="ngModel" />
-                    @if(deliveryToVendor?.errors?.['required'] &&
-                    deliveryToVendor?.touched) {
-                    <div class="errorMessage">
-                      Delivery To Vendor is required
-                    </div>
-                    }
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-2"></div>
               </div>
 
               <div class="row">
                 <div class="col-lg-2 col-md-2"></div>
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
-                    <label class="form-label requiredField">Booking Amount</label>
-                    <input [readonly]="!isEditForm" type="number" class="form-control" name="bookingAmount"
-                      [(ngModel)]="leadDetails.bookingAmount" required #bookingAmount="ngModel" />
-                    @if(bookingAmount?.errors?.['required'] &&
-                    bookingAmount?.touched) {
-                    <div class="errorMessage">Booking Amount is required</div>
-                    }
-                  </div>
-                </div>
-
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Balance Amount</label>
-                    <input [readonly]="!isEditForm" type="number" class="form-control" name="balanceAmount"
-                      [(ngModel)]="leadDetails.balanceAmount" required #balanceAmount="ngModel" />
-                    @if(balanceAmount?.errors?.['required'] &&
-                    balanceAmount?.touched) {
-                    <div class="errorMessage">Balance Amount is required</div>
-                    }
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Total Amount</label>
-                    <input [readonly]="!isEditForm" type="number" class="form-control" name="totalAmount"
-                      [(ngModel)]="leadDetails.totalAmount" required #totalAmount="ngModel" />
-                    @if(totalAmount?.errors?.['required'] &&
-                    totalAmount?.touched) {
-                    <div class="errorMessage">Total Amount is required</div>
-                    }
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Security Amount</label>
-                    <input [readonly]="!isEditForm" type="number" class="form-control" name="securityAmount"
-                      [(ngModel)]="leadDetails.securityAmount" required #securityAmount="ngModel" />
-                    @if(securityAmount?.errors?.['required'] &&
-                    securityAmount?.touched) {
-                    <div class="errorMessage">Security Amount is required</div>
-                    }
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-2"></div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2 col-md-2"></div>
-                <div class="col-lg-2 col-md-2">
-                  <label class="form-label requiredField">Pay to Vendor</label>
-                  <input [readonly]="!isEditForm" type="text" class="form-control" name="payToVendor"
-                    [(ngModel)]="leadDetails.payToVendor" required #payToVendor="ngModel" />
-                  @if(payToVendor?.errors?.['required'] && payToVendor?.touched)
-                  {
-                  <div class="errorMessage">Pay to Vendor is required</div>
-                  }
-                </div>
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Pay To Company</label>
-                    <input [readonly]="!isEditForm" type="text" class="form-control" name="payToCompany"
-                      [(ngModel)]="leadDetails.payToCompany" required #payToCompany="ngModel" />
-                    @if(payToCompany?.errors?.['required'] &&
-                    payToCompany?.touched) {
-                    <div class="errorMessage">Pay To Company is required</div>
-                    }
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label requiredField">Lead Origine</label>
-
-                    <mat-select name="leadOrigine" [(ngModel)]="leadDetails.leadOrigine" class="select"
-                      placeholder="Select Lead Origine">
+                    <mat-select name="leadOrigine" placeholder="Select Lead Origine" formControlName="leadOrigine"
+                      class="select" placeholder="Select Lead Origine">
                       @for (listData of leadOrigine; track listData) {
                       <mat-option [value]="listData.name">
                         {{ listData.name }}
@@ -1072,10 +641,8 @@
                 </div>
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
-                    <label class="form-label requiredField">Lead Type</label>
-
-                    <mat-select name="leadType" [(ngModel)]="leadDetails.leadType" class="select"
-                      placeholder="Select Lead Type">
+                    <mat-select name="leadType" formControlName="leadType" placeholder="Select Lead Type"
+                      class="select">
                       @for (listData of leadType; track listData) {
                       <mat-option [value]="listData.name">
                         {{ listData.name }}
@@ -1084,43 +651,9 @@
                     </mat-select>
                   </div>
                 </div>
-                <div class="col-lg-2 col-md-2"></div>
-              </div>
-
-              <div class="row">
-                <div class="col-lg-2 col-md-2"></div>
                 <div class="col-lg-2 col-md-2">
                   <div class="mb-2">
-                    <label class="form-label requiredField">Created By</label>
-                    @if(roleType === 'SUPERADMIN') {
-                    <mat-select [(ngModel)]="leadDetails.createdBy" class="select custom-mat-select" name="createdBy"
-                      placeholder="Select Agent Name" #createdBy="ngModel">
-                      <mat-option *ngFor="let user of userForDropDown" [value]="user.loginId">
-                        {{ user.firstName }}
-                      </mat-option>
-                    </mat-select>
-                    @if(createdBy?.errors?.['required'] && createdBy?.touched) {
-                    <div class="errorMessage">Created By is required</div>
-                    } } @else {
-
-                    <mat-select [(ngModel)]="leadDetails.createdBy" class="select custom-mat-select" name="createdBy"
-                      placeholder="Select Agent Name" #createdBy="ngModel">
-                      <mat-option *ngFor="let user of userForDropDown" [value]="user.loginId">
-                        {{ user.firstName }} {{ user.lastName }}
-                      </mat-option>
-                    </mat-select>
-                    @if(createdBy?.errors?.['required'] && createdBy?.touched) {
-                    <div class="errorMessage">Created By is required</div>
-                    }
-                    }
-                  </div>
-                </div>
-                <div class="col-lg-2 col-md-2">
-                  <div class="mb-2">
-                    <label class="form-label">Status</label>
-
-                    <mat-select name="status" [(ngModel)]="leadDetails.status" class="select"
-                      placeholder="Select Status">
+                    <mat-select name="status" formControlName="status" class="select" placeholder="Select Status">
                       @for (listData of leadStatus; track listData) {
                       <mat-option [value]="listData.value">
                         {{ listData.name }}
@@ -1129,8 +662,24 @@
                     </mat-select>
                   </div>
                 </div>
+                <div class="col-lg-2 col-md-2">
+                  <div class="mb-2">
+                    <mat-select formControlName="createdBy" class="select custom-mat-select" name="createdBy"
+                      placeholder="Select Agent Name">
+                      <mat-option *ngFor="let user of userForDropDown" [value]="user.loginId">
+                        {{ user.firstName }}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-2"></div>
               </div>
+              <div class="row">
+                <div class="col-lg-2 col-md-2"></div>
+              </div>
+            </div>
 
+            <div class="section customer-details-section wider-spacing">
               <div class="card-title-head">
                 <h6>
                   <span><i class="feather icon-info feather-edit"></i></span>Customer Details
@@ -1139,126 +688,113 @@
               <div class="row">
                 <div class="col-lg-3 col-md-3">
                   <div class="mb-3">
-                    <input [readonly]="!isEditForm" type="text" class="form-control bottom-border"
-                      placeholder="Custome Name" name="customerName" [(ngModel)]="leadDetails.customerName" required
-                      #customerName="ngModel" />
-                    @if(customerName?.errors?.['required'] &&
-                    customerName?.touched) {
-                    <div class="errorMessage">Customer Name is required</div>
-                    }
+                    <input type="text" class="form-control bottom-border" placeholder="Custome Name"
+                      formControlName="customeName" required />
                   </div>
                 </div>
                 <div class="col-lg-1 col-md-3">
                   <div class="mb-3">
-                    <input [readonly]="!isEditForm" type="text" class="form-control bottom-border"
-                      placeholder="Dial Code" name="dialCode" [(ngModel)]="leadDetails.dialCode" required
-                      #dialCode="ngModel" />
-                    @if(dialCode?.errors?.['required'] && dialCode?.touched) {
-                    <div class="errorMessage">Dial Code is required</div>
-                    }
+                    <input type="text" class="form-control bottom-border" placeholder="Dial Code"
+                      formControlName="countryDialCode" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-3">
-                    <input [readonly]="!isEditForm" type="text" class="form-control bottom-border" placeholder="Mobile"
-                      name="mobile" [(ngModel)]="leadDetails.mobile" required #mobile="ngModel" />
-                    @if(mobile?.errors?.['required'] && mobile?.touched) {
-                    <div class="errorMessage">Customer Mobile is required</div>
-                    }
+                    <input type="text" class="form-control bottom-border" placeholder="Mobile"
+                      formControlName="customerMobile" required />
                   </div>
                 </div>
                 <div class="col-lg-2 col-md-6">
                   <div class="mb-3">
-                    <input [readonly]="!isEditForm" type="text" class="form-control bottom-border"
-                      placeholder="Alternate Mobile" name="alternateMobile" [(ngModel)]="leadDetails.alternateMobile"
-                      #alternateMobile="ngModel" />
+                    <input type="text" class="form-control bottom-border" placeholder="Alternate Mobile"
+                      formControlName="customerAlternateMobile" />
                   </div>
                 </div>
                 <div class="col-lg-4 col-md-6">
                   <div class="mb-3">
-                    <input [readonly]="!isEditForm" type="text" class="form-control bottom-border"
-                      placeholder="Customer EmailId" name="emailId" [(ngModel)]="leadDetails.emailId" required
-                      #emailId="ngModel" />
-                    @if(emailId?.errors?.['required'] && emailId?.touched) {
-                    <div class="errorMessage">Customer EmailId is required</div>
-                    }
+                    <input type="text" class="form-control bottom-border" placeholder="Customer EmailId"
+                      formControlName="customerEmailId" required />
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div class="row remarks-box">
+            <div class="section additional-info-section">
+              <div class="custom-card-title-head" [ngStyle]="{ 'border-bottom': 'none', 'box-shadow': 'none' }">
+                <h6 class="additional-info-text">
+                  <span><i class="feather icon-info feather-edit custom-icon"></i></span>Additional Info
+                </h6>
+              </div>
+              <div class="row">
                 <p></p>
                 <div class="col-lg-4 col-md-4">
                   <div class="input-container">
-                    <label for="reports"><b>Report: </b></label>{{ leadDetails.vendorRate }}
+                    <label for="reports"><b>Report: </b></label>
+                    {{ vendorRate }}
                   </div>
                   <div class="input-container">
-                    <label for="delivery"><b>Delivery: </b></label>{{ leadDetails.deliveryToCompany }}
+                    <label for="delivery"><b>Delivery: </b></label>
+                    {{ deliveryAmtToVendor }}
                   </div>
                   <div class="input-container">
                     <label for="remarks" class="requiredField"><b>Remarks:</b></label>
-                    <input [readonly]="!isEditForm" type="text" id="remarks" class="form-control no-border"
-                      placeholder=" Write Remarks..." name="remarks" [(ngModel)]="leadDetails.remarks" required
-                      #remarks="ngModel" />
-                    @if(remarks?.errors?.['required'] && remarks?.touched) {
-                    <div class="errorMessage">Remarks is required</div>
-                    }
+                    <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..."
+                      formControlName="remarks" required />
                   </div>
                   <div class="input-container">
-                    <label for="pay-to-vendor"><b>Pay to vendor:</b></label>{{ leadDetails.payToVendor }}
+                    <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
+                    {{ payToVendor }}
                   </div>
                   <div class="input-container">
                     <label for="pay-to-company"><b>Pay to company:</b></label>
-                    {{ leadDetails.payToCompany }}
-                   
                   </div>
                 </div>
 
                 <div class="col-lg-4 col-md-4 vl">
-                  <input [readonly]="!isEditForm" class="form-check-input" type="radio" name="companyName"
-                    [(ngModel)]="leadDetails.companyName" value="Notes" id="notes1" checked />
-                  <label class="form-check-label" for="notes1" style="margin-right: 20px; margin-left: 20px">
-                    Notes
-                  </label>
-                  <input [readonly]="!isEditForm" class="form-check-input" type="radio" name="companyName"
-                    [(ngModel)]="leadDetails.companyName" value="Reminders" id="notes2" />
-                  <label class="form-check-label" for="notes2" style="margin-left: 20px">
-                    Reminders
-                  </label>
+                  <!-- <input class="form-check-input" type="radio" name="notesType" [value]="'Notes'" id="notes1"
+                  (change)="onNotesTypeChange('Notes')" [checked]="notesType === 'Notes'" />
+                <label class="form-check-label" for="notes1" style="margin-right: 20px; margin-left: 20px">
+                  Notes
+                </label> -->
 
-                  <div *ngIf="leadDetails.companyName === 'Notes'">
-                    <textarea class="form-control no-border" name="notes" [(ngModel)]="leadDetails.notes" rows="4"
-                      placeholder="___________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
-                  </div>
-                  <P></P>
-                  <div *ngIf="leadDetails.companyName === 'Reminders'">
-                    <input [readonly]="!isEditForm" type="datetime-local" class="form-control" name="reminderDate"
-                      [(ngModel)]="leadDetails.reminderDate" required #reminderDate="ngModel" />
-                    @if(reminderDate?.errors?.['required'] &&
-                    reminderDate?.touched) {
-                    <div class="errorMessage">Reminder Date is required</div>
-                    }
-                    <textarea class="form-control no-border" name="notes" [(ngModel)]="leadDetails.notes" rows="2"
-                      placeholder="___________________________________________________________________________________________"></textarea>
-                  </div>
+                  <!-- <input class="form-check-input" type="radio" name="notesType" [value]="'Reminders'" id="notes2"
+                  (change)="onNotesTypeChange('Reminders')" [checked]="notesType === 'Reminders'" />
+                <label class="form-check-label" for="notes2" style="margin-left: 20px">
+                  Reminders </label><br /><br /> -->
+
+                  <!-- <div *ngIf="notesType === 'Notes'">
+                  <textarea class="form-control no-border" name="notes" formControlName="notes" rows="4"
+                    placeholder="___________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
+                </div> -->
+
+                  <!-- <div *ngIf="notesType === 'Reminders'">
+                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
+                    bsDatepicker container=".date-input2" [bsConfig]="{
+                      dateInputFormat: 'DD/MM/YYYY',
+                      minDate: minDate,
+                      maxDate: maxDate
+                    }" />
+                  <textarea class="form-control no-border" name="notes" formControlName="notes" rows="2"
+                    placeholder="___________________________________________________________________________________________"></textarea>
+                </div> -->
                 </div>
+
                 <div class="col-lg-4 col-md-4 vl">
                   <h4>Records</h4>
-                  <textarea class="form-control no-border" name="records" [(ngModel)]="leadDetails.records" rows="4"
+                  <textarea class="form-control no-border" name="records" formControlName="records" rows="4"
                     placeholder="No Records Found"></textarea>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="text-mid mb-3">
+          <button type="submit" class="btn btn-submit">Save Lead</button>
+        </div>
+        <div class="text-mid mb-3"></div>
       </div>
-    </mat-dialog-content>
-  </form> -->
+    </form>
 
+  </div>
 
-  <!-- <div class="modalFooterContainer">
-    <button type="submit" class="btn btn-submit" (click)="updateLeadDetails()">
-      Update Lead Details
-    </button>
-  </div> -->
 </ng-template>
