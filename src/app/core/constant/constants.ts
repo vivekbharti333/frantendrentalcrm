@@ -1,7 +1,7 @@
 export class Constant {
 
-    public static Site_Url = "http://116.203.172.163/rentalcrm/";
-    // public static Site_Url = "http://localhost/rentalcrm/";
+    // public static Site_Url = "http://116.203.172.163/rentalcrm/";
+    public static Site_Url = "http://localhost/rentalcrm/";
     // public static Site_Url = "http://192.168.29.119:8080/rentalcrm/";
 
 
@@ -37,8 +37,6 @@ export class Constant {
     public static LOST = "LOST";
     public static ASSIGNED = "ASSIGNED";
     public static RESERVED = "RESERVED";
-
-    
 
 
     public static LEAD_STATUS_LIST = [{ value: 'ENQUIRY', name: 'Enquiry'}, {value: 'FOLLOWUP', name: 'Follow Up'}, {value: 'RESERVED', name: 'Reserved'}];

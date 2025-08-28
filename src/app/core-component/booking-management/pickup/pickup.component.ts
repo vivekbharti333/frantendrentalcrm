@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { HelperService } from 'src/app/core/service/helper.service';
 import {
   DataService,
   pageSelection,
@@ -39,52 +41,15 @@ export interface listData {
   providers: [MessageService, ToastModule],
 })
 export class PickupComponent {
-  public loginUser: any;
-  public fullData: any[] = [];
-  pickupDate: string = '';
-  dropoffDate: string = '';
-  daysDifference: number = 0;
-  pickupError: string = '';
-  dropoffError: string = '';
-
-  // pagination variables
-  public routes = routes;
-  public tableData: Array<any> = [];
-  public pageSize = 10;
-  public serialNumberArray: Array<number> = [];
-  public totalData = 0;
-  showFilter = false;
-  dataSource!: MatTableDataSource<any>;
-  public searchDataValue = '';
-
-  public lastIndex = 0;
-  public skip = 0;
-  public limit: number = this.pageSize;
-  public pageIndex = 0;
-  public currentPage = 1;
-  public pageNumberArray: Array<number> = [];
-  public pageSelection: Array<pageSelection> = [];
-  public totalPages = 0;
-
-
-  public vendorRate: any;
-  public deliveryAmtToVendor: any;
-  public payToVendor: any;
-  public payToVendorAct: any;
-  public payToCompany: any;
-  public payToCompanyAct: any;
-
-  public categoryList: any[] = [];
-  public subCategoryList: any[] = [];
+  public followupList: any;
+  public userForDropDown: any[] = [];
   public pickLocationList: any[] = [];
   public dropLocationList: any[] = [];
-  public userList: any[] = [];
+  filteredPickLocationList: any[] = [];
+  filteredDropLocationList: any[] = [];
 
-  // public routes = routes;
-  public leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
-  public leadType: listData[] = Constant.LEAD_TYPE_LIST;
-  public leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
-
+  public editLeadForm!: FormGroup;
+  public changeStatusForm!: FormGroup;
   public minDate!: Date;
   public maxDate!: Date;
 
@@ -92,66 +57,285 @@ export class PickupComponent {
   public fullName: string = '';
 
   public isActivities: Boolean = false;
-  public addLeadForm!: FormGroup;
 
-  public selectedOption: string = 'vehicle';
-  public notesType: string = 'Notes';
+  public vendorRate: any;
+  public deliveryAmtToVendor: any;
+  public payToVendor: any;
+  public payToCompany: any;
 
   public discountType = '₹';
-  public currentDate: any;
 
+  pickupDate: string = '';
+  dropoffDate: string = '';
+  daysDifference: number = 0;
+  pickupError: string = '';
+  dropoffError: string = '';
+
+  activityDate: string = '2025-05-01';
+  startTime: string = '10:00';
+  endTime: string = '18:00';
+  locationType: string = 'self';
+
+  public name: any;
+  public mobile: any;
+
+
+  public routes = routes;
+
+  // pagination variables
+  public tableData: Array<any> = [];
+  public categoryTypeList: Array<any> = [];
+  public superCategoryList: Array<any> = [];
+  public categoryList: Array<any> = [];
+  public subCategoryList: Array<any> = [];
+  public pageSize = 10;
+  public serialNumberArray: Array<number> = [];
+  public totalData = 0;
+  showFilter = false;
+  dataSource!: MatTableDataSource<users>;
+  public searchDataValue = '';
+  // roleType: string = '';
+  //** / pagination variables
+  viewLeadDetailsDialog: any;
+  statusLeadDialogTemplate: any;
+
+  firstDate: any = '';
+  lastDate: any = '';
+  // leadDetails = {
+  //   categoryType: '',
+  //   superCategory: '',
+  //   category: '',
+  //   subCategory: '',
+  //   pickupDateTime: '',
+  //   pickupLocation: '',
+  //   dropDateTime: '',
+  //   dropLocation: '',
+  //   totalDays: '',
+  //   quantity: '',
+  //   vendorRate: '',
+  //   companyRate: '',
+  //   bookingAmount: '',
+  //   balanceAmount: '',
+  //   totalAmount: '',
+  //   securityAmount: '',
+  //   payToVendor: '',
+  //   payToCompany: '',
+  //   deliveryToCompany: '',
+  //   deliveryToVendor: '',
+  //   customerName: '',
+  //   dialCode: '',
+  //   mobile: '',
+  //   alternateMobile: '',
+  //   emailId: '',
+  //   id: '',
+  //   companyName: '',
+  //   enquirySource: '',
+  //   pickupPoint: '',
+  //   dropPoint: '',
+  //   status: '',
+  //   leadOrigine: '',
+  //   leadType: '',
+  //   createdBy: '',
+  //   notes: '',
+  //   records: '',
+  //   remarks: '',
+  //   reminderDate: '',
+  //   // leadStatus:'',
+  // };
+  isEditForm: boolean = false;
   filteredCategoryTypeList: any[] = [];
   filteredSuperCategoryList: any[] = [];
   filteredCategoryList: any[] = [];
   filteredSubCategoryList: any[] = [];
-  filteredPickLocationList: any[] = [];
-  filteredDropLocationList: any[] = [];
 
+  allIds = {
+    superCategoryId: '',
+    categoryTypeId: '',
+  }
+
+
+  public userList: any[] = [];
+  leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
+  leadType: listData[] = Constant.LEAD_TYPE_LIST;
+  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
   constructor(
+    private fb: FormBuilder,
+    private data: DataService,
     private pagination: PaginationService,
     private router: Router,
     private sidebar: SidebarService,
     private messageService: MessageService,
-    private dialog: MatDialog,
-    private authenticationService: AuthenticationService,
     private bookingManagementService: BookingManagementService,
-    //  private cdr: ChangeDetectorRef,
-    private fb: FormBuilder,
-    // private sidebar: SidebarService,
     private leadManagementService: LeadManagementService,
-    // private authenticationService: AuthenticationService,
-    // private messageService: MessageService,
-    private spinnerService: SpinnerService,
+    private dialog: MatDialog,
+    private helper: HelperService,
     private categoriesManagementService: CategoriesManagementService,
     private userManagementService: UserManagementService,
-    private cookiesService: CookieService
-  ) {
-    this.loginUser = this.authenticationService.getLoginUser();
-    this.loginUser = this.authenticationService.getLoginUser();
-    this.roleType = this.cookiesService.get('roleType');
-    this.fullName = this.cookiesService.get('firstName') + ' ' + this.cookiesService.get('lastName');
-  }
+    private cookieService: CookieService,
+    private datePipe: DatePipe
+  ) { }
 
   ngOnInit() {
-    this.getDropList();
-    const currentDate = new Date();
-    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
+    this.getPickupList();
+    this.getUserListForDropDown();
+    this.getCategoryType();
+    this.getPickLocation();
+    this.getDropLocation();
+    this.createForms();
+    this.initializeComponent();
   }
 
-   getDropList() {
-    this.bookingManagementService.getDropList().subscribe((apiRes: any) => {
-      this.setTableData(apiRes);
-      
+  initializeComponent(): void {
+    this.getCategory('');
+    // this.getSubCategory('');
+    this.createForms();
+    this.getCategoryType();
+    // this.getCategory();
+    this.getPickLocation();
+    this.getDropLocation();
+    this.calculateDays();
+
+    this.roleType === 'SUPERADMIN'
+      ? (this.editLeadForm.value.createdBy = '')
+      : (this.editLeadForm.value.createdBy = this.fullName);
+
+    this.minDate = new Date();
+    this.minDate.setHours(0, 0, 0, 0);
+    this.maxDate = new Date();
+    this.maxDate.setFullYear(this.maxDate.getFullYear() + 1);
+
+    this.setDefaultDateTime();
+
+    const now = new Date();
+    const pickup = this.roundToPrevious15Minutes(now);
+    const dropoff = new Date(pickup);
+    dropoff.setDate(dropoff.getDate() + 1);
+
+    this.pickupDate = this.formatDateTime(pickup);
+    this.dropoffDate = this.formatDateTime(dropoff);
+    this.minDate = new Date(this.pickupDate);
+
+    this.validateDateRange();
+  }
+
+
+  createForms() {
+    this.editLeadForm = this.fb.group({
+      companyName: ['Notes'],
+      enquirySource: ['Call'],
+      categoryTypeId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],],
+      categoryTypeName: [''],
+      superCategoryId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],],
+      categoryId: [''],
+      subCategoryId: [''],
+      superCategory: [''],
+      category: [''],
+      subCategory: [''],
+      itemName: [''],
+      pickupDateTime: [''],
+      pickupHub: [''],
+      pickupPoint: [''],
+      dropDateTime: [''],
+      dropHub: [''],
+      dropPoint: [''],
+      customeName: [''],
+      countryDialCode: [''],
+      customerMobile: [''],
+      customerAlternateMobile: [''],
+      customerEmailId: [''],
+      totalDays: [''],
+      quantity: 1,
+      kidQuantity: [''],
+      infantQuantity: [''],
+      vendorRate: 0,
+      vendorRateForKids: 0,
+      payToVendor: 0,
+      companyRate: 0,
+      companyRateForKids: 0,
+      payToCompany: 0,
+      bookingAmount: 0,
+      balanceAmount: 0,
+      totalAmount: 0,
+      actualAmount: 0,
+      securityAmount: [''],
+      discountType: [''],
+      discount: 0,
+      deliveryAmountToCompany: 0,
+      deliveryAmountToVendor: 0,
+      status: [''],
+      leadOrigine: [''],
+      leadType: [''],
+      createdBy: [''],
+      notes: [''],
+      followupDateTime: [''],
+      remarks: [''],
+      preValue: `    Reports : 
+            Delivery : 
+            Comments : 
+            Pay to vendor : 
+            Pay to company :`,
+      reminderDate: [''],
+      records: [''],
+    });
+
+    this.changeStatusForm = this.fb.group({
+      id: [],
+      customeName: [''],
+      countryDialCode: [''],
+      customerMobile: [''],
+      status: [''],
     });
   }
+
+  downloadInvoice(receiptNo: string) {
+    window.open(Constant.Site_Url + "paymentreceipt/" + receiptNo, '_blank');
+    // console.log(Constant.Site_Url+"paymentreceipt/"+receiptNo);
+  }
+
+  public getUserListForDropDown() {
+    this.userManagementService.getUserListForDropDown().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.userForDropDown = JSON.parse(JSON.stringify(response.listPayload));
+        }
+      },
+      error: (error: any) => this.messageService.add({
+        summary: '500',
+        detail: 'Server Error',
+        styleClass: 'danger-background-popover',
+      })
+    });
+  }
+
+  // onAgentSelectionChange(dd:any){
+  //   this.bookingManagementService.getPickUpList().subscribe((apiRes: any) => {
+  //     this.setTableData(apiRes);
+  //   });
+  // }
+
+  getPickupList() {
+
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate() + 1);
+
+    // Format dates as YYYY-MM-DD (or any format required by API)
+    const formattedToday = today.toISOString().split('T')[0];
+    const formattedTomorrow = tomorrow.toISOString().split('T')[0];
+
+    this.bookingManagementService.getPickUpList(formattedToday, formattedTomorrow)
+      .subscribe((apiRes: any) => {
+        this.setTableData(apiRes);
+      });
+  }
+
 
   setTableData(apiRes: any) {
     this.tableData = [];
     this.serialNumberArray = [];
     this.totalData = apiRes.totalNumber;
     this.pagination.tablePageSize.subscribe((pageRes: tablePageSize) => {
-      if (this.router.url == this.routes.allLead) {
+      if (this.router.url == this.routes.pickup) {
         apiRes.listPayload.map((res: any, index: number) => {
           const serialNumber = index + 1;
           if (index >= pageRes.skip && serialNumber <= this.totalData) {
@@ -185,230 +369,149 @@ export class PickupComponent {
     }
   }
 
+  openStatusModel(templateRef: TemplateRef<any>,
+    rawData: any) {
 
-  // public getDropList(): void {
+    this.changeStatusForm.patchValue({
+      id: rawData['id'],
+      customeName: rawData['customeName'],
+      countryDialCode: rawData['countryDialCode'],
+      customerMobile: rawData['customerMobile'],
+      status: rawData['status']
+    })
+    this.name = rawData.customeName;
+    this.mobile = rawData.countryDialCode + " " + rawData.customerMobile;
 
-  //   this.serialNumberArray = [];
-
-  //   this.bookingManagementService.getDropList().subscribe((apiRes: any) => {
-  //     this.totalData = apiRes.totalNumber;
-  //     this.fullData = apiRes.listPayload; // Store the full dataset
-
-  //     this.pagination.tablePageSize.subscribe((res: tablePageSize) => {
-  //       if (this.router.url === this.routes.drop) {
-  //         this.pageSize = res.pageSize;
-
-  //         // Use the full dataset for pagination
-  //         this.prepareTableData(this.fullData, { skip: res.skip, limit: res.skip + res.pageSize });
-  //         this.pageSize = res.pageSize;
-  //       }
-  //     });
-  //   });
-  // }
-  // private prepareTableData(apiRes: any[], pageOption: pageSelection): void {
-  //   this.tableData = [];
-  //   this.serialNumberArray = [];
-
-  //   apiRes.forEach((res: any, index: number) => {
-  //     const serialNumber = index + 1;
-  //     if (index >= pageOption.skip && serialNumber <= pageOption.limit) {
-  //       this.tableData.push(res);
-  //       this.serialNumberArray.push(serialNumber);
-  //     }
-  //   });
-  //   // Update the MatTableDataSource
-  //   this.dataSource = new MatTableDataSource<any>(this.tableData);
-  //   // Emit updated pagination data
-  //   this.pagination.calculatePageSize.next({
-  //     totalData: this.totalData,
-  //     pageSize: this.pageSize,
-  //     tableData: this.tableData,
-  //     serialNumberArray: this.serialNumberArray,
-  //   });
-  // }
-
-
-  // public sortData(sort: Sort) {
-  //   const data = this.tableData.slice();
-  //   if (!sort.active || sort.direction === '') {
-  //     this.tableData = data;
-  //   } else {
-  //     this.tableData = data.sort((a, b) => {
-  //       const aValue = (a as never)[sort.active];
-  //       const bValue = (b as never)[sort.active];
-  //       return (aValue < bValue ? -1 : 1) * (sort.direction === 'asc' ? 1 : -1);
-  //     });
-  //   }
-  // }
-
-
-  public searchData(value: string): void {
-  //   const searchTerm = value.trim().toLowerCase();
-
-  //   if (searchTerm) {
-  //     // Filter the full dataset based on the search term
-  //     const filteredData = this.fullData.filter((donation: any) =>
-  //       Object.values(donation).some((field) =>
-  //         String(field).toLowerCase().includes(searchTerm)
-  //       )
-  //     );
-
-  //     this.prepareTableData(filteredData, { skip: 0, limit: this.pageSize });
-  //     this.totalData = filteredData.length; // Update total data count for pagination
-  //   } else {
-  //     // Reset to the full dataset when the search term is cleared
-  //     this.prepareTableData(this.fullData, { skip: 0, limit: this.pageSize });
-  //     this.totalData = this.fullData.length; // Reset the total data count
-  //   }
-
-  //   // Reset to the first page after a search or clearing search
-  //   this.pagination.calculatePageSize.next({
-  //     totalData: this.totalData,
-  //     pageSize: this.pageSize,
-  //     tableData: this.tableData,
-  //     serialNumberArray: this.serialNumberArray,
-  //   });
-  }
-
-  isCollapsed: boolean = false;
-  toggleCollapse() {
-    this.sidebar.toggleCollapse();
-    this.isCollapsed = !this.isCollapsed;
-  }
-  public filter = false;
-  openFilter() {
-    this.filter = !this.filter;
-  }
-
-
-  public getUserList() {
-    this.userManagementService.getUserDetailsList().subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.userList = JSON.parse(JSON.stringify(response.listPayload));
-        }
-      },
-      error: (error: any) =>
-        this.messageService.add({
-          summary: '500',
-          detail: 'Server Error',
-          styleClass: 'danger-background-popover',
-        }),
+    this.statusLeadDialogTemplate = this.dialog.open(templateRef, {
+      width: '30%',
     });
   }
 
-  
-  public getPickLocation() {
-    this.categoriesManagementService.getLocationByType('PICK').subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.pickLocationList = JSON.parse(
-            JSON.stringify(response.listPayload)
-          );
-          this.filteredPickLocationList = this.pickLocationList;
-        }
-      },
-      error: (error: any) =>
-        this.messageService.add({
-          summary: '500',
-          detail: 'Server Error',
-          styleClass: 'danger-background-popover',
-        }),
+
+  async openEditModal(
+    templateRef: TemplateRef<any>,
+    rawData: any,
+    isEditable: boolean
+
+  ) {
+
+    this.isEditForm = isEditable;
+    // this.getSubCategory(rawData['categoryId']);
+    this.editLeadForm.patchValue({
+
+      category: rawData['category'],
+      subCategory: rawData['subCategory'],
+      itemName: rawData['itemName'],
+      pickupDateTime: this.formatDateTime(rawData['pickupDateTime']),
+      pickupHub: rawData['pickupHub'],
+      pickupPoint: rawData['pickupPoint'],
+      dropDateTime: this.formatDateTime(rawData['dropDateTime']),
+      dropHub: rawData['dropHub'],
+      dropPoint: rawData['dropPoint'],
+      customeName: rawData['customeName'],
+      countryDialCode: rawData['countryDialCode'],
+      customerMobile: rawData['customerMobile'],
+      customerAlternateMobile: rawData['customerAlternateMobile'],
+      customerEmailId: rawData['customerEmailId'],
+      totalDays: rawData['totalDays'],
+      quantity: rawData['quantity'],
+      kidQuantity: rawData['kidQuantity'],
+      infantQuantity: rawData['infantQuantity'],
+      vendorRate: rawData['vendorRate'],
+      vendorRateForKids: rawData['vendorRate'],
+      payToVendor: rawData['payToVendor'],
+      companyRate: rawData['companyRate'],
+      companyRateForKids: rawData['companyRateForKids'],
+      payToCompany: rawData['payToCompany'],
+      bookingAmount: rawData['bookingAmount'],
+      balanceAmount: rawData['balanceAmount'],
+      totalAmount: rawData['totalAmount'],
+      actualAmount: rawData['actualAmount'],
+      securityAmount: rawData['securityAmount'],
+      discountType: rawData['discountType'],
+      discount: rawData['discount'],
+      deliveryAmountToCompany: rawData['deliveryAmountToCompany'],
+      deliveryAmountToVendor: rawData['deliveryAmountToVendor'],
+      status: rawData['status'],
+      leadOrigine: rawData['leadOrigine'],
+      leadType: rawData['leadType'],
+      createdBy: rawData['createdBy'],
+      notes: rawData['notes'],
+      followupDateTime: rawData['followupDateTime'],
+      remarks: rawData['remarks'],
+      // preValue: `    Reports : 
+      //   Delivery : 
+      //   Comments : 
+      //   Pay to vendor : 
+      //   Pay to company :`,
+      // reminderDate: [''],
+      // records: 
+
+    });
+    this.viewLeadDetailsDialog = this.dialog.open(templateRef, {
+      width: '80%',
     });
   }
 
-  public getDropLocation() {
-    this.categoriesManagementService.getLocationByType('DROP').subscribe({
-      next: (response: any) => {
-        if (response['responseCode'] == '200') {
-          this.dropLocationList = JSON.parse(
-            JSON.stringify(response.listPayload)
-          );
-          this.filteredDropLocationList = this.dropLocationList;
-        }
-      },
-      error: (error: any) =>
-        this.messageService.add({
-          summary: '500',
-          detail: 'Server Error',
-          styleClass: 'danger-background-popover',
-        }),
+
+
+  async getDropdownOnEditModal(rawData: any) {
+    const filterCategoryType: any = this.categoryTypeList.filter((item) => {
+      if (item?.categoryTypeName === rawData?.categoryTypeName) {
+        return item;
+      }
     });
-  }
-
-    percentOrAmount() {
-    if (this.discountType === '₹') {
-      this.discountType = '%';
-      this.addLeadForm.patchValue({ discountType: 'Percent' });
-    } else if (this.discountType === '%') {
-      this.discountType = '₹';
-      this.addLeadForm.patchValue({ discountType: 'Amount' });
-    }
-  }
-
-  roundToNearest15Minutes(date: Date): Date {
-    const ms = 1000 * 60 * 15;
-    const rounded = Math.round(date.getTime() / ms) * ms;
-    return new Date(rounded);
-  }
-
-  calculateDays() {
-    const pickupDateTime = this.addLeadForm.value.pickupDateTime;
-    const dropDateTime = this.addLeadForm.value.dropDateTime;
-
-    if (pickupDateTime && dropDateTime) {
-      let pickDate = new Date(pickupDateTime);
-      let dropDate = new Date(dropDateTime);
-
-      // Round both to nearest 15 minutes
-      pickDate = this.roundToNearest15Minutes(pickDate);
-      dropDate = this.roundToNearest15Minutes(dropDate);
-
-      // Base day difference
-      let noOfDays = Math.floor(
-        (dropDate.setHours(0, 0, 0, 0) - pickDate.setHours(0, 0, 0, 0)) /
-        (1000 * 60 * 60 * 24)
+    // await this.getSuperCategory({
+    //   value: filterCategoryType[0]?.id,
+    // });
+    const filterSuperCategory: any = this.superCategoryList.filter((item) => {
+      if (item?.superCategory === rawData?.superCategory) {
+        return item;
+      }
+    });
+    await this.getCategory({ value: filterSuperCategory[0]?.id });
+    const filterCategory: any = this.categoryList.filter((item) => {
+      if (item?.category === rawData?.category) {
+        return item;
+      }
+    });
+    // await this.getSubCategory({ value: filterSuperCategory[0]?.id });
+    const filterSubCategory: any = this.categoryList.filter((item) => {
+      if (item?.category === rawData?.subCategory) {
+        return item;
+      }
+      console.log(
+        filterCategoryType,
+        filterSuperCategory,
+        filterCategory,
+        filterSubCategory
       );
-
-      // Reset time to original (after date comparison)
-      pickDate = new Date(pickupDateTime);
-      dropDate = new Date(dropDateTime);
-      pickDate = this.roundToNearest15Minutes(pickDate);
-      dropDate = this.roundToNearest15Minutes(dropDate);
-
-      // Apply rules:
-      // If pickup is before 6:00 AM, add 1 day
-      if (pickDate.getHours() < 6) {
-        noOfDays += 1;
-      }
-
-      // If drop is after 9:00 AM, add 1 day
-      if (dropDate.getHours() > 9 || (dropDate.getHours() === 9 && dropDate.getMinutes() > 0)) {
-        noOfDays += 1;
-      }
-
-      // Ensure at least 1 day
-      if (noOfDays < 1) noOfDays = 1;
-      this.addLeadForm.patchValue({
-        pickupDateTime: this.formatDateTime(pickDate),
-        dropDateTime: this.formatDateTime(dropDate),
-        totalDays: noOfDays,
-      });
-
-      this.addLeadForm.patchValue({
-        actualAmount: 0,
-
-      });
-
-    }
+    });
   }
 
-  formatDateTime(date: Date): string {
+  roundToPrevious15Minutes(date: Date): Date {
+    const newDate = new Date(date);
+    const minutes = newDate.getMinutes();
+    const remainder = minutes % 15;
+    newDate.setMinutes(minutes - remainder);
+    newDate.setSeconds(0);
+    newDate.setMilliseconds(0);
+    return newDate;
+  }
+
+  formatDateTime(dateInput: any): string {
+    if (!dateInput) return ''; // handle undefined or null immediately
+
+    const date = new Date(dateInput);
+    if (isNaN(date.getTime())) return ''; // handle invalid date
+
     const pad = (n: number) => n.toString().padStart(2, '0');
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
       date.getDate()
     )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   }
+
+
 
   setError(field: 'pickupDate' | 'dropoffDate', message: string) {
     if (field === 'pickupDate') {
@@ -453,6 +556,94 @@ export class PickupComponent {
     }
   }
 
+  calculateTotalAmountAndBalaenceAmontAfterDiscount1() {
+    // const addFormValue = this.editLeadForm.value;
+
+    //total amount start
+    if (
+      this.editLeadForm.value &&
+      this.editLeadForm.value.companyRate != null &&
+      this.editLeadForm.value.totalDays != null &&
+      this.editLeadForm.value.deliveryAmountToCompany != null &&
+      this.editLeadForm.value.quantity != null
+    ) {
+      const firstValue =
+        this.editLeadForm.value.companyRate * this.editLeadForm.value.totalDays;
+      const secondValue =
+        firstValue + Number(this.editLeadForm.value.deliveryAmountToCompany); // Ensure numeric addition
+
+      this.editLeadForm.patchValue({
+        totalAmount: secondValue * this.editLeadForm.value.quantity,
+      });
+
+      //total amount end
+
+      // booking amount start
+      this.editLeadForm.patchValue({
+        bookingAmount:
+          secondValue * this.editLeadForm.value.quantity -
+          this.editLeadForm.value.balanceAmount,
+      });
+      //bokking amount end
+    }
+
+    const discount = this.editLeadForm.value.discount;
+
+    // Ensure discount is not more than the total amount
+    const totalAmt = this.editLeadForm.value.totalAmount - discount;
+    const balanceAmt = this.editLeadForm.value.balanceAmount;
+    const bookingAmt = totalAmt - balanceAmt;
+
+    // Update the form with all new values in one patchValue call
+    this.editLeadForm.patchValue({
+      totalAmount: totalAmt,
+      bookingAmount: bookingAmt,
+    });
+  }
+
+  calculateTotalAmountAndBalaenceAmontAfterDiscount() {
+    //total amount start
+    if (
+      this.editLeadForm.value &&
+      this.editLeadForm.value.companyRate != null &&
+      this.editLeadForm.value.totalDays != null &&
+      this.editLeadForm.value.deliveryAmountToCompany != null &&
+      this.editLeadForm.value.quantity != null
+    ) {
+      const firstValue =
+        this.editLeadForm.value.companyRate * this.editLeadForm.value.totalDays;
+      const secondValue =
+        firstValue + Number(this.editLeadForm.value.deliveryAmountToCompany); // Ensure numeric addition
+
+      // this.editLeadForm.patchValue({ totalAmount: secondValue * this.editLeadForm.value.quantity });
+
+      //total amount end
+
+      // Ensure discount is not more than the total amount
+      const totalAmt = secondValue * this.editLeadForm.value.quantity - this.editLeadForm.value.discount;
+      const balanceAmt = this.editLeadForm.value.balanceAmount;
+      const bookingAmt = totalAmt - balanceAmt;
+
+
+      // Update the form with all new values in one patchValue call
+      this.editLeadForm.patchValue({
+        totalAmount: totalAmt,
+        bookingAmount: bookingAmt,
+      });
+    }
+  }
+
+  percentOrAmount() {
+    if (this.discountType === '₹') {
+      this.discountType = '%';
+      this.editLeadForm.patchValue({ discountType: 'Percent' });
+    } else if (this.discountType === '%') {
+      this.discountType = '₹';
+      this.editLeadForm.patchValue({ discountType: 'Amount' });
+    }
+  }
+
+
   calculateDaysDifference() {
     const start = new Date(this.pickupDate);
     const end = new Date(this.dropoffDate);
@@ -461,30 +652,29 @@ export class PickupComponent {
     this.daysDifference = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
   }
 
-  setSecurityAndVendorRate(event: any) {
 
-    const selectedSubCategory = event; // This now holds the full selected object
-    const addFormValue = this.addLeadForm.value;
+  setSecurityAndVendorRate(event: any) {
+    const selectedSubCategory = event.value; // This now holds the full selected object
+    const addFormValue = this.editLeadForm.value;
+
+    // add date and time automatic from sub category
+    const startTime = selectedSubCategory.startTime;
+    const endTime = selectedSubCategory.endTime;
 
     if (addFormValue.categoryTypeName == Constant.ACTIVITY) {
       this.addTimeToDate(selectedSubCategory.startTime);
     }
-    this.addLeadForm.patchValue({
-      categoryTypeName: selectedSubCategory.categoryTypeName,
-      superCategory: selectedSubCategory.superCategory,
-      category: selectedSubCategory.category,
-      subCategory: selectedSubCategory.subCategory,
-      startTime: selectedSubCategory.startTime,
-      endTime: selectedSubCategory.endTime,
-      activityLocation: selectedSubCategory.activityLocation,
-      pickDropHub: selectedSubCategory.pickDropHub,
+
+    this.editLeadForm.patchValue({
       securityAmount: selectedSubCategory.securityAmount,
-      vendorRate: selectedSubCategory.vendorRate,
+    });
+    this.editLeadForm.patchValue({ vendorRate: selectedSubCategory.vendorRate });
+    this.editLeadForm.patchValue({
       vendorRateForKids: selectedSubCategory.vendorRateForKids,
     });
   }
 
-    addTimeToDate(timeString: string): string {
+  addTimeToDate(timeString: string): string {
     const currentDate = new Date();
 
     // Extract hours and minutes from the time string (e.g., "14:53")
@@ -506,119 +696,493 @@ export class PickupComponent {
     const formattedMinutes = String(currentDate.getMinutes()).padStart(2, '0');
 
     const formattedDate = `${year}-${month}-${day}T${formattedHours}:${formattedMinutes}`;
+
+    console.log('hi : ' + formattedDate);
+
     // Set the formatted date to the form control
-    this.addLeadForm.patchValue({ pickupDateTime: formattedDate });
+    this.editLeadForm.patchValue({ pickupDateTime: formattedDate });
 
     return formattedDate;
   }
 
-  calculationForActivity(): void {
-    const leadValue = this.addLeadForm.value;
+  calExtraAmount() {
 
-    const adultQuantity = Number(leadValue.quantity) || 0;
-    const adultCompanyRate = Number(leadValue.companyRate) || 0;
-    const kidQuantity = Number(leadValue.kidQuantity) || 0;
-    const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
-    const adultVendorRate = Number(leadValue.vendorRate) || 0;
-    const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
-    const discount = Number(leadValue.discount) || 0;
-    const actualAmt = Number(leadValue.actualAmount) || 0;
+  }
 
-    // Total Amount (Company Rate)
-    const totalBeforeDiscount = (adultQuantity * adultCompanyRate) + (kidQuantity * companyRateForKids);
-    const totalAmount = Math.max(totalBeforeDiscount - discount, 0);
+  setDefaultDateTime(): void {
+    const currentDate = new Date();
 
-    // Balance Amount (Vendor Rate)
-    const balanceAmt = (adultQuantity * adultVendorRate) + (kidQuantity * kidsVendorRate);
-    const balanceAmount = Math.max(balanceAmt, 0);
+    // Get the local date and time values
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
 
-    // Booking Amount
-    const bookingAmount = Math.max(totalAmount - balanceAmount, 0);
+    // Combine into the required format: YYYY-MM-DDTHH:MM
+    const dateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
 
-    // Extra Calculation
-    let finalBalanceAmount = balanceAmount;
-
-    if (actualAmt != 0) {
-      if (bookingAmount >= actualAmt) {
-        const extraAmt = bookingAmount - actualAmt;
-        this.payToCompanyAct = extraAmt;
-        this.payToVendorAct = 0;
-        finalBalanceAmount = balanceAmount + extraAmt;
-      } else {
-        const extraAmt = actualAmt - bookingAmount;
-        this.payToCompanyAct = 0;
-        this.payToVendorAct = extraAmt;
-        finalBalanceAmount = Math.max(balanceAmount - extraAmt, 0);
-      }
-    }
-    // Patch all values at once
-    this.addLeadForm.patchValue({
-      totalAmount: totalAmount,
-      balanceAmount: finalBalanceAmount,
-      bookingAmount: bookingAmount,
-
-      payToCompany: this.payToCompanyAct,
-      payToVendor: this.payToVendorAct
+    // Patch the value into the form
+    this.editLeadForm.patchValue({
+      dropDateTime: dateTime,
+      pickupDateTime: dateTime,
     });
   }
 
-  calculationForVehicle() {
-    const leadValue = this.addLeadForm.value;
+  calculateDays() {
+    const pickupDateTime = this.editLeadForm.value.pickupDateTime;
+    const dropDateTime = this.editLeadForm.value.dropDateTime;
 
-    const companyRate = Number(leadValue.companyRate) || 0;
-    const totalDays = Number(leadValue.totalDays) || 0;
-    const deliveryAmountToCompany = Number(leadValue.deliveryAmountToCompany) || 0;
+    if (pickupDateTime && dropDateTime) {
+      let pickDate = new Date(pickupDateTime);
+      let dropDate = new Date(dropDateTime);
+
+      // Round both to nearest 15 minutes
+      pickDate = this.roundToNearest15Minutes(pickDate);
+      dropDate = this.roundToNearest15Minutes(dropDate);
+
+      // Base day difference
+      let noOfDays = Math.floor(
+        (dropDate.setHours(0, 0, 0, 0) - pickDate.setHours(0, 0, 0, 0)) /
+        (1000 * 60 * 60 * 24)
+      );
+
+      // Reset time to original (after date comparison)
+      pickDate = new Date(pickupDateTime);
+      dropDate = new Date(dropDateTime);
+      pickDate = this.roundToNearest15Minutes(pickDate);
+      dropDate = this.roundToNearest15Minutes(dropDate);
+
+      // Apply rules:
+      // If pickup is before 6:00 AM, add 1 day
+      if (pickDate.getHours() < 6) {
+        noOfDays += 1;
+      }
+
+      // If drop is after 9:00 AM, add 1 day
+      if (dropDate.getHours() > 9 || (dropDate.getHours() === 9 && dropDate.getMinutes() > 0)) {
+        noOfDays += 1;
+      }
+
+      // Ensure at least 1 day
+      if (noOfDays < 1) noOfDays = 1;
+
+      console.log({
+        pickupDateTime: this.formatDateTime(pickDate),
+        dropDateTime: this.formatDateTime(dropDate),
+        totalDays: noOfDays,
+      });
+
+      this.editLeadForm.patchValue({
+        pickupDateTime: this.formatDateTime(pickDate),
+        dropDateTime: this.formatDateTime(dropDate),
+        totalDays: noOfDays,
+      });
+    }
+  }
+
+  roundToNearest15Minutes(date: Date): Date {
+    const ms = 1000 * 60 * 15;
+    const rounded = Math.round(date.getTime() / ms) * ms;
+    return new Date(rounded);
+  }
+
+  calculateTotalAmount() {
+    const leadValue = this.editLeadForm.value;
+    let secondValue = 0;
+    if (
+      leadValue &&
+      leadValue.companyRate != null &&
+      leadValue.totalDays != null &&
+      leadValue.deliveryAmountToCompany != null &&
+      leadValue.quantity != null
+    ) {
+      const firstValue = leadValue.companyRate * leadValue.totalDays;
+      const secondValue =
+        firstValue + Number(leadValue.deliveryAmountToCompany); // Ensure numeric addition
+
+      this.editLeadForm.patchValue({
+        totalAmount: secondValue * leadValue.quantity,
+      });
+
+      this.deliveryAmtToVendor = this.editLeadForm.value.deliveryAmountToVendor;
+      this.vendorRate = this.editLeadForm.value.vendorRate;
+
+      // this.calExtraAmount();
+
+      this.calculateBalanceAmount();
+      this.calculatePayToCompanyAndPayToVendor();
+
+      this.editLeadForm.patchValue({ actualAmount: 0, discount: 0 });
+    } else {
+      console.error('Some required fields are missing for total amount calculation.'
+      );
+      leadValue.totalAmount = 0; // Set a fallback value
+    }
+    return secondValue * leadValue.quantity;
+  }
+
+  calculateBalanceAmount(): number {
+    const leadValue = this.editLeadForm.value;
+    let secondValue = 0;
+    if (
+      leadValue.vendorRate != null &&
+      leadValue.totalDays != null &&
+      leadValue.deliveryAmountToVendor != null &&
+      leadValue.quantity != null
+    ) {
+      const firstValue = leadValue.vendorRate * leadValue.totalDays;
+      secondValue = firstValue + Number(leadValue.deliveryAmountToVendor);
+      this.editLeadForm.patchValue({
+        balanceAmount: secondValue * leadValue.quantity,
+      });
+
+      this.calculateBookingAmount();
+      this.calculatePayToCompanyAndPayToVendor();
+    } else {
+      console.error(
+        'Some required fields are missing for balance amount calculation.'
+      );
+      leadValue.balanceAmount = 0; // Set a default fallback value
+    }
+    return secondValue * leadValue.quantity;
+  }
+
+  calculateBookingAmount(): number {
+    const leadValue = this.editLeadForm.value;
+    this.editLeadForm.patchValue({
+      bookingAmount: leadValue.totalAmount - leadValue.balanceAmount,
+    }),
+      this.calculatePayToCompanyAndPayToVendor();
+
+    return leadValue.totalAmount - leadValue.balanceAmount;
+  }
+
+  calculatePayToCompanyAndPayToVendor(): number {
+    const leadValue = this.editLeadForm.value;
+    const amountValue = leadValue.bookingAmount - leadValue.actualAmount;
+
+    // this.calExtraAmount();
+    if (amountValue < 0) {
+      leadValue.payToVendor = amountValue;
+      this.editLeadForm.patchValue({ payToVendor: amountValue });
+
+      this.payToVendor = this.editLeadForm.value.payToVendor;
+    } else if (amountValue >= 0) {
+      leadValue.payToCompany = amountValue;
+      this.editLeadForm.patchValue({ payToCompany: amountValue });
+      this.payToCompany = this.editLeadForm.value.payToCompany;
+    }
+    return amountValue;
+  }
+
+  // ----------------------------------------------Calculation for Activities Start----------------------------------------------------------------
+  calculateTotalAmountOfActivites() {
+    const leadValue = this.editLeadForm.value;
+
     const quantity = Number(leadValue.quantity) || 0;
-    const discount = Number(leadValue.discount) || 0;
-    const actualAmt = Number(leadValue.actualAmount) || 0;
+    const kidQuantity = Number(leadValue.kidQuantity) || 0;
+    const companyRate = Number(leadValue.companyRate) || 0;
+    const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
+
+    if (quantity >= 0 && kidQuantity >= 0) {
+      const firstValue = companyRate * quantity;
+      const secondValue = companyRateForKids * kidQuantity;
+      const totalAmount = firstValue + secondValue;
+
+      this.editLeadForm.patchValue({ totalAmount });
+
+      // Call booking amount calculation after total amount is updated
+      this.calculateBalanceAmountOfActivites();
+    } else {
+      console.error('Invalid input values.');
+      this.editLeadForm.patchValue({ totalAmount: 0 });
+    }
+  }
+
+  calculateBalanceAmountOfActivites(): number {
+    const leadValue = this.editLeadForm.value;
+
+    const quantity = Number(leadValue.quantity) || 0;
+    const kidQuantity = Number(leadValue.kidQuantity) || 0;
     const vendorRate = Number(leadValue.vendorRate) || 0;
-    const deliveryAmountToVendor = Number(leadValue.deliveryAmountToVendor) || 0;
-    const existingBalanceAmount = Number(leadValue.balanceAmount) || 0;
+    const vendorRateForKids = Number(leadValue.vendorRateForKids) || 0;
 
-    // === Total Amount ===
-    const compRatePerDay = companyRate * totalDays;
-    const totalCompanyAmount = (compRatePerDay + deliveryAmountToCompany) * quantity;
-    const totalAmount = totalCompanyAmount - discount;
+    if (quantity >= 0 && kidQuantity >= 0) {
+      const firstValue = vendorRate * quantity;
+      const secondValue = vendorRateForKids * kidQuantity;
+      const balanceAmount = firstValue + secondValue;
 
-    // === Balance Amount ===
-    const vendorRatePerDay = vendorRate * totalDays;
-    const totalVendorAmount = (vendorRatePerDay + deliveryAmountToVendor) * quantity;
+      this.editLeadForm.patchValue({ balanceAmount });
 
-    let balanceAmount = totalVendorAmount;
-
-    // === Booking Amount ===
-    const bookingAmount = totalAmount - existingBalanceAmount;
-
-    // === Adjusted Balance Based on Actual Amount ===
-    if (actualAmt > 0) {
-      if (bookingAmount >= actualAmt) {
-        const extraAmt = bookingAmount - actualAmt;
-        this.payToCompany = extraAmt;
-        this.payToVendor = 0;
-        balanceAmount += extraAmt;
-      } else {
-        const extraAmt = actualAmt - bookingAmount;
-        this.payToCompany = 0;
-        this.payToVendor = extraAmt;
-        balanceAmount = Math.max(balanceAmount - extraAmt, 0);
-      }
+      // Call booking amount calculation after balance amount is updated
+      this.calculateBookingAmountOfActivites();
+    } else {
+      console.error('Invalid input values.');
+      this.editLeadForm.patchValue({ balanceAmount: 0 });
     }
 
-    // ✅ Always patch values
-    this.addLeadForm.patchValue({
-      totalAmount: totalAmount,
-      balanceAmount: balanceAmount,
-      bookingAmount: bookingAmount,
-      payToCompany: this.payToCompany,
-      payToVendor: this.payToVendor
+    return 0;
+  }
+
+  calculateBookingAmountOfActivites(): number {
+    const leadValue = this.editLeadForm.value;
+
+    const totalAmount = Number(leadValue.totalAmount) || 0;
+    const balanceAmount = Number(leadValue.balanceAmount) || 0;
+    const bookingAmount = totalAmount - balanceAmount;
+
+    this.editLeadForm.patchValue({ bookingAmount });
+
+    return bookingAmount;
+  }
+
+  // ----------------------------------------------Calculation for Activities End----------------------------------------------------------------
+
+  checkCategoryType(categoryType: any) {
+    if (categoryType.categoryTypeName === Constant.ACTIVITY) {
+      this.isActivities = true;
+    } else {
+      this.isActivities = false;
+    }
+  }
+
+  onSelectionChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    // this.selectedOption = inputElement.value;
+    this.initializeComponent();
+  }
+
+  ////////////////////////////////////////////////////////////////////////////////////Below old------------------
+  setDateTime(date: any): string {
+
+    const currentDate = new Date(date);
+
+    // Adjust to local time zone
+    const timeZoneOffset = currentDate.getTimezoneOffset() * 60000; // offset in milliseconds
+    const localDate = new Date(currentDate.getTime() - timeZoneOffset);
+
+    // Round minutes to the nearest 15-minute interval
+    const minutes = localDate.getMinutes();
+    const roundedMinutes = Math.ceil(minutes / 15) * 15;
+    localDate.setMinutes(roundedMinutes);
+    localDate.setSeconds(0);
+    localDate.setMilliseconds(0);
+
+    // Format the date to the required input format: YYYY-MM-DDTHH:MM
+    const year = localDate.getFullYear();
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const hours = String(localDate.getHours()).padStart(2, '0');
+    const minutesFormatted = String(localDate.getMinutes()).padStart(2, '0');
+
+    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutesFormatted}`;
+
+    return formattedDateTime;
+  }
+
+  // saveLeadData(rawData: any) {
+  //   this.leadDetails = {
+  //     categoryType: rawData?.categoryTypeName,
+  //     superCategory: rawData?.superCategory,
+  //     category: rawData?.category,
+  //     subCategory: rawData?.subCategory,
+  //     pickupDateTime: this.setDateTime(rawData?.pickupDateTime),
+  //     pickupLocation: rawData?.pickupLocation,
+  //     pickupPoint: rawData?.pickupPoint,
+  //     dropDateTime: this.setDateTime(rawData?.dropDateTime),
+  //     dropLocation: rawData?.dropLocation,
+  //     dropPoint: rawData?.dropPoint,
+  //     totalDays: rawData?.totalDays,
+  //     quantity: rawData?.quantity,
+  //     vendorRate: rawData?.vendorRate,
+  //     companyRate: rawData?.companyRate,
+  //     bookingAmount: rawData?.bookingAmount,
+  //     balanceAmount: rawData?.balanceAmount,
+  //     totalAmount: rawData?.totalAmount,
+  //     securityAmount: rawData?.securityAmount,
+  //     payToVendor: rawData?.payToVendor,
+  //     payToCompany: rawData?.payToCompany,
+  //     deliveryToCompany: rawData?.deliveryAmountToCompany,
+  //     deliveryToVendor: rawData?.deliveryAmountToVendor,
+  //     customerName: rawData?.customeName,
+  //     dialCode: rawData?.countryDialCode,
+  //     mobile: rawData?.customerMobile,
+  //     alternateMobile: '',
+  //     emailId: rawData?.customerEmailId,
+  //     id: rawData?.id,
+  //     companyName: rawData?.companyName,
+  //     enquirySource: rawData?.enquirySource,
+  //     status: rawData?.status,
+  //     leadOrigine: rawData?.leadOrigine,
+  //     leadType: rawData?.leadType,
+  //     createdBy: rawData?.createdBy,
+  //     notes: rawData?.notes,
+  //     records: rawData?.records,
+  //     remarks: rawData?.remarks,
+  //     reminderDate: rawData?.reminderDate,
+  //   };
+
+  //   this.getCategoryType();
+
+  //   const superCategory = this.categoryTypeList.find(item => item.categoryTypeName === this.leadDetails.categoryType);
+  //   this.getSuperCategory(superCategory.id);
+  //   this.allIds.superCategoryId = superCategory.id;
+  // }
+
+  // async copyData(data: any, idx: number) {
+  //   this.saveLeadData(data);
+  //   this.helper.copyData(this.leadDetails);
+  //   this.setIsDataCopied(true, idx);
+  // }
+
+  public searchData(value: string): void {
+    this.dataSource.filter = value.trim().toLowerCase();
+    this.tableData = this.dataSource.filteredData;
+  }
+
+  setIsDataCopied(val: boolean, idx: number) {
+    for (const element of this.tableData) {
+      element.isDataCopied = false;
+    }
+    this.tableData[idx]['isDataCopied'] = val;
+  }
+
+
+  public getPickLocation() {
+    this.categoriesManagementService.getLocationByType('PICK').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.pickLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredPickLocationList = this.pickLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
     });
   }
 
-    onNotesTypeChange(value: string) {
-    this.notesType = value;
+  public getDropLocation() {
+    this.categoriesManagementService.getLocationByType('DROP').subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.dropLocationList = JSON.parse(
+            JSON.stringify(response.listPayload)
+          );
+          this.filteredDropLocationList = this.dropLocationList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
   }
 
-    setFilterList(listVal: any, typeOfList: any) {
+  public getCategoryType() {
+    // alert("getCategoryType ");
+    this.categoriesManagementService.getCategoryTypeList().subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          this.categoryTypeList = JSON.parse(JSON.stringify(response.listPayload));
+          this.filteredCategoryTypeList = this.categoryTypeList;
+        }
+      },
+      error: (error: any) =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+          styleClass: 'danger-background-popover',
+        }),
+    });
+  }
+
+  // public getSuperCategory(superCateId: any) {
+  //   // alert("getSuperCategory :"+superCateId);
+  //   this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(superCateId)
+  //     .subscribe({
+  //       next: (response: any) => {
+  //         if (response['responseCode'] == '200') {
+  //           this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+
+  //           this.filteredSuperCategoryList = this.superCategoryList;
+
+  //           const category = this.superCategoryList.find(item => item.superCategory === this.leadDetails.superCategory);
+  //           this.getCategory(category.id)
+  //         }
+  //       },
+  //       error: (error: any) =>
+  //         this.messageService.add({
+  //           summary: '500',
+  //           detail: 'Server Error',
+  //           styleClass: 'danger-background-popover',
+  //         }),
+  //     });
+  // }
+
+
+  public getCategory(categoryId: any) {
+    this.categoriesManagementService.getCategoryBySuperCatId(categoryId)
+      .subscribe({
+        next: (response: any) => {
+          if (response['responseCode'] == '200') {
+            this.categoryList = JSON.parse(JSON.stringify(response.listPayload));
+            this.filteredCategoryList = this.categoryList;
+
+            // const subCategory = this.categoryList.find(item => item.category === this.leadDetails.category);
+            // this.getSubCategory(subCategory.id);
+          }
+        },
+        error: (error: any) =>
+          this.messageService.add({
+            summary: '500',
+            detail: 'Server Error',
+            styleClass: 'danger-background-popover',
+          }),
+      });
+  }
+
+  // public getSubCategory(subCategoryId: any) {
+  //   console.log("Sub category : " + subCategoryId);
+  //   this.categoriesManagementService.getSubCategoryList()
+  //     .subscribe({
+  //       next: (response: any) => {
+  //         if (response['responseCode'] == '200') {
+  //           this.subCategoryList = JSON.parse(JSON.stringify(response.listPayload));
+  //           this.subCategoryList.forEach(subCategory => {
+  //             console.log(subCategory); // Access each item
+  //             // You can perform actions on each subCategory here
+  //           });
+  //           this.filteredSubCategoryList = this.subCategoryList;
+  //         }
+  //       },
+  //       error: (error: any) =>
+  //         this.messageService.add({
+  //           summary: '500',
+  //           detail: 'Server Error',
+  //           styleClass: 'danger-background-popover',
+  //         }),
+  //     });
+  // }
+
+  isCollapsed: boolean = false;
+  toggleCollapse() {
+    this.sidebar.toggleCollapse();
+    this.isCollapsed = !this.isCollapsed;
+  }
+  public filter = false;
+  openFilter() {
+    this.filter = !this.filter;
+  }
+  setFilterList(listVal: any, typeOfList: any) {
     switch (typeOfList) {
       case 'categoryType':
         this.filteredCategoryTypeList = listVal;
@@ -632,20 +1196,118 @@ export class PickupComponent {
       case 'subCategory':
         this.filteredSubCategoryList = listVal;
         break;
-      case 'pickLocation':
-        this.filteredPickLocationList = listVal;
-        break;
-      case 'dropLocation':
-        this.filteredDropLocationList = listVal;
-        break;
       default:
         break;
     }
   }
-
-  updateLeadDetails(){
-
+  filterByDate() {
+    this.bookingManagementService
+      .getPickUpList(this.firstDate, this.lastDate)
+      .subscribe((apiRes: any) => {
+        this.setTableData(apiRes);
+      });
+  }
+  setFilterDate(eve: any, date: any) {
+    if (date === 'first') {
+      this.firstDate = eve.target.value;
+    }
+    if (date === 'last') {
+      this.lastDate = eve.target.value;
+    }
   }
 
-}
+  changeLeadStatus() {
+    this.leadManagementService.changeLeadStatus(this.changeStatusForm.value).subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+            this.changeStatusForm.reset();
+            this.getPickupList();
 
+            this.statusLeadDialogTemplate.close();
+
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'success-background-popover',
+            });
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        } else {
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      },
+      error: () =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+        }),
+    });
+  }
+
+
+  updateLeadDetails() {
+    this.leadManagementService.updateLeadDetails(this.editLeadForm).subscribe({
+      next: (response: any) => {
+        if (response['responseCode'] == '200') {
+          if (response['payload']['respCode'] == '200') {
+            // form.reset();
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'success-background-popover',
+            });
+          } else {
+            this.messageService.add({
+              summary: response['payload']['respCode'],
+              detail: response['payload']['respMesg'],
+              styleClass: 'danger-background-popover',
+            });
+          }
+        } else {
+          this.messageService.add({
+            summary: response['payload']['respCode'],
+            detail: response['payload']['respMesg'],
+            styleClass: 'danger-background-popover',
+          });
+        }
+      },
+      error: () =>
+        this.messageService.add({
+          summary: '500',
+          detail: 'Server Error',
+        }),
+    });
+  }
+
+
+  getBadgeClass(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'enquiry':
+        return 'badge-linesuccess';
+      case 'lost':
+        return 'badge-linedanger';
+      case 'info':
+        return 'badge-lineinfo';
+      case 'followup':
+        return 'badge-linewarning';
+      case 'win':
+        return 'badge-linewin';
+      case 'assigned':
+        return 'badge-lineassigned';
+      case 'reserved':
+        return 'badge-linereserved';
+      default:
+        return 'badge-default'; // Default class if no match
+    }
+  }
+}

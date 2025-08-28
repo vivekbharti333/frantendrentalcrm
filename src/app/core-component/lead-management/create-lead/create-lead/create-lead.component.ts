@@ -526,7 +526,6 @@ export class CreateLeadComponent implements OnInit, AfterViewInit {
       .saveLeadDetails(this.addLeadForm.value)
       .subscribe({
         next: (response: any) => {
-          alert('response : ' + response.responseCode);
           if (response['responseCode'] == '200') {
             if (response['payload']['respCode'] == '200') {
               this.addLeadForm.reset();

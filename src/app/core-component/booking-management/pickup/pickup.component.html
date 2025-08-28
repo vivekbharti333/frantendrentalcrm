@@ -159,23 +159,26 @@
                   <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
                   <td>{{ data.invoiceNumber}}</td>
                   <td>
-                    <button class="badge-button"
-                      [ngClass]="{'badge-linesuccess': data.status === 'ACTIVE','badge-linedanger': data.status === 'INACTIVE'}">
-                      {{ data.status}}
-                    </button>
+                    <button class="badge-button" [ngClass]="getBadgeClass(data.status)"
+                    (click)="openStatusModel(statusLeadDialogTemplate, data)">
+                    {{ data.status }}
+                  </button>
                   </td>
                   <td class="action-table-data">
-                    <!-- <div class="edit-delete-action">
+                    <div class="edit-delete-action">
                       
-                        <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units"
-                          (click)="openEditModal(dialogTemplate, data)" *ngIf =isSuperadmin>
-                          <i class="feather icon-edit feather-edit"></i></a>
+                        <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#view-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, false)">
+                      <i class="feather icon-info feather-info"></i>
+                      <span class="tooltipText">View</span>
+                    </a>
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#edit-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, true)">
+                      <i class="feather icon-edit feather-edit textBlack"></i>
+                      <span class="tooltipText">Edit</span>
+                    </a>
   
-                          <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units"
-                          (click)="downloadInvoice(data.receiptNumber)">
-                          <i class="feather icon-download feather-download"></i></a>
-  
-                      </div> -->
+                      </div> 
                   </td>
                 </tr>
                 }
@@ -240,58 +243,73 @@
         </div>
         <div class="tab-pane" id="solid-justified-tab3">
           <div class="table-responsive">
-            <table matSort (matSortChange)="sortData($event)" class="table datanew">
-              <thead>
-                <tr>
-                  <th mat-sort-header="userName">category Type</th>
-                  <th mat-sort-header="loginId">SuperCategory</th>
-                  <th mat-sort-header="phone">category </th>
-                  <th mat-sort-header="role">Sub Category</th>
-                  <th mat-sort-header="createdOn">Drop Date</th>
-                  <th mat-sort-header="program">customeName</th>
-                  <th mat-sort-header="program">Mobile No</th>
-                  <th mat-sort-header="date&Time">Date & Time</th>
-                  <th mat-sort-header="invoiceNumber">Invoice Number</th>
-                  <th mat-sort-header="status">Status</th>
-                  <th class="no-sort">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (data of tableData; track data) {
-                <tr>
-                  <td>{{ data.categoryTypeName }} </td>
-                  <td>{{ data.superCategory }}</td>
-                  <td>{{ data.category }} </td>
-                  <td>{{ data.subCategory }}</td>
-                  <td>{{ data.dropDate }}</td>
-                  <td>{{ data.customeName }}</td>
-                  <td>{{ data.countryDialCode }} {{data.customerMobile}}</td>
-                  <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
-                  <td>{{ data.invoiceNumber}}</td>
-                  <td>
-                    <button class="badge-button"
-                      [ngClass]="{'badge-linesuccess': data.status === 'ACTIVE','badge-linedanger': data.status === 'INACTIVE'}">
-                      {{ data.status}}
-                    </button>
-                  </td>
-                  <td class="action-table-data">
-                    <!-- <div class="edit-delete-action">
-                        
-                          <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units"
-                            (click)="openEditModal(dialogTemplate, data)" *ngIf =isSuperadmin>
-                            <i class="feather icon-edit feather-edit"></i></a>
-    
-                            <a class="me-2 p-2 mb-0" data-bs-toggle="modal" data-bs-target="#edit-units"
-                            (click)="downloadInvoice(data.receiptNumber)">
-                            <i class="feather icon-download feather-download"></i></a>
-    
-                        </div> -->
-                  </td>
-                </tr>
-                }
-              </tbody>
-            </table>
-          </div>
+          <table matSort (matSortChange)="sortData($event)" class="table datanew">
+            <thead>
+              <tr>
+                <th></th>
+                <th mat-sort-header="userName">Sub Category</th>
+                <th mat-sort-header="loginId">Customer Name</th>
+                <th mat-sort-header="phone">Mobile</th>
+                <th mat-sort-header="role">Agent Name</th>
+                <th mat-sort-header="createdOn">Created On</th>
+                <th mat-sort-header="status">Status</th>
+                <th class="no-sort">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (data of tableData; track data; let idx=$index) {
+              <tr>
+                <td></td>
+                <td>{{ data.subCategory }}</td>
+                <td>{{ data.customeName }}</td>
+                <td>{{ data.customerMobile }}</td>
+                <td>{{ data.createdBy }}</td>
+                <td>{{ data.createdAt | date : "dd-MM-yyyy | HH:mm" }}</td>
+                <!-- <td>{{ data.status }}</td> -->
+                <td>
+                  <button class="badge-button" [ngClass]="getBadgeClass(data.status)"
+                    (click)="openStatusModel(statusLeadDialogTemplate, data)">
+                    {{ data.status }}
+                  </button>
+                </td>
+
+
+                <td class="action-table-data">
+                  <div class="edit-delete-action">
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#view-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, false)">
+                      <i class="feather icon-info feather-info"></i>
+                      <span class="tooltipText">View</span>
+                    </a>
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#edit-units"
+                      (click)="openEditModal(viewLeadDialogTemplate, data, true)">
+                      <i class="feather icon-edit feather-edit textBlack"></i>
+                      <span class="tooltipText">Edit</span>
+                    </a>
+                    <!-- <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#edit-units"
+                      (click)="downloadInvoice(data.bookingId)">
+                      <i class="fa fa-download"></i>
+                      <span class="tooltipText">invoice</span>
+                    </a> -->
+                    <!-- @if(data?.isDataCopied) {
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units">
+                      <i class="feather icon-check feather-check"></i>
+                      <span class="tooltipText">Copied!</span>
+                    </a>
+                    } @else {
+                    <a class="me-2 p-2 mb-0 position-relative" data-bs-toggle="modal" data-bs-target="#copy-units"
+                      (click)="copyData(data, idx)">
+                      <i class="feather icon-copy feather-copy"></i>
+                      <span class="tooltipText">Copy</span>
+                    </a>
+                    } -->
+                  </div>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
         </div>
 
         <div class="tab-pane" id="solid-justified-tab4">
@@ -392,412 +410,474 @@
   </div>
 
 
-  <ng-template #viewLeadDialogTemplate let-dialog>
-    <div class="modalHeaderContainer">
-      <h2 mat-dialog-title class="p-0">
-        Edit Lead Details</h2>
-      <div mat-dialog-close class="closeBtn">
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+  <ng-template #statusLeadDialogTemplate let-dialog>
+  <div class="modalHeaderContainer">
+    <h2 mat-dialog-title class="p-0">
+      Change Status
+    </h2>
+    <div mat-dialog-close class="closeBtn">
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="new-employee-field">
+        <br />
+
+        <div class="vehicle-section">
+          <div class="row">
+            <div class="col-lg-6 col-md-6">
+              <b>Name:</b> {{name}}
+            </div>
+
+            <div class="col-lg-6 col-md-6">
+              <b>Mobile:</b> {{mobile}}
+            </div>
+
+          </div><br>
+
+          <form [formGroup]="changeStatusForm" (ngSubmit)="changeLeadStatus()">
+            <div class="row">
+              <div class="col-lg-8 col-md-8">
+
+                <mat-select name="status" formControlName="status" class="select" placeholder="Select Status">
+                  @for (listData of leadStatus; track listData) {
+                  <mat-option [value]="listData.value">
+                    {{ listData.name }}
+                  </mat-option>
+                  }
+                </mat-select>
+
+              </div>
+              <div class="col-lg-4 col-md-4">
+                <button type="submit" class="btn btn-primary w-100">Submit</button>
+              </div>
+
+            </div>
+
+          </form>
+
+        </div>
       </div>
     </div>
-    <div class="fixed-height-scroll">
+  </div>
 
-      <div *ngIf="selectedOption === 'vehicle'">
-        <form [formGroup]="addLeadForm" (ngSubmit)="updateLeadDetails()">
-          <div class="card">
-            <div class="card-body">
-              <div class="new-employee-field">
-                <br />
-
-                <div class="vehicle-section">
-                  <div class="row justify-content-center mb-3 row-1">
-                    <div class="col-lg-3 col-md-3">
-                      <div class="mb-3">
-                        <mat-select formControlName="categoryId"
-                          class="select custom-mat-select no-border input-inside-element form-control"
-                          placeholder="Select a Package" (selectionChange)="setSecurityAndVendorRate($event.value)"
-                          required>
-                          <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
-                            [originalList]="filteredCategoryList"
-                            [categoryName]="'pickLocation'"></app-mat-select-search>
-                          <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate">
-                            {{ cate.category }}
-                          </mat-option>
-                        </mat-select>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 col-md-2">
-                      <div class="mb-2">
-                        <mat-form-field appearance="outline" class="w-100">
-                          <mat-label>Sub Category</mat-label>
-                          <input matInput type="text" formControlName="subCategory" required />
-                        </mat-form-field>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-5 col-md-5">
-                      <div class="mb-3">
-                        <div class="booking-container ">
-                          <div class="w-36">
-                            <label for="pickupDate" class="grey-text ">Pickup Date & Time</label>
-                            <input type="datetime-local" formControlName="pickupDateTime" id="pickupDate"
-                              name="pickupDate" step="900" [min]="minDate" [value]="pickupDate" (blur)="calculateDays()"
-                              class="datetimepick" />
-                            <div class="error" *ngIf="pickupError">
-                              {{ pickupError }}
-                            </div>
-                          </div>
-
-                          <div class="days-diff">
-                            <div type="text" class="form-control no-border days-no">
-                              <input type="number" class="form-control no-border days-no" formControlName="totalDays"
-                                required (change)="calculationForVehicle()" />
-                            </div>
-                          </div>
-
-                          <div class="date-time-group">
-                            <label for="dropoffDate" class="grey-text datepicker-label">Drop-off Date & Time</label>
-                            <input type="datetime-local" formControlName="dropDateTime" id="dropDateTime"
-                              name="dropDateTime" step="900" [min]="this.addLeadForm.value.pickupDateTime"
-                              [value]="dropoffDate" (blur)="calculateDays()" class="datetimepick" />
-                            <div class="error" *ngIf="dropoffError">
-                              {{ dropoffError }}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="container">
-                    <div class="row justify-content-center row-4">
-                      <div class="col-lg-3 col-md-3">
-                        <div class="mb-3">
-                          <mat-select formControlName="pickupHub" class="select custom-mat-select"
-                            placeholder="Pickup Location" required>
-                            <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
-                              [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search>
-                            <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
-                              {{ pickList.location }}
-                            </mat-option>
-                          </mat-select>
-                        </div>
-                      </div>
-
-                      <div class="col-lg-3 col-md-3">
-                        <mat-form-field appearance="outline" class="w-100">
-                          <mat-label>Pickup Point</mat-label>
-                          <input matInput type="text" formControlName="pickupPoint" required />
-                        </mat-form-field>
-                      </div>
-
-                      <div class="col-lg-3 col-md-3">
-                        <div class="mb-3">
-                          <mat-select formControlName="dropHub" placeholder="Drop Locations"
-                            class="select custom-mat-select" required>
-                            <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
-                              [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search>
-                            <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
-                              {{ dropList.location }}
-                            </mat-option>
-                          </mat-select>
-                        </div>
-                      </div>
-
-                      <div class="col-lg-3 col-md-3">
-                        <mat-form-field appearance="outline" class="w-100">
-                          <mat-label>Drop Point</mat-label>
-                          <input matInput type="text" formControlName="dropPoint" required />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- ----------------------------Thrird Row --------------------------------------->
-                  <div class="container">
-                    <div class="row justify-content-center row-3">
-                      <div class="col-lg-2 col-md-2 input-col">
-                        <mat-form-field appearance="outline" class="w-100">
-                          <mat-label>Quantity</mat-label>
-                          <input matInput type="number" formControlName="quantity" min="0" required
-                            (change)="calculationForVehicle()" />
-                        </mat-form-field>
-                      </div>
-
-                      <div class="col-lg-2 col-md-2 input-col">
-                        <mat-form-field appearance="outline" class="w-100">
-                          <mat-label>Company Rate</mat-label>
-                          <input matInput type="text" formControlName="companyRate" required
-                            (change)="calculationForVehicle()" />
-                        </mat-form-field>
-                      </div>
-
-                      <div class="col-lg-2 col-md-2 input-col">
-                        <mat-form-field appearance="outline" class="w-100">
-                          <mat-label>Vendor Rate</mat-label>
-                          <input matInput type="text" formControlName="vendorRate" required
-                            (change)="calculationForVehicle()" />
-                        </mat-form-field>
-                      </div>
-
-                      <div class="col-lg-2 col-md-2 input-col">
-                        <mat-form-field appearance="outline" class="w-100">
-                          <mat-label>Total Delivery</mat-label>
-                          <input matInput type="text" formControlName="deliveryAmountToCompany" required
-                            (change)="calculationForVehicle()" />
-                        </mat-form-field>
-                      </div>
-
-                      <div class="col-lg-2 col-md-2 input-col">
-                        <mat-form-field appearance="outline" class="w-100">
-                          <mat-label>Vendor Delivery</mat-label>
-                          <input matInput type="text" formControlName="deliveryAmountToVendor" required
-                            (change)="calculationForVehicle()" />
-                        </mat-form-field>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- ----------------------------Fourth Row --------------------------------------->
-
-                  <div class="row justify-content-center row-4">
-                    <div class="col-lg-2 col-md-2 input-col-2">
-                      <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Booking Amount</mat-label>
-                        <input matInput type="number" formControlName="bookingAmount" required readonly />
-                      </mat-form-field>
-                    </div>
-
-                    <div class="col-lg-2 col-md-2 input-col-2">
-                      <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Balance Amount</mat-label>
-                        <input matInput type="number" formControlName="balanceAmount" required readonly />
-                      </mat-form-field>
-                    </div>
-
-                    <div class="col-lg-2 col-md-2 input-col-2">
-                      <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Total Amount</mat-label>
-                        <input matInput type="number" formControlName="totalAmount" required readonly />
-                      </mat-form-field>
-                    </div>
-                  </div>
-
-                  <!-- ----------------------------Fifth Row --------------------------------------->
-
-                  <div class="row justify-content-center row-5">
-                    <!-- Discount + Type -->
-                    <div class="col-lg-2 col-md-2 input-col-3">
-                      <div class="mb-2">
-                        <div class="input-group">
-                          <mat-form-field appearance="outline" class="w-100">
-                            <mat-label>Discount</mat-label>
-                            <input matInput type="text" class="form-control" placeholder="Discount"
-                              formControlName="discount" (change)="
-                        calculationForVehicle() " />
-                            <span class="input-group-text no-select" formControlName="discountType"
-                              (click)="percentOrAmount()" style="cursor: pointer; width: 40px" hidden>{{ discountType
-                              }}</span>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-2 col-md-2 input-col-3">
-                      <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Actual Amount</mat-label>
-                        <input matInput type="number" formControlName="actualAmount" required
-                          (change)="calculationForVehicle()" />
-                      </mat-form-field>
-                    </div>
-
-                    <!-- Security Deposit -->
-                    <div class="col-lg-2 col-md-2 input-col-3">
-                      <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Security Deposit</mat-label>
-                        <input matInput type="number" formControlName="securityAmount" required
-                          (change)="calculationForVehicle()" />
-                      </mat-form-field>
-                    </div>
+</ng-template>
 
 
-                  </div>
+<ng-template #viewLeadDialogTemplate let-dialog>
+  <div class="modalHeaderContainer">
+    <h2 mat-dialog-title class="p-0">
+      {{ isEditForm ? "Edit Lead Details" : "View Lead Details" }}
+    </h2>
+    <div mat-dialog-close class="closeBtn">
+      <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
 
-                  <div class="row">
-                    <div class="col-lg-2 col-md-2"></div>
-                    <div class="col-lg-2 col-md-2">
-                      <div class="mb-2">
-                        <mat-select name="leadOrigine" placeholder="Select Lead Origine" formControlName="leadOrigine"
-                          class="select" placeholder="Select Lead Origine">
-                          @for (listData of leadOrigine; track listData) {
-                          <mat-option [value]="listData.name">
-                            {{ listData.name }}
-                          </mat-option>
-                          }
-                        </mat-select>
-                      </div>
-                    </div>
-                    <div class="col-lg-2 col-md-2">
-                      <div class="mb-2">
-                        <mat-select name="leadType" formControlName="leadType" placeholder="Select Lead Type"
-                          class="select">
-                          @for (listData of leadType; track listData) {
-                          <mat-option [value]="listData.name">
-                            {{ listData.name }}
-                          </mat-option>
-                          }
-                        </mat-select>
-                      </div>
-                    </div>
-                    <div class="col-lg-2 col-md-2">
-                      <div class="mb-2">
-                        <mat-select name="status" formControlName="status" class="select" placeholder="Select Status">
-                          @for (listData of leadStatus; track listData) {
-                          <mat-option [value]="listData.value">
-                            {{ listData.name }}
-                          </mat-option>
-                          }
-                        </mat-select>
-                      </div>
-                    </div>
-                    <div class="col-lg-2 col-md-2">
-                      <div class="mb-2">
-                        <mat-select formControlName="createdBy" class="select custom-mat-select" name="createdBy"
-                          placeholder="Select Agent Name">
-                          <mat-option *ngFor="let user of userList" [value]="user.loginId">
-                            {{ user.firstName }}
-                          </mat-option>
-                        </mat-select>
-                      </div>
-                    </div>
-                    <div class="col-lg-2 col-md-2"></div>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-2 col-md-2"></div>
+  <div class="fixed-height-scroll">
+
+
+    <form [formGroup]="editLeadForm" (ngSubmit)="updateLeadDetails()">
+      <div class="card">
+        <div class="card-body">
+          <div class="new-employee-field">
+            <br />
+
+            <div class="vehicle-section">
+              <div class="row justify-content-center mb-3 row-1">
+                <div class="col-lg-3 col-md-3">
+                  <div class="mb-3">
+                    <!-- <mat-select formControlName="category"
+                      class="select custom-mat-select no-border input-inside-element form-control"
+                      placeholder="Select a Package" (selectionChange)="getSubCategory($event.value)" required>
+                      <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
+                        [originalList]="filteredCategoryList" [categoryName]="'pickLocation'"></app-mat-select-search>
+                      <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate.category">
+                        {{ cate.category }}
+                      </mat-option> -->
+                      <mat-select formControlName="category"
+                      class="select custom-mat-select no-border input-inside-element form-control"
+                      placeholder="Select a Package" required>
+                      <app-mat-select-search (filteredList)="setFilterList($event, 'category')"
+                        [originalList]="filteredCategoryList" [categoryName]="'pickLocation'"></app-mat-select-search>
+                      <mat-option *ngFor="let cate of filteredCategoryList" [value]="cate.category">
+                        {{ cate.category }}
+                      </mat-option>
+                    </mat-select>
                   </div>
                 </div>
 
-                <div class="section customer-details-section wider-spacing">
-                  <div class="card-title-head">
-                    <h6>
-                      <span><i class="feather icon-info feather-edit"></i></span>Customer Details
-                    </h6>
-                  </div>
-                  <div class="row">
-                    <div class="col-lg-3 col-md-3">
-                      <div class="mb-3">
-                        <input type="text" class="form-control bottom-border" placeholder="Full Name"
-                          formControlName="customeName" required />
-                      </div>
-                    </div>
-                    <div class="col-lg-1 col-md-3">
-                      <div class="mb-3">
-                        <input type="text" class="form-control bottom-border" placeholder="Dial Code"
-                          formControlName="countryDialCode" required />
-                      </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6">
-                      <div class="mb-3">
-                        <input type="text" class="form-control bottom-border" placeholder="Mobile"
-                          formControlName="customerMobile" required />
-                      </div>
-                    </div>
-                    <div class="col-lg-2 col-md-6">
-                      <div class="mb-3">
-                        <input type="text" class="form-control bottom-border" placeholder="Alt. Mobile"
-                          formControlName="customerAlternateMobile" />
-                      </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                      <div class="mb-3">
-                        <input type="text" class="form-control bottom-border" placeholder="Email id"
-                          formControlName="customerEmailId" required />
-                      </div>
-                    </div>
+                <div class="col-lg-2 col-md-2">
+                  <div class="mb-2">
+                    <mat-form-field appearance="outline" class="w-200">
+                    <mat-label>Sub Category</mat-label>
+                    <input matInput type="text" formControlName="subCategory" required readonly/>
+                  </mat-form-field>
                   </div>
                 </div>
 
-                <div class="section additional-info-section">
-                  <div class="custom-card-title-head" [ngStyle]="{ 'border-bottom': 'none', 'box-shadow': 'none' }">
-                    <h6 class="additional-info-text">
-                      <span><i class="feather icon-info feather-edit custom-icon"></i></span>Additional Info
-                    </h6>
-                  </div>
-                  <div class="row">
-                    <p></p>
-                    <div class="col-lg-4 col-md-4">
-                      <div class="input-container">
-                        <label for="reports"><b>Report: </b></label>
-                        {{ vendorRate }}
-                      </div>
-                      <div class="input-container">
-                        <label for="delivery"><b>Delivery: </b></label>
-                        {{ deliveryAmtToVendor }}
-                      </div>
-                      <div class="input-container">
-                        <label for="remarks" class="requiredField"><b>Remarks:</b></label>
-                        <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..."
-                          formControlName="remarks" required />
-                      </div>
-                      <div class="input-container">
-                        <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
-                        {{ payToVendor }}
-                      </div>
-                      <div class="input-container">
-                        <label for="pay-to-company"><b>Pay to company:</b></label>
-                        {{ payToCompany }}
-                      </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-4 vl">
-                      <input class="form-check-input" type="radio" name="notesType" [value]="'Notes'" id="notes1"
-                        (change)="onNotesTypeChange('Notes')" [checked]="notesType === 'Notes'" />
-                      <label class="form-check-label" for="notes1" style="margin-right: 20px; margin-left: 20px">
-                        Notes
-                      </label>
-
-                      <input class="form-check-input" type="radio" name="notesType" [value]="'Reminders'" id="notes2"
-                        (change)="onNotesTypeChange('Reminders')" [checked]="notesType === 'Reminders'" />
-                      <label class="form-check-label" for="notes2" style="margin-left: 20px">
-                        Reminders </label><br /><br />
-
-                      <div *ngIf="notesType === 'Notes'">
-                        <textarea class="form-control no-border" name="notes" formControlName="notes" rows="4"
-                          placeholder="___________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
+                <div class="col-lg-5 col-md-5">
+                  <div class="mb-3">
+                    <div class="booking-container ">
+                      <div class="w-36">
+                        <label for="pickupDate" class="grey-text ">Pickup Date & Time</label>
+                        <!-- <input type="datetime-local" id="pickupDate" name="pickupDate" step="900"[min]="minDate" [value]="pickupDate" (change)="onDateChange($event, 'pickupDate')"class="datetimepick" /> -->
+                        <input type="datetime-local" formControlName="pickupDateTime" id="pickupDate" name="pickupDate"
+                          step="900" [min]="minDate" [value]="pickupDate" (blur)="calculateDays()"
+                          class="datetimepick" />
+                        <div class="error" *ngIf="pickupError">
+                          {{ pickupError }}
+                        </div>
                       </div>
 
-                      <div *ngIf="notesType === 'Reminders'">
-                        <input class="form-control datetimepicker" placeholder="Choose Date"
-                          formControlName="nextFollowupDate" bsDatepicker container=".date-input2" [bsConfig]="{
-                      dateInputFormat: 'DD/MM/YYYY',
-                      minDate: minDate,
-                      maxDate: maxDate
-                    }" />
-                        <textarea class="form-control no-border" name="notes" formControlName="notes" rows="2"
-                          placeholder="___________________________________________________________________________________________"></textarea>
+                      <div class="days-diff">
+                        <div type="text" class="form-control no-border days-no">
+                          <!-- {{ daysDifference }} days -->
+                          <input type="number" class="form-control no-border days-no" formControlName="totalDays"
+                            required (change)="calculateTotalAmount()" />
+                        </div>
                       </div>
-                    </div>
 
-                    <div class="col-lg-4 col-md-4 vl">
-                      <h4>Records</h4>
-                      <textarea class="form-control no-border" name="records" formControlName="records" rows="4"
-                        placeholder="No Records Found"></textarea>
+                      <div class="date-time-group">
+                        <label for="dropoffDate" class="grey-text datepicker-label">Drop-off Date & Time</label>
+                        <!-- <input type="datetime-local" id="dropoffDate" name="dropoffDate" step="900" [min]="pickupDate" [value]="dropoffDate"(change)="onDateChange($event, 'dropoffDate')" class="datetimepick"/> -->
+                        <input type="datetime-local" formControlName="dropDateTime" id="dropDateTime"
+                          name="dropDateTime" step="900" [min]="this.editLeadForm.value.pickupDateTime"
+                          [value]="dropoffDate" (blur)="calculateDays()" class="datetimepick" />
+                        <div class="error" *ngIf="dropoffError">
+                          {{ dropoffError }}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              <div class="container">
+                <div class="row justify-content-center row-2">
+                  <div class="col-lg-2 col-md-2">
+                    <div class="mb-2">
+                      <mat-select formControlName="pickupHub" class="select custom-mat-select"
+                        placeholder="Pickup Location" required>
+                        <app-mat-select-search (filteredList)="setFilterList($event, 'pickLocation')"
+                          [originalList]="pickLocationList" [categoryName]="'pickLocation'"></app-mat-select-search>
+                        <mat-option *ngFor="let pickList of filteredPickLocationList" [value]="pickList.location">
+                          {{ pickList.location }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Pickup Point</mat-label>
+                      <input matInput type="text" formControlName="pickupPoint" required />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2">
+                    <div class="mb-2">
+                      <mat-select formControlName="dropHub" placeholder="Drop Locations"
+                        class="select custom-mat-select" required>
+                        <app-mat-select-search (filteredList)="setFilterList($event, 'dropLocation')"
+                          [originalList]="dropLocationList" [categoryName]="'dropLocation'"></app-mat-select-search>
+                        <mat-option *ngFor="let dropList of filteredDropLocationList" [value]="dropList.location">
+                          {{ dropList.location }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Drop Point</mat-label>
+                      <input matInput type="text" formControlName="dropPoint" required />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <!-- hjhjkhkhkhjkhh -->
+
+              <!-- ----------------------------Thrird Row --------------------------------------->
+              <div class="container">
+                <div class="row justify-content-center row-3">
+                  <div class="col-lg-2 col-md-2 input-col">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Quantity</mat-label>
+                      <input matInput type="number" formControlName="quantity" min="0" required />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2 input-col">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Company Rate</mat-label>
+                      <input matInput type="text" formControlName="companyRate" required
+                        (change)="calculateTotalAmount()" />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2 input-col">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Vendor Rate</mat-label>
+                      <input matInput type="text" formControlName="vendorRate" required
+                        (change)="calculateTotalAmount()" />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2 input-col" *ngIf="!isActivities">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Total Delivery</mat-label>
+                      <input matInput type="text" formControlName="deliveryAmountToCompany" required
+                        (change)="calculateTotalAmount()" />
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-lg-2 col-md-2 input-col">
+                    <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Vendor Delivery</mat-label>
+                      <input matInput type="text" formControlName="deliveryAmountToVendor" required
+                        (change)="calculateTotalAmount()" />
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ----------------------------Fourth Row --------------------------------------->
+
+              <div class="row justify-content-center row-4">
+                <div class="col-lg-2 col-md-2 input-col-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Booking Amount</mat-label>
+                    <input matInput type="number" formControlName="bookingAmount" required readonly />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-2 col-md-2 input-col-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Balance Amount</mat-label>
+                    <input matInput type="number" formControlName="balanceAmount" required readonly />
+                  </mat-form-field>
+                </div>
+
+                <div class="col-lg-2 col-md-2 input-col-2">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Total Amount</mat-label>
+                    <input matInput type="number" formControlName="totalAmount" required readonly />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <!-- ----------------------------Fifth Row --------------------------------------->
+
+              <div class="row justify-content-center row-5">
+                <!-- Discount + Type -->
+                <div class="col-lg-2 col-md-2 input-col-3">
+                  <div class="mb-2">
+                    <div class="input-group">
+                      <input type="text" class="form-control" placeholder="Discount" formControlName="discount"
+                        (change)="
+                        calculateTotalAmountAndBalaenceAmontAfterDiscount()
+                      " />
+                      <span class="input-group-text no-select" formControlName="discountType"
+                        (click)="percentOrAmount()" style="cursor: pointer; width: 40px">{{ discountType }}</span>
+                    </div>
+                  </div>
+                </div>
+                <!-- Actual Amount -->
+                <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Actual Amount</mat-label>
+                    <input matInput type="number" formControlName="actualAmount" required (change)="calExtraAmount()" />
+                  </mat-form-field>
+                </div>
+
+                <!-- Security Deposit -->
+                <div class="col-lg-2 col-md-2 input-col-3" *ngIf="!isActivities">
+                  <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Security Deposit</mat-label>
+                    <input matInput type="number" formControlName="securityAmount" required
+                      (change)="calculatePayToCompanyAndPayToVendor()" />
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-2 col-md-2"></div>
+                <div class="col-lg-2 col-md-2">
+                  <div class="mb-2">
+                    <mat-select name="leadOrigine" placeholder="Select Lead Origine" formControlName="leadOrigine"
+                      class="select" placeholder="Select Lead Origine">
+                      @for (listData of leadOrigine; track listData) {
+                      <mat-option [value]="listData.name">
+                        {{ listData.name }}
+                      </mat-option>
+                      }
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                  <div class="mb-2">
+                    <mat-select name="leadType" formControlName="leadType" placeholder="Select Lead Type"
+                      class="select">
+                      @for (listData of leadType; track listData) {
+                      <mat-option [value]="listData.name">
+                        {{ listData.name }}
+                      </mat-option>
+                      }
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                  <div class="mb-2">
+                    <mat-select name="status" formControlName="status" class="select" placeholder="Select Status">
+                      @for (listData of leadStatus; track listData) {
+                      <mat-option [value]="listData.value">
+                        {{ listData.name }}
+                      </mat-option>
+                      }
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                  <div class="mb-2">
+                    <mat-select formControlName="createdBy" class="select custom-mat-select" name="createdBy"
+                      placeholder="Select Agent Name">
+                      <mat-option *ngFor="let user of userForDropDown" [value]="user.loginId">
+                        {{ user.firstName }}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-2"></div>
+              </div>
+              <div class="row">
+                <div class="col-lg-2 col-md-2"></div>
+              </div>
             </div>
-            <div class="text-mid mb-3">
-              <button type="submit" class="btn btn-submit">Save Lead</button>
+
+            <div class="section customer-details-section wider-spacing">
+              <div class="card-title-head">
+                <h6>
+                  <span><i class="feather icon-info feather-edit"></i></span>Customer Details
+                </h6>
+              </div>
+              <div class="row">
+                <div class="col-lg-3 col-md-3">
+                  <div class="mb-3">
+                    <input type="text" class="form-control bottom-border" placeholder="Custome Name"
+                      formControlName="customeName" required />
+                  </div>
+                </div>
+                <div class="col-lg-1 col-md-3">
+                  <div class="mb-3">
+                    <input type="text" class="form-control bottom-border" placeholder="Dial Code"
+                      formControlName="countryDialCode" required />
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                  <div class="mb-3">
+                    <input type="text" class="form-control bottom-border" placeholder="Mobile"
+                      formControlName="customerMobile" required />
+                  </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                  <div class="mb-3">
+                    <input type="text" class="form-control bottom-border" placeholder="Alternate Mobile"
+                      formControlName="customerAlternateMobile" />
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                  <div class="mb-3">
+                    <input type="text" class="form-control bottom-border" placeholder="Customer EmailId"
+                      formControlName="customerEmailId" required />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="text-mid mb-3"></div>
+
+            <div class="section additional-info-section">
+              <div class="custom-card-title-head" [ngStyle]="{ 'border-bottom': 'none', 'box-shadow': 'none' }">
+                <h6 class="additional-info-text">
+                  <span><i class="feather icon-info feather-edit custom-icon"></i></span>Additional Info
+                </h6>
+              </div>
+              <div class="row">
+                <p></p>
+                <div class="col-lg-4 col-md-4">
+                  <div class="input-container">
+                    <label for="reports"><b>Report: </b></label>
+                    {{ vendorRate }}
+                  </div>
+                  <div class="input-container">
+                    <label for="delivery"><b>Delivery: </b></label>
+                    {{ deliveryAmtToVendor }}
+                  </div>
+                  <div class="input-container">
+                    <label for="remarks" class="requiredField"><b>Remarks:</b></label>
+                    <input type="text" id="remarks" class="form-control no-border" placeholder=" Write Remarks..."
+                      formControlName="remarks" required />
+                  </div>
+                  <div class="input-container">
+                    <label for="pay-to-vendor"><b>Pay to vendor:</b></label>
+                    {{ payToVendor }}
+                  </div>
+                  <div class="input-container">
+                    <label for="pay-to-company"><b>Pay to company:</b></label>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 vl">
+                  <!-- <input class="form-check-input" type="radio" name="notesType" [value]="'Notes'" id="notes1"
+                  (change)="onNotesTypeChange('Notes')" [checked]="notesType === 'Notes'" />
+                <label class="form-check-label" for="notes1" style="margin-right: 20px; margin-left: 20px">
+                  Notes
+                </label> -->
+
+                  <!-- <input class="form-check-input" type="radio" name="notesType" [value]="'Reminders'" id="notes2"
+                  (change)="onNotesTypeChange('Reminders')" [checked]="notesType === 'Reminders'" />
+                <label class="form-check-label" for="notes2" style="margin-left: 20px">
+                  Reminders </label><br /><br /> -->
+
+                  <!-- <div *ngIf="notesType === 'Notes'">
+                  <textarea class="form-control no-border" name="notes" formControlName="notes" rows="4"
+                    placeholder="___________________________________________________________________________________________________________________________________________________________________________________________________________"></textarea>
+                </div> -->
+
+                  <!-- <div *ngIf="notesType === 'Reminders'">
+                  <input class="form-control datetimepicker" placeholder="Choose Date" formControlName="followupDate"
+                    bsDatepicker container=".date-input2" [bsConfig]="{
+                      dateInputFormat: 'DD/MM/YYYY',
+                      minDate: minDate,
+                      maxDate: maxDate
+                    }" />
+                  <textarea class="form-control no-border" name="notes" formControlName="notes" rows="2"
+                    placeholder="___________________________________________________________________________________________"></textarea>
+                </div> -->
+                </div>
+
+                <div class="col-lg-4 col-md-4 vl">
+                  <h4>Records</h4>
+                  <textarea class="form-control no-border" name="records" formControlName="records" rows="4"
+                    placeholder="No Records Found"></textarea>
+                </div>
+              </div>
+            </div>
           </div>
-        </form>
+        </div>
+        <div class="text-mid mb-3">
+          <button type="submit" class="btn btn-submit">Save Lead</button>
+        </div>
+        <div class="text-mid mb-3"></div>
       </div>
+    </form>
 
+  </div>
 
-    </div>
-  </ng-template>
+</ng-template>

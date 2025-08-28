@@ -80,7 +80,16 @@ export class DropComponent {
 
     this.serialNumberArray = [];
 
-    this.bookingManagementService.getDropList().subscribe((apiRes: any) => {
+    const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+
+  // Format dates as YYYY-MM-DD (or any format required by API)
+  const formattedToday = today.toISOString().split('T')[0];
+  const formattedTomorrow = tomorrow.toISOString().split('T')[0];
+
+
+    this.bookingManagementService.getDropList(formattedToday,formattedTomorrow).subscribe((apiRes: any) => {
       this.totalData = apiRes.totalNumber;
       this.fullData = apiRes.listPayload; // Store the full dataset
 
@@ -115,6 +124,7 @@ export class DropComponent {
       tableData: this.tableData,
       serialNumberArray: this.serialNumberArray,
     });
+    
   }
 
 
