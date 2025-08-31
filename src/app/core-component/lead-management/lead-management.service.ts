@@ -144,124 +144,68 @@ export class LeadManagementService {
   }
 
   updateLeadDetails(lead: any): Observable<any> {
+    alert(lead.id+" id")
     const request: any = {
-      payload: this.updateLeadPayload(lead),
+      payload : {
+        id: lead.id,
+        companyName: lead.companyName,
+        enquirySource: lead.enquirySource,
+        pickDropHub: lead.pickDropHub,
+        activityLocation: lead.activityLocation,
+        // categoryTypeId: lead.categoryTypeId?.id,
+        categoryTypeName: lead.categoryTypeName,
+        // superCategoryId: lead.superCategoryId?.id,
+        // categoryId: lead.categoryId,
+        // subCategoryId: lead.subCategoryId?.id,
+        superCategory: lead.superCategory, 
+        category: lead.category, 
+        subCategory: lead.subCategory, 
+        pickupDateTime: lead.pickupDateTime,
+        pickupHub: lead.pickupHub,
+        pickupPoint: lead.pickupPoint,
+        dropDateTime: lead.dropDateTime,
+        dropHub: lead.dropHub,
+        dropPoint: lead.dropPoint,
+        customeName: lead.customeName,
+        countryDialCode: lead.countryDialCode,
+        customerMobile: lead.customerMobile,
+        customerEmailId: lead.customerEmailId,
+        totalDays: lead.totalDays,
+        quantity: lead.quantity,
+        kidQuantity: lead.kidQuantity,
+        infantQuantity: lead.infantQuantity,
+        vendorRate: lead.vendorRate,
+        payToVendor: lead.payToVendor,
+        companyRate: lead.companyRate,
+        payToCompany: lead.payToCompany,
+        bookingAmount: lead.bookingAmount,
+        balanceAmount: lead.balanceAmount,
+        totalAmount: lead.totalAmount,
+        actualAmount: lead.actualAmount,
+        securityAmount: lead.securityAmount,
+        discountType: lead.discountType,
+        discount: lead.discount,
+        deliveryAmountToCompany: lead.deliveryAmountToCompany,
+        deliveryAmountToVendor: lead.deliveryAmountToVendor,
+        status: lead.status,
+        leadOrigine: lead.leadOrigine,
+        leadType: lead.leadType,
+        createdBy: lead.createdBy,
+        loginId: this.cookieService.get('loginId'),
+        notes: lead.notes,
+        nextFollowupDate: lead.nextFollowupDate,
+        remarks: lead.remarks,
+        roleType: this.cookieService.get('roleType'),
+        token: this.cookieService.get('token'),
+        // createdBy: this.cookieService.get('loginId'),
+        superadminId: this.cookieService.get('superadminId'),
+        teamleaderId: this.cookieService.get('teamleaderId'),
+        adminId: this.cookieService.get('adminId')
+      }
     };
-    return this.http.post<any>(Constant.Site_Url + 'registerLead', request);
+    return this.http.post<any>(Constant.Site_Url + 'updateLead', request);
   }
 
-  // saveLeadPayload(lead: any) {
-
-  //   alert(" khj : "+lead.categoryTypeName);
-  //   const payload = {
-  //     companyName: lead.companyName,
-  //     enquirySource: lead.enquirySource,
-      
-  //         pickDropHub: lead.pickDropHub,
-  //   activityLocation: lead.activityLocation,
-  //     categoryTypeId: lead.categoryTypeId?.id,
-  //     superCategoryId: lead.superCategoryId?.id,
-  //     categoryId: lead.categoryId?.id,
-  //     subCategoryId: lead.subCategoryId?.id,
-  //     categoryTypeName: lead.categoryTypeName?.categoryTypeName, // Need to add in payload
-  //     superCategory: lead.superCategoryId?.superCategory, //
-  //     category: lead.categoryId?.category, //
-  //     subCategory: lead.subCategoryId?.subCategory, //
-  //     // itemName: lead.itemName,
-  //     pickupDateTime: lead.pickupDateTime,
-  //     pickupHub: lead.pickupHub,
-  //     pickupPoint: lead.pickupPoint,
-  //     dropDateTime: lead.dropDateTime,
-  //     dropHub: lead.dropHub,
-  //     dropPoint: lead.dropPoint,
-  //     customeName: lead.customeName,
-  //     countryDialCode: lead.countryDialCode,
-  //     customerMobile: lead.customerMobile,
-  //     customerEmailId: lead.customerEmailId,
-  //     totalDays: lead.totalDays,
-  //     quantity: lead.quantity,
-  //     kidQuantity: lead.kidQuantity,
-  //     infantQuantity: lead.infantQuantity,
-  //     vendorRate: lead.vendorRate,
-  //     payToVendor: lead.payToVendor,
-  //     companyRate: lead.companyRate,
-  //     payToCompany: lead.payToCompany,
-  //     bookingAmount: lead.bookingAmount,
-  //     balanceAmount: lead.balanceAmount,
-  //     totalAmount: lead.totalAmount,
-  //     actualAmount: lead.actualAmount,
-  //     securityAmount: lead.securityAmount,
-  //     discountType: lead.discountType,
-  //     discount: lead.discount,
-  //     deliveryAmountToCompany: lead.deliveryAmountToCompany,
-  //     deliveryAmountToVendor: lead.deliveryAmountToVendor,
-  //     // vendorName: lead.,
-  //     status: lead.status,
-  //     leadOrigine: lead.leadOrigine,
-  //     leadType: lead.leadType,
-  //     createdBy: lead.createdBy,
-  //     loginId: this.cookieService.get('loginId'),
-  //     notes: lead.notes,
-  //     nextFollowupDate: lead.nextFollowupDate,
-  //     remarks: lead.remarks,
-  //     roleType: this.cookieService.get('roleType'),
-  //     token: this.cookieService.get('token'),
-  //     // createdBy: this.cookieService.get('loginId'),
-  //     superadminId: this.cookieService.get('superadminId'),
-  //     teamleaderId: this.cookieService.get('teamleaderId'),
-  //     adminId: this.cookieService.get('adminId')
-  //   };
-  //   return payload;
-  // }
-
-  updateLeadPayload(lead: any) {
-    const payload = {
-      id: lead.id,
-      companyName: lead.companyName,
-      enquirySource: lead.enquirySource,
-      categoryTypeId: lead?.categoryType?.id,
-      superCategoryId: lead?.superCategory?.id,
-      categoryId: lead?.category?.id,
-      subCategoryId: lead?.subCategory?.id,
-      categoryTypeName: lead?.categoryType?.categoryTypeName,
-      superCategory: lead?.superCategory?.superCategory, //
-      category: lead?.category?.category, //
-      subCategory: lead?.subCategory?.subCategory, //
-      // itemName: lead.itemName,
-      pickupDateTime: lead?.pickUpDateTime,
-      pickupLocation: lead?.pickUpLocation,
-      pickupPoint: lead.pickupPoint,
-      dropDateTime: lead?.dropDateTime,
-      dropLocation: lead?.dropLocation,
-      dropPoint: lead.dropPoint,
-      customeName: lead?.customerName,
-      countryDialCode: lead?.dialCode,
-      customerMobile: lead?.mobile,
-      customerEmailId: lead?.emailId,
-      totalDays: lead?.totalDays,
-      quantity: lead?.quantity,
-      vendorRate: lead?.vendorRate,
-      payToVendor: lead?.payToVendor,
-      companyRate: lead?.companyRate,
-      payToCompany: lead?.payToCompany,
-      bookingAmount: lead?.bookingAmount,
-      balanceAmount: lead?.balanceAmount,
-      totalAmount: lead?.totalAmount,
-      securityAmount: lead?.securityAmount,
-      // vendorName: lead.,
-      status: lead.status,
-      leadOrigine: lead.leadOrigine,
-      leadType: lead.leadType,
-      // createdBy: lead.createdBy,
-      createdBy: this.cookieService.get('loginId'),
-      notes: lead.notes,
-      roleType: this.cookieService.get('roleType'),
-      token: this.cookieService.get('token'),
-      // createdBy: this.cookieService.get('loginId'),
-      superadminId: this.cookieService.get('superadminId'),
-    };
-    return payload;
-  }
 
   changeLeadStatus(lead: any): Observable<any> {
     const request: any = {

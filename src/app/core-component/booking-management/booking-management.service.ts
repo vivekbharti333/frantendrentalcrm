@@ -22,20 +22,18 @@ export class BookingManagementService {
   }
 
 
-  getPickUpList(todayDate: any, tomorrowDate: any): Observable<any> {
+  getPickUpList(requestFor: any): Observable<any> {
       const request: any = {
         payload: {
-          requestedFor: 'PICKUP',
+          requestedFor: requestFor,
           roleType: "SUPERADMIN",
-          firstDate: todayDate,
-          lastDate: tomorrowDate,
           token: this.cookieService.get('token'),
           createdBy: this.cookieService.get('loginId'),
           adminId: this.cookieService.get('adminId'),
           superadminId: this.cookieService.get('superadminId'),
         },
       };
-      return this.http.post<any>(Constant.Site_Url + 'getPickAndDropLeadList', request);
+      return this.http.post<any>(Constant.Site_Url + 'getPickupLeadList', request);
     }
 
     getDropList(todayDate: any, tomorrowDate: any): Observable<any> {
@@ -51,7 +49,7 @@ export class BookingManagementService {
           superadminId: this.cookieService.get('superadminId'),
         },
       };
-      return this.http.post<any>(Constant.Site_Url + 'getPickAndDropLeadList', request);
+      return this.http.post<any>(Constant.Site_Url + 'getDropLeadList', request);
     }
   
 }

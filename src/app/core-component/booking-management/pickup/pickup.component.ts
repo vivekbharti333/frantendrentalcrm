@@ -41,6 +41,9 @@ export interface listData {
   providers: [MessageService, ToastModule],
 })
 export class PickupComponent {
+
+  public tooltipMessage: string = 'Copy';
+
   public followupList: any;
   public userForDropDown: any[] = [];
   public pickLocationList: any[] = [];
@@ -78,6 +81,12 @@ export class PickupComponent {
 
   public name: any;
   public mobile: any;
+   public selectedOption: string = 'vehicle';
+  public notesType: string = 'Notes';
+  // public payToVendor: any;
+  public payToVendorAct: any;
+  // public payToCompany: any;
+  public payToCompanyAct: any;
 
 
   public routes = routes;
@@ -101,47 +110,7 @@ export class PickupComponent {
 
   firstDate: any = '';
   lastDate: any = '';
-  // leadDetails = {
-  //   categoryType: '',
-  //   superCategory: '',
-  //   category: '',
-  //   subCategory: '',
-  //   pickupDateTime: '',
-  //   pickupLocation: '',
-  //   dropDateTime: '',
-  //   dropLocation: '',
-  //   totalDays: '',
-  //   quantity: '',
-  //   vendorRate: '',
-  //   companyRate: '',
-  //   bookingAmount: '',
-  //   balanceAmount: '',
-  //   totalAmount: '',
-  //   securityAmount: '',
-  //   payToVendor: '',
-  //   payToCompany: '',
-  //   deliveryToCompany: '',
-  //   deliveryToVendor: '',
-  //   customerName: '',
-  //   dialCode: '',
-  //   mobile: '',
-  //   alternateMobile: '',
-  //   emailId: '',
-  //   id: '',
-  //   companyName: '',
-  //   enquirySource: '',
-  //   pickupPoint: '',
-  //   dropPoint: '',
-  //   status: '',
-  //   leadOrigine: '',
-  //   leadType: '',
-  //   createdBy: '',
-  //   notes: '',
-  //   records: '',
-  //   remarks: '',
-  //   reminderDate: '',
-  //   // leadStatus:'',
-  // };
+  
   isEditForm: boolean = false;
   filteredCategoryTypeList: any[] = [];
   filteredSuperCategoryList: any[] = [];
@@ -176,7 +145,7 @@ export class PickupComponent {
   ) { }
 
   ngOnInit() {
-    this.getPickupList();
+    this.getPickupList('TODAY');
     this.getUserListForDropDown();
     this.getCategoryType();
     this.getPickLocation();
@@ -221,6 +190,7 @@ export class PickupComponent {
 
   createForms() {
     this.editLeadForm = this.fb.group({
+      id: [],
       companyName: ['Notes'],
       enquirySource: ['Call'],
       categoryTypeId: ['', [Validators.required, Validators.pattern('[A-Za-z ]{3,150}')],],
@@ -313,20 +283,20 @@ export class PickupComponent {
   //   });
   // }
 
-  getPickupList() {
 
-    const today = new Date();
-    const tomorrow = new Date();
-    tomorrow.setDate(today.getDate() + 1);
 
-    // Format dates as YYYY-MM-DD (or any format required by API)
-    const formattedToday = today.toISOString().split('T')[0];
-    const formattedTomorrow = tomorrow.toISOString().split('T')[0];
 
-    this.bookingManagementService.getPickUpList(formattedToday, formattedTomorrow)
+  getPickupList(requestFor: any) {
+
+    this.bookingManagementService.getPickUpList(requestFor)
       .subscribe((apiRes: any) => {
         this.setTableData(apiRes);
       });
+
+
+      // this.onSelectionChange('Vehicle')
+
+      
   }
 
 
@@ -352,6 +322,7 @@ export class PickupComponent {
           tableData: this.tableData,
           serialNumberArray: this.serialNumberArray,
         });
+       
       }
     });
   }
@@ -395,10 +366,16 @@ export class PickupComponent {
 
   ) {
 
+    if(!['car', 'bike'].includes(rawData['categoryTypeName']?.toLowerCase())) {
+      this.selectedOption === 'activity';
+    } else {
+      this.selectedOption == 'vehicle'
+    }
+
     this.isEditForm = isEditable;
     // this.getSubCategory(rawData['categoryId']);
     this.editLeadForm.patchValue({
-
+      id: rawData['id'],
       category: rawData['category'],
       subCategory: rawData['subCategory'],
       itemName: rawData['itemName'],
@@ -461,9 +438,6 @@ export class PickupComponent {
         return item;
       }
     });
-    // await this.getSuperCategory({
-    //   value: filterCategoryType[0]?.id,
-    // });
     const filterSuperCategory: any = this.superCategoryList.filter((item) => {
       if (item?.superCategory === rawData?.superCategory) {
         return item;
@@ -488,6 +462,42 @@ export class PickupComponent {
       );
     });
   }
+
+
+  adjustToNearest15Min(event: Event, field: 'startTime' | 'endTime') {
+    const input = event.target as HTMLInputElement;
+    const timeStr = input.value;
+
+    if (!timeStr || !timeStr.includes(':')) return;
+
+    const [hourStr, minuteStr] = timeStr.split(':');
+    let hours = parseInt(hourStr, 10);
+    const minute = parseInt(minuteStr, 10);
+
+    let roundedMinutes = Math.round(minute / 15) * 15;
+
+    if (roundedMinutes === 60) {
+      roundedMinutes = 0;
+      hours = (hours + 1) % 24;
+    }
+
+    const correctedTime = `${this.pad(hours)}:${this.pad(roundedMinutes)}`;
+
+    // Correctly update the corresponding field
+    if (field === 'startTime') {
+      this.startTime = correctedTime;
+    } else {
+      this.endTime = correctedTime;
+    }
+    // Update input display value explicitly
+    input.value = correctedTime;
+  }
+
+  pad(num: number): string {
+    return num < 10 ? '0' + num : num.toString();
+  }
+
+  
 
   roundToPrevious15Minutes(date: Date): Date {
     const newDate = new Date(date);
@@ -787,158 +797,6 @@ export class PickupComponent {
     return new Date(rounded);
   }
 
-  calculateTotalAmount() {
-    const leadValue = this.editLeadForm.value;
-    let secondValue = 0;
-    if (
-      leadValue &&
-      leadValue.companyRate != null &&
-      leadValue.totalDays != null &&
-      leadValue.deliveryAmountToCompany != null &&
-      leadValue.quantity != null
-    ) {
-      const firstValue = leadValue.companyRate * leadValue.totalDays;
-      const secondValue =
-        firstValue + Number(leadValue.deliveryAmountToCompany); // Ensure numeric addition
-
-      this.editLeadForm.patchValue({
-        totalAmount: secondValue * leadValue.quantity,
-      });
-
-      this.deliveryAmtToVendor = this.editLeadForm.value.deliveryAmountToVendor;
-      this.vendorRate = this.editLeadForm.value.vendorRate;
-
-      // this.calExtraAmount();
-
-      this.calculateBalanceAmount();
-      this.calculatePayToCompanyAndPayToVendor();
-
-      this.editLeadForm.patchValue({ actualAmount: 0, discount: 0 });
-    } else {
-      console.error('Some required fields are missing for total amount calculation.'
-      );
-      leadValue.totalAmount = 0; // Set a fallback value
-    }
-    return secondValue * leadValue.quantity;
-  }
-
-  calculateBalanceAmount(): number {
-    const leadValue = this.editLeadForm.value;
-    let secondValue = 0;
-    if (
-      leadValue.vendorRate != null &&
-      leadValue.totalDays != null &&
-      leadValue.deliveryAmountToVendor != null &&
-      leadValue.quantity != null
-    ) {
-      const firstValue = leadValue.vendorRate * leadValue.totalDays;
-      secondValue = firstValue + Number(leadValue.deliveryAmountToVendor);
-      this.editLeadForm.patchValue({
-        balanceAmount: secondValue * leadValue.quantity,
-      });
-
-      this.calculateBookingAmount();
-      this.calculatePayToCompanyAndPayToVendor();
-    } else {
-      console.error(
-        'Some required fields are missing for balance amount calculation.'
-      );
-      leadValue.balanceAmount = 0; // Set a default fallback value
-    }
-    return secondValue * leadValue.quantity;
-  }
-
-  calculateBookingAmount(): number {
-    const leadValue = this.editLeadForm.value;
-    this.editLeadForm.patchValue({
-      bookingAmount: leadValue.totalAmount - leadValue.balanceAmount,
-    }),
-      this.calculatePayToCompanyAndPayToVendor();
-
-    return leadValue.totalAmount - leadValue.balanceAmount;
-  }
-
-  calculatePayToCompanyAndPayToVendor(): number {
-    const leadValue = this.editLeadForm.value;
-    const amountValue = leadValue.bookingAmount - leadValue.actualAmount;
-
-    // this.calExtraAmount();
-    if (amountValue < 0) {
-      leadValue.payToVendor = amountValue;
-      this.editLeadForm.patchValue({ payToVendor: amountValue });
-
-      this.payToVendor = this.editLeadForm.value.payToVendor;
-    } else if (amountValue >= 0) {
-      leadValue.payToCompany = amountValue;
-      this.editLeadForm.patchValue({ payToCompany: amountValue });
-      this.payToCompany = this.editLeadForm.value.payToCompany;
-    }
-    return amountValue;
-  }
-
-  // ----------------------------------------------Calculation for Activities Start----------------------------------------------------------------
-  calculateTotalAmountOfActivites() {
-    const leadValue = this.editLeadForm.value;
-
-    const quantity = Number(leadValue.quantity) || 0;
-    const kidQuantity = Number(leadValue.kidQuantity) || 0;
-    const companyRate = Number(leadValue.companyRate) || 0;
-    const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
-
-    if (quantity >= 0 && kidQuantity >= 0) {
-      const firstValue = companyRate * quantity;
-      const secondValue = companyRateForKids * kidQuantity;
-      const totalAmount = firstValue + secondValue;
-
-      this.editLeadForm.patchValue({ totalAmount });
-
-      // Call booking amount calculation after total amount is updated
-      this.calculateBalanceAmountOfActivites();
-    } else {
-      console.error('Invalid input values.');
-      this.editLeadForm.patchValue({ totalAmount: 0 });
-    }
-  }
-
-  calculateBalanceAmountOfActivites(): number {
-    const leadValue = this.editLeadForm.value;
-
-    const quantity = Number(leadValue.quantity) || 0;
-    const kidQuantity = Number(leadValue.kidQuantity) || 0;
-    const vendorRate = Number(leadValue.vendorRate) || 0;
-    const vendorRateForKids = Number(leadValue.vendorRateForKids) || 0;
-
-    if (quantity >= 0 && kidQuantity >= 0) {
-      const firstValue = vendorRate * quantity;
-      const secondValue = vendorRateForKids * kidQuantity;
-      const balanceAmount = firstValue + secondValue;
-
-      this.editLeadForm.patchValue({ balanceAmount });
-
-      // Call booking amount calculation after balance amount is updated
-      this.calculateBookingAmountOfActivites();
-    } else {
-      console.error('Invalid input values.');
-      this.editLeadForm.patchValue({ balanceAmount: 0 });
-    }
-
-    return 0;
-  }
-
-  calculateBookingAmountOfActivites(): number {
-    const leadValue = this.editLeadForm.value;
-
-    const totalAmount = Number(leadValue.totalAmount) || 0;
-    const balanceAmount = Number(leadValue.balanceAmount) || 0;
-    const bookingAmount = totalAmount - balanceAmount;
-
-    this.editLeadForm.patchValue({ bookingAmount });
-
-    return bookingAmount;
-  }
-
-  // ----------------------------------------------Calculation for Activities End----------------------------------------------------------------
-
   checkCategoryType(categoryType: any) {
     if (categoryType.categoryTypeName === Constant.ACTIVITY) {
       this.isActivities = true;
@@ -947,9 +805,9 @@ export class PickupComponent {
     }
   }
 
-  onSelectionChange(event: Event): void {
+    onSelectionChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    // this.selectedOption = inputElement.value;
+    this.selectedOption = inputElement.value;
     this.initializeComponent();
   }
 
@@ -981,60 +839,6 @@ export class PickupComponent {
     return formattedDateTime;
   }
 
-  // saveLeadData(rawData: any) {
-  //   this.leadDetails = {
-  //     categoryType: rawData?.categoryTypeName,
-  //     superCategory: rawData?.superCategory,
-  //     category: rawData?.category,
-  //     subCategory: rawData?.subCategory,
-  //     pickupDateTime: this.setDateTime(rawData?.pickupDateTime),
-  //     pickupLocation: rawData?.pickupLocation,
-  //     pickupPoint: rawData?.pickupPoint,
-  //     dropDateTime: this.setDateTime(rawData?.dropDateTime),
-  //     dropLocation: rawData?.dropLocation,
-  //     dropPoint: rawData?.dropPoint,
-  //     totalDays: rawData?.totalDays,
-  //     quantity: rawData?.quantity,
-  //     vendorRate: rawData?.vendorRate,
-  //     companyRate: rawData?.companyRate,
-  //     bookingAmount: rawData?.bookingAmount,
-  //     balanceAmount: rawData?.balanceAmount,
-  //     totalAmount: rawData?.totalAmount,
-  //     securityAmount: rawData?.securityAmount,
-  //     payToVendor: rawData?.payToVendor,
-  //     payToCompany: rawData?.payToCompany,
-  //     deliveryToCompany: rawData?.deliveryAmountToCompany,
-  //     deliveryToVendor: rawData?.deliveryAmountToVendor,
-  //     customerName: rawData?.customeName,
-  //     dialCode: rawData?.countryDialCode,
-  //     mobile: rawData?.customerMobile,
-  //     alternateMobile: '',
-  //     emailId: rawData?.customerEmailId,
-  //     id: rawData?.id,
-  //     companyName: rawData?.companyName,
-  //     enquirySource: rawData?.enquirySource,
-  //     status: rawData?.status,
-  //     leadOrigine: rawData?.leadOrigine,
-  //     leadType: rawData?.leadType,
-  //     createdBy: rawData?.createdBy,
-  //     notes: rawData?.notes,
-  //     records: rawData?.records,
-  //     remarks: rawData?.remarks,
-  //     reminderDate: rawData?.reminderDate,
-  //   };
-
-  //   this.getCategoryType();
-
-  //   const superCategory = this.categoryTypeList.find(item => item.categoryTypeName === this.leadDetails.categoryType);
-  //   this.getSuperCategory(superCategory.id);
-  //   this.allIds.superCategoryId = superCategory.id;
-  // }
-
-  // async copyData(data: any, idx: number) {
-  //   this.saveLeadData(data);
-  //   this.helper.copyData(this.leadDetails);
-  //   this.setIsDataCopied(true, idx);
-  // }
 
   public searchData(value: string): void {
     this.dataSource.filter = value.trim().toLowerCase();
@@ -1088,7 +892,6 @@ export class PickupComponent {
   }
 
   public getCategoryType() {
-    // alert("getCategoryType ");
     this.categoriesManagementService.getCategoryTypeList().subscribe({
       next: (response: any) => {
         if (response['responseCode'] == '200') {
@@ -1105,28 +908,6 @@ export class PickupComponent {
     });
   }
 
-  // public getSuperCategory(superCateId: any) {
-  //   // alert("getSuperCategory :"+superCateId);
-  //   this.categoriesManagementService.getSuperCategoryListByCategoryTypeId(superCateId)
-  //     .subscribe({
-  //       next: (response: any) => {
-  //         if (response['responseCode'] == '200') {
-  //           this.superCategoryList = JSON.parse(JSON.stringify(response.listPayload));
-
-  //           this.filteredSuperCategoryList = this.superCategoryList;
-
-  //           const category = this.superCategoryList.find(item => item.superCategory === this.leadDetails.superCategory);
-  //           this.getCategory(category.id)
-  //         }
-  //       },
-  //       error: (error: any) =>
-  //         this.messageService.add({
-  //           summary: '500',
-  //           detail: 'Server Error',
-  //           styleClass: 'danger-background-popover',
-  //         }),
-  //     });
-  // }
 
 
   public getCategory(categoryId: any) {
@@ -1150,28 +931,6 @@ export class PickupComponent {
       });
   }
 
-  // public getSubCategory(subCategoryId: any) {
-  //   console.log("Sub category : " + subCategoryId);
-  //   this.categoriesManagementService.getSubCategoryList()
-  //     .subscribe({
-  //       next: (response: any) => {
-  //         if (response['responseCode'] == '200') {
-  //           this.subCategoryList = JSON.parse(JSON.stringify(response.listPayload));
-  //           this.subCategoryList.forEach(subCategory => {
-  //             console.log(subCategory); // Access each item
-  //             // You can perform actions on each subCategory here
-  //           });
-  //           this.filteredSubCategoryList = this.subCategoryList;
-  //         }
-  //       },
-  //       error: (error: any) =>
-  //         this.messageService.add({
-  //           summary: '500',
-  //           detail: 'Server Error',
-  //           styleClass: 'danger-background-popover',
-  //         }),
-  //     });
-  // }
 
   isCollapsed: boolean = false;
   toggleCollapse() {
@@ -1202,7 +961,7 @@ export class PickupComponent {
   }
   filterByDate() {
     this.bookingManagementService
-      .getPickUpList(this.firstDate, this.lastDate)
+      .getPickUpList('TODAY')
       .subscribe((apiRes: any) => {
         this.setTableData(apiRes);
       });
@@ -1222,7 +981,7 @@ export class PickupComponent {
         if (response['responseCode'] == '200') {
           if (response['payload']['respCode'] == '200') {
             this.changeStatusForm.reset();
-            this.getPickupList();
+            this.getPickupList('TODAY');
 
             this.statusLeadDialogTemplate.close();
 
@@ -1260,7 +1019,8 @@ export class PickupComponent {
       next: (response: any) => {
         if (response['responseCode'] == '200') {
           if (response['payload']['respCode'] == '200') {
-            // form.reset();
+            this.editLeadForm.reset();
+            
             this.messageService.add({
               summary: response['payload']['respCode'],
               detail: response['payload']['respMesg'],
@@ -1310,4 +1070,156 @@ export class PickupComponent {
         return 'badge-default'; // Default class if no match
     }
   }
+
+    onNotesTypeChange(value: string) {
+    this.notesType = value;
+  }
+
+  calculationForActivity(): void {
+    const leadValue = this.editLeadForm.value;
+
+    const adultQuantity = Number(leadValue.quantity) || 0;
+    const adultCompanyRate = Number(leadValue.companyRate) || 0;
+    const kidQuantity = Number(leadValue.kidQuantity) || 0;
+    const companyRateForKids = Number(leadValue.companyRateForKids) || 0;
+    const adultVendorRate = Number(leadValue.vendorRate) || 0;
+    const kidsVendorRate = Number(leadValue.vendorRateForKids) || 0;
+    const discount = Number(leadValue.discount) || 0;
+    const actualAmt = Number(leadValue.actualAmount) || 0;
+
+    // Total Amount (Company Rate)
+    const totalBeforeDiscount = (adultQuantity * adultCompanyRate) + (kidQuantity * companyRateForKids);
+    const totalAmount = Math.max(totalBeforeDiscount - discount, 0);
+
+    // Balance Amount (Vendor Rate)
+    const balanceAmt = (adultQuantity * adultVendorRate) + (kidQuantity * kidsVendorRate);
+    const balanceAmount = Math.max(balanceAmt, 0);
+
+    // Booking Amount
+    const bookingAmount = Math.max(totalAmount - balanceAmount, 0);
+
+    // Extra Calculation
+    let finalBalanceAmount = balanceAmount;
+
+    if (actualAmt != 0) {
+      if (bookingAmount >= actualAmt) {
+        const extraAmt = bookingAmount - actualAmt;
+        this.payToCompanyAct = extraAmt;
+        this.payToVendorAct = 0;
+        finalBalanceAmount = balanceAmount + extraAmt;
+      } else {
+        const extraAmt = actualAmt - bookingAmount;
+        this.payToCompanyAct = 0;
+        this.payToVendorAct = extraAmt;
+        finalBalanceAmount = Math.max(balanceAmount - extraAmt, 0);
+      }
+    }
+    // Patch all values at once
+    this.editLeadForm.patchValue({
+      totalAmount: totalAmount,
+      balanceAmount: finalBalanceAmount,
+      bookingAmount: bookingAmount,
+
+      payToCompany: this.payToCompanyAct,
+      payToVendor: this.payToVendorAct
+    });
+  }
+
+  calculationForVehicle() {
+    const leadValue = this.editLeadForm.value;
+
+    const companyRate = Number(leadValue.companyRate) || 0;
+    const totalDays = Number(leadValue.totalDays) || 0;
+    const deliveryAmountToCompany = Number(leadValue.deliveryAmountToCompany) || 0;
+    const quantity = Number(leadValue.quantity) || 0;
+    const discount = Number(leadValue.discount) || 0;
+    const actualAmt = Number(leadValue.actualAmount) || 0;
+    const vendorRate = Number(leadValue.vendorRate) || 0;
+    const deliveryAmountToVendor = Number(leadValue.deliveryAmountToVendor) || 0;
+    const existingBalanceAmount = Number(leadValue.balanceAmount) || 0;
+
+    // === Total Amount ===
+    const compRatePerDay = companyRate * totalDays;
+    const totalCompanyAmount = (compRatePerDay + deliveryAmountToCompany) * quantity;
+    const totalAmount = totalCompanyAmount - discount;
+
+    // === Balance Amount ===
+    const vendorRatePerDay = vendorRate * totalDays;
+    const totalVendorAmount = (vendorRatePerDay + deliveryAmountToVendor) * quantity;
+
+    let balanceAmount = totalVendorAmount;
+
+    // === Booking Amount ===
+    const bookingAmount = totalAmount - existingBalanceAmount;
+
+    // === Adjusted Balance Based on Actual Amount ===
+    if (actualAmt > 0) {
+      if (bookingAmount >= actualAmt) {
+        const extraAmt = bookingAmount - actualAmt;
+        this.payToCompany = extraAmt;
+        this.payToVendor = 0;
+        balanceAmount += extraAmt;
+      } else {
+        const extraAmt = actualAmt - bookingAmount;
+        this.payToCompany = 0;
+        this.payToVendor = extraAmt;
+        balanceAmount = Math.max(balanceAmount - extraAmt, 0);
+      }
+    }
+
+    // ✅ Always patch values
+    this.editLeadForm.patchValue({
+      totalAmount: totalAmount,
+      balanceAmount: balanceAmount,
+      bookingAmount: bookingAmount,
+      payToCompany: this.payToCompany,
+      payToVendor: this.payToVendor
+    });
+  }
+
+  copyText(rowData: any) {
+    let pickupDate = this.datePipe.transform(rowData['pickupDateTime'], 'dd-MM-yyyy | HH:mm');
+    let dropDate = this.datePipe.transform(rowData['pickupDateTime'], 'dd-MM-yyyy | HH:mm');
+    let text = '';
+
+    if (!['car', 'bike'].includes(rowData['categoryTypeName']?.toLowerCase())) {
+      text = "*Package Name: " + rowData['category'] + "*\n\n" +
+        "Date " + pickupDate + ",\n\n" +
+        "Customer Name: " + rowData['customeName'] + "\n\n" +
+        "Phone Number: " + rowData['customerMobile'] + "\n\n" +
+        "Pickup Point: " + rowData['pickupPoint'] + "\n\n" +
+        "Drop Point: " + rowData['dropPoint'] + "\n\n" +
+        "Adult: " + rowData['quantity'] + "\n\n" +
+        "Kids: " + rowData['kidQuantity'] + "\n\n" +
+        "Infant: " + rowData['infantQuantity'] + "\n\n" +
+        "Remarks: " + rowData['remarks'] + "\n\n" +
+        "*Balance Amount: ₹ " + rowData['balenceAmount'] + "*\n\n";
+    } else {
+      text = "*Vehicle Name: " + rowData['category'] + "*\n\n" +
+        "Vehicle Type: " + rowData['subCategory'] + "\n" +
+        "Adult: " + rowData['quantity'] + "\n" +
+        "Customer Name: " + rowData['customeName'] + "\n" +
+        "Phone Number: " + rowData['customerMobile'] + "\n" +
+        "Pickup Date " + pickupDate + ",\n" +
+        "Drop Date " + dropDate + ",\n" +
+        "Pickup Point: " + rowData['pickupPoint'] + "\n" +
+        "Drop Point: " + rowData['dropPoint'] + "\n\n" +
+        "*Balance Amount: ₹ " + rowData['balenceAmount'] + "*\n\n" +
+        "*Refundable Deposit: ₹ " + rowData['securityAmount'] + "*\n\n" +
+        rowData['remarks'];
+    }
+
+    navigator.clipboard.writeText(text).then(() => {
+      this.tooltipMessage = 'Copied!'; // Show "Copied!" text
+      setTimeout(() => {
+        this.tooltipMessage = 'Copy'; // Reset back after 1.5 seconds
+      }, 1500);
+    }).catch(err => {
+      console.error('Could not copy text: ', err);
+    });
+  }
+
+
+
+
 }
