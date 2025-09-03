@@ -1,8 +1,8 @@
 <div class="page-header">
   <div class="add-item d-flex">
     <div class="page-title">
-      <h4>Pickup List</h4>
-      <h6>Manage Your pickup List</h6>
+      <h4>Drop List</h4>
+      <h6>Manage Your Drop List</h6>
       <p-toast></p-toast>
       <!-- <button type="button" class="btn btn-primary btn-wave" id="liveToastBtn" pButton pRipple
           (click)="show()" label="Show">Show live
@@ -310,33 +310,23 @@
         <div class="tab-pane" id="solid-justified-tab4">
           <div class="table-responsive">
 
-            <div class="row">
-
-              <div class="col-sm-2">
-                <label> From</label>
-                <input class="form-control" pInputText type="date" #firstDate>
-              </div>
-              <div class="col-sm-2">
-                <label> To </label>
-                <input class="form-control" pInputText type="date" #lastDate>
-
-              </div>
-              <!-- <div class="col-sm-2">
-                  <br>
-                 
-                  <button type="submit" class="btn btn-warning " 
-                    (click)="getDonationListByDate(firstDate.value,lastDate.value)"
-                    style="margin-top: 8px; margin-left: 0px;"><i class="feather icon-search feather-search"></i> Search</button>
+            <form [formGroup]="searchByDateForm" (ngSubmit)="submitSeachByDateForm()">
+              <div class="row">
+                <div class="col-lg-2 col-md-3">
+                  <label> From</label>
+                  <input class="form-control" pInputText type="date" formControlName="firstDate">
                 </div>
-                  <div class="col-2" *ngIf = showExcelReport>
-                    <label> Export Excel Report</label>
-                    <br>
-                   
-                    <a matTooltip="Export to Excel" matTooltipPosition="above" (click)="exportAsExcelFile()">
-                      <img src="assets/img/icons/xls.svg" alt="Export Excel Report" width="30" />
-                    </a>
-                  </div>
-              </div> -->
+                <div class="col-lg-2 col-md-3">
+                  <label> From</label>
+                  <input class="form-control" pInputText type="date" formControlName="lastDate">
+                </div>
+                <div class="col-lg-1 col-md-1">
+                  <label>. </label>
+                   <button type="submit" class="btn btn-primary w-100">Submit</button>
+                </div>
+              </div>
+            </form>
+
               <br><br>
 
               <table matSort (matSortChange)="sortData($event)" class="table datanew">
@@ -394,7 +384,6 @@
                   }
                 </tbody>
               </table>
-            </div>
           </div>
 
 

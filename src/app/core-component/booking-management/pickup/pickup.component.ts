@@ -53,6 +53,7 @@ export class PickupComponent {
 
   public editLeadForm!: FormGroup;
   public changeStatusForm!: FormGroup;
+  public searchByDateForm! : FormGroup;
   public minDate!: Date;
   public maxDate!: Date;
 
@@ -255,6 +256,11 @@ export class PickupComponent {
       customerMobile: [''],
       status: [''],
     });
+
+    this.searchByDateForm = this.fb.group({
+      firstDate: [''],
+      lastDate: [''],
+    });
   }
 
   downloadInvoice(receiptNo: string) {
@@ -274,6 +280,13 @@ export class PickupComponent {
         styleClass: 'danger-background-popover',
       })
     });
+  }
+
+  submitSeachByDateForm() {
+    this.bookingManagementService.getPickUpListByDateSearch(this.searchByDateForm.value)
+      .subscribe((apiRes: any) => {
+        this.setTableData(apiRes);
+      });
   }
 
   getPickupList(requestFor: any) {

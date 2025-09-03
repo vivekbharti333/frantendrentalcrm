@@ -52,6 +52,7 @@ export class DropComponent {
   
     public editLeadForm!: FormGroup;
     public changeStatusForm!: FormGroup;
+     public searchByDateForm! : FormGroup;
     public minDate!: Date;
     public maxDate!: Date;
   
@@ -254,6 +255,11 @@ export class DropComponent {
         customerMobile: [''],
         status: [''],
       });
+
+      this.searchByDateForm = this.fb.group({
+      firstDate: [''],
+      lastDate: [''],
+    });
     }
   
     downloadInvoice(receiptNo: string) {
@@ -274,6 +280,13 @@ export class DropComponent {
         })
       });
     }
+
+  submitSeachByDateForm() {
+    this.bookingManagementService.getDropListByDateSearch(this.searchByDateForm.value)
+      .subscribe((apiRes: any) => {
+        this.setTableData(apiRes);
+      });
+  }
   
     getDropList(requestFor: any) {
       this.bookingManagementService.getDropList(requestFor)
