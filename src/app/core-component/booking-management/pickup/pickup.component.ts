@@ -259,7 +259,6 @@ export class PickupComponent {
 
   downloadInvoice(receiptNo: string) {
     window.open(Constant.Site_Url + "paymentreceipt/" + receiptNo, '_blank');
-    // console.log(Constant.Site_Url+"paymentreceipt/"+receiptNo);
   }
 
   public getUserListForDropDown() {
@@ -277,26 +276,11 @@ export class PickupComponent {
     });
   }
 
-  // onAgentSelectionChange(dd:any){
-  //   this.bookingManagementService.getPickUpList().subscribe((apiRes: any) => {
-  //     this.setTableData(apiRes);
-  //   });
-  // }
-
-
-
-
   getPickupList(requestFor: any) {
-
     this.bookingManagementService.getPickUpList(requestFor)
       .subscribe((apiRes: any) => {
         this.setTableData(apiRes);
       });
-
-
-      // this.onSelectionChange('Vehicle')
-
-      
   }
 
 
@@ -449,7 +433,6 @@ export class PickupComponent {
         return item;
       }
     });
-    // await this.getSubCategory({ value: filterSuperCategory[0]?.id });
     const filterSubCategory: any = this.categoryList.filter((item) => {
       if (item?.category === rawData?.subCategory) {
         return item;
@@ -497,8 +480,6 @@ export class PickupComponent {
     return num < 10 ? '0' + num : num.toString();
   }
 
-  
-
   roundToPrevious15Minutes(date: Date): Date {
     const newDate = new Date(date);
     const minutes = newDate.getMinutes();
@@ -520,8 +501,6 @@ export class PickupComponent {
       date.getDate()
     )}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   }
-
-
 
   setError(field: 'pickupDate' | 'dropoffDate', message: string) {
     if (field === 'pickupDate') {
@@ -567,8 +546,6 @@ export class PickupComponent {
   }
 
   calculateTotalAmountAndBalaenceAmontAfterDiscount1() {
-    // const addFormValue = this.editLeadForm.value;
-
     //total amount start
     if (
       this.editLeadForm.value &&
@@ -609,38 +586,6 @@ export class PickupComponent {
       totalAmount: totalAmt,
       bookingAmount: bookingAmt,
     });
-  }
-
-  calculateTotalAmountAndBalaenceAmontAfterDiscount() {
-    //total amount start
-    if (
-      this.editLeadForm.value &&
-      this.editLeadForm.value.companyRate != null &&
-      this.editLeadForm.value.totalDays != null &&
-      this.editLeadForm.value.deliveryAmountToCompany != null &&
-      this.editLeadForm.value.quantity != null
-    ) {
-      const firstValue =
-        this.editLeadForm.value.companyRate * this.editLeadForm.value.totalDays;
-      const secondValue =
-        firstValue + Number(this.editLeadForm.value.deliveryAmountToCompany); // Ensure numeric addition
-
-      // this.editLeadForm.patchValue({ totalAmount: secondValue * this.editLeadForm.value.quantity });
-
-      //total amount end
-
-      // Ensure discount is not more than the total amount
-      const totalAmt = secondValue * this.editLeadForm.value.quantity - this.editLeadForm.value.discount;
-      const balanceAmt = this.editLeadForm.value.balanceAmount;
-      const bookingAmt = totalAmt - balanceAmt;
-
-
-      // Update the form with all new values in one patchValue call
-      this.editLeadForm.patchValue({
-        totalAmount: totalAmt,
-        bookingAmount: bookingAmt,
-      });
-    }
   }
 
   percentOrAmount() {
@@ -715,9 +660,9 @@ export class PickupComponent {
     return formattedDate;
   }
 
-  calExtraAmount() {
+  // calExtraAmount() {
 
-  }
+  // }
 
   setDefaultDateTime(): void {
     const currentDate = new Date();

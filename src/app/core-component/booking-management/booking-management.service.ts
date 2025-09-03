@@ -36,13 +36,11 @@ export class BookingManagementService {
       return this.http.post<any>(Constant.Site_Url + 'getPickupLeadList', request);
     }
 
-    getDropList(todayDate: any, tomorrowDate: any): Observable<any> {
+    getDropList(requestFor: any): Observable<any> {
       const request: any = {
         payload: {
-          requestedFor: 'DROP',
+          requestedFor: requestFor,
           roleType: "SUPERADMIN",
-          firstDate: todayDate,
-          lastDate: tomorrowDate,
           token: this.cookieService.get('token'),
           createdBy: this.cookieService.get('loginId'),
           adminId: this.cookieService.get('adminId'),
