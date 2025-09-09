@@ -311,7 +311,7 @@ export class WonComponent {
       this.serialNumberArray = [];
       this.totalData = apiRes.totalNumber;
       this.pagination.tablePageSize.subscribe((pageRes: tablePageSize) => {
-        if (this.router.url == this.routes.pickup) {
+        if (this.router.url == this.routes.wonLead) {
           apiRes.listPayload.map((res: any, index: number) => {
             const serialNumber = index + 1;
             if (index >= pageRes.skip && serialNumber <= this.totalData) {
@@ -354,7 +354,8 @@ export class WonComponent {
         customeName: rawData['customeName'],
         countryDialCode: rawData['countryDialCode'],
         customerMobile: rawData['customerMobile'],
-        status: rawData['status']
+        status: rawData['status'],
+        vendorName: rawData['vendorName'],
       })
       this.name = rawData.customeName;
       this.mobile = rawData.countryDialCode + " " + rawData.customerMobile;

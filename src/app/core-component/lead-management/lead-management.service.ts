@@ -213,6 +213,7 @@ export class LeadManagementService {
         requestedFor: 'ALL',
         id: lead.id,
         status: lead.status,
+        vendorName: lead.vendorName,
         token: this.cookieService.get('token'),
         loginId: this.cookieService.get('loginId'),
         adminId: this.cookieService.get('adminId'),

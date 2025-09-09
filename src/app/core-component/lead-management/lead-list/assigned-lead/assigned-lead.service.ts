@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Constant } from 'src/app/core/constant/constants'; 
 import { AuthenticationService } from 'src/app/auth/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -8,7 +8,7 @@ import { CookieService } from 'ngx-cookie-service';
 @Injectable({
   providedIn: 'root'
 })
-export class WonService {
+export class AssignedLeadService {
 public loginUser: any;
   public details = false;
 
@@ -21,7 +21,7 @@ public loginUser: any;
   }
 
 
-  geWonList(requestFor: any, status: any): Observable<any> {
+  geAssignedList(requestFor: any, status: any): Observable<any> {
       const request: any = {
         payload: {
           requestedFor: requestFor,
@@ -42,16 +42,16 @@ public loginUser: any;
       const request: any = {
         payload: {
           requestedFor: "CUSTOME",
-          roleType: "SUPERADMIN",
           firstDate: searchForm.firstDate,
           lastDate: searchForm.lastDate,
-          token: this.cookieService.get('token'),
-          createdBy: this.cookieService.get('loginId'),
-          adminId: this.cookieService.get('adminId'),
-          superadminId: this.cookieService.get('superadminId'),
+          roleType: this.loginUser['roleType'],
+          token: this.loginUser['token'],
+          createdBy: this.loginUser['loginId'],
+          adminId: this.loginUser['adminId'],
+          superadminId: this.loginUser['superadminId'],
         },
       };
-      return this.http.post<any>(Constant.Site_Url + 'getPickupLeadList', request);
+      return this.http.post<any>(Constant.Site_Url + 'getLeadByStatus', request);
     }
 
   }
