@@ -262,6 +262,7 @@ export class AssignedLeadComponent {
         this.searchByDateForm = this.fb.group({
           firstDate: [''],
           lastDate: [''],
+          status: ['ASSIGNED'],
         });
       }
     
@@ -285,7 +286,7 @@ export class AssignedLeadComponent {
       }
     
       submitSeachByDateForm() {
-        this.assignedLeadService.getPickUpListByDateSearch(this.searchByDateForm.value)
+        this.assignedLeadService.getAssignedListByDateSearch(this.searchByDateForm.value)
           .subscribe((apiRes: any) => {
             this.setTableData(apiRes);
           });

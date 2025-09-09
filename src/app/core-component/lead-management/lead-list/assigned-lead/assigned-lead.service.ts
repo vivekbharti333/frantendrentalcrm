@@ -38,10 +38,11 @@ public loginUser: any;
 
 
 
-    getPickUpListByDateSearch(searchForm: any): Observable<any> {
+    getAssignedListByDateSearch(searchForm: any): Observable<any> {
       const request: any = {
         payload: {
           requestedFor: "CUSTOME",
+          status: status,
           firstDate: searchForm.firstDate,
           lastDate: searchForm.lastDate,
           roleType: this.loginUser['roleType'],
