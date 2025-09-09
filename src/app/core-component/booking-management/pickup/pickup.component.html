@@ -417,11 +417,11 @@
 
           <div class="vehicle-section">
             <div class="row">
-              <div class="col-lg-6 col-md-6">
+              <div class="col-lg-4 col-md-4">
                 <b>Name:</b> {{name}}
               </div>
 
-              <div class="col-lg-6 col-md-6">
+              <div class="col-lg-4 col-md-4">
                 <b>Mobile:</b> {{mobile}}
               </div>
 
@@ -429,7 +429,7 @@
 
             <form [formGroup]="changeStatusForm" (ngSubmit)="changeLeadStatus()">
               <div class="row">
-                <div class="col-lg-8 col-md-8">
+                <div class="col-lg-4 col-md-4">
 
                   <mat-select name="status" formControlName="status" class="select" placeholder="Select Status">
                     @for (listData of leadStatus; track listData) {
@@ -438,9 +438,15 @@
                     </mat-option>
                     }
                   </mat-select>
-
                 </div>
                 <div class="col-lg-4 col-md-4">
+                  <mat-form-field appearance="outline" class="w-100">
+                      <mat-label>Vendor Name</mat-label>
+                      <input matInput type="text" formControlName="vendorName" required />
+                   </mat-form-field>
+                      
+                </div>
+                <div class="col-lg-3 col-md-3">
                   <button type="submit" class="btn btn-primary w-100">Submit</button>
                 </div>
 

@@ -1,7 +1,7 @@
 export class Constant {
 
-    public static Site_Url = "http://116.203.172.163/rentalcrm/";
-    // public static Site_Url = "http://localhost:8080/rentalcrm/";
+    // public static Site_Url = "http://116.203.172.163/rentalcrm/";
+    public static Site_Url = "http://localhost:8080/rentalcrm/";
     // public static Site_Url = "http://192.168.29.119:8080/rentalcrm/";
 
 
@@ -39,11 +39,12 @@ export class Constant {
     public static RESERVED = "RESERVED";
 
 
-    public static LEAD_STATUS_LIST = [{ value: 'ENQUIRY', name: 'Enquiry'}, {value: 'FOLLOWUP', name: 'Follow Up'}, {value: 'RESERVED', name: 'Reserved'}];
+    public static LEAD_STATUS_LIST = [{ value: 'ENQUIRY', name: 'Enquiry'}, {value: 'FOLLOWUP', name: 'Follow Up'}, {value: 'WON', name: 'Won'}, {value: 'ASSIGNED', name: 'Assigned'}];
     public static LEAD_ORIGINE_LIST = [{ value: 'CALL', name: 'Call'}, {value: 'WHATSAPP', name: 'Whats App'}, {value: 'EMAIL', name: 'Email'},{value: 'OTHER', name: 'Other'}];
     public static LEAD_TYPE_LIST = [{ value: 'NEW', name: 'New'}, {value: 'REPEAT', name: 'Repeat'}, {value: 'REFERRED', name: 'Referred'},{value: 'AGENT', name: 'Agent'}, {value: 'AGENT-REPEAT', name: 'Agent Repeat'}];
 
-
+    //Status
+    public static LEAD_STATUS_FOR_PICKUP_LIST = [{value: 'WON', name: 'Won'}, {value: 'ASSIGNED', name: 'Assigned'}];
     
 
 }

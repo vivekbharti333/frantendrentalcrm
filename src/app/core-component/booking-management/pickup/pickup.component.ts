@@ -127,7 +127,7 @@ export class PickupComponent {
   public userList: any[] = [];
   leadOrigine: listData[] = Constant.LEAD_ORIGINE_LIST;
   leadType: listData[] = Constant.LEAD_TYPE_LIST;
-  leadStatus: listData[] = Constant.LEAD_STATUS_LIST;
+  leadStatus: listData[] = Constant.LEAD_STATUS_FOR_PICKUP_LIST;
   constructor(
     private fb: FormBuilder,
     private data: DataService,
@@ -254,6 +254,7 @@ export class PickupComponent {
       customeName: [''],
       countryDialCode: [''],
       customerMobile: [''],
+      vendorName: [''],
       status: [''],
     });
 
@@ -351,7 +352,7 @@ export class PickupComponent {
     this.mobile = rawData.countryDialCode + " " + rawData.customerMobile;
 
     this.statusLeadDialogTemplate = this.dialog.open(templateRef, {
-      width: '30%',
+      width: '50%',
     });
   }
 
