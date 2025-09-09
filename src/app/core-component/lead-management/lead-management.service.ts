@@ -83,20 +83,26 @@ export class LeadManagementService {
   }
 
   saveLeadDetails(lead: any): Observable<any> {
+    // let createdBy: string = '';
+
+    // if (!lead.createdBy || lead.createdBy.trim() === "") {
+    //   createdBy = this.cookieService.get('loginId');
+    // } else {
+    //   createdBy = lead.createdBy;
+    // }
+    // console.log("createdBy : "+createdBy);
     const request: any = {
       payload: {
         companyName: lead.companyName,
         enquirySource: lead.enquirySource,
         pickDropHub: lead.pickDropHub,
         activityLocation: lead.activityLocation,
-        // categoryTypeId: lead.categoryTypeId?.id,
+
         categoryTypeName: lead.categoryTypeName,
-        // superCategoryId: lead.superCategoryId?.id,
-        // categoryId: lead.categoryId,
-        // subCategoryId: lead.subCategoryId?.id,
-        superCategory: lead.superCategory, 
-        category: lead.category, 
-        subCategory: lead.subCategory, 
+
+        superCategory: lead.superCategory,
+        category: lead.category,
+        subCategory: lead.subCategory,
         pickupDateTime: lead.pickupDateTime,
         pickupHub: lead.pickupHub,
         pickupPoint: lead.pickupPoint,
@@ -127,13 +133,14 @@ export class LeadManagementService {
         status: lead.status,
         leadOrigine: lead.leadOrigine,
         leadType: lead.leadType,
-        createdBy: lead.createdBy,
         loginId: this.cookieService.get('loginId'),
         notes: lead.notes,
         nextFollowupDate: lead.nextFollowupDate,
         remarks: lead.remarks,
         roleType: this.cookieService.get('roleType'),
         token: this.cookieService.get('token'),
+        createdBy: lead.createdBy,
+        // createdBy: createdBy,
         // createdBy: this.cookieService.get('loginId'),
         superadminId: this.cookieService.get('superadminId'),
         teamleaderId: this.cookieService.get('teamleaderId'),

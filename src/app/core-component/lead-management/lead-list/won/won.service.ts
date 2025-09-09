@@ -38,20 +38,21 @@ public loginUser: any;
 
 
 
-    getPickUpListByDateSearch(searchForm: any): Observable<any> {
+    getWonListByDateSearch(searchForm: any): Observable<any> {
       const request: any = {
         payload: {
           requestedFor: "CUSTOME",
-          roleType: "SUPERADMIN",
+          status: searchForm.status,
           firstDate: searchForm.firstDate,
           lastDate: searchForm.lastDate,
-          token: this.cookieService.get('token'),
-          createdBy: this.cookieService.get('loginId'),
-          adminId: this.cookieService.get('adminId'),
-          superadminId: this.cookieService.get('superadminId'),
+          roleType: this.loginUser['roleType'],
+          token: this.loginUser['token'],
+          createdBy: this.loginUser['loginId'],
+          adminId: this.loginUser['adminId'],
+          superadminId: this.loginUser['superadminId'],
         },
       };
-      return this.http.post<any>(Constant.Site_Url + 'getPickupLeadList', request);
+      return this.http.post<any>(Constant.Site_Url + 'getLeadByStatus', request);
     }
 
   }

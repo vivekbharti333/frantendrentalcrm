@@ -2,18 +2,11 @@ import { Component, TemplateRef } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import {
-  // DataService,
-  pageSelection,
-  // apiResultFormat,
-  SidebarService,
-} from 'src/app/core/core.index';
+import { SidebarService } from 'src/app/core/core.index';
 import { routes } from 'src/app/core/helpers/routes';
 import { users } from 'src/app/shared/model/page.model';
 import { PaginationService, tablePageSize } from 'src/app/shared/shared.index';
-// import Swal from 'sweetalert2';
 import { LeadManagementService } from '../../lead-management.service';
-// import { UserManagementService } from '../user-management.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { HelperService } from 'src/app/core/service/helper.service';
@@ -22,20 +15,8 @@ import { CategoriesManagementService } from 'src/app/core-component/categories-m
 import { Constant } from 'src/app/core/constant/constants';
 import { UserManagementService } from '../../../user-management/user-management.service';
 import { WonService } from './won.service';
-
-
-
 import { DatePipe } from '@angular/common';
-
-
-
-import { BookingManagementService } from '../../../booking-management/booking-management.service';
-import { AuthenticationService } from 'src/app/auth/authentication.service';
-
-import { SpinnerService } from 'src/app/core/core.index';
-
 import { CookieService } from 'ngx-cookie-service';
-import { CalendarModule } from 'primeng/calendar';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 export interface listData {
@@ -269,6 +250,7 @@ export class WonComponent {
       this.searchByDateForm = this.fb.group({
         firstDate: [''],
         lastDate: [''],
+        status: ['WON'],
       });
     }
   
@@ -292,7 +274,7 @@ export class WonComponent {
     }
   
     submitSeachByDateForm() {
-      this.wonService.getPickUpListByDateSearch(this.searchByDateForm.value)
+      this.wonService.getWonListByDateSearch(this.searchByDateForm.value)
         .subscribe((apiRes: any) => {
           this.setTableData(apiRes);
         });

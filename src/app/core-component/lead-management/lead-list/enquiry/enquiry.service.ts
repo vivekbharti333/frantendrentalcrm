@@ -5,10 +5,11 @@ import { Constant } from 'src/app/core/constant/constants';
 import { AuthenticationService } from 'src/app/auth/authentication.service';
 import { CookieService } from 'ngx-cookie-service';
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class AssignedLeadService {
+export class EnquiryService {
 public loginUser: any;
   public details = false;
 
@@ -21,7 +22,7 @@ public loginUser: any;
   }
 
 
-  geAssignedList(requestFor: any, status: any): Observable<any> {
+  getEnquiryList(requestFor: any, status: any): Observable<any> {
       const request: any = {
         payload: {
           requestedFor: requestFor,
@@ -38,7 +39,7 @@ public loginUser: any;
 
 
 
-    getAssignedListByDateSearch(searchForm: any): Observable<any> {
+    getEnquaryListByDateSearch(searchForm: any): Observable<any> {
       const request: any = {
         payload: {
           requestedFor: "CUSTOME",
@@ -54,5 +55,4 @@ public loginUser: any;
       };
       return this.http.post<any>(Constant.Site_Url + 'getLeadByStatus', request);
     }
-
   }
