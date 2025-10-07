@@ -97,7 +97,7 @@ subCategoryList: data[] = [
     { value: 'Automatic-HB', name: "Automatic-HB" },
     { value: 'Automatic-SD', name: "Automatic-SD" },
     { value: 'Manual-MSUV', name: "Manual-SD" },
-    { value: 'Automatic-MSUV', name: "Automatic-MSUV" },
+    { value: 'Automatic-CSUV', name: "Automatic-CSUV" },
     { value: 'Manual-SUV', name: "Manual-SUV" },
     { value: 'Automatic-SUV', name: "Automatic-SUV" },
 
