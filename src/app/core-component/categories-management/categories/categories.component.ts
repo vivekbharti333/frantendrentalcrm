@@ -157,6 +157,7 @@ subCategoryList: data[] = [
     });
 
     this.editCategoryForm = this.fb.group({
+      categoryId: '',
       categoryImage: '',
       categoryTypeId: '',
       categoryTypeName: '',
@@ -424,6 +425,7 @@ subCategoryList: data[] = [
       }
     });
     this.editCategoryForm.patchValue({
+      categoryId: rowData['id'] ?? null,
       categoryTypeId: rowData['categoryTypeId'] ?? null,
       superCategoryId: rowData['superCategoryId'] ?? null,
       category: rowData['category'] ?? '',

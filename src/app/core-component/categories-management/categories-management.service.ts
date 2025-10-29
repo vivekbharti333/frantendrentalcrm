@@ -179,6 +179,7 @@ export class CategoriesManagementService {
   editCategoryDetails(editCategory: any): Observable<any> {
     let request: any = {
       payload: {
+        categoryId: editCategory.categoryId,
        categoryImage: editCategory.categoryImage,
         categoryTypeId: editCategory.categoryTypeId,
         superCategoryId: editCategory.superCategoryId,
