@@ -180,7 +180,7 @@ export class CategoriesManagementService {
     let request: any = {
       payload: {
         categoryId: editCategory.categoryId,
-       categoryImage: editCategory.categoryImage,
+        categoryImage: editCategory.categoryImage,
         categoryTypeId: editCategory.categoryTypeId,
         superCategoryId: editCategory.superCategoryId,
         category: editCategory.category,
@@ -323,10 +323,10 @@ export class CategoriesManagementService {
   }
 
   getSubCategoryListByCatId(categoryId: any): Observable<any> {
-    console.log("categoryId : "+categoryId)
+    console.log("categoryId : " + categoryId)
     let request: any = {
       payload: {
-       
+
         categoryId: categoryId,
         requestedFor: 'BYCATID',
         // requestedFor: 'ALL',
